@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>路人库检索</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/faceCaptureList.css" />
+</head>
+
+<body style="overflow: hidden">
+    <div class="pager-wrap" container="scroll" id="faceCollectionList" ui-control="listview"
+        ui-service="face/capture/query" ui-template="faceTemplate" ui-parameters="queryParams" ui-options="uiOptions">
+        <div class="pager-content">
+            <div class="page-title pr" id="redListWrap">
+                <span>路人库检索</span>
+            </div>
+
+
+            <!-- 顶部区域 -->
+            <div class="top-box">
+                <!-- 上传图片区域 -->
+                <div class="photo-tools">
+                    <div class="top-pic-box">
+                        <div class="img-wrap">
+                            <img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+                            <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg"
+                                issearch=true />
+                        </div>
+                        <ul>
+                            <li class="re-upload"><i class="icon-image2"></i> <input class="file-style searchImgButton"
+                                    type="file" id="picBtn" name="picBtn" issearch=true /></li>
+                            <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+                            <li class="edit-pic" id="editImgBtn"><i class="icon-pencil3"></i></li>
+                        </ul>
+                    </div>
+                    <!--<ul class="bottom-pic-bar hide" id="thresholdValidate">
+                           <li><i class="icon-search4"></i>阈值<input type="text" value="60" id="threshold" ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数"></li>
+                       </ul>-->
+                </div>
+
+
+
+
+                <!-- 过滤区域 -->
+                <div class="filter-view">
+                    <dl class="filter-bar hide">
+                        <dd class="filter-bar-search">
+                            <div class="fifler-group mr5">
+                                <div class="search-box upload-img" clearsearchkey="true">
+                                    <input class="search-input" type="text" id="searchText" placeholder="请输入设备名称、地点"
+                                        maxlength="50"> <span class="icon-search2" id="searchBtn"></span>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="filter-bar hide">
+                        <dt class="filter-arrt">人脸来源：</dt>
+                        <dd class="filter-tag">
+                            <div class="tagslist face-rource" id="faceRource"></div>
+                        </dd>
+                    </dl>
+                    <script id="faceRourceTemplate" type="x-tmpl">
+                        {% for(var i=0; i<o.length; i++) { %}
+                            <span class="tag-item {%=(i==0 ? 'active':'')%}" value="{%=o[i].orgCode %}">{%=o[i].name %}</span>
+                        {% } %}
+                    </script>
+                    <dl class="filter-bar">
+                        <dt class="filter-arrt">抓拍时间：</dt>
+                        <dd class="filter-tag ">
+                            <div class="tagslist timelist" id="timeTagList">
+                                <span class="tag-item active tagsTime" time-control="jt">今天</span>
+                                <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                                <span class="tag-item tagsTime" time-control="bz">本周</span>
+                                <span class="tag-item tagsTime" time-control="by">本月</span>
+                                <span class="tag-item tagsTime" time-control="nW">近7天</span>
+                                <span class="tag-item tagsTime" time-control="nM">近30天</span>
+                                <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                                <div class="opera-group">
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="beginTime" readonly type="text"> <i></i>
+                                    </div>
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="endTime" readonly type="text">
+                                        <i></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="filter-bar" id="carPlate">
+                        <dt class="filter-arrt">感知设备：</dt>
+                        <dd class="filter-tag pt3">
+                            <!-- <input class="device-name" type="text" name="country" id="deviceNames" readonly="readonly" />
+                        <input type="hidden" id="orgCode">
+                        <span class="select-place" id="deviceListBtn" style="width: initial;padding: 0 10px;"><i class="icon-list22"></i></span>
+                        <span class="select-place" id="locate"><i class="icon-locate"></i> 感知设备</span> -->
+
+
+                            <div class="dropdown-list">
+                                <div class="dropdown-list-text">
+                                    <span class="list-title" id="deviceNames"></span> <input type="hidden" id="orgCode">
+                                    <input type="hidden" id="orgCodeInt"> <a class="dropdown hide"> <i
+                                            class="icon-arrow-down8"></i>
+                                    </a>
+                                </div>
+                                <div class="dropdown-menu">
+                                    <ul class="list-con" id="deviceNameList">
+                                        <!-- <li>
+                                        <a>
+                                            <span class="deviceName">广东省</span>
+                                            <span class="removeBtn operate-btn">×</span>
+                                        </a>
+                                    </li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <span class="select-place" id="locate"><i class="icon-locate"></i> 感知设备</span>
+
+                            <!-- <div class="ov p0 dropdown-tree form-control treetwo" id="orgTree" name="orgTree" type="dropdown-tree" 
+                         ui-control="dropdowntree" ui-service="face/common/getFaceDetect" ui-options="orgTreeOpts"></div>
+                        <span class="select-place" id="locate"><i class="icon-locate"></i> 卡口选择</span>
+                        <input type="hidden" id="orgCode"> -->
+                        </dd>
+                    </dl>
+                    <dl class="filter-bar hide" cj-permission="people_category">
+                        <dt class="filter-arrt">人员分类：</dt>
+                        <dd class="filter-tag">
+                            <div class="tagslist" id="race">
+                                <span class="tag-item active" value="">全部</span>
+                                <span class="tag-item" value="3">外籍人</span>
+                            </div>
+                        </dd>
+                    </dl>
+
+                    <!-- 算法 -->
+                    <dl class="filter-bar clearfix arithmetic" id="arithmetic">
+                        <dt class="filter-arrt">算法：</dt>
+                        <dd class="arithmetic-item">
+                            <div class="arithmetic-min arithmetic-tools all">
+                                <span>综合</span>|<i></i>
+                            </div>
+                            <div class="arithmetic-max">
+                                <div class="arithmetic-header clearfix">
+                                    <div class="arithmetic-name fl">综合</div>
+                                    <div class="arithmetic-input fr">
+                                        <input type="text" algo_type="10003"
+                                            ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="综合"
+                                            value="60">
+                                    </div>
+                                </div>
+                                <div class="arithmetic-btn"></div>
+                            </div>
+                        </dd>
+                        <script id="ALGTemplate" type="x-tmpl">
+                        <dd class="arithmetic-item">
+                            <div class="arithmetic-min arithmetic-tools" algo_type="{%=o.ALGORITHM_ID%}" score-rate="{%=o.SCORE_RATE%}"><span>{%=o.ALGORITHM_NAME%}</span>|<i></i></div>
+                            <div class="arithmetic-max">
+                                <div class="arithmetic-header clearfix">
+                                    <div class="arithmetic-name fl">{%=o.ALGORITHM_NAME%}</div>
+                                    <div class="arithmetic-input fr">
+                                        <input type="text" algo_type="{%=o.ALGORITHM_ID%}" ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="{%=o.ALGORITHM_DESC%}" value="60">
+                                    </div>
+                                </div>
+                                <div class="arithmetic-btn"></div>
+                            </div>
+                        </dd>
+                    </script>
+                    </dl>
+                    <!-- 排序 -->
+                    <dl class="filter-bar">
+                        <dt class="filter-arrt">排序：</dt>
+                        <dd class="filter-tag pt5">
+                            <div class="tagslist" id="sortList">
+                                <span class="tag-item px-item barItem active" type="timeSort" attr-type="time"
+                                    attr-arc="timeDesc" isFirst="true">时间
+                                    <i class="time-asc-icon px-icon arcIcon hide" title="时间正序"></i>
+                                    <i class="time-desc-icon px-icon descIcon" title="时间降序"></i>
+                                </span>
+                                <span class="tag-item px-item barItem disabled" type="scoreSort" attr-type="similar"
+                                    isFirst="true">
+                                    相似度<i class="simialr-icon px-icon"></i>
+                                </span>
+                                <span class="tag-item px-item barItem disabled" type="calcuSort" attr-type="calculate"
+                                    isFirst="true">
+                                    多算法<i class="simialr-icon px-icon"></i>
+                                </span>
+                                <span class="tag-item px-item barItem" type="sourceSort" attr-type="source" isFirst="true">
+                                    多来源</span>
+                            </div>
+                        </dd>
+                    </dl>
+
+                    <button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+                </div>
+            </div>
+
+
+
+
+            <!-- 内容主体 -->
+            <div class="page-info-metro full">
+                <!-- 顶部过滤条件 -->
+                <div class="action-btn-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="checkAll" listview-checkall="">全选
+                    </label>
+                    <span class="tabs-box clearfix">
+                        <span class="tab-item fl card-module active module" title="卡片展示" attr-type="card">
+                            <i class="card-module-icon module-icon"></i>
+                        </span>
+                        <span class="tab-item fl table-module module" title="列表展示" attr-type="table">
+                            <i class="table-module-icon module-icon"></i>
+                        </span>
+                    </span>
+                    <!-- <a class="btn btn-i-t" id="freqAnalysisBtn">
+                        <span class="btn-icon import-icon"></span>
+                        <span>频次分析</span>
+                    </a> -->
+                    <a class="btn btn-i-t" id="freqAnalysisBtn_1">
+                        <span class="btn-icon import-icon"></span>
+                        <span>频次分析</span>
+                    </a>
+                    <a class="btn btn-i-t" id="exportPersonalBtn" title="最大支持导出1000条数据"> <span
+                            class="btn-icon export-icon"></span>
+                        <span>导出</span>
+                    </a>
+                    <a class="btn btn-i-t" id="gjSearch">
+                        <span class="btn-icon gjsearch-icon"></span>
+                        <span>轨迹查看</span>
+                    </a>
+                    <a class="btn btn-i-t hide" id="capDevice">
+                        <span class=""></span>
+                        <span>设备统计列表</span>
+                    </a>
+                </div>
+                <div class="page-wrap">
+                    <div class="page-info-metro square-pager">
+                        <div class="page-data tc pageData hide" listview-page="">
+                            <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+                                    class="icon-arrow-left7"></i></a> <span class="page-num">共有<i class="page-num"
+                                    listview-counts="">0</i>条记录
+                            </span> <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+                            <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="source-page hide">
+                    <span class="page-prev-btn disabled">
+                        <i class="icon-arrow-left7"></i>
+                    </span>
+                    <span class="page-number">
+                        共有
+                        <span>0</span>
+                        条记录
+                    </span>
+                    <span class="current-total">
+                        <span class="page-current">1</span>
+                        /
+                        <span class="page-total">0</span>
+                    </span>
+                    <span class="page-next-btn disabled">
+                        <i class="icon-arrow-right7"></i>
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- 图片列表区域 -->
+            <div class="page-con p0">
+                <!-- 正常图列表模板 -->
+                <div class="library-info p20 listviewImgBox cardBox">
+                    <div class="tilelist vertical ver-caselist two-pictrues-small checkbox listBox">
+                        <!-- checkbox 类做选择 -->
+                        <script id="faceTemplate" type="text/x-tmpl">
+                        <div class="list-node-wrap">
+                        <dl class="list-node picMessage">
+                            <!-- 图片区域 -->
+                            <dt class="node-img compare-img" attrimg="doublezoom">
+                                <span class="compare-large">
+                                    <img src="{%=o.PIC%}" zoom-url="{%=o.PIC%}" style="width:100%">
+                                    <em>原图</em>
+                                </span>
+                                <span class="compare-small ml0">
+                                    <img src="{%=o.OBJ_PIC%}" zoom-url="{%=o.OBJ_PIC%}">
+                                    <em>抓拍图片</em>
+                                </span>
+                                {% if(o.SCORE!=""&&typeof o.SCORE!="undefined"){ %}
+                                    <b class="similar color-blue" key="similar" picMsg="相似度:{%=o.SCORE%}%">{%=o.SCORE%}%</b>
+                                {% } %}
+                            </dt>
+                            <!-- 图片下文字列表 -->
+                            <dd class="node-text mt10">
+                                <input type="checkbox" listview-check="" class="checkbox-opacity hide nodeCheck">
+                                <p class="similar-name">
+                                    <label picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">地点：</label>
+                                    <span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span>
+                                </p>
+                                <!-- 190225 -->
+                                <p>
+                                    <label picMsg="时间:{%=renderNullToNotKnow(o.JGSK)%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.JGSK%}' class='portal-icon icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>">抓拍时间：</label>
+                                    <span title="抓拍时间：{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}">入库时间：</label>
+                                    <span title="入库时间：{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.JGSK%}' class='portal-icon icon icon-search2 fr SearchByImage' title='以图搜图' style='color:#777;font-size:20px;'></span>">设备名称：</label>
+                                    <span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="行政区域:{%=renderNullToNotKnow(o.ORG_NAME)%}">行政区域：</label>
+                                    <span title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}">注册状态：</label>
+                                    <span title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
+                                    <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</span>
+                                </p>
+                                <p>
+                                    <label picMsg="质量分数:{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}">质量分数：</label>
+                                    <span title="{%=o.FACE_SCORE ? o.FACE_SCORE:'未知'%}">{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}</span>
+                                </p>
+                                {% if(o.ACTIVITY_NAME) { %}
+                                <p class="hide">
+                                    <label picMsg="活动名称:{%=o.ACTIVITY_NAME%}"></label>
+                                </pc>
+                                {% } %}
+                                {% if(o.ACTIVITY_TIME) { %}
+                                <p class="hide">
+                                    <label picMsg="活动时间:{%=o.ACTIVITY_TIME%}"></label>
+                                </p>
+                                {% } %}
+                                {% if(o.ACTIVITY_PLACE) { %}
+                                <p class="hide">
+                                    <label picMsg="活动场馆:{%=o.ACTIVITY_PLACE%}"></label>
+                                </p>
+                                {% } %}
+                                {% if(o.PURCHASER_NAME) { %}
+                                <p class="hide">
+                                    <label picMsg="持票人姓名:{%=o.PURCHASER_NAME%}"></label>
+                                </p>
+                                {% } %}
+                                {% if(o.PURCHASER_SEAT_NO) { %}
+                                <p class="hide">
+                                    <label picMsg="持票人座位:{%=o.PURCHASER_SEAT_NO%}"></label>
+                                </p>
+                                {% } %}
+
+
+
+
+
+                                {% if(!UI.isForeigners) { %}
+                                <div class="btn-group fr" >
+                                    {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
+                                    <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}">
+                                        <i class="btn-icon verification-icon"></i>
+                                    </a>
+                                    {% } %}
+
+
+                                    <!-- 如果有权限，显示身份核查图标 -->
+                                    {% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
+                                    <a class="btn-i-t btn-xs verification-search" title="身份核查"  url="{%=o.OBJ_PIC%}"  identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" >
+                                        <i class="btn-icon verification-icon"></i>
+                                    </a>
+                                    {% } %}
+
+                                    <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.OBJ_PIC%}">
+                                        <i class="btn-icon trajectory-icon"></i>
+                                    </a>
+                                    <a fileUrl="{%=o.OBJ_PIC%}" bigImg="{%=o.PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                        <i class="btn-icon search-icon"></i>
+                                    </a>
+                                    <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">
+                                        <i class="btn-icon collection-icon"></i>
+                                    </a>
+                                    <a fileUrl="{%=o.OBJ_PIC%}" 
+                                        LATITUDE="{%= o.LATITUDE %}"
+                                        LONGITUDE="{%= o.LONGITUDE %}"
+                                        attr-time="{%=renderNullToNotKnow(o.JGSK)%}" 
+                                        attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}"
+                                        class="btn-i-t btn-xs locationBtn location-btn" 
+                                        ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+                                        <i class="btn-icon location-icon"></i>
+                                    </a>
+
+
+
+                                    
+                                    <!-- 如果有权限，显示结构化搜索图标 -->
+                                    {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                        <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o.PIC%}" title="结构化检索">
+                                            <i class="btn-icon structured-icon"></i>
+                                        </a>
+                                    {% } %}
+                                    <a class="btn-i-t btn-xs detailSearch hide" id="{%=o.INFO_ID%}" type="{%=o.INFO_ID%}" title="详情">
+                                        <i class="btn-icon detail-icon"></i>
+                                    </a>
+                                </div>
+                                {% } %}
+                            </dd>
+                        </dl>
+                        </div>
+                    </script>
+                    </div>
+                </div>
+                <!-- 缩略图列表模板 -->
+                <div class="table-wrap hide tableBox">
+                    <table class="table listBxo" cellspacing="0" cellpadding="0">
+                        <!-- 头部区域 -->
+                        <thead>
+                            <tr>
+                                <th class="tc" style="width: 30px;"></th>
+                                <th class="tc clearfix" style="width: 140px;">
+                                    <span class="pic-text fl tc ">原图</span>
+                                    <span class="obj-text fr tc">抓拍图</span>
+                                </th>
+                                <th class="tc hide" style="width: 50px;"></th>
+                                <th class="w10 tc"><span>地点</span></th>
+                                <th class="w10 tc"><span>抓拍时间</span></th>
+                                <th class="w10 tc"><span>入库时间</span></th>
+                                <th class="w10 tc"><span>设备名称</span></th>
+                                <th class="w10 tc"><span>行政区域</span></th>
+                                <th class="w10 tc"><span>注册状态</span></th>
+                                <th class="w10 tc"><span>算法类型</span></th>
+                                <th class="w10 tc"><span>质量分数</span></th>
+                                <th class="tc" style="width: 350px;"><span>操作</span></th>
+                            </tr>
+                        </thead>
+                        <!-- 内容列表 -->
+                        <tbody class="listviewImgBox">
+                            <script id="faceTableTemplate" type="x-tmpl">
+                                <tr class="picMessage">
+                                    <td class="tc" style="width: 30px;">
+                                        <input type="checkbox" listview-check="" class="checkbox-opacity tableCheck">
+                                    </td>
+                                    <td class="tr clearfix p0" style="width: 140px; position:relative;" attrimg="doublezoom">
+                                        <img src="{%=o.PIC%}" zoom-url="{%=o.PIC%}" class="pic-img fl">
+                                        <img src="{%= o.OBJ_PIC %}" class="obj-img fr">
+                                        {% if(o.SCORE!=""&&typeof o.SCORE!="undefined"){ %}
+                                        <b class="similar color-blue" key="similar" style="right: 40px;" picMsg="相似度:{%=o.SCORE%}%">{%=o.SCORE%}%</b>
+                                        {% } %}
+                                    </td>
+                                    <!-- <td style="width: 50px;" attrimg="doublezoom">
+                                        <img src="{%=o.PIC%}" class="hide">
+                                        <img src="{%=o.OBJ_PIC%}">
+                                    </td>  -->
+                                    <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</td>
+                                    <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
+                                    <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                    <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</td>
+                                    <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o.ORG_NAME)%}" title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</td>
+                                    <td class="tc" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</td>
+                                    <td class="tc" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</td>
+                                    <td class="tc" picMsg="质量分数:{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}</td>
+                                    {% if(o.ACTIVITY_NAME) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动名称:{%=o.ACTIVITY_NAME%}"></label>
+                                    </pc>
+                                    {% } %}
+                                    {% if(o.ACTIVITY_TIME) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动时间:{%=o.ACTIVITY_TIME%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o.ACTIVITY_PLACE) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动场馆:{%=o.ACTIVITY_PLACE%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o.PURCHASER_NAME) { %}
+                                    <p class="hide">
+                                        <label picMsg="持票人姓名:{%=o.PURCHASER_NAME%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o.PURCHASER_SEAT_NO) { %}
+                                    <p class="hide">
+                                        <label picMsg="持票人座位:{%=o.PURCHASER_SEAT_NO%}"></label>
+                                    </p>
+                                    {% } %}
+
+
+
+                                    <td class="tc" style="width: 422px;">
+                                        <ul class="btn-group-icons list-inline">
+                                            {% if(UI.control.hasPermission('EFACE_faceVerification')) { %} 
+                                            <li class="verification-search" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" ui-permission="EFACE_faceVerification" title="身份核查">
+                                                <b><i class="btn-icon verification-icon"></i></b>
+                                            </li>
+                                            {% } %}
+                                            {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %} 
+                                            <li class="verification-search" url="{%=o.OBJ_PIC%}" onClick="facestoreGetData('{%=o.OBJ_PIC%}')" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" ui-permission="EFACE_faceVerificationArchive" title="身份核查">
+                                                <b><i class="btn-icon verification-icon"></i></b>
+                                            </li>
+                                            {% } %}
+                                            <li class="trajectory-search"  url="{%=o.OBJ_PIC%}" title="轨迹分析"><b><i class="btn-icon trajectory-icon"></i></b></li>
+                                            <li class="searchBtn search-btn search-list" fileUrl="{%=o.OBJ_PIC%}" bigImg="{%= o.PIC %}" title="搜索"><b><i class="btn-icon search-icon"></i></b></li>
+                                            <li class="collectionBtn collection" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏"><b><i class="btn-icon collection-icon"></i></b></li>
+                                            <li class="locationBtn location-li" fileUrl="{%=o.OBJ_PIC%}" 
+                                                LATITUDE="{%= o.LATITUDE %}"
+                                                LONGITUDE="{%= o.LONGITUDE %}"
+                                                attr-time="{%=renderNullToNotKnow(o.JGSK)%}" 
+                                                attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}" 
+                                                ref="/efacecloud/page/library/selectMapAddr.html" title="定位"><b><i class="btn-icon location-icon"></i></b>
+                                            </li>
+                                            {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}                                            
+                                            <li class="turnStructuredSearch structured-search" imgSrc="{%=o.PIC%}" title="结构化检索">
+                                                <b><i class="btn-icon structured-icon"></i></b>
+                                            </li>
+                                            {% } %}
+                                            <li class="detailSearch hide" id="{%=o.INFO_ID%}" type="{%=o.INFO_ID%}" title="详情">
+                                                <b><i class="btn-icon detail-icon"></i></b>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </script>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 排序后模板 -->
+            <div class="page-con-sort p0 hide">
+                <div class="hide sort-item" id="timeSort"></div>
+                <div class="hide sort-item" id="scoreSort"></div>
+                <div class="hide sort-item" id="calcuSort"></div>
+                <div class="hide sort-item" id="sourceSort"></div>
+                <!-- timeScoreTemplate模板 -->
+                <script id="timeScoreTemplate" type="x-tmpl">
+                    <!-- 正常图列表模板 -->
+                    <div class="library-info p20 listviewImgBox cardBox">
+                        <div class="tilelist vertical ver-caselist two-pictrues-small checkbox listBox">
+                            <!-- checkbox 类做选择 -->
+                            {% for(var i=0;i<o.length;i++){ %}
+                            <div class="list-node-wrap" curindex="{%=i%}">
+                            <dl class="list-node picMessage">
+                                <dt class="node-img compare-img" attrimg="doublezoom">
+                                    <span class="compare-large">
+                                        <img src="{%=o[i].PIC%}" zoom-url="{%=o[i].PIC%}" style="width:100%">
+                                        <em>原图</em>
+                                    </span>
+                                    <span class="compare-small ml0">
+                                        <img src="{%=o[i].OBJ_PIC%}" zoom-url="{%=o[i].OBJ_PIC%}">
+                                        <em>抓拍图片</em>
+                                    </span>
+                                    {% if(o[i].SCORE!=""&&typeof o[i].SCORE!="undefined"){ %}
+                                        <b class="similar color-blue" key="similar" picMsg="相似度:{%=o[i].SCORE%}%">{%=o[i].SCORE%}%</b>
+                                    {% } %}
+                                </dt>
+                                <dd class="node-text mt10">
+                                    <p class="similar-name">
+                                        <label picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">地点：</label>
+                                        <span title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="时间:{%=renderNullToNotKnow(o[i].JGSK)%}">抓拍时间：</label>
+                                        <span title="抓拍时间：{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="入库时间:{%=renderNullToNotKnow(o[i].CREATETIME)%}">入库时间：</label>
+                                        <span title="入库时间：{%=renderNullToNotKnow(o[i].CREATETIME)%}">{%=renderNullToNotKnow(o[i].CREATETIME)%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">设备名称：</label>
+                                        <span title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}">行政区域：</label>
+                                        <span title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="注册状态:{%=o[i].RLTZ == '' ? '失败' : '成功'%}">注册状态：</label>
+                                        <span title="{%=o[i].RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="算法类型:{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
+                                        <span title="{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</span>
+                                    </p>
+                                    <p>
+                                        <label picMsg="质量分数:{%=o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">质量分数：</label>
+                                        <span title="{%= o[i].FACE_SCORE %}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</span>
+                                    </p>
+                                    {% if(o[i].ACTIVITY_NAME) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动名称:{%=o[i].ACTIVITY_NAME%}"></label>
+                                    </pc>
+                                    {% } %}
+                                    {% if(o[i].ACTIVITY_TIME) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动时间:{%=o[i].ACTIVITY_TIME%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o[i].ACTIVITY_PLACE) { %}
+                                    <p class="hide">
+                                        <label picMsg="活动场馆:{%=o[i].ACTIVITY_PLACE%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o[i].PURCHASER_NAME) { %}
+                                    <p class="hide">
+                                        <label picMsg="持票人姓名:{%=o[i].PURCHASER_NAME%}"></label>
+                                    </p>
+                                    {% } %}
+                                    {% if(o[i].PURCHASER_SEAT_NO) { %}
+                                    <p class="hide">
+                                        <label picMsg="持票人座位:{%=o[i].PURCHASER_SEAT_NO%}"></label>
+                                    </p>
+                                    {% } %}
+
+
+                                    <div class="btn-group fr">
+                                        <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}"  identity-id="{%=o[i].PERSON_ID%}" device-id="{%=o[i].DEVICE_ID%}" capture-time="{%=o[i].JGSK%}" algo-id="{%=o[i].ALGORITHM_ID%}" face-id="{%=o[i].FACE_ID%}" >
+                                            <i class="btn-icon verification-icon"></i>
+                                        </a>
+                                        <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
+                                            <i class="btn-icon trajectory-icon"></i>
+                                        </a>
+                                        <a fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%=o[i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                            <i class="btn-icon search-icon"></i>
+                                        </a>
+                                        <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[i].DEVICE_ID%}&deviceName={%=o[i].DEVICE_NAME%}&infoId={%=o[i].INFO_ID%}&pic={%=o[i].PIC%}&objPci={%=o[i].OBJ_PIC%}&jgsj={%=o[i].JGSK%}" title="收藏">
+                                            <i class="btn-icon collection-icon"></i>
+                                        </a>
+                                        <a fileUrl="{%=o[i].OBJ_PIC%}" 
+                                            LATITUDE="{%= o[i].LATITUDE %}"
+                                            LONGITUDE="{%= o[i].LONGITUDE %}"
+                                            attr-time="{%=renderNullToNotKnow(o[i].JGSK)%}" 
+                                            attr-addr="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" 
+                                            class="btn-i-t btn-xs locationBtn location-btn" 
+                                            ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+                                            <i class="btn-icon location-icon"></i> 
+                                        </a>
+                                        {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                        <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[i].PIC%}" title="结构化检索">
+                                            <i class="btn-icon structured-icon"></i>
+                                        </a>
+                                        {% } %}
+                                        <a class="btn-i-t btn-xs detailSearch hide" id="{%=o[i].INFO_ID%}" type="{%=o[i].INFO_ID%}" title="详情">
+                                            <i class="btn-icon detail-icon"></i>
+                                        </a>
+                                    </div>      
+                                </dd>
+                            </dl>
+                            </div>
+                            {% } %}
+                        </div>
+                    </div>
+                    <!-- 缩略图列表模板 -->
+                    <div class="table-wrap hide tableBox">
+                        <table class="table listBox" cellspacing="0" cellpadding="0">  
+                            <thead>
+                                <tr>
+                                    <th class="tc" style="width: 30px;"></th>
+                                    <th class="tc clearfix" style="width: 140px;">
+                                        <span class="pic-text fl tc ">原图</span>
+                                        <span class="obj-text fr tc">抓拍图</span>
+                                    </th>
+                                    <th class="tc hide" style="width: 50px;"></th>
+                                    <th class="w10 tc"><span>地点</span></th>      
+                                    <th class="w10 tc"><span>抓拍时间</span></th> 
+                                    <th class="w10 tc"><span>入库时间</span></th> 
+                                    <th class="w10 tc"><span>设备名称</span></th>      
+                                    <th class="w10 tc"><span>行政区域</span></th> 
+                                    <th class="w10 tc"><span>注册状态</span></th>      
+                                    <th class="w10 tc"><span>算法类型</span></th> 
+                                    <th class="w10 tc"><span>质量分数</span></th>
+                                    <th class="tc" style="width: 422px;"><span>操作</span></th> 
+                                </tr>
+                            </thead>
+                            <tbody class="listviewImgBox">
+                                    {% for(var i=0;i<o.length;i++){ %}
+                                    <tr class="picTableMessage" curindex="{%=i%}">
+                                        <td class="tc" style="width: 30px;">
+                                            <input type="checkbox" class="checkbox-opacity picTableCheck">
+                                        </td>
+                                        <td class="tr clearfix p0" style="width: 140px; position:relative;" attrimg="doublezoom">
+                                            <img src="{%=o[i].PIC%}" zoom-url="{%=o[i].PIC%}" class="pic-img fl">
+                                            <img src="{%= o[i].OBJ_PIC %}" class="obj-img fr">
+                                            {% if(o[i].SCORE!=""&&typeof o[i].SCORE!="undefined"){ %}
+                                            <b class="similar color-blue" key="similar" style="right: 40px;" picMsg="相似度:{%=o[i].SCORE%}%">{%=o[i].SCORE%}%</b>
+                                            {% } %}
+                                        </td>
+                                        <!-- <td style="width: 50px;" attrimg="doublezoom">
+                                            <img src="{%=o[i].PIC%}" class="hide">
+                                            <img src="{%=o[i].OBJ_PIC%}">
+                                        </td>  -->
+                                        <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</td>
+                                        <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
+                                        <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                        <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</td>
+                                        <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}" title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</td>
+                                        <td class="tc" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</td>
+                                        <td class="tc" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</td>
+                                        <td class="tc" picMsg="质量分数:{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</td>
+
+                                        {% if(o[i].ACTIVITY_NAME) { %}
+                                        <p class="hide">
+                                            <label picMsg="活动名称:{%=o[i].ACTIVITY_NAME%}"></label>
+                                        </pc>
+                                        {% } %}
+                                        {% if(o[i].ACTIVITY_TIME) { %}
+                                        <p class="hide">
+                                            <label picMsg="活动时间:{%=o[i].ACTIVITY_TIME%}"></label>
+                                        </p>
+                                        {% } %}
+                                        {% if(o[i].ACTIVITY_PLACE) { %}
+                                        <p class="hide">
+                                            <label picMsg="活动场馆:{%=o[i].ACTIVITY_PLACE%}"></label>
+                                        </p>
+                                        {% } %}
+                                        {% if(o[i].PURCHASER_NAME) { %}
+                                        <p class="hide">
+                                            <label picMsg="持票人姓名:{%=o[i].PURCHASER_NAME%}"></label>
+                                        </p>
+                                        {% } %}
+                                        {% if(o[i].PURCHASER_SEAT_NO) { %}
+                                        <p class="hide">
+                                            <label picMsg="持票人座位:{%=o[i].PURCHASER_SEAT_NO%}"></label>
+                                        </p>
+                                        {% } %}
+
+
+
+
+                                        <td class="tc" style="width: 422px;">
+                                            <ul class="btn-group-icons list-inline">
+                                                <li class="verification-search" url="{%=o[i].OBJ_PIC%}" identity-id="{%=o[i].PERSON_ID%}" device-id="{%=o[i].DEVICE_ID%}" capture-time="{%=o[i].JGSK%}" algo-id="{%=o[i].ALGORITHM_ID%}" face-id="{%=o[i].FACE_ID%}"><b><i class="btn-icon verification-icon"></i>身份核查</b></li>
+                                                <li class="trajectory-search"  url="{%=o[i].OBJ_PIC%}"><b><i class="btn-icon trajectory-icon"></i>轨迹分析</b></li>
+                                                <li class="searchBtn search-btn search-list" fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%= o[i].PIC %}"><b><i class="btn-icon search-icon"></i>搜索</b></li>
+                                                <li class="collectionBtn collection" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[i].DEVICE_ID%}&deviceName={%=o[i].DEVICE_NAME%}&infoId={%=o[i].INFO_ID%}&pic={%=o[i].PIC%}&objPci={%=o[i].OBJ_PIC%}&jgsj={%=o[i].JGSK%}" title="收藏"><b><i class="btn-icon collection-icon"></i>收藏</b></li>
+                                                <li class="locationBtn location-li" fileUrl="{%=o[i].OBJ_PIC%}" 
+                                                    LATITUDE="{%= o[i].LATITUDE %}"
+                                                    LONGITUDE="{%= o[i].LONGITUDE %}"
+                                                    attr-time="{%=renderNullToNotKnow(o[i].JGSK)%}" 
+                                                    attr-addr="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" 
+                                                    ref="/efacecloud/page/library/selectMapAddr.html" title="定位"><b><i class="btn-icon location-icon"></i>定位</b>
+                                                </li>
+                                                {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                                <li class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[i].PIC%}" title="结构化检索">
+                                                    <b><i class="btn-icon structured-icon"></i></b>
+                                                </li>
+                                                {% } %}
+                                                <li class="detailSearch hide" id="{%=o[i].INFO_ID%}" type="{%=o[i].INFO_ID%}" title="详情">
+                                                    <b><i class="btn-icon detail-icon"></i></b>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% } %}
+                            </tbody>
+                        </table>
+                    </div>
+                </script>
+                <!-- calcuTemplate模板 -->
+                <script id="calcuTemplate" type="x-tmpl">
+                    <div class="sort-type">
+                        <ul class="sort-list clearfix" scrollfix>
+                            {% for(i = 0;i<o.length; i++){ %}
+                                {% for(j = 0;j<o[i].key.length; j++){ %}
+                                <li><span class="tag-item">{%=o[i].key[j] %}</span></li>
+                                {% } %}
+                            {% } %}
+                        </ul>
+                    </div>
+                    <div class="sort-con">
+                        <div class="tilelist vertical checkbox">
+                            {% for(j = 0;j<o.length; j++){ %}
+                                {% for(k = 0;k<o[j].key.length; k++){ %}
+                                    <div class="sort-con-title">
+                                        <label for="sort-con-item1"><span class="sort-icon"></span>{%=o[j].key[k] %}</label>
+                                    </div>
+                                    <div class="sort-con-list">
+                                        {% for(var i=0;i<o[j].sortAlgorithmObj[k].length;i++){ %}
+                                            <div class="list-node-wrap" curindex="{%=k%}" subindex="{%=i%}">
+                                    <dl class="list-node picMessage">
+                                        <dt class="node-img compare-img" attrimg="doublezoom">
+                                            <span class="compare-large">
+                                                <img src="{%=o[j].sortAlgorithmObj[k][i].PIC%}" zoom-url="{%=o[j].sortAlgorithmObj[k][i].PIC%}" style="width:100%">
+                                                <em>原图</em>
+                                            </span>
+                                            <span class="compare-small ml0">
+                                                <img src="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" zoom-url="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}">
+                                                <em>抓拍图片</em>
+                                            </span>
+                                            {% if(o[j].sortAlgorithmObj[k][i].SCORE!=""&&typeof o[j].sortAlgorithmObj[k][i].SCORE!="undefined"){ %}
+                                                <b class="similar color-blue" key="similar" picMsg="相似度:{%=o[j].sortAlgorithmObj[k][i].SCORE%}%">{%=o[j].sortAlgorithmObj[k][i].SCORE%}%</b>
+                                            {% } %}
+                                        </dt>
+                                        <dd class="node-text mt10">
+                                            <p class="similar-name">
+                                                <label picMsg="地点:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_ADDR)%}">地点：</label>
+                                                <span title="{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_ADDR)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">抓拍时间：</label>
+                                                <span title="抓拍时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="入库时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">入库时间：</label>
+                                                <span title="入库时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="设备名称:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_NAME)%}">设备名称：</label>
+                                                <span title="{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_NAME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="行政区域:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].ORG_NAME)%}">行政区域：</label>
+                                                <span title="{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].ORG_NAME)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].ORG_NAME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="注册状态:{%=o[j].sortAlgorithmObj[k][i].RLTZ == '' ? '失败' : '成功'%}">注册状态：</label>
+                                                <span title="{%=o[j].sortAlgorithmObj[k][i].RLTZ == '' ? '失败' : '成功'%}">{%=o[j].sortAlgorithmObj[k][i].RLTZ == '' ? '失败' : '成功'%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="算法类型:{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">算法类型：</label>
+                                                <span title="{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="质量分数:{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知' %}">质量分数：</label>
+                                                <span title="{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE %}">{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知'%}</span>
+                                            </p>
+
+                                            {% if(o[j].sortAlgorithmObj[k][i].ACTIVITY_NAME) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动名称:{%=o[j].sortAlgorithmObj[k][i].ACTIVITY_NAME%}"></label>
+                                            </pc>
+                                            {% } %}
+                                            {% if(o[j].sortAlgorithmObj[k][i].ACTIVITY_TIME) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动时间:{%=o[j].sortAlgorithmObj[k][i].ACTIVITY_TIME%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[j].sortAlgorithmObj[k][i].ACTIVITY_PLACE) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动场馆:{%=o[j].sortAlgorithmObj[k][i].ACTIVITY_PLACE%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[j].sortAlgorithmObj[k][i].PURCHASER_NAME) { %}
+                                            <p class="hide">
+                                                <label picMsg="持票人姓名:{%=o[j].sortAlgorithmObj[k][i].PURCHASER_NAME%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[j].sortAlgorithmObj[k][i].PURCHASER_SEAT_NO) { %}
+                                            <p class="hide">
+                                                <label picMsg="持票人座位:{%=o[j].sortAlgorithmObj[k][i].PURCHASER_SEAT_NO%}"></label>
+                                            </p>
+                                            {% } %}
+
+
+
+                                            <div class="btn-group fr">
+                                                <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" identity-id="{%=o[j].sortAlgorithmObj[k][i].PERSON_ID%}" device-id="{%=o[j].sortAlgorithmObj[k][i].DEVICE_ID%}" capture-time="{%=o[j].sortAlgorithmObj[k][i].JGSK%}" algo-id="{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_ID%}" face-id="{%=o[j].sortAlgorithmObj[k][i].FACE_ID%}">
+                                                    <i class="btn-icon verification-icon"></i>
+                                                </a>
+                                                <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}">
+                                                    <i class="btn-icon trajectory-icon"></i>
+                                                </a>
+                                                <a fileUrl="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" bigImg="{%=o[j].sortAlgorithmObj[k][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                                    <i class="btn-icon search-icon"></i>
+                                                </a>
+                                                <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[j].sortAlgorithmObj[k][i].DEVICE_ID%}&deviceName={%=o[j].sortAlgorithmObj[k][i].DEVICE_NAME%}&infoId={%=o[j].sortAlgorithmObj[k][i].INFO_ID%}&pic={%=o[j].sortAlgorithmObj[k][i].PIC%}&objPci={%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}&jgsj={%=o[j].sortAlgorithmObj[k][i].JGSK%}" title="收藏">
+                                                    <i class="btn-icon collection-icon"></i>
+                                                </a>
+                                                <a fileUrl="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" 
+                                                    LATITUDE="{%= o[j].sortAlgorithmObj[k][i].LATITUDE %}"
+                                                    LONGITUDE="{%= o[j].sortAlgorithmObj[k][i].LONGITUDE %}"
+                                                    attr-time="{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}" 
+                                                    attr-addr="{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].DEVICE_ADDR)%}" 
+                                                    class="btn-i-t btn-xs locationBtn location-btn" 
+                                                    ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+                                                    <i class="btn-icon location-icon"></i> 
+                                                </a>
+                                                {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                                <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[j].sortAlgorithmObj[k][i].PIC%}" title="结构化检索">
+                                                    <i class="btn-icon structured-icon"></i>
+                                                </a>
+                                                {% } %}
+                                                <a class="btn-i-t btn-xs detailSearch hide" id="{%=o[j].sortAlgorithmObj[k][i].INFO_ID%}" type="{%=o[j].sortAlgorithmObj[k][i].INFO_ID%}" title="详情">
+                                                    <i class="btn-icon detail-icon"></i>
+                                                </a>
+                                            </div>      
+                                        </dd>
+                                    </dl>
+                                            </div>
+                                        {% } %}
+                                    </div>
+                                {% } %}
+                            {% } %}
+                        </div>
+                    </div>
+                </script>
+
+                <!-- sourceTemplate模板 -->
+                <script id="sourceTemplate" type="x-tmpl">
+                    <div class="library-info p20 listviewImgBox cardBox">
+                        <div class="tilelist vertical ver-caselist two-pictrues-small checkbox listBox">
+                            {% for(var key in o){ %}
+                            <div class="source-wrap">
+                                <div class="source-title">
+                                    <span>{%=o[key][0].SOURCE_NAME%}</span>
+                                </div>
+                                {% for(var i=0;i<o[key].length;i++){ %}
+                                <div class="list-node-wrap" curindex="{%=i%}" parentkey="{%=key%}">
+                                    <dl class="list-node picMessage">
+                                        <dt class="node-img compare-img" attrimg="doublezoom">
+                                            <span class="compare-large">
+                                                <img src="{%=o[key][i].PIC%}" zoom-url="{%=o[key][i].PIC%}" style="width:100%">
+                                                <em>原图</em>
+                                            </span>
+                                            <span class="compare-small ml0">
+                                                <img src="{%=o[key][i].OBJ_PIC%}" zoom-url="{%=o[key][i].OBJ_PIC%}">
+                                                <em>抓拍图片</em>
+                                            </span>
+                                            {% if(o[key][i].SCORE!=""&&typeof o[key][i].SCORE!="undefined"){ %}
+                                                <b class="similar color-blue" key="similar" picMsg="相似度:{%=o[key][i].SCORE%}%">{%=o[key][i].SCORE%}%</b>
+                                            {% } %}
+                                        </dt>
+                                        <dd class="node-text mt10">
+                                            <p class="similar-name">
+                                                <label picMsg="地点:{%=renderNullToNotKnow(o[key][i].DEVICE_ADDR)%}">地点：</label>
+                                                <span title="{%=renderNullToNotKnow(o[key][i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[key][i].DEVICE_ADDR)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="时间:{%=renderNullToNotKnow(o[key][i].JGSK)%}">抓拍时间：</label>
+                                                <span title="抓拍时间：{%=renderNullToNotKnow(o[key][i].JGSK)%}">{%=renderNullToNotKnow(o[key][i].JGSK)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="入库时间:{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">入库时间：</label>
+                                                <span title="入库时间：{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">{%=renderNullToNotKnow(o[key][i].CREATETIME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="设备名称:{%=renderNullToNotKnow(o[key][i].DEVICE_NAME)%}">设备名称：</label>
+                                                <span title="{%=renderNullToNotKnow(o[key][i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[key][i].DEVICE_NAME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="行政区域:{%=renderNullToNotKnow(o[key][i].ORG_NAME)%}">行政区域：</label>
+                                                <span title="{%=renderNullToNotKnow(o[key][i].ORG_NAME)%}">{%=renderNullToNotKnow(o[key][i].ORG_NAME)%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="注册状态:{%=o[key][i].RLTZ == '' ? '失败' : '成功'%}">注册状态：</label>
+                                                <span title="{%=o[key][i].RLTZ == '' ? '失败' : '成功'%}">{%=o[key][i].RLTZ == '' ? '失败' : '成功'%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="算法类型:{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
+                                                <span title="{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[key][i].ALGORITHM_NAME?o[key][i].ALGORITHM_NAME:'未知'%}</span>
+                                            </p>
+                                            <p>
+                                                <label picMsg="质量分数:{%=o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}">质量分数：</label>
+                                                <span title="{%= o[key][i].FACE_SCORE %}">{%= o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}</span>
+                                            </p>
+                                            {% if(o[key][i].ACTIVITY_NAME) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动名称:{%=o[key][i].ACTIVITY_NAME%}"></label>
+                                            </pc>
+                                            {% } %}
+                                            {% if(o[key][i].ACTIVITY_TIME) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动时间:{%=o[key][i].ACTIVITY_TIME%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[key][i].ACTIVITY_PLACE) { %}
+                                            <p class="hide">
+                                                <label picMsg="活动场馆:{%=o[key][i].ACTIVITY_PLACE%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[key][i].PURCHASER_NAME) { %}
+                                            <p class="hide">
+                                                <label picMsg="持票人姓名:{%=o[key][i].PURCHASER_NAME%}"></label>
+                                            </p>
+                                            {% } %}
+                                            {% if(o[key][i].PURCHASER_SEAT_NO) { %}
+                                            <p class="hide">
+                                                <label picMsg="持票人座位:{%=o[key][i].PURCHASER_SEAT_NO%}"></label>
+                                            </p>
+                                            {% } %}
+        
+        
+                                            <div class="btn-group fr">
+                                                <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[key][i].OBJ_PIC%}"  identity-id="{%=o[key][i].PERSON_ID%}" device-id="{%=o[key][i].DEVICE_ID%}" capture-time="{%=o[key][i].JGSK%}" algo-id="{%=o[key][i].ALGORITHM_ID%}" face-id="{%=o[key][i].FACE_ID%}" >
+                                                    <i class="btn-icon verification-icon"></i>
+                                                </a>
+                                                <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[key][i].OBJ_PIC%}">
+                                                    <i class="btn-icon trajectory-icon"></i>
+                                                </a>
+                                                <a fileUrl="{%=o[key][i].OBJ_PIC%}" bigImg="{%=o[key][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                                    <i class="btn-icon search-icon"></i>
+                                                </a>
+                                                <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[key][i].DEVICE_ID%}&deviceName={%=o[key][i].DEVICE_NAME%}&infoId={%=o[key][i].INFO_ID%}&pic={%=o[key][i].PIC%}&objPci={%=o[key][i].OBJ_PIC%}&jgsj={%=o[key][i].JGSK%}" title="收藏">
+                                                    <i class="btn-icon collection-icon"></i>
+                                                </a>
+                                                <a fileUrl="{%=o[key][i].OBJ_PIC%}" 
+                                                    LATITUDE="{%= o[key][i].LATITUDE %}"
+                                                    LONGITUDE="{%= o[key][i].LONGITUDE %}"
+                                                    attr-time="{%=renderNullToNotKnow(o[key][i].JGSK)%}" 
+                                                    attr-addr="{%=renderNullToNotKnow(o[key][i].DEVICE_ADDR)%}" 
+                                                    class="btn-i-t btn-xs locationBtn location-btn" 
+                                                    ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+                                                    <i class="btn-icon location-icon"></i> 
+                                                </a>
+                                                {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                                <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[key][i].PIC%}" title="结构化检索">
+                                                    <i class="btn-icon structured-icon"></i>
+                                                </a>
+                                                {% } %}
+                                                <a class="btn-i-t btn-xs detailSearch hide" id="{%=o[key][i].INFO_ID%}" type="{%=o[key][i].INFO_ID%}" title="详情">
+                                                    <i class="btn-icon detail-icon"></i>
+                                                </a>
+                                            </div>      
+                                        </dd>
+                                    </dl>
+                                </div>
+                                {% } %}
+                            </div>
+                            {% } %}
+                        </div>
+                    </div>
+                </script>
+
+            </div>
+            <div class="frame-form-full">
+                <iframe class="full-screen" id="frameFormView" frameborder="0" name="mainContent"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/gis/js/suntekmapAPI.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/specialUpload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/faceCollectionList.js"></script>
+<script type="text/javascript">
+    $(function () {// 初始化内容
+        var map = { "applicationName": "portal" };//应用功能名
+        UI.control.remoteCall('platform/webapp/config/get', map, function (resp) {
+            var jsonObj = resp.attrList;
+            for (var i = 0; i < jsonObj.length; i++) {
+                if (jsonObj[i].key == "MENU_COMPATIBLE_SEQUENCE" && jsonObj[i].value == "黄埔") { //1为黄埔版本
+                    $("[time-control='nW']").trigger("click");
+                    $("#confirmSearch").trigger("click");
+                }
+                //结构化检索显隐开关。
+                if (jsonObj[i].key == "MENU_COMPATIBLE_SEQUENCE" && jsonObj[i].value != "默认") {
+                    $("[title='结构化检索']").addClass('hide');
+                }
+            }
+        });
+        var map2 = { 'applicationName': 'efacecloud' };
+        UI.control.remoteCall('platform/webapp/config/get', map2, function (resp) {
+            var jsonObj = resp.attrList;
+            for (var i = 0; i < jsonObj.length; i++) {
+                if (jsonObj[i].key == 'FACE_TYPE_ALGO_TYPES' && jsonObj[i].value != '') {
+                    // 显示人员分类筛选
+                    $('#race').parents('.filter-bar').removeClass('hide');
+                }
+            }
+        });
+    });
+</script>
+
+</html>

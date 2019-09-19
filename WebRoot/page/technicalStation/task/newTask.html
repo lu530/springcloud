@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .task-name{
+            padding:20px 0 35px;
+            text-align: center;
+        }
+        .task-name input,.task-name span{
+            height:30px;
+            line-height:30px;
+        }
+        .task-name input{
+            min-width:250px;
+            border:1px solid #ddd;
+            text-indent: 1em;
+        }
+        .button-group{
+            border-top: 1px solid #ddd;
+            padding:10px;
+        }
+        .button-group button{
+            float:right;
+            height:30px;
+            cursor:pointer;
+            color:rgb(72,118,209);
+            line-height:30px;
+            background-color:#fff;
+            border:1px solid rgb(72,118,209);
+            width:80px;
+            margin:0 5px;
+            border-radius:2px;
+        }
+        .button-group .btn-active{
+            background-color:rgb(72,118,209);
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="task-name">
+        <span>任务名称：</span>
+        <input type="text" placeholder="请输入任务名称" onfocus="this.placeholder=''" onblur="this.placeholder='请输入任务名称'">
+    </div>
+    <div class="button-group">
+        <button class="btn-active">确定</button>
+        <button>取消</button>
+    </div>
+</body>
+</html>

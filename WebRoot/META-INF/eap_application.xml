@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application module-version="3.1.2.35878" db-version="" portal-module="false" name="efacecloud" sso="true" description="" build-date="2019-08-30"> 
+  <datasources> 
+    <!-- 应用数据源 -->  
+    <datasource name="appdb"/>  
+    <datasource name="MPPDB_RES"/> 
+  </datasources> 
+</application>
+<!-- <application module-version="模块版本号" db-version="数据库版本号" portal-module="是否是门户应用(true 
+	or false)" name="应用名称(上下文名称，例如：agent)" sso="是否进行单点登录认证(true or false)" description="描述,例如：座席框架" 
+	build-date="创建时间"> -->

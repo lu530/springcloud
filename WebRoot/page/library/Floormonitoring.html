@@ -1,0 +1,476 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+    <!-- <script src="/ui/plugins/eapui/frame/tmpl.js" type="text/javascript"></script> -->
+    <script src="/ui/plugins/eapui/eapbaseui.js" type="text/javascript"></script>
+</head>
+
+<script>
+    (function () {
+        var _ = function () { document.querySelector('html').style.fontSize = 0.26667 * (750 <= document.documentElement.clientWidth ? 750 : document.documentElement.clientWidth) + "px"; }; window.onresize = _;
+    })();
+    var data = {"时间列表":[{"日期":"6-29","停靠次数":"4","楼层分布":[{"楼层":"4","百分率":"25%"},{"楼层":"7","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"6-30","停靠次数":"3","楼层分布":[{"楼层":"3","百分率":"33.3%"},{"楼层":"4","百分率":"33.3%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"6-31","停靠次数":"4","楼层分布":[{"楼层":"11","百分率":"25%"},{"楼层":"14","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"7-01","停靠次数":"4","楼层分布":[{"楼层":"4","百分率":"20%"},{"楼层":"9","百分率":"20%"},{"楼层":"14","百分率":"20%"},{"楼层":"16","百分率":"40%"}]},{"日期":"7-02","停靠次数":"6","楼层分布":[{"楼层":"2","百分率":"25%"},{"楼层":"4","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"16","百分率":"25%"},{"楼层":"17","百分率":"25%"}]},{"日期":"7-03","停靠次数":"4","楼层分布":[]},{"日期":"7-04","停靠次数":"6","楼层分布":[{"楼层":"4","百分率":"16.6%"},{"楼层":"7","百分率":"16.6%"},{"楼层":"13","百分率":"16.6%"},{"楼层":"14","百分率":"16.6%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-05","停靠次数":"4","楼层分布":[{"楼层":"11","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-06","停靠次数":"3","楼层分布":[{"楼层":"2","百分率":"33.3%"},{"楼层":"6","百分率":"33.3%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-07","停靠次数":"4","楼层分布":[{"楼层":"7","百分率":"25%"},{"楼层":"15","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"7-08","停靠次数":"6","楼层分布":[{"楼层":"3","百分率":"16.6%"},{"楼层":"5","百分率":"16.6%"},{"楼层":"11","百分率":"16.6%"},{"楼层":"15","百分率":"16.6%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-09","停靠次数":"6","楼层分布":[{"楼层":"2","百分率":"16.6%"},{"楼层":"6","百分率":"33.3%"},{"楼层":"13","百分率":"16.6%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-10","停靠次数":"3","楼层分布":[{"楼层":"4","百分率":"25%"},{"楼层":"7","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"7-11","停靠次数":"4","楼层分布":[]},{"日期":"7-12","停靠次数":"6","楼层分布":[{"楼层":"4","百分率":"16.6%"},{"楼层":"8","百分率":"16.6%"},{"楼层":"16","百分率":"33.3%"},{"楼层":"17","百分率":"33.3%"}]},{"日期":"7-13","停靠次数":"4","楼层分布":[{"楼层":"2","百分率":"25%"},{"楼层":"11","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"7-14","停靠次数":"4","楼层分布":[{"楼层":"5","百分率":"25%"},{"楼层":"7","百分率":"25%"},{"楼层":"8","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-15","停靠次数":"3","楼层分布":[{"楼层":"3","百分率":"33.3%"},{"楼层":"4","百分率":"33.3%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-16","停靠次数":"3","楼层分布":[{"楼层":"2","百分率":"33.3%"},{"楼层":"4","百分率":"33.3%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-17","停靠次数":"6","楼层分布":[{"楼层":"4","百分率":"16.6%"},{"楼层":"5","百分率":"16.6%"},{"楼层":"11","百分率":"16.6%"},{"楼层":"16","百分率":"33.3%"},{"楼层":"17","百分率":"16.6%"}]},{"日期":"7-18","停靠次数":"4","楼层分布":[{"楼层":"4","百分率":"25%"},{"楼层":"7","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-19","停靠次数":"4","楼层分布":[]},{"日期":"7-20","停靠次数":"3","楼层分布":[{"楼层":"11","百分率":"33.3%"},{"楼层":"12","百分率":"33.3%"},{"楼层":"16","百分率":"33.3%"}]},{"日期":"7-21","停靠次数":"4","楼层分布":[{"楼层":"10","百分率":"25%"},{"楼层":"14","百分率":"25%"},{"楼层":"15","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-22","停靠次数":"4","楼层分布":[{"楼层":"9","百分率":"25%"},{"楼层":"10","百分率":"25%"},{"楼层":"12","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-23","停靠次数":"6","楼层分布":[{"楼层":"3","百分率":"16.6%"},{"楼层":"4","百分率":"16.6%"},{"楼层":"10","百分率":"16.6%"},{"楼层":"13","百分率":"16.6%"},{"楼层":"14","百分率":"16.6%"},{"楼层":"16","百分率":"16.6%"}]},{"日期":"7-24","停靠次数":"4","楼层分布":[]},{"日期":"7-25","停靠次数":"4","楼层分布":[{"楼层":"6","百分率":"25%"},{"楼层":"7","百分率":"25%"},{"楼层":"10","百分率":"25%"},{"楼层":"16","百分率":"25%"}]},{"日期":"7-26","停靠次数":"4","楼层分布":[{"楼层":"4","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"16","百分率":"50%"}]},{"日期":"7-27","停靠次数":"4","楼层分布":[{"楼层":"2","百分率":"25%"},{"楼层":"13","百分率":"25%"},{"楼层":"16","百分率":"50%"}]}],"总楼层":"17","楼层可信度":[{"楼层":"17","百分率":"2.8%"},{"楼层":"16","百分率":"34.7%"},{"楼层":"15","百分率":"2.5%"},{"楼层":"14","百分率":"3.9%"},{"楼层":"13","百分率":"6.6%"},{"楼层":"12","百分率":"2.2%"},{"楼层":"11","百分率":"5.3%"},{"楼层":"10","百分率":"3.4%"},{"楼层":"9","百分率":"1.7%"},{"楼层":"8","百分率":"1.5%"},{"楼层":"7","百分率":"7.2%"},{"楼层":"6","百分率":"3.4%"},{"楼层":"5","百分率":"2.2%"},{"楼层":"4","百分率":"12.2%"},{"楼层":"3","百分率":"3.7%"},{"楼层":"2","百分率":"6%"}]}
+    var dataitem=[
+		{"房号":"1601房","户型":"三室一厅","面积":"116","是否出租":"是","人员列表":[{"姓名":"梁秋梅","联系电话":"13527884340","同行":"14"},{"姓名":"郭仲新","联系电话":"18948806992","同行":"9"},{"姓名":"蒋波","联系电话":"13527884340","同行":"8"}],"百分率":"58.4%"},
+		{"房号":"1602房","户型":"三室一厅","面积":"116","是否出租":"否","人员列表":[{"姓名":"吴川","联系电话":"13824465148","同行":"2"},{"姓名":"周坚","联系电话":"18320733190","同行":"1"},{"姓名":"王珍军","联系电话":"15014192293","同行":"3"}],"百分率":"11.3%"},
+		{"房号":"1603房","户型":"三室一厅","面积":"116","是否出租":"否","人员列表":[{"姓名":"周志乐","联系电话":"13533578024","同行":"1"},{"姓名":"彭玉肖","联系电话":"13533578024","同行":"2"}],"百分率":"5.6%"},
+		{"房号":"1604房","户型":"三室一厅","面积":"116","是否出租":"否","人员列表":[{"姓名":"陈安琴","联系电话":"13660751663","同行":"1"},{"姓名":"王思瑶","联系电话":"15625137068","同行":"2"},{"姓名":"王玉乔","联系电话":"13527884340","同行":"3"}],"百分率":"11.3%"},
+		{"房号":"1605房","户型":"三室一厅","面积":"116","是否出租":"否","人员列表":[{"姓名":"卢霄","联系电话":"13527896618","同行":"1"},{"姓名":"卢花城","联系电话":"13922705328","同行":"1"},{"姓名":"王亚楠","联系电话":"13316068827"}],"百分率":"3.7%"},
+		{"房号":"1606房","户型":"三室一厅","面积":"116","是否出租":"是","人员列表":[],"百分率":"9.4%"}
+    ]
+
+</script>
+
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+
+    .bg {
+        width: 100%;
+        height: 100%;
+        background-image: url('../../images/bg.jpg');
+        background-position: center center;
+        background-size: cover;
+    }
+
+    .bar {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        /* transform: translateY(50px) */
+        padding-top: 20px;
+    }
+
+    #main {
+        width: 115%;
+        min-height: 70%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .warp {
+        width: 50%;
+        float: left;
+    }
+
+    .item {
+        width: 80%;
+        display: flex;
+        background-color: rgba(66, 99, 144, 0.4);
+        margin: 0 auto 6px;
+        overflow: hidden;
+        border-radius: 10px 10px 10px 10px / 10px 10px 10px 10px;
+    }
+
+    .l {
+        flex: 1;
+        padding: 10px;
+        box-sizing: border-box;
+        float: left;
+        position: relative;
+    }
+
+    .house {
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .detail {
+        font-size: 12px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .detail span {
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    .detail .sup {
+        font-size: 12px;
+    }
+
+    .zu {
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 10px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .m {
+        flex: 4;
+        display: flex;
+        align-items: flex-start;
+        box-sizing: border-box;
+        padding: 10px 0;
+
+    }
+    .middlep{
+        width: 100%;
+        overflow: hidden;
+    }
+    p {
+        font-size: 12px;
+        padding: 0;
+        padding-bottom: 8px;
+        width: 50%;
+        float: left;
+        margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .phone {
+        margin: 0 5px;
+        color: black;
+        font-size: 12px;
+    }
+
+    .colorblue {
+        color: #3891a0;
+    }
+
+    .colorred {
+        color: red;
+
+    }
+
+    .r {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .circleouter {
+        width: 6rem;
+        height: 6rem;
+        border: 1px solid gray;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .circleinner {
+        width: 5rem;
+        height: 5rem;
+        border: 1px solid gray;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .circleinner span {
+        font-size: 20px;
+    }
+
+    .footer {
+        width: 100%;
+        position: relative;
+        height: 100px;
+        margin-top: -40px;
+    }
+
+    /* #pie {
+        width: 400px;
+        height: 300px;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 99;
+    } */
+</style>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div class="bg">
+        <div class="bar">
+            <div id="main"></div>
+            <div class="footer">
+                <script id="listTemplate" type="x-tmpl">
+                {% for(var i=0;i<o.length;i++) { %}
+                <div class="warp">
+                    <div class="item">
+                        <div class="l">
+                            <div class="house">{%= o[i]['房号'] %}</div>
+                            <div class="detail">{%= o[i]['户型'] %}<span>{%= o[i]['面积'] %}m <sup>2</sup></span></div>
+                            {% if(o[i]['是否出租']=='是') { %}
+                            <div class="zu" >租</div>
+                            {% }%}
+                        </div>
+                        <div class="m">
+                            <div class="middlep">
+                                {% for(var j=0;j<o[i]['人员列表'].length;j++) { %}
+                                <p class="colorred">{%= o[i]['人员列表'][j]['姓名'] %}
+                                    <span class="phone">{%= o[i]['人员列表'][j]['联系电话'] %}</span>
+                                    <span class="det colorblue">同行<span class="number">({%=o[i]['人员列表'][j]['同行']%})</span>次</span>
+                                </p>
+                                {% }%}
+                            </div>
+                        </div>
+                        <div class="r">
+                            <div class="circleouter">
+                                <div class="circleinner">
+                                    <span>{%= o[i]['百分率'] %}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% } %}
+            </script>
+            </div>
+            <!-- <div id="pie"></div> -->
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        // var imageDom=document.createElement("img");
+        // imageDom.src="./1.png";
+        var timeout = null;//onresize触发次数过多，设置定时器
+        window.onresize = function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () { window.location.reload(); }, 300);//页面大小变化，重新加载页面以刷新MAP
+        }
+        window.onload=function() {
+            $('.footer').html(tmpl('listTemplate',dataitem));
+        }
+        var arrx = [];
+        var arry = [];
+        arryy = [];
+        var arr = [];
+        for (var i = 1; i <= data['总楼层']; i++) {
+            var ii = i + '楼';
+            arry.push(ii);
+            arryy.push(i);
+        }
+        data['时间列表'].forEach(function (item) {
+            var str = item['日期'] + '(' + item['停靠次数'] + ')';
+            arrx.push(str);
+            if (item['楼层分布'].length > 0) {
+                item['楼层分布'].forEach(function (itemson) {
+                    var arritem = [arrx.indexOf(str), arryy.indexOf(Number(itemson['楼层'])), itemson['百分率'].substr(0, itemson['百分率'].length - 1)];
+                    arr.push(arritem);
+                })
+            }
+        })
+        arrx.push("");
+        var arrtmp = [];
+        data['楼层可信度'].forEach(function (item) {
+            var tmp = [];
+            tmp[0] = arrx.length - 1;
+            tmp[1] = Number(item['楼层']) - 1;
+            tmp[2] = item['百分率'].substr(0, item['百分率'].length - 1);
+            arrtmp.push(tmp);
+
+        })
+        var max = arrtmp[0][2];
+        var maxi = 0;
+        for (var i = 0; i < arrtmp.length; i++) {
+            if (Number(arrtmp[i][2]) > Number(max)) {
+                max=arrtmp[i][2];
+                maxi = i;
+            }
+        }
+        var objtmp = {};
+        objtmp.value = [arrtmp[maxi][0], arrtmp[maxi][1], arrtmp[maxi][2]];
+        objtmp.itemStyle = {};
+        objtmp.itemStyle.color = 'red';
+        // objtmp.itemStyle.color.repeat='repeat';
+        // arr = arr.map(function (item) {
+        //     return [item[1], item[0], item[2] || '-'];
+        // });
+        // 基于准备好的dom，初始化echarts实例
+        // imageDom.onload=function (){
+        var myChart = echarts.init(document.getElementById('main'));
+        // objtmp.itemStyle.color.image=imageDom;
+        // console.log(objtmp.itemStyle.color.image);
+        arrtmp[maxi] = objtmp;
+        arr = arr.concat(arrtmp);
+        // console.log(arr)
+        option = {
+            tooltip: {
+                position: 'top',
+                axisPointer: {
+                    show: true,
+                    // type: 'cross',
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1
+                    }
+                }
+            },
+            textStyle: {
+                color: "#fff",
+            },
+            title: {
+                left: 'center',
+                text: '新岑四路2号',
+                textStyle: {
+                    color: 'white',
+                    fontSize: 22,
+                    lineHeight: 14
+                }
+            },
+            // legend: {
+            //     data: ['停靠百分率'],
+            //     left: "center",
+            //     bottom: 360,
+            //     textStyle: {
+            //         color: '#fff'
+            //     }
+            // },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    xAxisIndex: [0],
+                },
+                {
+                    type: 'inside',
+                    yAxisIndex: [0],
+                }
+            ],
+            renderAsImage: "../../images/bg.jpg",
+            animation: true,
+            grid: {
+            },
+            xAxis: {
+                type: 'category',
+                data: arrx,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        width: 0.5,
+                        type: "dashed"
+                    }
+                },
+                axisTick: {
+                    show: false,
+                },
+                axisLine: {
+                    show: false
+                },
+                position: 'top',
+                splitNumber: Number(data['总楼层']),
+                axisLabel: {
+                    interval: 0
+                },
+            },
+            yAxis: {
+                type: 'category',
+                data: arry,
+                splitArea: {
+                    show: true
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        width: 0.5,
+                        type: "dashed"
+                    }
+                },
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false,
+                },
+                splitNumber: Number(data['总楼层']),
+                axisLabel: {
+                    interval: 0
+                },
+            },
+
+            series: [{
+                name: '停靠百分率',
+                type: 'heatmap',
+                data: arr,
+                label: {
+                    normal: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    color: 'rgb(173, 216, 230)',
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+
+                    }
+                }
+            }]
+        };
+        myChart.setOption(option);
+        // }
+        // 使用刚指定的配置项和数据显示图表。
+
+        // var myChartpie = echarts.init(document.getElementById('pie'));
+        // optionpie = {
+        //     title: {
+        //         text: '楼层可信度',
+        //         left: 'center',
+        //         textStyle: {
+        //             color: 'white'
+        //         }
+        //     },
+        //     tooltip: {
+        //         trigger: 'item',
+        //         formatter: "{a} <br/>{b} : {c} ({d}%)"
+        //     },
+        //     textStyle: {
+        //         color: "#fff",
+        //     },
+        //     series: [
+        //         {
+        //             type: 'pie',
+        //             radius: '65%',
+        //             center: ['50%', '50%'],
+        //             selectedMode: 'single',
+        //             data: [
+
+        //                 { value: 20, name: '5楼：40%' },
+        //                 { value: 30, name: '6楼：40%' },
+        //                 { value: 10, name: '7楼：75%' },
+
+        //             ],
+        //             itemStyle: {
+        //                 emphasis: {
+        //                     shadowBlur: 10,
+        //                     shadowOffsetX: 0,
+        //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // };
+        // myChartpie.setOption(optionpie)
+    </script>
+</body>
+
+</html>

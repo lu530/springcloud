@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title></title> 
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" >
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />	
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css">
+	<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />	
+	<style>
+	.page-title .title{
+	    line-height: 36px;
+	    font-size: 14px;
+	    margin-left: 5px;
+	}
+	</style>
+</head> 
+<body>
+<div class="pager-content">
+	<div id="listTab" ui-control="listview" ui-service="control/localCommunityTerminal/getListImportant"  ui-template='listTemplate' >
+		<div class="page-title step-title ps hide">
+			<a class="back-btn" id="backBtn"><i class="icon-arrow-left10"></i><em>返回</em></a>
+			<span class="title"></span>
+		</div>
+		<div class="filter-view">
+			<dl class="filter-bar">
+				<dd class="filter-bar-search">
+					<div class="fifler-group mr5">
+		  				<div class="search-box upload-img">
+							<div class="sttb" id="uploadSearchImgBtn"> 
+								<i class="upload-icon"></i>
+								<input class="file-style" type="file" id="uploadLibraryPic" name="uploadLibraryPic">
+								<a class="st-tips" id="">上传图片，搜索相关信息</a>
+							</div>
+							<input class="search-input" type="text" id="keyWords" name="keyWords" placeholder="请输入关键字" maxlength="50">
+							<span class="icon-search2" id="searchBtn"></span>
+		  				</div>
+					</div>
+					<div class="fifler-group">
+						<div class="search-bar-tips">
+						  <span class="icon-info22"></span>
+						  <span>提示：模糊搜索时，“？”代表单个字符匹配，“*”不限字符数匹配。</span>
+						</div>
+					</div>
+	  				
+				</dd>
+			</dl>
+			<dl class="filter-bar">
+				<dt class="filter-arrt">案件类型：</dt>
+				<dd class="filter-tag">
+					<div class="tags-list" id="caseType">
+						<span class="tag-item active" val="">全部</span>
+						<span class="tag-item" val="01050100">盗窃</span>
+						<span class="tag-item" val="01050200">抢劫</span>
+						<span class="tag-item" val="01050300">诈骗</span>
+						<span class="tag-item" val="01050400">抢夺</span>
+						<span class="tag-item" val="01059900">其他</span>
+					</div>
+				</dd>
+			</dl>
+			
+			<dl class="filter-bar">
+				<dt class="filter-arrt">人员类别：</dt>
+				<dd class="filter-tag">
+					<div class="tags-list" id="personType">
+						<span class="tag-item active" val="1">身份证库</span>
+						<span class="tag-item" val="2">前科人员</span>
+					</div>
+				</dd>
+			</dl>
+			
+			<dl class="filter-bar">
+				<dt class="filter-arrt">告警时间：</dt>
+				<dd class="filter-tag ">
+				<div class="tagslist " id="timeTagList">
+					<span class="tag-item active tagsTime" time-control="jt">今天</span>
+					<span class="tag-item tagsTime" time-control="zt">昨天</span>
+					<span class="tag-item tagsTime" time-control="bz">本周</span>
+					<span class="tag-item tagsTime" time-control="by">本月</span>
+					<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+					<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+					<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+					<div class="opera-group">
+						<div class="time-control-item">
+							<input class="time-control" id="beginTime" readonly type="text">
+							<i></i>
+						</div>
+						<span>-</span>
+						<div class="time-control-item">
+							<input class="time-control" id="endTime" readonly type="text">
+							<i></i>
+						</div>
+						<button class="btn btn-i-t bsline zdyTimeBtn">确定</button>
+					</div>
+				</div>
+			</dd>
+			</dl> 
+			
+			<dl class="filter-bar">
+				<dt class="filter-arrt">性别：</dt>
+				<dd class="filter-tag">
+					<div class="tags-list" id="sex">
+						<span class="tag-item active" val="">全部</span>
+						<span class="tag-item" val="1">男</span>
+						<span class="tag-item" val="2">女</span>
+					</div>
+				</dd>
+			</dl>
+			
+			<dl class="filter-bar filter-bar-hide hide">
+				<dt class="filter-arrt">年龄段：</dt>
+				<dd class="filter-tag">
+					<div class="tags-list" id="age">
+						<span class="tag-item active" val="">全部</span>
+						<span class="tag-item" val="1">儿童</span>
+						<span class="tag-item" val="2">青少年</span>
+						<span class="tag-item" val="3">中年</span>
+						<span class="tag-item" val="4">老年</span>
+						<span class="tag-item" val="0">未知</span>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		
+		<div class="filter-state">
+			<div class="filter-state-box" id="fiflerState">
+				<em class="fifler-text">查看更多</em>
+				<i class="icon icon-more"></i>
+			</div>
+		</div>
+		
+			
+				<div class="page-info-metro  square-pager">
+					<div class="action-btn-group">	
+						<ul class="list-filter">
+							<li class="active" val="BEGINTIME">采集时间<i class="icon-arrow-down5 filter-icon"></i></li>
+						</ul>
+						<a class="btn btn-i-t first addCaseBtn">
+							<span class="btn-icon add-icon"></span>
+							<span>添加</span>
+						</a>
+						<a class="btn btn-i-t addCaseBtn">
+							<span class="btn-icon icon-ccw f16" style="background:transparent"></span>
+							<span>刷新</span>
+						</a>
+					</div>
+					<div class="page-data fr" listview-page="">
+		               <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+		               <span class="page-num">共有<i class="page-num" listview-counts="">10</i>条记录</span>
+		               <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+		               <a class="page-next fr disable" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+		           </div>				    		
+			   	</div>
+			   	<div class="page-con">
+		   	<div class="tilelist vertical checkbox listviewImgBox" >
+		   	
+			   	
+				<script id="listTemplate" type="x-tmpl">
+			   	<div class="list-node-wrap">
+			   		<dl class="list-node" >
+						<dt class="node-img person-img">
+							<img src="{%=o.SHOTURL%}" attrimg="zoom" class="rIMG mb0">
+						</dt>
+						<dd class="node-text picMessage">
+							<p picMsg="名称:{%=o.NAME%}"><label>名称：</label><a class="detailBtn" imgsrc="{%=o.SHOTURL%}"><span title="">{%=o.NAME%}</span></a></p>
+							<p picMsg="性别:{%=o.SEX%}"><label>性别：</label><span title="">{%=o.SEX%}</span></p> 
+							<p picMsg="案件标签:{%=o.TYPE%}"><label>案件标签：</label><span title="">{%=o.TYPE%}</span></p>
+							<p picMsg="身份证:{%=o.IDCAR%}"><label>身份证：</label><span title="">{%=o.IDCAR%}</span></p>
+							<p picMsg="人员状态:{%=o.STATUS%}"><label>人员状态：</label><span title="">{%=o.STATUS%}</span></p>
+							<div class="btn-group fr">
+							<a class="btn btn-i-t btn-xs">
+								<i class="btn-icon search-icon"></i>
+							</a>
+							<a class="btn btn-i-t btn-xs">
+								<i class="btn-icon collection-icon"></i>
+							</a>
+							<div class="btn-i-t btn btn-xs">
+								<span class="dropdown-toggle" data-toggle="dropdown">
+									<i class="btn-icon more-icon"></i>
+								</span>
+								<!-- <ul class="dropdown-menu">
+									<li>
+										<a class="deleteCase">删除</a>
+									</li>
+								</ul> -->
+							</div>
+						</div>
+						</dd>
+					</dl>
+				</div>
+				</script>
+				</div>
+				</div>
+		 </div>
+</div>
+<div class="compare-wrap hide">
+	<div class="compare-title compare-item">
+		案件串并
+	</div>
+	<div class="compare-con compare-item">
+		<div class="compare-scroll-wrap">
+			<div class="tilelist">
+				<!-- <dl class="list-node compare-pic" style="width:262px;">
+					<dt class="node-img car-img">
+						<span>
+							<img src="/ui/plugins/eapui/img/nophoto.jpg" class="rIMG mb0" attrimg="zoom">
+						</span>
+					</dt>
+					<dd class="node-text pt0 pl5">
+						<p><label>案件编号：</label><span title=""></span></p>
+						<p><label>案件名称：</label><span title="蓝色">蓝色</span></p>
+						<p><label>案件类型：</label><span title="其他">其他</span></p>
+						<p><label>案件时间：</label><span title="2016-04-22 ">2016-04-22</span></p>
+					</dd>
+				</dl> -->
+			</div>
+		</div>
+	</div>
+	<div class="compare-operation compare-item">
+		<button type="button" class="btn btn-blue compareGroupBtn">比对</button>
+		<a href="javascript:void(0)" class="cancelBtn">取消比对</a>
+	</div>
+</div> 
+<div class="frame-form-full" style="display: none;">
+    <iframe class="full-screen" id="mainContent" frameborder="0" name="mainContent"></iframe>
+</div>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/importantPersonLib/libraryDetailList.js"></script>
+</body>
+</html>

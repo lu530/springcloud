@@ -1,0 +1,110 @@
+@charset "utf-8";
+.page-con {
+	padding: 0;
+	background: #e7ecf0;
+}
+
+.content-box {
+	width: 100%;
+	margin-bottom: 20px;
+	background: #fff;
+	padding: 16px 30px 8px;
+}
+
+.content-title {
+	font-size: 13px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #EDF1FB;
+}
+
+.content-title .name {
+	color: #5E89E0;
+	padding-right: 10px;
+	margin-right: 6px;
+	border-right: 1px solid #eaeaea;
+}
+
+.content-title .police-send-btn {
+	margin-top: -8px;
+    top: 0;
+    width: auto;
+    height: auto;
+}
+
+.tilelist .list-node-wrap {
+	position: relative;
+	width: 33%;
+}
+
+.compare-large~.similar {
+	right: 50%;
+}
+
+.tilelist .list-node .compare-img {
+	width: 181px;
+}
+
+.tilelist .list-node .compare-img .compare-small {
+	width: 76px;
+}
+
+.tilelist .list-node .compare-img .compare-large {
+	width: 93px;
+}
+
+.tilelist .list-node .compare-img img {
+	width: 100%;
+	height: 123px;
+}
+
+.compare-large~.similar {
+	right: 55%;
+	bottom: 18px;
+}
+
+.line {
+	width: 1px;
+	height: 118px;
+	background-color: #ccc;
+	float: right;
+	margin-top: 16px;
+	position: absolute;
+	right: 2%;
+}
+
+.alarm-title {
+	color: #989898;
+}
+
+.alarm-item {
+	color: #323232;
+	margin-right: 30px;
+}
+
+.nodata {
+	background-color: #fff;
+}
+
+.search-similar {
+	width: 200px;
+	position: relative;
+}
+
+.search-similar .icon-search2 {
+	right: 1px;
+    line-height: 30px;
+    font-size: 14px;
+    height: 30px;
+    top: 1px;
+}
+.search-similar.search-box>span{
+	font-size: 14px;
+}
+.tagslist .opera-group {
+    margin-top: -6px;
+}
+.police-send{
+	margin-top: -8px;
+	float: right;
+}
+

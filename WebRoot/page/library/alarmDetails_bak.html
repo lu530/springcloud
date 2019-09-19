@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>报警详情信息</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/alarmDetails.css" />
+</head>
+<body>
+    <div class="tilelist" id="alarmDetailsList"></div>
+    <div class="btn-wrap">
+        <span class="switch-detail prev-detail hide"></span>
+        <button class="btn btn-alarm mr10 hide" id="alarmConfirmBtn">告警确认</button>
+        <button class="btn btn-alarm mr10 hide" id="filterBtn">添加过滤名单</button>
+        <button class="btn btn-alarm mr10" id="issuedBtn">警情下发</button>
+        <button class="btn btn-alarm mr10" id="playAttention" disabled="disabled">关注</button>
+        <button class="btn btn-alarm mr10" id="ignore" disabled="disabled">忽略</button>
+        <button class="btn btn-alarm mr10" id="receivedBtn">签收</button>
+        <button class="btn btn-alarm mr10 hide disabled" id="feedbackBtn">反馈</button>
+        <button class="btn btn-alarm mr10" id="recordBtn">处置记录</button>
+        <button class="btn btn-alarm mr10 catch-btn hide" id="hasCatchBtn">确认抓捕</button>
+        <span class="switch-detail next-detail hide"></span>
+    </div>
+    <!-- <script id="alarmDetailsTemplate" type="x-tmpl">
+    <div class="alarm-wrag {%=o.isFly==1?"fly-con":""%}">
+        <div class="alarm-left">
+            <dl class="alarm-information clearFloat">
+                <dt class="alarm-img" attrimg="doublezoom">
+                    <span class="alarm-img-small">
+                        <img src="{%=o.ALARM_IMG%}"/>
+                    </span>
+                    <span class="alarm-img-small fr pl3">
+                        <img src="{%=o.TEMPLET_IMG%}" />
+                    </span>
+                    <b class="similar {%=renderColor(o.LEVEL)%}">{%=renderScore(o.SCORE)%}</b>
+                </dt>
+                <dd class="alarm-location clearFloat">
+                        <div title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+                            <span class="btn-icon alarm-icon position-icon" title="地点"></span>{%=renderNullToNotKnow(o.DEVICE_ADDR)%}
+                        </div>
+                        <div title="{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+                            <span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
+                        </div>
+                </dd>
+                <dd class="alarm-text">
+                    <p class="fl w50">姓名:<span>{%=renderNullToNotKnow(o.NAME)%}</span></p>
+                    <p class="fl w50">性别:<span>{%=renderNullToNotKnow(renderPersonSex(o.SEX))%}</span></p>
+                    <p>证件号码:<span id="identityID">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
+                    <p>布控库:<span>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
+                    <p>布控人:<span>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
+                    <p>布控单位:<span>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
+                    <p>布控算法：{% for(var i=0;i<o.ALGO_LIST.length;i++ ){  %}<span>{%= o.ALGO_LIST[i].ALGORITHM_NAME%}</span>{% }%}</p>
+                    <p>校核算法：
+                            {% var txt = ''; %}
+                            {% for(var i=0;i<o.CHECK_ALGO_LIST.length;i++ ){  %}
+                                {% txt += o.CHECK_ALGO_LIST[i].ALGORITHM_NAME + '('+ o.CHECK_ALGO_LIST[i].SCORE +') '; %}
+                            {% }%}
+                            <span title="{%=txt %}">{%=txt %}</span>
+                    </p>
+                    <p>七天告警频次:<a id="frequentlyAlarm"><span>{%=o.RECENT_COUNT%}次</span></a></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}">比中姓名:<span title="{%=renderFields(o.FS_NAME)%}">{%=renderFields(o.FS_NAME)%}</span></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}">比中证件:<span title="{%=renderFields(o.FS_IDENTITY_ID)%}">{%=renderFields(o.FS_IDENTITY_ID)%}</span></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}"><span title="{%=renderFields(o.FS_HIT_TIME)%}">{%=renderFields(o.FS_HIT_TIME)%}</span></p>
+                    <p class="list-node pl10 pt0">
+                        操作:
+                        <span class="btn-group">
+                            <a class="btn-i-t btn-xs structuredSearch pt0" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
+                                <i class="btn-icon structured-icon"></i>
+                            </a>                                
+                        </span>
+                    </p>
+                </dd>
+            </dl>
+        </div>
+        <div class="alarm-right clearFloat fr">
+            <img src="{%=o.FRAME_IMG%}" attrimg="zoom" />
+        </div>
+    </div>
+    </script> -->
+    <!-- <div class="multil-arithmetic-wrap">
+            <div class="multil-arithmetic-list arithmetic-main">
+                <p class="multil-name">{%= o.ALGORITHM_NAME %}</p>
+                <p class="multil-similar">{%=o.SCORE%}<span> %</span></p>
+            </div>
+            {% for(var j = 0; j < o.CHECK_ALGO_LIST.length; j++) { %}
+                <div class="multil-arithmetic-list">
+                    <p class="multil-name">{%=o.CHECK_ALGO_LIST[j].CHECK_ALGO_NAME%}</p>
+                    <p class="multil-similar">{%=o.CHECK_ALGO_LIST[j].CHECK_SCORE%}<span> %</span></p>
+                    {% if(o.CHECK_ALGO_LIST[j].STATUS == 0) { %}
+                        <i class="pass-failed pass-failed-yes">√</i>
+                    {% }else{ %}
+                        <i class="pass-failed pass-failed-no">×</i>
+                    {% } %}
+                </div>
+            {% } %}
+        </div> -->
+    <script id="alarmDetailsTemplate" type="x-tmpl">
+	<div class="alarm-wrag {%=o.isFly==1?"fly-con":""%}" dispatch-id="{%=o.POLICE_TASK_ID||""%}">
+        <div class="alarm-left">
+            <dl class="alarm-information clearFloat">
+                <dt class="alarm-img" attrimg="doublezoom">
+                    <span class="alarm-img-small">
+                        <img id ='detail_alarm_img' src="{%=o.ALARM_IMG%}"/>
+                    </span>
+                    <span class="alarm-img-small fr pl3">
+                        <img src="{%=o.TEMPLET_IMG%}" />
+                    </span>
+                    <b class="similar {%=renderColor(o.LEVEL)%}">{%=renderScore(o.SCORE)%}</b>
+                </dt>
+                <dd class="alarm-location clearFloat">
+                    <div title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+                        <span class="btn-icon alarm-icon position-icon" title="地点"></span>{%=renderNullToNotKnow(o.DEVICE_ADDR)%}
+                    </div>
+                    <div title="{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+                        <span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
+                    	<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=o.CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo" title="查看视频" style="color:#777;font-size:20px;"></span>
+					</div>
+                </dd>
+                <dd class="alarm-text">
+                    <div class="multil-arithmetic-wrap">
+                        <div class="multil-arithmetic-list arithmetic-main">
+                                <p class="multil-name">{%= o.ALGO_LIST[0].ALGORITHM_NAME && o.ALGO_LIST[0].ALGORITHM_NAME.split("").splice(0,2).join("") %}</p>
+                                <p class="multil-similar">{%=o.SCORE%}<span> %</span></p>
+                        </div>
+                        {% for(var j = 0; j < o.CHECK_ALGO_LIST.length; j++) { %}
+                            <div class="multil-arithmetic-list">
+                                <p class="multil-name">{%= o.CHECK_ALGO_LIST[j].ALGORITHM_NAME && o.CHECK_ALGO_LIST[j].ALGORITHM_NAME.split("").splice(0,2).join("") %}</p>
+                                <p class="multil-similar">{%=o.CHECK_ALGO_LIST[j].SCORE%}</p>
+                            </div>
+                        {% } %}
+
+						<div class="multil-arithmetic-list arithmetic-main {%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME?'':' hide' %}">
+                             <p class="multil-name">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME %}</p>
+                             <p class="multil-similar">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_SCORE %}<span> %</span></p>
+                        </div>
+
+                    </div>
+                    {% if(o.FS_ALGO_LIST.length > 0){ %}
+                        <div class="multil-arithmetic-face-wrap">
+                            {% for(var j = 0; j < o.FS_ALGO_LIST.length; j++) { %}
+                                <div class="multil-arithmetic-face-list" style="background-color:{%= o.FS_ALGO_LIST[j].PASS == '1' ? 'rgb(62,186,248)' : '#e8ecf8' %}">
+                                    <p class="multil-name">{%= o.FS_ALGO_LIST[j].ALGORITHMNAME && o.FS_ALGO_LIST[j].ALGORITHMNAME.indexOf("++")>-1?o.FS_ALGO_LIST[j].ALGORITHMNAME:o.FS_ALGO_LIST[j].ALGORITHMNAME.split("").splice(0,2).join("") %}</p>
+                                    <p class="multil-similar">{%=o.FS_ALGO_LIST[j].SIMILARITY%}%</p>
+                                </div>
+                            {% } %}
+                        </div>
+                    {% } %}
+                    <p class="fl w50">姓名:<span>{%=renderNullToNotKnow(o.NAME)%}</span></p>
+                    <p class="fl w50">性别:<span>{%=renderNullToNotKnow(renderPersonSex(o.SEX))%}</span></p>
+                    <p>证件号码:<span id="identityID">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
+                    <p>布控库:<span>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
+                    <p>布控人:<span>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
+                    {% try { var extraInfo = JSON.parse(o.OBJECT_EXTEND_INFO); %}
+                        {% if(extraInfo.POLICE_STATION_INFO && extraInfo.POLICE_STATION_INFO.IS_SHOW == '1') { %}
+                        <p>当前派出所: <span>{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span></p>
+                        {% } %}
+                        {% var rel = extraInfo.RELATIVE_POLICE_STATION_INFO; if(rel && rel.length) { %}
+                        <p>相关派出所:
+                            <span title="{% for(var i = 0; i < rel.length; i++) { %}{%= rel[i] %}&nbsp;{% } %}">{% for(var i = 0; i < rel.length; i++) { %}{%= rel[i] %}&nbsp;{% } %}</span>
+                        </p>
+                        {% } %}
+                    {% } catch(error) { UI.util.debug(error); } %}
+
+                    <p>七天告警频次:<a id="frequentlyAlarm"><span>{%=o.RECENT_COUNT%}次</span></a></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}">比中姓名:<span title="{%=renderFields(o.FS_NAME)%}">{%=renderFields(o.FS_NAME)%}</span></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}">比中证件:<span title="{%=renderFields(o.FS_IDENTITY_ID)%}">{%=renderFields(o.FS_IDENTITY_ID)%}</span></p>
+                    <p class="{%=o.isFly==1?"":"hide"%}"><span title="{%=renderFields(o.FS_HIT_TIME)%}">{%=renderFields(o.FS_HIT_TIME)%}</span></p>
+                    <p class='{%=o.CONFIRM_STATUS?"":"hide"%}' id='confirm_status_line'>确认状态:<span id='confirm_status_label'>{%=renderConfirmStatus(o.CONFIRM_STATUS)%}</span></p>
+                    {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                    <p class="list-node pl10 pt0">
+						操作:
+						<span class="btn-group">
+							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.ALARM_IMG%}">
+								<i class="btn-icon verification-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs trajectory-searchAll" title="轨迹分析" url="{%=o.ALARM_IMG%}">
+								<i class="btn-icon trajectory-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs searchBtnAll" title="检索" fileUrl="{%=o.ALARM_IMG%}">
+								<i class="btn-icon search-icon"></i>
+							</a>
+							<a class="btn-i-t  btn-xs controlDetailBtn" title="布控详情" objectid="{%=o.OBJECT_ID%}">
+								<i class="btn-icon library-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs information-search" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
+								<i class="btn-icon intelligence-icon"></i>
+							</a>					
+							<a class="btn-i-t btn-xs structuredSearch pt0" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
+								<i class="btn-icon structured-icon"></i>
+							</a>								
+						</span>
+					</p>
+                    {% } %}
+                </dd>
+            </dl>
+        </div>
+        <div class="alarm-right clearFloat fr pr">
+            <img src="{%=o.FRAME_IMG%}" attrimg="zoom" />
+			<img class="had-sign hide" src="/efacecloud/images/had_sign.png" alt="">
+        </div>
+    </div>
+    </script>
+    <!-- <p>布控算法：{% for(var i=0;i<o.ALGO_LIST.length;i++ ){  %}<span>{%= o.ALGO_LIST[i].ALGORITHM_NAME%}</span>{% }%}</p>
+    <p>校核算法：
+            {% var txt = ''; %}
+            {% for(var i=0;i<o.CHECK_ALGO_LIST.length;i++ ){  %}
+                {% txt += o.CHECK_ALGO_LIST[i].ALGORITHM_NAME + '('+ o.CHECK_ALGO_LIST[i].SCORE +') '; %}
+            {% }%}
+            <span title="{%=txt %}">{%=txt %}</span>
+    </p> -->
+    
+    <script id="alarmDetailsTemplate" type="x-tmpl">
+        <div class="alarm-wrag">
+            <div class="alarm-left">
+                <dl class="alarm-information clearFloat">
+                    <dt class="alarm-img" attrimg="doublezoom">
+                        <span class="alarm-img-small">
+                            <img src="{%=o.ALARM_IMG%}"/>
+                        </span>
+                        <span class="alarm-img-small fr">
+                            <img src="{%=o.TEMPLET_IMG%}" />
+                        </span>
+                        <b class="alarm-similar hide">{%=renderScore(o.SCORE)%}</b>
+                    </dt>
+                    <dd class="alarm-location clearFloat">
+                        <div title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+                            <span class="btn-icon alarm-icon position-icon" title="地点"></span>{%=renderNullToNotKnow(o.DEVICE_ADDR)%}
+                        </div>
+                        <div title="{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+                            <span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
+                        </div>
+                    </dd>
+                    <dd class="alarm-text"  data-faceid="{%= o.ALARM_FACE_ID%}" data-personid="{%= o.ALARM_PERSON_ID%}">
+                        <div class="multil-arithmetic-wrap">
+                            <div class="multil-arithmetic-list arithmetic-main">
+                                <p class="multil-name">{%= o.ALGORITHM_NAME %}</p>
+                                <p class="multil-similar">{%=o.SCORE%}<span> %</span></p>
+                            </div>
+                            {% for(var j = 0; j < o.CHECK_ALGO_LIST.length; j++) { %}
+                                <div class="multil-arithmetic-list">
+                                    <p class="multil-name">{%=o.CHECK_ALGO_LIST[j].CHECK_ALGO_NAME%}</p>
+                                    <p class="multil-similar">{%=o.CHECK_ALGO_LIST[j].CHECK_SCORE%}<span> %</span></p>
+                                    {% if(o.CHECK_ALGO_LIST[j].STATUS == 0) { %}
+                                        <i class="pass-failed pass-failed-yes">√</i>
+                                    {% }else{ %}
+                                        <i class="pass-failed pass-failed-no">×</i>
+                                    {% } %}
+                                </div>
+                            {% } %}
+                        </div>
+                        <p class="">姓名:<span>{%=renderNullToNotKnow(o.NAME)%}</span></p>
+                        <p class="">性别:<span>{%=renderNullToNotKnow(renderPersonSex(o.SEX))%}</span></p>
+                        <p class="">证件号码:<span>{%= renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
+                        <p>七天告警频次:<a id="frequentlyAlarm" OBJECT_ID="{%=o.OBJECT_ID%}"><span>{%=o.RECENT_COUNT%}次</span></a></p>
+                        <p class="check-identity hide" data-suspect="{%= o.IS_SUSPECT%}" data-facestatus="{%= o.FACE_STATUS%}">身份确认:
+                        <span>
+                            <button class="btn btn-small gray-btn mr5 identityBtn uncertainBtn" val="2">疑似</button>
+                            <button class="btn btn-small gray-btn mr5 identityBtn falseBtn" val="-1">误判</button>
+                            <button class="btn btn-small blue-btn identityBtn trueBtn" val="1">确认</button>
+                        </span>
+                        </p>
+                        <p class="control-list hide">操作日志:<span class="logList log-list">日志列表</span></p>
+                        <p class="">脱敏ID:<span>{%=o.PERSON_ID%}</span></p>
+                    </dd>
+                </dl>
+            </div>
+            <div class="alarm-right clearFloat fr">
+                <img src="{%=o.FRAME_IMG%}" attrimg="zoom" />
+            </div>
+        </div>
+    </script>
+        
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/alarmDetails.js"></script>
+</html>

@@ -1,0 +1,205 @@
+@charset 'utf-8';
+.frame-side{
+	width:300px;
+	background: transparent;
+    border-right: 1px solid #f5f3f4;
+}
+.frame-con{
+	left:300px;
+	padding:10px; 
+}
+
+.ztree li a.level1{
+	border-bottom:1px solid #d1d0d6;
+}
+.ztree li a:hover {
+    background-color: #efefef;
+}
+.ztree li a.curSelectedNode {
+    color: #c5060d;
+    background-color: #efefef;
+}
+.menu-search-box input[type="text"] {
+    height: 36px;
+    padding: 7px 0 6px;
+    background: #f5f3f4;
+    border-radius: 5px;
+    color: #a3a3a3;
+}
+.menu-search-box input[type="text"]:focus {
+    color: #000;
+    background: #f5f3f4;
+}
+.menu-search-box > span{
+	height: 100%;
+    top: 0;
+    width: 36px;
+    font-size: 18px;
+    line-height: 36px;
+    color: #a7a8ad;
+}
+.search-box > span:active {
+    color: #d21406;
+    background-color: transparent;
+}
+.left-tree-wrap{
+	top:46px;
+}
+.ztree.folder li span.button.ico_open,
+.ztree.folder li span.button.ico_close,
+.ztree li span.button {
+    background-image: url(/datadefence/images/32px.png);
+}
+.ztree.folder li span.button.ico_open{
+	background-position: -409px -120px;
+}
+.ztree.folder li span.button.ico_close{
+	background-position: -373px -118px;
+}
+.ztree.folder li .curSelectedNode span.button.ico_open{
+	background-position: -233px -120px;
+}
+.ztree.folder li .curSelectedNode span.button.ico_close{
+	background-position: -197px -118px;
+}
+
+.ztree li span.button.root_open, 
+.ztree li span.button.center_open, 
+.ztree li span.button.bottom_open{
+    background-position: -342px -118px;
+}
+.ztree li span.button.center_close, 
+.ztree li span.button.root_close, 
+.ztree li span.button.bottom_close, 
+.ztree li span.button.roots_close{
+    background-position: -310px -118px;
+}
+
+.ztree li .curSelectedNode span.button.root_open, 
+.ztree li .curSelectedNode span.button.center_open, 
+.ztree li .curSelectedNode span.button.bottom_open{
+    background-position: -166px -118px;
+}
+.ztree li .curSelectedNode span.button.center_close, 
+.ztree li .curSelectedNode span.button.root_close, 
+.ztree li .curSelectedNode span.button.bottom_close, 
+.ztree li .curSelectedNode span.button.roots_close{
+    background-position: -134px -118px;
+}
+
+/* 查询列表 */
+.search-list{
+    padding: 0;
+    position: absolute;
+    bottom: 52px;
+    top: 46px;
+    overflow: auto;
+    left: 0;
+    right: 0;
+    padding-top: 10px;
+    margin: 0;
+}
+.search-list li{
+	padding:10px 20px;
+	cursor: pointer;
+}
+.search-list li:hover,
+.search-list li.active{
+	background:#efefef;
+	color: #c5060d;
+}
+
+/*自义定页码*/
+.page-info-metro{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+} 
+.page-info-position{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    width: 100%;
+    background-color: #EDEDED;
+}
+
+.square-pager .page-data .page-prev,
+.square-pager .page-data .page-next{
+    border-radius: 5px;
+    width: 30px;
+    line-height: 30px;
+    font-size: 17px;
+    padding:0;
+    margin-top: 2px;
+    background: #fff;
+}
+.square-pager .page-data {
+    padding:10px;
+    margin: 0;
+    line-height: 30px;
+    min-width: 320px;
+    text-align: center;
+    float: right;
+}
+.square-pager .page-data .disable {
+    cursor: not-allowed;
+}
+
+.square-pager .page-data .disable:hover {
+    border: 1px solid #cfcfcf !important;
+}
+.square-pager .page-data .page-prev:hover,
+.square-pager .page-data .page-next:hover {
+    color: #fff;
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid #cfcfcf;
+}
+.square-pager .page-data .page-next:hover i:before{
+    color:#3a5d9e!important;
+}
+.square-pager .page-data .page-prev:hover i:before{
+    color:#3a5d9e!important;
+}
+
+.square-pager .page-data select {
+    display: inline-block;
+    height: 30px;
+    vertical-align: middle;
+    border: 1px solid #cfcfcf;
+}
+.square-pager .page-data .current-page {
+    border: none;
+    font-size: 13px;
+    color: #9ca9c8;
+    line-height: 31px;
+    margin-left: 10px;
+}
+.square-pager .page-data .current-page i {
+    font-size: 13px;
+    color: #9ca9c8;
+}
+.square-pager .page-data .page-num {
+    color: #98abcc;
+}
+.square-pager .page-data .page-num i {
+    font-size: 13px;
+}
+.page-info-metro .page-data .page-num i {
+    top: -3px;
+}
+.square-pager .page-data .page-next:hover [class^="icon-"]:before{
+    color:#fff;
+}
+.page-wrap{
+	width:300px;
+	margin:0 auto;
+	position:relative;
+	height: 52px;
+	float: right;
+	overflow: hidden;
+}
+/*end自义定页码*/

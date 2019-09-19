@@ -1,0 +1,373 @@
+@charset 'utf-8';
+a {
+	color: #666;
+}
+
+.title-view {
+	padding: 20px 0 0 30px;
+	background-color: #f6f6f6;
+	margin: 0;
+}
+
+.page-con {
+	padding: 20px;
+}
+
+.title-view .tab-btn {
+	border: none;
+	background-color: transparent;
+	padding: 9px 20px;
+	display: inline-block;
+	color: #666;
+	cursor: pointer;
+}
+
+.title-view .tab-btn.actives {
+	background-color: #fff;
+	color: #465187;
+	border: none;
+}
+
+.list-node .btn-group .btn-i-t {
+	color: #0078d7;
+	font-weight: bold;
+}
+.list-node .btn-group .btn-i-t:hover{
+	color: #3160b8;
+}
+
+.btn-group>.btn+.dropdown-toggle {
+	border: 1px solid #ededed;
+	border-left: none;
+}
+
+.action-btn-group .action-btn {
+	line-height: 50px;
+	display: inline-block;
+	height: 50px;
+	padding: 0 25px;
+	border-right: 1px solid #e8e5e5;
+}
+
+.action-btn-group .action-btn.noborder {
+	border-right: none;
+}
+
+.action-btn-group .action-btn [class^='icon'] {
+	margin: 0 5px;
+}
+
+.freq-view {
+	position: absolute;
+	/*	left:0px;*/
+	/*	right:0px;*/
+	left: 20px;
+	right: 20px;
+	top: 95px;
+	bottom: 0;
+}
+
+.freq-view.title-sib {
+	top: 135px;
+}
+
+.compare-large~.similar {
+	right: 44%;
+}
+
+.filter-tag .search-similar {
+	width: 200px;
+	border: 1px solid #f1f1f1;
+	border-radius: 6px;
+}
+
+.event-alert.freq-view.title-sib {
+	position: static;
+}
+
+.tilelist .list-node .three-compare-img span {
+    width: 30%;
+}
+
+.list-filter {
+    height: 40px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+}
+.list-filter li.active {
+    color: #4c72d5;
+}
+.list-filter li {
+    float: left;
+    margin-right: 15px;
+    cursor: pointer;
+    color: #939497;
+}
+.filter-icon {
+    margin-left: 5px;
+}
+.look-task {
+	position: absolute;
+	right: 20px;
+	top: 18px;
+	padding-left: 0;
+	color: #65809E;
+	/* border-left: 1px solid #E0E0E0; */
+	cursor: pointer;
+	font-size: 12px;
+	line-height: initial;
+	height: auto;
+}
+
+.icon-look-task {
+	display: inline-block;
+    position: relative;
+    top: 3px;
+    width: 16px;
+    height: 18px;
+    margin-right: 5px;
+    background: url(/datadefence/images/btn-icon2.png) -325px -88px;
+}
+
+.page-top {
+	line-height: 50px;
+	font-size: 15px;
+	color: #6f7581;
+	border-bottom: 3px solid #3a5d9f;
+	position: fixed;
+	z-index: 1000;
+	background-color: white;
+	left: 15px;
+	right: 15px;
+}
+
+.page-top span {
+	margin-left: 45px;
+}
+
+.page-top span a {
+	color: #6f7581;
+}
+
+.pager-con .pager-content {
+	position: absolute;
+	top: 48px;
+	bottom: 15px;
+	left: 15px;
+	right: 15px;
+	background: #fff;
+	padding-top: 20px;
+	overflow: auto;
+	min-height: auto;
+}
+.fly-bg{
+	background:url("/efacecloud/images/fly-icon.png") no-repeat;
+	background-position:31px 0;
+}
+.fly-bg-wjr::after {
+	width: 140px;
+    height: 50px;
+    border: 4px solid #FE9E34;
+    content: '移民局比中';
+    display: block;
+    color: #FE9E34;
+    font-size: 24px;
+    text-align: center;
+    line-height: 42px;
+    box-sizing: border-box;
+    transform: rotate(-20deg);
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    opacity: 0.7;
+    z-index: -1;
+}
+.identity-confirm::after {
+	width: 140px;
+    height: 50px;
+    border: 4px solid #45b854;
+    content: '身份比中';
+    display: block;
+    color: #45b854;
+    font-size: 24px;
+    text-align: center;
+    line-height: 42px;
+    box-sizing: border-box;
+    transform: rotate(-20deg);
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    opacity: 0.7;
+    z-index: -1;
+}
+.wjr-bg::after {
+	width: 140px;
+    height: 50px;
+    border: 4px solid #1e8bd3;
+    content: '移民局比中';
+    display: block;
+    color: #1e8bd3;
+    font-size: 24px;
+    text-align: center;
+    line-height: 42px;
+    box-sizing: border-box;
+    transform: rotate(-20deg);
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    opacity: 0.7;
+    z-index: -1;
+}
+.zt-icon-big,.zt-icon-small,.zt-icon-what{
+	background:url(/efacecloud/images/btn-icon.png);
+	display: inline-block;	
+}
+.zt-icon-small{
+	width: 16px;
+	height: 16px;
+	background-position: -72px -160px;
+	margin: 0 6px;
+	vertical-align: top;
+	position: relative;
+	top: 20px;
+}
+.zt-tips{
+	line-height: 53px;
+	display: inline-block;
+	margin-left: 30px;
+	margin-bottom: 0;
+}
+.zt-icon-big{
+	width: 23px;
+    height: 23px;
+    background-position: -98px -155px;
+    position: absolute;
+    z-index: 2;
+    right: 10px;
+}
+.zt-icon-what {
+	width: 23px;
+    height: 23px;
+    background-position: -98px -181px;
+    position: absolute;
+    z-index: 2;
+    right: 10px;
+}
+/* .btn-i-t:hover, .btn-group .btn-i-t:hover {
+	color: #333;
+} */
+.list-node-wrap{
+	position: relative;
+}
+.tilelist .list-node .node-text .similar-name{
+	height: 22px;
+}
+.tag{
+	color: #fff;
+	display: inline-block;
+	border-radius: 4px;
+	padding: 2px 4px;
+	font-size: 12px;
+}
+.sign-color{
+	background: #95a8b7;
+}
+.feedback-color{
+	background: #d2c0ad;
+}
+.management-color{
+	background: #d0b9b9;
+}
+.issued-color{
+	background: #b4c0a6;
+}
+.label-item{
+	margin-right: 30px;
+	cursor: pointer;
+	font-weight: normal;
+	-webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.label-item input{
+	margin-right: 5px;
+	position: relative;
+	top: 2px;
+	cursor: pointer;
+}
+.repeat-num{
+	display: inline-block;
+    width: auto;
+    height: 22px;
+    line-height: 22px;
+    min-width: 60px;
+    padding: 0 11px 0 4px;
+    color: #fff;
+    font-size: 12px;
+    margin-right: 10px;
+    background: #afb3be;
+    position: relative;
+    cursor: pointer;
+}
+.repeat-num:after{
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 0px;
+    width: 0px;
+    border-top: 11px solid transparent;
+    border-right: 9px solid #fff;
+    border-bottom: 11px solid transparent;
+}
+
+.open-repeat{
+	cursor: pointer;
+}
+
+.filter-view .filter-half-bar{
+	clear: initial;
+    float: left;
+    width: 50%;
+}
+
+.tagslist li:hover{
+	background-color: #4C72D5;
+	color: #fff;
+}
+
+/*  调整卡片的响应式布局 */
+ @media screen and (min-width: 668px) and (max-width: 815px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 50%;
+	}
+}
+@media screen and (min-width: 815px) and (max-width: 1063px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 33.3%;
+	}
+}
+
+@media screen and (min-width: 1063px) and (max-width: 1290px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 25%;
+	}
+}
+
+@media screen and (min-width: 1290px) and (max-width: 1555px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 20%;
+	}
+}
+@media screen and (min-width: 1555px) and (max-width: 1760px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 16.666%;
+	}
+}
+@media screen and (min-width: 1760px) {
+	.alarm-card .tilelist.vertical .list-node-wrap {
+		width: 14.285%;
+	}
+}

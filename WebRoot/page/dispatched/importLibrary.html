@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>批量导入重点人员</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/importLibrary.css" />
+</head>
+<body class="oa">
+	<div class="window-content" id="addPersonForm">
+
+		<div class="main-con mt30">
+			<div id="messageForm" class="form-con form-inline ps"
+				style="margin: 0 auto; overflow-y: initial;">
+				<div class="sort-cell">
+					<dl class="form-single">
+
+						<dd class="form-group">
+							<label class="control-label">人员标签：</label>
+							<!-- <select name="CASE_TYPE"  id="CASE_TYPE" class="form-control ml5 w60">
+								<option value="">请选择</option>
+								<option value="01050100">抢劫</option>
+								<option value="01050200">盗窃</option>
+								<option value="01050300">诈骗</option>
+								<option value="01050400">抢夺</option>
+								<option value="01059900">其他</option>
+							</select>	 -->
+							<div class="filter-tag person-tag inline w60 vt pl5 mark-wrap">
+								<div class="mark-list tagslist tagItmeList"
+									select-multiple="true" id="personTab">
+									<script id="tagTemplate" type="x-tmpl">
+											{% for(var i=0;i<o.length;i++){ %}
+												<span class="tag-item" val="{%=o[i].TAG_CODE%}" dbId="{%=o[i].DB_ID%}">{%=o[i].TAG_NAME%}</span>
+											{% } %}
+										</script>
+								</div>
+							</div>
+							<span class="red">*</span>
+						</dd>
+
+						<dd class="form-group">
+							<label class="control-label">选择目录：</label> <input
+								class="form-control ml5" type="text" id="LIBRARY_FILE"
+								name="MODULE_FILE" readonly="readonly" style="width: 52%">
+							<div class="upload-file">
+								浏览··· <input class="file-input" type="file" name="dataFile"
+									id="dataFile">
+							</div>
+							<span class="red">*</span>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label"></label> <span class="ml5 red">提示:上传文件为zip压缩包,文件包含(
+								人员图片 , 人员图片的命名规则： 姓名-身份证号码.jpg )</span>
+						</dd>
+					</dl>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-blue mr5 " id="savePersonBtn">确定</button>
+		<button class="btn btn-sm btn-white" id="cancelBtn">取消</button>
+	</div>
+	<iframe class="hide" id="messageExport" frameborder="0" /></iframe>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/eapui/main/eapui-fileupload.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/eapui/util/StringUtil.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/dispatched/importLibrary.js"></script>
+</html>

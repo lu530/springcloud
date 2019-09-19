@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>告警处置记录</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/alarm/realTimeAlarm/receivedList.css" />
+</head>
+<body>
+	<div class="alarm-list" id="alarmList">
+	</div>
+	<div class="alarm-line"></div>
+	<div class="alarm-bottom">
+		<button class="btn btn-small gray-btn" id="closeBtn" type="button">取消</button>
+	</div>
+	<script id="alarmTemplate" type="x-tmpl">
+		{%var flag=true; for(var i = 0;i<o.length;i++){ %}
+			{% if( o[i].OP_TYPE != 2 && o[i].OP_TYPE != 9){  %}
+			<div class="list-item">
+				<div class="item-title">{%=o[i].TIME%}</div>
+				<a class="item-name {%=o[i].USER_NAME?"":"hide"%}">操作人：{%=o[i].USER_NAME%}（{%=o[i].DEPT_NAME%}-{%=o[i].POLICE_ID%}）</a>
+				<div class="item-con"><span class="item-icon"></span>
+					{% if(o[i].CONTENT  == '{"SIGN":1}'){ %}
+						确定签收
+					{% }else{ %}
+						<div class="item-con">{%=o[i].CONTENT%}</div>
+					{% } %}
+					{% if(o[i].IS_TIMEOUT && o[i].IS_TIMEOUT == 1){ %}
+						<b class="red">【已超时】</b>
+					{% } %}
+				</div>
+			</div>
+			{% }else{ %}
+				{% if(i != o.length){var thisDataObj = JSON.parse(o[i].CONTENT); %}
+					<div class="list-item">
+					<div class="item-title">{%=o[i].TIME%}</div>
+					<a class="item-name {%=o[i].USER_NAME?"":"hide"%}">操作人：{%=o[i].USER_NAME%}（{%=o[i].DEPT_NAME%}-{%=o[i].POLICE_ID%}）</a>
+					{% if(flag){flag = false; %}
+						<div class="item-con">首次反馈
+						{% if(o[i].IS_TIMEOUT && o[i].IS_TIMEOUT == 1){ %}
+							<b class="red">【已超时】</b>
+						{% } %}
+						</div>
+					{% } %}
+					<div class="item-con"><span class="item-icon"></span>
+
+						{% if(thisDataObj.IS_POLICE_OUT){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_POLICE_OUT==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_POLICE_OUT==1?"":"不"%}</b>出警</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_FOUND){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_FOUND==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_FOUND==1?"发现":"未发现"%}</b>可疑人员</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_CONTROL){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONTROL==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_CONTROL==1?"控制":"未控制"%}</b>可疑人员</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_CONSISTENT){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONSISTENT==1?"isCheck":"noCheck"%}"></span>可疑人员身份与告警<b>{%=thisDataObj.IS_CONSISTENT==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_CANCEL_DISPATCHED){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CANCEL_DISPATCHED==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_CANCEL_DISPATCHED==1?"":"不"%}</b>撤控</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_SEX_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_SEX_MATCHING==1?"isCheck":"noCheck"%}"></span>性别<b>{%=thisDataObj.IS_SEX_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_IDENTITY_ID_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_IDENTITY_ID_MATCHING==1?"isCheck":"noCheck"%}"></span>年龄<b>{%=thisDataObj.IS_IDENTITY_ID_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_APPEARANCE_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_APPEARANCE_MATCHING==1?"isCheck":"noCheck"%}"></span>样貌<b>{%=thisDataObj.IS_APPEARANCE_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.OTHER){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.OTHER==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.OTHER==1?"有":"无"%}</b>其他</div>
+						{% } %}
+
+						{% if(thisDataObj.NOTE){ %}
+							<div class="item-con"><span class="itemicon noteicon"></span>{%=thisDataObj.NOTE%}</div>
+						{% } %}
+
+					</div>
+					</div>
+				{% } %}
+
+			{% } %}
+
+		{% } %}
+	</script>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapmapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/realTimeAlarm/receivedList.js"></script>
+</html>

@@ -1,0 +1,166 @@
+@charset 'utf-8';
+
+.data-wrap {
+	position: absolute;
+	top: 46px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+}
+
+.listview .list-node {
+	padding: 10px 20px;
+	margin: 0;
+}
+
+.listview .list-node .node-icon {
+	width: 41px;
+}
+
+.listview .list-node .node-icon img {
+	width: 100%;
+	height: 51px;
+}
+
+.listview .list-node .node-text {
+	vertical-align: middle;
+}
+
+.timeline-wrap {
+	/* border-left: 1px solid #c3f1ff; */
+	margin: 10px 5px 10px 22px;
+	padding-left: 10px;
+}
+
+.item .circle {
+	position: absolute;
+	left: -16px; top;
+	top: 25px;
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	background: #0082e1;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	z-index: 2;
+}
+
+.item {
+	position: relative;
+}
+
+.item:after {
+	content: '';
+	position: absolute;
+	left: -12px;
+	top: -29px;
+	height: 100%;
+	width: 1px;
+	background: #c3f1ff;
+}
+
+.item.first:after {
+	display: none;
+}
+
+.item .tilelist .list-node {
+	border: none;
+	border-bottom: 1px solid #ddd;
+	padding-left: 0;
+	width: 100%;
+	margin: 0;
+}
+
+.list-wrap .tilelist .list-node {
+	border: none;
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+	margin: 0;
+	padding: 8px;
+}
+
+.list-wrap .tilelist .list-node:hover {
+	background: #CAE5F9;
+}
+
+.list-wrap .tilelist .list-node .node-img img {
+	/* width: 57px; */
+	/* height: 70px; */
+	
+}
+
+.list-wrap .tilelist .list-node .node-img, .list-wrap .tilelist .list-node .node-img span
+	{
+	width: 47px;
+	text-align: right;
+}
+
+.tilelist .list-node .node-img, .tilelist .list-node .node-img span {
+	width: 41px;
+	text-align: center;
+}
+
+.tilelist .list-node .node-img img {
+	width: 41px;
+	height: 50px;
+}
+
+.page-list-head {
+	position: relative;
+	padding: 14px 10px;
+	height: 46px;
+	color: #444;
+	background-color: #E5E5E5;
+	font-size: 15px;
+}
+
+.page-list-head .back-btn {
+	display: block;
+	float: left;
+	height: 20px;
+	padding: 0 10px 0 0;
+	margin: 0 9px 0 0;
+	line-height: 20px;
+	color: #2d85fa;
+	text-decoration: none;
+	cursor: pointer;
+	border-right: 1px solid #c5c5c5;
+}
+
+.page-list-head .back-btn i {
+	float: left;
+	margin: 3px 1px 0 0;
+	font-size: 15px;
+}
+
+.page-list-head .back-btn em {
+	font-size: 15px;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.pager-wrap {
+	position: absolute;
+	top: 46px;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	overflow: auto;
+}
+
+.timeline-wrap .tilelist {
+	padding-left: 8px;
+}
+
+.tilelist:hover, .tilelist.active {
+	background: #CAE5F9;
+}
+
+.pager-bottom {
+	height: 50px;
+}
+
+.pager.bigbtn-pager {
+	padding: 8px 0;
+}

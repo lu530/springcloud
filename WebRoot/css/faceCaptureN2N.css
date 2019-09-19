@@ -1,0 +1,235 @@
+@charset 'utf-8';
+
+body {
+	padding: 15px;
+	background-color: #e7ecf0;
+	overflow: hidden;
+}
+
+.page-top {
+	line-height: 50px;
+	font-size: 15px;
+	color: #6f7581;
+	border-bottom: 3px solid #3a5d9f;
+	position: fixed;
+	left: 15px;
+	right: 15px;
+	/* width: 100%; */
+	z-index: 50;
+	background-color: white;
+}
+
+.page-top span {
+	margin-left: 45px;
+}
+
+.page-top span a {
+	color: #6f7581;
+}
+/*
+.pager-wrap {
+    position: absolute;
+    top: 53px;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    height: auto;
+}
+.pager-content {
+    position: absolute;
+    top: 53px;
+    bottom: 0px;
+    left: 20px;
+    right: 20px;
+    height: auto;
+    padding-top: 20px;
+}
+ åˆ‡æ¢åŒºåŸŸæ ·å¼ */
+.pager-content {
+	/* position: absolute; */
+	/* top: 69px; */
+	/* bottom: 15px; */
+	/* left: 15px; */
+	/* right: 15px; */
+	/* background: #fff; */
+	/* padding-top: 20px; */
+	/* overflow:auto; */
+	/* min-height:auto; */
+	
+}
+
+.tilelist.vertical .list-node {
+	background: #fff;
+}
+
+.data-wrap {
+	padding: 0px 0 0 115px;
+	position: relative;
+}
+
+.date-style {
+	margin: 0px 5px 0px 5px;
+	font-weight: bold;
+	color: #4977cd;
+	font-size: 14px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+.day-block {
+    /* position: absolute; */
+    /* top: 8px; */
+    /* left: 0; */
+    /* right: -12px; */
+    /* background: #fff; */
+    /* height: 56px; */
+    /* text-align: center; */
+    /* padding-top: 6px; */
+    text-align: center;
+    width: 80px;
+}
+.day-block .year {
+    font-weight: normal;
+    display: block;
+}
+
+.dis-table-cell {
+	padding-top: 0px;
+}
+
+.timeline {
+	position: absolute;
+	top: 7px;
+	bottom: -30px;
+	left: 55px;
+}
+
+.timeline .circle-top {
+	position: absolute;
+	left: 26px;
+	top: -5px;
+}
+
+.timeline .line {width: 2px;display: inline-block;background: #eaedf2;left: 33px;position: absolute;top: 15px;bottom: 4px;z-index: 1;}
+
+.timeline .circle-bottom {
+	position: absolute;
+	left: 26px;
+	bottom: -3px;
+	z-index: 2;
+}
+
+.specific-time {
+	padding-top: 5px;
+}
+
+.list-view, .capture-data {
+	position: fixed;
+	top: 68px;
+	bottom: 15px;
+	right: 0px;
+	left: 0px;
+	margin: 0;
+	padding: 15px;
+	overflow: auto;
+	transition: right 0.25s;
+	padding-bottom: 0;
+}
+
+.list-view {
+	padding: 0;
+	transition: width 0.25s;
+	width: 0;
+	right: 0;
+	left: auto;
+}
+
+.show .list-view {
+	background: #fff;
+	border-left: 5px solid #ddd;
+	padding-top: 10px;
+	width: 400px;
+}
+
+.show .capture-data {
+	right: 400px;
+}
+
+.close-bg {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 29px;
+	height: 29px;
+	background: url(/ui/plugins/bootstrap4.0/img/photoZoom/close.png)
+		no-repeat center center;
+	padding: 10px 15px;
+	font-size: 25pt;
+	color: #666;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.tag-item {
+	display: none;
+}
+
+.tag-item.active {
+	display: initial;
+}
+
+.tilelist .list-node .node-text {
+	padding: 0 5px;
+}
+
+.caption {
+	height: 50px;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 40px;
+	background: #fff;
+	border-bottom: none;
+}
+
+.caption .title {
+	display: inline-block;
+	height: 40px;
+	margin-top: 4px;
+	margin-bottom: 0;
+	font-family: 'Microsoft YaHei';
+	font-size: 22px;
+	font-weight: normal;
+	line-height: 40px;
+	color: #222;
+	margin: 8px 0 0 20px;
+}
+
+.caption .window-close {
+	top: 4px;
+	position: absolute;
+	right: 0;
+	z-index: 3;
+	width: 45px;
+	height: 40px;
+	padding: 0;
+	margin: 0;
+	font-family: 'Cambria_', 'PT Serif Caption', Verdana, Arial, Helvetica,
+		sans-serif;
+	font-size: 15pt;
+	font-weight: normal;
+	line-height: 38px;
+	color: #000;
+	text-align: center;
+	vertical-align: middle;
+	background-color: transparent;
+	outline: 0 none;
+	cursor: pointer;
+}
+
+.show .tilelist .list-node-wrap {
+	width: 25%;
+}
+.tilelist .list-node .person-img img {
+    height: 120px;
+}

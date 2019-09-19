@@ -1,0 +1,255 @@
+@CHARSET "UTF-8";
+
+.page-title {
+	height: 50px;
+	padding: 9px 15px;
+	margin-bottom: 10px;
+	background-color: #f2f2f2;
+}
+
+.page-title .back-btn {
+	display: block;
+	float: left;
+	height: 20px;
+	padding: 0 10px 0 0;
+	margin: 5px 5px 0 0;
+	line-height: 20px;
+	color: #5f5f5f;
+	text-decoration: none;
+	cursor: pointer;
+	border-right: 1px solid #ddd;
+}
+
+.page-title .back-btn i {
+	float: left;
+	margin: 5px 1px 0 0;
+	font-size: 15px;
+}
+
+.page-title .back-btn em {
+	font-size: 15px;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.page-title .title {
+	line-height: 29px;
+	margin: 0;
+	font-size: 16px;
+	font-family: 'Microsoft YaHei';
+	padding-left: 10px;
+	position: relative;
+}
+
+.title-view {
+    padding: 20px 0 0 30px;
+    background-color: #f6f6f6;
+    margin: 0;
+}
+.title-view .tab-btn {
+    border: none;
+    background-color: transparent;
+    padding: 9px 20px;
+    display: inline-block;
+    color: #666;
+    cursor: pointer;
+}
+.title-view .tab-btn.active {
+    background-color: #fff;
+    color: #465187;
+    border: none;
+}
+
+.person-head {
+	height: 40px;
+	width: 100%;
+	background: #2A3137;
+	padding-top: 5px;
+	color: #fff;
+}
+
+.person-head .person-icon {
+	font-size: 27px;
+	margin: 2px 10px 0 20px;
+	float: left;
+	color: #F5D638;
+}
+
+.person-head .person-msg {
+	font-size: 20px;
+}
+
+.wrap {
+	width: 1200px;
+	background: #fff;
+	position: absolute;
+	left: 50%;
+	margin-left: -600px;
+	bottom: 0;
+	top: 0;
+	padding: 70px;
+}
+
+.left-image {
+	width: 860px;
+	margin: 90px auto 0;
+	padding: 50px 100px;
+	border: 1px solid #E2E2E2;
+	box-shadow: 0px 0px 1px #C7C7C7;
+}
+
+.image-item {
+	width: 200px;
+	height: 257px;
+	border: 4px solid #fff;
+	box-shadow: 5px 5px 15px #eeeeee, -5px -5px 15px #eeeeee;
+}
+
+.upload-wrap {
+	position: absolute;
+	bottom: 0;
+	height: 50px;
+	left: 0;
+	right: 0;
+	line-height: 50px;
+	font-size: 16px;
+	color: #fff;
+}
+
+.upload-file {
+	position: relative;
+	overflow: hidden;
+}
+
+.file-input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+}
+
+.upload-wrap span {
+	display: none;
+	width: 100%;
+	text-align: center;
+	height: 100%;
+	cursor: pointer;
+	background: #000;
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+}
+
+.upload-img:hover .upload-wrap span {
+	display: block;
+}
+
+.proportion {
+	float: left;
+	width: 122px;
+	height: 122px;
+	background: url(/efacecloud/images/compare_bg_black_cir.png) no-repeat;
+	background-position: 0px 0px;
+	margin: 80px 35px 0;
+	text-align: center;
+	color: #fff;
+	font-size: 12px;
+	visibility: hidden;
+}
+.proportion.show {
+	visibility: visible;
+}
+
+
+.oneToOneProportion {
+	float: left;
+	width: 202px;
+	height: 257px;
+	margin: 0 20px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	visibility: hidden;
+}
+.oneToOneProportion.show {
+	visibility: visible;
+}
+.oneToOneProportion .algo-item {
+	line-height: 2em;
+	margin-bottom: 10px;
+}
+.oneToOneProportion .algo-name {
+	width: 70%;
+	float: left;
+	text-align: left;
+	text-indent: 1em;
+	background-color: skyblue;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.oneToOneProportion .algo-score,
+.oneToOneProportion .algo-error {
+	width: 30%;
+	float: right;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.oneToOneProportion .algo-score {
+	background-color: #90eea7;
+}
+.oneToOneProportion .algo-error {
+	background-color: lightcoral;
+
+}
+
+.proportion b {
+	display: inline-block;
+	color: #FAFC02;
+	width: 100%;
+	text-align: center;
+	font-size: 25px;
+	margin-top: 40px;
+}
+
+.btn-wrap {
+	width: 308px;
+	margin: 0 auto;
+}
+
+.btn-wrap button {
+	width: 100%;
+	height: 50px;
+	font-size: 16px;
+	margin-top: 50px;
+}
+/* .btn-wrap button:hover{
+	background: #157AD6;
+	color:#fff;
+} */
+.image-item:hover {
+	border: 4px solid #fff;
+}
+
+.image-item .upload-bg {
+	padding-top: 60px;
+}
+
+.image-item .upload-bg .icon-upload {
+	font-size: 65px;
+	margin-bottom: 20px;
+}
+
+.btn-blue {
+	background: #4c72d5;
+	color: #fff;
+	border: 1px solid #4c72d5;
+	border-radius: 5px;
+}
+
+.btn-blue:hover, .btn-blue:focus, .btn-blue:active {
+	background: #3a5d9e;
+	color: #fff;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 任务球模板 -->
+    <script id="taskBall" type="text/x-tmpl">
+        <div class="task" style="margin-right: 90px; margin-top:100px;" id="taskLibrary">
+            <a class="task-title">
+                <span class="task-title-bg"></span>
+                <span class="task-speed-mask" id="taskMask"></span>
+                <span class="task-cur-value" id="taskValue"></span>
+                <!-- <span class="task-icon"><img src="/efacestore/images/task-icon.png"/></span> -->
+                <span class="task-con hide">下载任务(<b id="totalTaskNum">5</b>/<b id="curTaskNum">10</b>)</span>
+            </a>
+            <div class="dropdown-menu">
+                <div class="dropdown-head">
+                    <p class="dropdown-menu-title">任务列表</p>
+                    <ul class="tab-list" id="taskTabList">
+                        <li class="active" attrid="#taskingList">正在执行（<b id="loadingNum">0</b>）</li>
+                        <li attrid="#completeList">已完成（<b id="compeleteNum">0</b>）</li>
+                    </ul>
+                </div>
+                <div class="dropdown-menu-con mCustomScrollbar">
+                    <ul class="task-list active tasking-list" id="taskingList">
+                        <div class="nodata"></div>
+                        <!-- <li>
+                            <p class="task-time">2018-01-01 15:16:25</p>
+                            <div class="progressbar"></div>
+                        </li> -->
+                    </ul>
+                    <ul class="task-list complete-list" id="completeList">
+                        <div class="nodata"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </script>
+    
+    <script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="/ui/plugins/eapui/frame/tmpl.js"></script>
+    <script type="text/javascript" src="/efacecloud/js/technicalStation/tmplStorage.js"></script>
+</body>
+</html>

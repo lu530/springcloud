@@ -1,0 +1,67 @@
+
+<!--* Created by 黎镇华 on ${DATE}.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" > 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>布控库人员列表</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/form.css" />
+    <style>
+        .ztree li span.button.chk.checkbox_false_part{
+            background-position: -14px 0px;
+        }
+        .ztree li span.button.chk.checkbox_true_part{
+            background-position: -14px 0px;
+        }
+        .window-bottom{
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div>
+       <!-- <div class="content-top">
+            <div class="frame-title">摄像机关联布控库</div>
+        </div>-->
+       <!-- <div class="page-info-metro">
+            <div class="action-btn-group">
+                <label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall>全选</label>
+            </div>
+            <div class="action-btn-group bottom-btn pl0">
+                <button type="button" class="btn" id="saveBtn">保存</button>
+            </div>
+        </div>-->
+        <div class="window-content">
+            <div class="search-box menu-search-box" style="margin-left:3%;width: 94%;">
+                <input class="search-input" type="text" id="orgName" placeholder="搜索摄像机" maxlength="50">
+                <span class="icon-search2" id="search"></span>
+            </div>
+            <ul id="structureTree" class="ztree folder" ui-control="treeview"
+                ui-service="face/hw/common/getFaceDetect" ui-options="orgTreeOpts"  style="width: auto;margin:10px 25px 0 25px;"></ul>
+        </div>
+        <div class="window-bottom">
+            <button class="btn blue-btn mr15" id="saveBtn" type="button">保存</button>
+            <button class="btn gray-btn btn-close mr20" data-dismiss="modal" type="button">关闭</button>
+        </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControlCopy/vidiconTrees.js"></script>
+</html>
+
+
+
+
+
+
+
+
+
+

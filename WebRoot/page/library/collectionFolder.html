@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>选择库</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/choseLibrary.css" />
+</head>
+<body class="oa">
+	<div class="window-content" id="folderList" ui-control="listview"
+		ui-service="face/favorite/getData" ui-template="folderTemplate"
+		ui-parameters="queryParams" ui-options="{unload:true}">
+		<div class="wrap-body">
+			<div class="library-list">
+				<div class="file-node" title="{%=o.FAVORITE_NAME%}" id="folderTemplate" style="display: none;">
+					<div class="fileicon person {%=renderFavoriteLogo(o.FILE_NUM)%}">
+						<span type="checkbox" class="checkbox"></span>
+					</div>
+					<div class="file-name">
+						<input class="filename text-overflow" value="{%=o.FAVORITE_NAME%}"
+							parentId="{%=o.PARENT_ID%}" favoriteId="{%=o.FAVORITE_ID%}"
+							disabled />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-data fr hide" listview-page=""></div>
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-small blue-btn mr5" id="confirmBtn">确定</button>
+		<button class="btn btn-small gray-btn" id="cancelBtn">取消</button>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/library/collectionFolder.js"></script>
+</html>

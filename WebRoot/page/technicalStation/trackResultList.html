@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人像云追踪查询结果</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/timeAxis.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/pageTop.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/trackFaceRightList.css" />
+</head>
+<body style="overflow-x:hidden;">
+	<div id="wrapBody" ui-control="listview" class="pager-wrap pager-npt" container="technicalStationScroll">
+		<div class="pager-content">
+			<div class="form-header nb">
+				<a class="close-btn" id="closeBtn">×</a>
+				<h3 class="form-title ml20">查询结果</h3>
+				<!-- <a class="btn btn-i-t" id="trajectoryGeneBtn">
+			<i class="btn-icon add-icon"></i>
+			<span>生成轨迹</span>
+		</a> -->
+			</div>
+			<!-- 页码 -->
+			<div class="page-info-metro square-pager list-wrap full">
+				<div class="action-btn-group">
+					<label class="checkbox-inline"><input type="checkbox" id="checkAll">全选</label>
+					<a class="btn btn-i-t hide"> <i class="btn-icon export-icon"></i>
+						<span>导出</span>
+					</a> <a class="btn btn-i-t disabled" id="trajectoryGeneBtn" title="生成轨迹至少勾选两条记录！">
+						<i class="btn-icon export-icon"></i> <span>生成轨迹</span>
+					</a>
+					<a class="btn btn-i-t disabled" id="wifiCollisionBtn" title="wifi碰撞至少勾选两条记录！">
+						<i class="btn-icon export-icon"></i> <span>wifi碰撞</span>
+					</a>
+				</div>
+				<div class="tool-bar">
+					<span class="tool-bar-item first" id="similar"><i class="hand similar"></i><span>相似度排序</span></span>
+					<span class="tool-bar-item center active" id="time"><i class="hand time"></i><span>时间排序</span></span>
+					<span class="tool-bar-item last" id="place"><i class="hand place"></i><span>地点排序</span></span>
+				</div>
+			</div>
+			<!-- 页码 end -->
+			<div>
+			<div class="library-info listviewImgBox">
+				<div class="picture-wrap">
+					<div class="compare-picture person pr">
+						<div class="image-item">
+							<span class="close-img-btn">×</span>
+							<div class="upload-img">
+								<img src="/ui/plugins/eapui/img/nophoto.jpg" id="vehicleImg" attrimg="zoom" hasImg="0">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="tilelist vertical ver-caselist checkbox vehicle">-->
+				<div class="checkbox m0 tilelist vertical pt10 pb10">
+					<div class="list-node-wrap" id="vehicleListTemplate"
+						style="display: none">
+						<dl class="list-node">
+							<dt class="node-img person-img">
+								<span>
+									<img src="{%=o.FaceImgUrl%}" attrimg="zoom" class="mb0">
+								</span>
+							</dt>
+							<dd class="node-text">
+								<b class="similar color-blue" key="similar">73%</b>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="people-list personList list-view listviewImgBox">
+				<script id="personTmpl" type="text/x-tmpl">
+			{% for(var  i=0;i<o.length;i++){ %}
+				<div class="dis-table">
+					<!--<h4 class="date-style">{%=o[i].DATE_TIME%}</h4>-->
+					<div class="date-style dis-table-cell" style="width:98px;">
+						<div class="day-block"><b class="f18">{%= dayTimeFormat(o[i].DATE_TIME)[1] +'-'+ dayTimeFormat(o[i].DATE_TIME)[2] %}</b><b style="display: block; font-weight:normal">{%= dayTimeFormat(o[i].DATE_TIME)[0] %} </b></div>	
+						<div class="timeline">
+							<span class="circle-top">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+							<span class="line"></span>
+							<span class="circle-bottom">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+						</div>
+					</div>
+					<div class="dis-table-cell">
+					{% for(var j=0;j<o[i].LIST.length;j++){ %}
+							<div class="clearfix">
+								<p class="address-style">{%=o[i].LIST[j].PLACE%}</p>
+								{% for(var k=0, obj=o[i].LIST[j].LIST;k<obj.length;k++){ %}
+									<dl class="list-node mt0 mb5 pr p0 pb5 picMessage">
+										<dt class="node-img vertical w100 pr m0">
+											<span class="m0" attrimg='doublezoom'>
+												<img class="rIMG test hide" src= "{%=obj[k].BIG_PIC%}">
+												<img data-original="{%=obj[k].vd%}"  class="rIMG test" src= "{%=obj[k].OBJ_PIC%}">
+											</span>
+											<p class="text-overflow mb0 mt5 black" picMsg="时间:{%=showTime(obj[k].TIME)%}">{%= showTime(obj[k].TIME)%}</p>
+											<p class="lb-elm text-overflow mb0 mt5 tc">
+											<input class="mr5 query-checkbox" device_name="{%=o[i].LIST[j].PLACE%}" obj_pic="{%=obj[k].OBJ_PIC%}"
+											x="{%=obj[k].X%}" y="{%=obj[k].Y%}" device_id="{%=obj[k].ORIGINAL_DEVICE_ID%}"  jgsk="{%=obj[k].TIME%}" type="checkbox" index="{%=i+'-'+j+'-'+k%}"/>
+											</p>
+											<span class="rb-elm" picMsg="相似度:{%=formatScore(obj[k].SCORE)%}%">
+												<b class="orange">{%=formatScore(obj[k].SCORE)%}%</b>
+											</span>
+										</dt>
+										<dd class="btn-group fr">
+											<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=obj[k].OBJ_PIC%}">
+												<i class="btn-icon verification-icon"></i>
+											</a>
+											<a class="btn-i-t btn-xs trajectory-search hide" title="轨迹分析" url="{%=obj[k].OBJ_PIC%}">
+												<i class="btn-icon trajectory-icon"></i>
+											</a>
+										</dd>
+									</dl>
+
+								{% } %}
+							</div>
+					{% } %}
+					</div>
+				</div>
+			{% } %}
+		</script>
+			</div>
+			
+			<!-- 地点排序 -->
+			<div class="person-list placeList list-view place-list listviewImgBox">
+				<script id="personPlaceTmpl" type="text/x-tmpl">
+			{% for(var  i=0;i<o.length;i++){ %}
+				<div class="dis-table">
+					<!--<h4 class="date-style">{%=o[i].DATE_TIME%}</h4>-->
+					<div class="date-style dis-table-cell" style="width:98px;">
+						<div class="timeline">
+							<span class="circle-top">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+							<span class="line"></span>
+							<span class="circle-bottom">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+						</div>
+					</div>
+					<div class="dis-table-cell">
+					<div class="clearfix">
+							<p class="address-style">{%=o[i].PLACE%}</p>
+							{% for(var j=0;j<o[i].LIST.length;j++){ %}
+								<p class="address-style hide"></p>
+									<dl class="list-node mt0 mb5 pr p0 pb5 picMessage" style="width:200px;">
+										<dt class="node-img vertical w100 pr m0 tc">
+											<span class="m0">
+												<img data-original="{%=o[i].LIST[j].PIC%}" attrimg="zoom" class="rIMG test" src= "{%=o[i].LIST[j].OBJ_PIC%}">
+											</span>
+											<p class="text-overflow mb0 mt5 black" picMsg="时间:{%= o[i].LIST[j].TIME %}">{%= o[i].LIST[j].TIME %}</p>
+											<p class="lb-elm text-overflow mb0 mt5 tc">
+											<input class="mr5 query-checkbox" device_name="{%=o[i].PLACE%}" obj_pic="{%=o[i].LIST[j].OBJ_PIC%}"
+											x="{%=o[i].LIST[j].X %}" y="{%=o[i].LIST[j].Y %}" device_id="{%=o[i].LIST[j].ORIGINAL_DEVICE_ID %}"  jgsk="{%=o[i].LIST[j].TIME%}" type="checkbox" index="{%=i+'-'+j%}"/>
+											</p>
+											<span class="rb-elm">
+												<b class="orange" picMsg="相似度:{%=formatScore(o[i].LIST[j].SCORE)%}%">{%=formatScore(o[i].LIST[j].SCORE)%}%</b>
+											</span>
+										</dt>
+										<dd class="btn-group fr">
+											<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].LIST[j].OBJ_PIC%}">
+												<i class="btn-icon verification-icon"></i>
+											</a>
+											<a class="btn-i-t btn-xs trajectory-search hide" title="轨迹分析" url="{%=o[i].LIST[j].OBJ_PIC%}">
+												<i class="btn-icon trajectory-icon"></i>
+											</a>
+										</dd>
+									</dl>
+
+							{% } %}
+						</div>
+					</div>
+				</div>
+			{% } %}
+		</script>
+			</div>
+			
+		</div>			
+		</div>
+		<script id="personTmplP" type="text/x-tmpl">
+			{% for(var  i=0;i<o.length;i++){ %}
+				<div class="list-node-wrap">
+					<dl class="list-node picMessage">
+					        <dt class="node-img person-img">
+					            <span>
+					                <img src="{%=o[i].OBJ_PIC%}" attrimg="zoom" class="mb0">
+					            </span>
+								<b class="similar color-blue similarData" picMsg="相似度:{%=formatScore(o[i].SCORE)%}%"><b>{%=formatScore(o[i].SCORE)%}%</b></b>
+					        </dt>
+					        <dd class="node-text">
+					            <input type="checkbox" listview-check="" class="checkbox-opacity hide">
+					            <p class="w100" picMsg="摄像机:{%=o[i].PLACE%}"><label>摄像机：</label><span>{%=o[i].PLACE%}</span></p>
+					            <p class="w100" picMsg="时间:{%=o[i].TIME%}"><label>时间：</label><span>{%=o[i].TIME%}</span></p>
+								<p class="lb-elm text-overflow mb0 mt5 tc hide">
+								<input class="mr5 query-checkbox" device_name="{%=o[i].PLACE%}" obj_pic="{%=o[i].OBJ_PIC%}"
+								x="{%=o[i].X%}" y="{%=o[i].Y%}" device_id="{%=o[i].ORIGINAL_DEVICE_ID%}"  jgsk="{%=o[i].TIME%}" type="checkbox" index="o[i].index"/></p>
+					            <div class="btn-group fr">
+									<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
+										<i class="btn-icon verification-icon"></i>
+									</a>
+									<a class="btn-i-t btn-xs trajectory-search hide" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
+										<i class="btn-icon trajectory-icon"></i>
+									</a>
+					                <a class="btn btn-i-t btn-xs btn-more hide">
+					                    <i class="btn-icon more-icon"></i>
+					                </a>
+					            </div>
+					        </dd>
+					 </dl>
+            	</div>
+			{% } %}
+</script>
+</div>
+
+<div class="mac-list">
+	<div class="mac-list-title">
+		<span>WIFI碰撞结果</span>
+		<span class="remove-btn" id="removeWifiListBtn">×</span>
+	</div>
+	<div class="mac-list-detail">
+		<div class="nodata"></div>
+	</div>
+	<div class="mac-list-result">
+		<div class="list-result-title">
+			<span class="title-circle"></span>
+			<span>最终碰撞结果</span>
+		</div>
+		<div class="list-result-con">
+			<div class="nodata" style="height:165px;"></div>
+		</div>
+	</div>
+</div>
+
+<script id="wifiResultTmpl" type="text/x-tmpl">
+	<ul>
+		{% for(var i=0;i<o.length;i++){ %}
+		<li><span class="list-con">{%=o[i].mac%}</span><span class="times">{%=o[i].times%}次</span></li>
+		{% } %}
+	</ul>
+</script>
+
+<script id="wifiTmpl" type="text/x-tmpl">
+		{% for(var i=0;i<o.length;i++){ %}
+		<div class="dis-table">
+			<div class="date-style dis-table-cell">
+				<div class="timeline">
+					<span class="circle-top">
+						<img src="/efacecloud/images/icon-circle.png">
+					</span>
+					<span class="line"></span>
+					{% if(i==o.length-1){ %}
+					<span class="circle-bottom">
+						<img src="/efacecloud/images/icon-circle.png">
+					</span>
+					{% } %}
+				</div>
+			</div>
+			<div class="dis-table-cell">
+				<div class="clearfix pl10">
+					<p class="address-style">{%=showTime(o[i].addrDetail[0].macDetail[0].CAP_TIME,'date')%}</p>
+					<dl class="mac-wrap">
+						<dt class="mac-title"><span class="mac-addr">{%=o[i].addr%}</span><span class="detail-times">{%=o[i].addrDetail.length%}条<span class="icon-arrow-down8"></span></span></dt>
+						<dd class="mac-content">
+							<ul>
+								{% for(var j=0;j<o[i].addrDetail.length;j++){ %}
+								<li>
+									<div class="list-con" window-wifi="{%=o[i].addrDetail[j].mac%}" class="wificontrol">{%=o[i].addrDetail[j].mac%}</div>
+									<div class="times-details">
+										<span class="times">{%=o[i].addrDetail[j].macTimes%}次</span>
+										<div class="dropdown-menu">
+											<div class="dropdown-menu-title">碰撞时间</div>
+											<div class="dropdown-menu-con">
+												{% for(var k=0;k<o[i].addrDetail[j].macDetail.length;k++){ %}
+												<span>{%=showTime(o[i].addrDetail[j].macDetail[k].CAP_TIME)%}</span>
+												{% } %}
+											</div>
+										</div>
+									</div>
+								</li>
+								{% } %}
+							</ul>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+		{% } %}
+		</script>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+<!-- <script type="text/javascript" src="/efacecloud/js/common.js"></script> -->
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/trackResultList.js"></script>
+</body>
+</html>

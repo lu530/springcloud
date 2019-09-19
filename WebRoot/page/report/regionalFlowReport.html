@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>区域人流量</title>  
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/report/regionalFlowReport.css" />
+</head>
+<body class="oa">
+	<div class="pager-wrap" >
+		<div class="pager-content pb20">
+			<div class="content-center">
+				<!-- 筛选菜单 -->
+				<div class="filter-view">
+					<div class="page-title">
+						<span class="ml30">人脸流量统计</span>
+					</div>
+					<dl class="filter-bar">
+						<dt class="filter-arrt">统计时间：</dt>
+						<dd class="filter-tag ">
+							<div class="tagslist " id="timeTagList">
+								<span class="tag-item active tagsTime" time-control="jt">今天</span>
+								<span class="tag-item tagsTime" time-control="zt">昨天</span>
+								<span class="tag-item tagsTime" time-control="bz">本周</span>
+								<span class="tag-item tagsTime" time-control="by">本月</span>
+								<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+								<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+								<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+								<div class="opera-group">
+								<div class="time-control-item">
+									<input class="time-control" id="beginTime" readonly="" type="text">
+									<i></i>
+								</div>
+								<div class="time-control-item">
+									<input class="time-control" id="endTime" readonly="" type="text">
+									<i></i>
+								</div>
+								<button class="btn btn-i-t zdyTimeBtn">确定</button>
+								</div>
+							</div>
+						</dd>
+					</dl> 
+				</div>
+				
+				<div class="draw bgwhite mt10" id="areaStatistics" style="width:100%;height:600px;"></div>
+			</div>
+		</div>
+		
+<!-- 		<div class="bgwhite mt20 hide">
+			<div class="content-center"><div class="content-title">统计分析</div></div>
+			<div class="content-center pt0">
+				<div class="page-info-metro full ">
+					<div class="page-data fr " listview-page="">
+						<span class="page-num">总数 <i class="page-num" listview-counts="">0</i> 条，</span> 
+						<a class="page-prev disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i> 上一页</a>
+						<a class="current-page"><i listview-current="">1</i> / <i listview-total="">1</i></a>
+						<a class="page-next disable" listview-next-btn="" href="#">下一页 <i class="icon-arrow-right7"></i></a>
+					</div>	
+				</div>
+			</div>
+		</div> -->
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/chart/echarts.min.js"></script>
+<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/report/regionalFlowReport.js"></script>
+</html>

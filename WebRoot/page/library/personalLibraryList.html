@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>我的收藏</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<body class="oa">
+	<div class="pager-wrap" id="favoriteList" ui-control="listview"
+		ui-service="face/favorite/getData" ui-template='personalTemplate'
+		ui-options="{usePage:true}">
+		<div class="pager-content">
+			<div class="page-title">
+				<span>我的收藏</span>
+			</div>
+
+			<div class="filter-view">
+				<dl class="filter-bar">
+					<dt class="filter-arrt">文件类型</dt>
+					<dd class="filter-tag">
+						<div class="tagslist tagItmeList" id="fileType">
+							<span class="tag-item active tagAll" val="">全部</span> <span
+								class="tag-item" val="1">路人人脸收藏夹</span> <span class="tag-item"
+								val="2">人脸资源收藏夹</span> <span class="tag-item" val="3">汽车驾驶人员收藏夹</span>
+							<span class="tag-item" val="4">非汽车驾驶人员收藏夹</span>
+						</div>
+					</dd>
+				</dl>
+			</div>
+
+			<div class="page-info-metro square-pager full">
+				<div class="action-btn-group ">
+					<label class="checkbox-inline"><input type="checkbox"
+						id="checkAll" listview-checkall="">全选</label> <a
+						class="btn btn-i-t mr20" id="addBtn"> <i
+						class="btn-icon add-icon"></i> <span>新增</span>
+					</a> <a class="btn btn-i-t" id="deleteCheckBtn"> <i
+						class="btn-icon delete-icon"></i> <span>删除</span>
+					</a>
+				</div>
+
+				<div class="page-data fr" listview-page="">
+					<a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+						class="icon-arrow-left7"></i></a> <span class="page-num">共有<i
+						class="page-num" listview-counts="">1</i>条记录
+					</span> <a class="current-page"><i listview-current="">1</i>/<i
+						listview-total="">1</i></a> <a class="page-next fr"
+						listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+				</div>
+
+			</div>
+
+			<div class="page-con">
+				<!-- <b class="item-pic"></b> 文件夹类型（在b标签多加以下类）：分享：share；导入：import；空文件夹：no-file； -->
+				<div class="tilelist vertical checkbox" id="personalLibListView">
+					<script id="personalTemplate" type="text/x-tmpl">
+			<div class="list-node-wrap">
+	      	<dl class="list-node">
+				<dt class="node-img person-img">
+					<span>
+						<a class="collectionListBtn" href="javascript:void(0)" ref="/efacecloud/page/library/myCollectionList.html?fileType={%=o.FAVORITE_TYPE%}&favoriteId={%=renderNullToNotKnow(o.FAVORITE_ID)%}&fileName={%=renderNullToNotKnow(o.FAVORITE_NAME)%}"><b class="item-pic person"></b></a>
+					</span>
+				</dt>
+				<dd class="node-text">
+					<input type="checkbox" listview-check class="hide"/>
+					<p class="node-title "><span title="{%=o.FAVORITE_NAME?o.FAVORITE_NAME:'暂无'%}">{%=o.FAVORITE_NAME?o.FAVORITE_NAME:'暂无'%}</span></p>
+					<p><label>时间：</label><span title="创建时间：{%=renderNullToNotKnow(o.CREATE_TIME)%}">{%=renderNullToNotKnow(o.CREATE_TIME)%}</span></p>
+					<p><label>创建人：</label><span title="{%=o.USER_NAME%}">{%=o.USER_NAME%}</span></p>
+					<p class="operation-group fr">
+						<a class="btn-i-t btn-xs editBtn nb" title="编辑" favoriteid={%=renderNullToNotKnow(o.FAVORITE_ID)%}>
+							<i class="btn-icon edit-icon"></i>
+						</a>
+						<a class="btn-i-t btn-xs nb deleteBtn" title="删除" favoriteId={%=renderNullToNotKnow(o.FAVORITE_ID)%}>
+							<i class="btn-icon deleteItem-icon"></i>
+						</a>
+						<a class="btn-i-t btn-xs nb detailBtn" title="详情" ref="/efacecloud/page/library/myCollectionList.html?fileType={%=o.FAVORITE_TYPE%}&favoriteId={%=renderNullToNotKnow(o.FAVORITE_ID)%}&fileName={%=renderNullToNotKnow(o.FAVORITE_NAME)%}">
+							<i class="btn-icon more-icon"></i>
+						</a>
+					</p>
+				</dd>
+				<dd class="num">{%=o.FILE_NUM%}</dd>
+			</dl>
+			</div>
+		</script>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/library/personalLibraryList.js"></script>
+</html>

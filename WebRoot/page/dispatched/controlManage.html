@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>布控库管理</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/tableBase.css" />
+</head>
+<body class="oa">
+
+	<div class="frame-side hide">
+		<div class="search-box menu-search-box">
+			<input class="search-input" type="text" id="deviceName"
+				placeholder="请搜索布控列表" maxlength="50"> <span
+				class="icon-search2" id="search"></span>
+		</div>
+		<div class="left-tree-wrap">
+			<!--<ul id="deptTree" class="ztree" ui-control="treeview" ui-service="cs/gate/getFaceDetect"></ul>
+		 	<ul class="ztree" id="structureSceneTree" ui-control="treeview" ui-parameters="{isShowChild:false}"
+		 	ui-service="cs/gate/getFaceDetect" ui-options="faceDetectOption"></ul> -->
+
+		</div>
+	</div>
+	<div class="wrap-body pt10" id="dispatchedLibList"
+		ui-control="listview" ui-service="controlPerson/task/getData"
+		ui-template='tableTemplate' ui-parameters="queryParam"
+		ui-options="{usePage:true, unload:true}">
+
+		<div class="tools-bar">
+			<div class="btn-group-link">
+				<button class="btn btn-primary" id="btnAdd" type="button">添加</button>
+				<button class="btn btn-gray" id="btnDel" type="button">删除</button>
+			</div>
+		</div>
+		<div class="">
+			<div class="table-head">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="w5 tc"><input class="check-all" type="checkbox"
+								listview-checkall></th>
+							<th class="w20"><span>任务名称</span></th>
+							<th class="w20 tc"><span>布控场景</span></th>
+							<th class="w20 tc"><span>布控人</span></th>
+							<th class="w20 tc"><span>布控时间</span></th>
+							<th class="w10 tc"><span>当前状态</span></th>
+							<th class="tc" style="width: 130px"><span>操作</span></th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="table-body bg-table">
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+						<script id="tableTemplate" type="x-tmpl">
+						<tr id="tableTemplate1"  >
+							<td class="w5 tc"><input listview-check type="checkbox" task-id="{%=o.TASK_ID%}"></td>
+							<td class="w20"><span>{%=o.TASK_NAME%}</span></td>
+							<td class="w20 tc"><span>{%=o.COMMUNITY_NAME%}</span></td>
+							<td class="w20 tc"><span>{%=o.CREATOR%}</span></td>	
+							<td class="w20 tc"><span>{%=o.CREATE_TIME%}</span></td>
+							<td class="w10 tc"><span>{%=renderStatus(o.STATUS_CODE)%}</span></td>
+							<td class="tc" style="width:130px">
+								<span>
+									<ul class="btn-group-icons list-inline">
+										<li class="editBtn" task-id="{%=o.TASK_ID%}" task-name="{%=o.TASK_NAME%}" bind-id="{%=o.COMMUNITY_ID%}" opt-status="{%=o.OPT_STATUS%}" bind-localdb="{%=o.DB_NAME_LOCAL%}" bind-syncdb="{%=o.DB_NAME_SYNC%}"><i class="icon-pencil3"></i> <b>修改</b></li>
+										<li class="liararyRemove" task-id="{%=o.TASK_ID%}"  task_name="{%=o.TASK_NAME%}"><i class="icon-trash" ></i> <b>删除</b></li>
+									</ul>
+								</span>
+							</td>			
+						</tr>	
+
+						</script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="page-info-metro hide" listview-page="">
+			<div class="page-data fr">
+				<span class="page-num">总数 <i class="page-num"
+					listview-counts="">0</i> 条，
+				</span> <a class="page-prev" listview-prev-btn="" href="#"><i
+					class="icon-arrow-left7"></i> 上一页</a> <a class="current-page"><i
+					listview-current="">0</i> / <i listview-total="">0</i></a>
+				<!-- <select listview-page-select=""></select> -->
+				<a class="page-next" listview-next-btn="" href="#">下一页 <i
+					class="icon-arrow-right7"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="frame-form-full" style="display: none;">
+		<iframe class="FrameContent full-screen" id="mainForm" frameborder="0"></iframe>
+	</div>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<!-- <script type="text/javascript" src="/efacecloud/js/system/structureTree.js"></script> -->
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/dispatchedCommon.js	"></script>
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/controlManage.js"></script>
+</body>
+</html>

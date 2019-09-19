@@ -1,0 +1,550 @@
+3.1.2#20190830
+[提交人]   
+    huangruijing
+[新增/修改文件] 
+    \efacecloud\src\com\suntek\efacecloud\dao\AlarmHandleRecordDao.java
+[修改说明]
+          1、签到/反馈日志添加PERSON_ID字段
+          2、升级此版本需要修改表字段：
+          	alter TABLE MD_ALARM_HANDLE_RECORD  add COLUMN PERSON_ID varchar(100)  after ID;
+*******************************************************************************************
+3.1.2#20190814
+[提交人]   
+    lijunbo
+[新增/修改文件] 
+    /efacecloud/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+    /efacecloud/src/com/suntek/efacecloud/dao/FaceSchedulingDao.java
+    /efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+    /efacecloud/src/com/suntek/efacecloud/service/FaceSchedulingService.java
+[修改说明]
+          1、警情下发-恢复REMARK_ID为REMARK,告警查询取消REAMRK_ID关联
+          2、升级此版本需要修改表字段：
+          	ALTER TABLE eface_police_task_record CHANGE REMARK_ID REMARK VARCHAR(2000) DEFAULT NULL;
+*******************************************************************************************
+
+3.1.3#20190807
+[提交人]   
+    linsj
+[新增/修改文件] 
+    /docs/update.sql
+    com/suntek/efacecloud/service/foriegner/ForiegnerCardTypeService.java
+[修改说明]
+          1、外籍人项目增加字典数据
+          2、增加外籍人证件类型查询服务
+*******************************************************************************************
+3.1.2#20190708
+[提交人]
+    wangshaotao
+[新增/修改文件]
+    efacecloud/dao/FaceSchedulingDao.java
+    efacecloud/service/FaceSchedulingService.java
+[修改说明]
+    修改警情下发表结构，更新查询语句；
+    此版本需要增加数据库字段：
+    alter  table EFACE_POLICE_TASK_RECORD change REMARK REMARK_ID varchar(2000) DEFAULT NULL;
+    
+    CREATE TABLE `eface_police_task_remark` (
+      `DISPATCH_ID` varchar(32) NOT NULL,
+      `REMARK_ID` varchar(32) NOT NULL,
+      `SERIAL_NUMBER` int(8) DEFAULT NULL,
+      `CREATE_TIME` datetime NOT NULL,
+      `REMARK_KEY` varchar(200) NOT NULL,
+      `REMARK_NAME` varchar(200) DEFAULT NULL,
+      `REMARK_VALUE` varchar(200) DEFAULT NULL,
+      `REMARK_NOTE` varchar(2000) DEFAULT NULL,
+      `REMARK_FILE` varchar(200) DEFAULT NULL,
+      PRIMARY KEY (`DISPATCH_ID`,`REMARK_ID`,`REMARK_KEY`,`CREATE_TIME`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+
+3.1.2#20190521
+[提交人]
+	luxiaoyi
+[新增/修改文件]
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceCaptureProvider.java
+    /efacecloud/page/library/faceCaptureList.html
+    efacecloud/page/library/faceCaptureList.js
+[修改说明]
+	增加大麦网对接人脸；
+    此版本需要增加数据库字段：
+       CREATE TABLE `activity_info` (
+  `ID` int(50) NOT NULL AUTO_INCREMENT COMMENT '主键,自增',
+  `ACTIVITY_NAME` varchar(50) DEFAULT NULL COMMENT '活动名称',
+  `ACTIVITY_TIME` datetime DEFAULT NULL COMMENT '活动时间',
+  `ACTIVITY_PLACE` varchar(50) DEFAULT NULL COMMENT '活动地点',
+  `PURCHASER_SEAT_NO` varchar(50) DEFAULT NULL COMMENT '座位号',
+  `PURCHASER_NAME` varchar(50) DEFAULT NULL COMMENT '人员姓名',
+  `PURCHASER_IDENTITY` varchar(50) DEFAULT NULL COMMENT '人员身份证号',
+  `FACE_PIC` longtext COMMENT '人员照片',
+  `INFO_ID` varchar(50) DEFAULT NULL COMMENT 'infoID,关联字段',
+  `ENTRANCE_NAME` varchar(50) DEFAULT NULL COMMENT '入口名称',
+  `TICKET_NO` varchar(50) DEFAULT NULL COMMENT '门票号码',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1772 DEFAULT CHARSET=utf8;
+
+3.1.2#20190521
+[提交人]
+	huangruijin
+[新增/修改文件]
+    /efaceclound/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+    /efaceclound/src/com/suntek/efacecloud/util/Constants.java
+    /efaceclound/WebRoot/META-INF/appconfig.xml
+[修改说明]
+	增加人脸告警精细化管理；
+    此版本需要增加数据库字段：
+        CREATE ALGORITHM=UNDEFINED DEFINER=`videoweb` @`%` SQL SECURITY DEFINER VIEW `V_VPLUS_DEVICE_INFO_TEMP` AS
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`NAME` AS `DEVICE_NAME`,131 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`PLATFORM_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`STATUS_FLAG` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'true' AS `HAVE_VIDEO`,`a`.`DEVICE_ID_INT` AS `DEVICE_ID_INT`,`a`.`RELATED_DEVICE_ID` AS `RELATED_DEVICE_ID` FROM (`VPLUS_VIDEO_CAMERA` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON ((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`))) WHERE (`a`.`SPECIAL_PURPOSE`=0) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`NAME` AS `DEVICE_NAME`,111 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`PLATFORM_ID` AS `PLATFORM_ID`,NULL AS `LONGITUDE`,NULL AS `LATITUDE`,`a`.`STATUS_FLAG` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'flase' AS `HAVE_VIDEO`,'' AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM (`VPLUS_VIDEO_ENCODER` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON (((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`) AND (`a`.`TYPE`<> 99)))) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`DEVICE_NAME` AS `DEVICE_NAME`,198 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`GW_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`DEVICE_STATUS` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'flase' AS `HAVE_VIDEO`,'' AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM (`VPLUS_AC_DOOR` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON ((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`))) UNION ALL
+            SELECT `c`.`DEVICE_ID` AS `DEVICE_ID`,`c`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`c`.`NAME` AS `DEVICE_NAME`,195 AS `DEVICE_TYPE`,`c`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`c`.`ORG_CODE` AS `ORG_CODE`,`c`.`PLATFORM_ID` AS `PLATFORM_ID`,`c`.`LONGITUDE` AS `LONGITUDE`,`c`.`LATITUDE` AS `LATITUDE`,`c`.`STATUS_FLAG` AS `DEVICE_STATUS`,`a`.`SCENE_ID` AS `SCENE_ID`,'flase' AS `HAVE_VIDEO`,`c`.`DEVICE_ID_INT` AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM ((`VPLUS_VIDEO_STRUCTURE_TASK_DEV` `b` JOIN `VPLUS_VIDEO_CAMERA` `c` ON ((`b`.`CAMERA_ID`=`c`.`UUID`))) LEFT JOIN `VPLUS_SCENE_DEVICE` `a` ON (((`c`.`DEVICE_ID`=`a`.`DEVICE_ID`) AND (`a`.`DEVICE_TYPE`=195)))) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`DEVICE_NAME` AS `DEVICE_NAME`,196 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`GW_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`DEVICE_STATUS` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'flase' AS `HAVE_VIDEO`,'' AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM (`VPLUS_IDCARD_DEVICE` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON ((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`))) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`DEVICE_NAME` AS `DEVICE_NAME`,199 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`GW_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`DEVICE_STATUS` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'flase' AS `HAVE_VIDEO`,'' AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM (`VPLUS_WIFI_DEVICE` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON ((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`))) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`NAME` AS `DEVICE_NAME`,194 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`PLATFORM_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`STATUS_FLAG` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'true' AS `HAVE_VIDEO`,`a`.`DEVICE_ID_INT` AS `DEVICE_ID_INT`,`a`.`RELATED_DEVICE_ID` AS `RELATED_DEVICE_ID` FROM (`VPLUS_VIDEO_CAMERA` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON (((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`) AND (`b`.`DEVICE_TYPE`=194)))) WHERE (`a`.`SPECIAL_PURPOSE`=1) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`NAME` AS `DEVICE_NAME`,193 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`PLATFORM_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`STATUS_FLAG` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'true' AS `HAVE_VIDEO`,`a`.`DEVICE_ID_INT` AS `DEVICE_ID_INT`,`a`.`RELATED_DEVICE_ID` AS `RELATED_DEVICE_ID` FROM (`VPLUS_VIDEO_CAMERA` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON (((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`) AND (`b`.`DEVICE_TYPE`=193)))) WHERE (`a`.`SPECIAL_PURPOSE`=2) UNION ALL
+            SELECT `a`.`DEVICE_ID` AS `DEVICE_ID`,`a`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`a`.`DEVICE_NAME` AS `DEVICE_NAME`,197 AS `DEVICE_TYPE`,`a`.`INSTALL_ADDR` AS `DEVICE_ADDR`,`a`.`ORG_CODE` AS `ORG_CODE`,`a`.`GW_ID` AS `PLATFORM_ID`,`a`.`LONGITUDE` AS `LONGITUDE`,`a`.`LATITUDE` AS `LATITUDE`,`a`.`DEVICE_STATUS` AS `DEVICE_STATUS`,`b`.`SCENE_ID` AS `SCENE_ID`,'false' AS `HAVE_VIDEO`,'' AS `DEVICE_ID_INT`,'' AS `RELATED_DEVICE_ID` FROM (`VPLUS_EFENCE_DEVICE` `a` LEFT JOIN `VPLUS_SCENE_DEVICE` `b` ON ((`a`.`DEVICE_ID`=`b`.`DEVICE_ID`)));
+        
+        CREATE ALGORITHM=UNDEFINED DEFINER=`videoweb` @`%` SQL SECURITY DEFINER VIEW `V_VPLUS_DEVICE_INFO` AS
+        SELECT `D`.`DEVICE_ID` AS `DEVICE_ID`,`D`.`ORIGINAL_DEVICE_ID` AS `ORIGINAL_DEVICE_ID`,`D`.`DEVICE_NAME` AS `DEVICE_NAME`,`D`.`DEVICE_TYPE` AS `DEVICE_TYPE`,`D`.`DEVICE_ADDR` AS `DEVICE_ADDR`,`D`.`ORG_CODE` AS `ORG_CODE`,`D`.`PLATFORM_ID` AS `PLATFORM_ID`,`D`.`LONGITUDE` AS `LONGITUDE`,`D`.`LATITUDE` AS `LATITUDE`,`D`.`DEVICE_STATUS` AS `DEVICE_STATUS`,`D`.`SCENE_ID` AS `SCENE_ID`,`D`.`HAVE_VIDEO` AS `HAVE_VIDEO`,`S`.`NAME` AS `ORG_NAME`,`D`.`DEVICE_ID_INT` AS `DEVICE_ID_INT`,`D`.`RELATED_DEVICE_ID` AS `RELATED_DEVICE_ID` FROM (`V_VPLUS_DEVICE_INFO_TEMP` `D` LEFT JOIN `SYS_STRUCTURE_INFO` `S` ON ((`D`.`ORG_CODE`=`S`.`ORG_CODE`)));
+
+*******************************************************************************************
+3.1.2#20190411
+[提交人]
+	xiaotao
+[新增/修改文件]
+    /efaceclound/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+    /efaceclound/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+    /efaceclound/src/com/suntek/efacecloud/util/CommonUtil.java
+    /efaceclound/src/com/suntek/efacecloud/util/Constants.java
+    /efaceclound/WebRoot/js/alarm/alarmAllCardList.js
+    /efaceclound/WebRoot/js/alarm/personAlarmList.js
+    /efaceclound/WebRoot/page/alarm/alarmAllCardList.html
+    /efaceclound/WebRoot/page/alarm/personAlarmList.html
+
+[修改说明]
+	增加告警确认；
+    此版本需要增加数据库字段：
+        ALTER TABLE VPLUS_SURVEILLANCE_ALARM ADD CONFIRM_STATUS  TINYINT  NUll COMMENT '告警确认状态： 0-不准确  1-准确 ';
+*******************************************************************************************3.1.2#20190315
+[提交人]
+	xiaotao
+[新增/修改文件]
+	/efaceclound/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+    /efaceclound/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+    /efaceclound/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+    /efaceclound/WebRoot/js/library/alarmDetails.js
+    /efaceclound/WebRoot/page/library/alarmDetails.html
+[修改说明]
+	增加多脸布控管理；
+    此版本需要增加数据库字段：
+         ALTER TABLE VIID_DISPATCHED_OBJECT ADD IS_COVER  tinyint default 2 comment '布控多脸类型：1-正面 0-副面 2-封面';
+         ALTER TABLE VIID_DISPATCHED_OBJECT ADD SOURCE_TYPE  tinyint default 0 comment '布控来源：0-布控库库 1-多脸维护 2-告警 ';
+*******************************************************************************************
+3.1.2#20190309
+[提交人]	
+	liuyongyi
+[新增/修改文件]
+	/efaceclound/WebRoot/js/alarm/personAlarmList.js
+[修改说明]
+	1.添加设备调用页面接口（仅黑人项目调用）
+*******************************************************************************************
+3.1.2#20190308
+[提交人]	
+	liuyongyi
+[新增/修改文件]
+	/efaceclound/WebRoot/js/library/faceCollectionList.js
+[修改说明]
+	1.添加设备调用页面接口（仅黑人项目调用）
+*******************************************************************************************
+3.1.2#20190215
+[提交人]	
+	liuzhuoqi
+[新增/修改文件]
+	1./efaceclound/WebRoot/page/alarm/personAlarmList.html
+[修改说明]
+	将图标改成文字提醒
+*******************************************************************************************
+3.1.2#20190215
+[提交人]	
+	liuzhuoqi
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+	2、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+	3、/efacecloud/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+	4、/efacecloud/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+[修改说明]
+	优化查询相关派出所速度
+*******************************************************************************************
+3.1.2#20190201
+[提交人]	
+	liuxue
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/service/FaceEquipmentService.java
+	2、/efacecloud/src/com/suntek/efacecloud/dao/FaceEquipmentDao.java
+[修改说明]
+	中山需求，查看所有设备当天采集数据量
+*******************************************************************************************
+3.1.2#20190122
+[提交人]	
+	liuzhuoqi
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+	2、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+	3、/efacecloud/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+	4、/efacecloud/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+[修改说明]
+	人脸告警查询并显示派出所信息：添加关联派出所信息的关系
+*******************************************************************************************
+3.1.2#20190118
+[提交人]	
+	liuzhuoqi
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+	2、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+	3、/efacecloud/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+	4、/efacecloud/src/com/suntek/efacecloud/dao/FaceDispatchedAlarmDao.java
+[修改说明]
+	人脸告警查询并显示派出所信息（可配置）改为efacecloud里关联查询
+*******************************************************************************************
+3.1.2#20190111
+[提交人]	
+	liuzhuoqi
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+	2、/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmProvider.java
+	3、/efacecloud/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+	4、/efacecloud/WebRoot/META-INF/appconfig.xml
+[修改说明]
+	人脸告警查询并显示派出所信息（可配置）
+*******************************************************************************************
+3.1.2#20181225
+[提交人]	
+	yangkang
+[新增/修改文件]
+	1、/efaceclound/src/com/suntek/efacecloud/service/FaceTechnicalTacticsService.java
+[修改说明]
+	外籍人员确认服务
+*******************************************************************************************
+3.1.2#20181224
+[提交人]	
+	liuxue
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/util/MaskIdentityAndNameUtil.java
+[修改说明]
+	去除util日志打印
+*******************************************************************************************	
+3.1.2#20181220
+[提交人]	
+	liuxue
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/util/ModuleUtil.java
+[修改说明]
+	增加https全路径免映射
+*******************************************************************************************	
+2.0.2#20181212
+[提交人]	
+	liaoweixiong
+[新增/修改文件]
+	/efacecloud/src/com/suntek/efacecloud/util/MaskIdentityAndNameUtil.java
+	/efacecloud/src/com/suntek/efacecloud/provider/FaceDispatchedAlarmGroupingProvider.java
+	/efacecloud/src/com/suntek/efacecloud/service/FaceDispatchedAlarmService.java
+[修改说明]
+	脱敏需求按需配置
+*******************************************************************************************	
+2.0.2#20181210
+[提交人]	
+	liaoweixiong
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/util/ModuleUtil.java
+[修改说明]
+	添加100001旷视算法渲染
+*******************************************************************************************	
+2.0.2#20181119
+[提交人]	
+	chenjin
+[新增/修改文件]
+	1、/efacecloud/src/com/suntek/efacecloud/util/ModuleUtil.java
+[修改说明]
+	添加80001华云算法识别
+*******************************************************************************************	
+2.0.2#20181019
+[提交人]	
+	xiahang
+[新增/修改文件]
+	1、com.suntek.efacecloud.provider.FaceDispatchedAlarmGroupingProvider.java
+	2、/WebRoot/page/alarm/personAlarmList.html
+[修改说明]
+	返回值中添加了抓拍时间 CAPTURE_TIME字段
+	执行脚本：
+	/*告警表增加抓拍时间字段*/
+	alter table VPLUS_SURVEILLANCE_ALARM add CAPTURE_TIME datetime COMMENT '抓拍时间' default null;
+*******************************************************************************************	
+
+3.1#20180929
+[提交人]	
+	chenqiankun
+[新增/修改文件]
+	/efacecloud_3.1/WebRoot/WEB-INF/lib/eap-ui.jar
+[修改说明]
+	更新eap-ui包,解决模块部署问题
+*******************************************************************************************
+3.1#20180928
+[提交人]	
+	chenwj
+[新增/修改文件]
+	faceCaptureList.html 
+[修改说明]
+	人员类型中的黑人改为外籍人
+*******************************************************************************************
+3.1#20180823
+[提交人]	
+	wangshaotao
+[新增/修改文件]
+	page/alarm/personAlarmList.html
+	js/common.js
+	js/alarm/personAlarmList.js
+[修改说明]
+	增加人脸告警列表情报接口按钮
+*******************************************************************************************
+3.1#20180802
+[提交人]	
+	zhangliping
+[新增/修改文件]
+	/src/com/suntek/efacecloud/provider/FaceRedListProvider.java
+[修改说明]
+	修改 bug 14032 人脸-红名单库，导出的数据中没有现住地址
+*******************************************************************************************
+3.1#20180730
+[提交人]	
+	liuxiang
+[新增/修改文件]
+	src/com/suntek/efacecloud/service/FaceFunAlgoService.java
+	src/com/suntek/efacecloud/dao/FaceFunAlgoDao.java
+[修改说明]
+	人脸算法与菜单关联表的增、删、改、查
+*******************************************************************************************
+3.1#20180711
+[提交人]	
+	liuxiang
+[新增/修改文件]
+    src/com/suntek/efacecloud/dao/FaceAlgorithmNameDao.java
+	src/com/suntek/efacecloud/service/FaceFunAlgoService.java
+	src/com/suntek/efacecloud/dao/FaceFunAlgoDao.java
+[修改说明]
+	人脸算法名字新增DEFAULT_SCORE字段的查询
+	人脸算法与菜单关联表的增、删、查
+*******************************************************************************************
+3.1#20180711
+[提交人]	
+	wujunying
+[新增/修改文件]
+	/efacecloud_3.1/src/com/suntek/efacecloud/dao/NNInfoDao.java
+	/efacecloud_3.1/src/com/suntek/efacecloud/dao/NNInfoDetailDao.java
+	/efacecloud_3.1/src/com/suntek/efacecloud/dao/NNTaskDao.java
+	/efacecloud_3.1/src/com/suntek/efacecloud/provider/NNInfoDetailProvider.java
+	/efacecloud_3.1/src/com/suntek/efacecloud/provider/NNInfoProvider.java
+	/efacecloud_3.1/src/com/suntek/efacecloud/service/FaceCaptureOptimizationService.java
+[修改说明]
+	新增路人检索频次分析功能优化,功能实现数据库需要添加三张表：VIID_NN_INFO、VIID_NN_INFO_DETAIL、VIID_NN_TASK
+*******************************************************************************************
+3.1#20180630
+[提交人]	
+	zhangliping
+[新增/修改文件]
+	/efacecloud_3.1/src/com/suntek/efacecloud/service/FaceQualityDetectionService.java
+[修改说明]
+	新增人脸图片质量判断，获得布控标签
+*******************************************************************************************
+3.1#20180627
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	修改了人脸告警，布控库列表选择不正确的bug
+*******************************************************************************************
+3.1#20180627
+[提交人]	
+	liuxiang
+[新增/修改文件]
+	1./efacecloud/src/com/suntek/efacecloud/dao/FaceAlgorithmNameDao.java
+	2./efacecloud/src/com/suntek/efacecloud/service/FaceCommonService.java
+[修改说明]
+	根据前端提交的MENUID,从数据库获取人脸算法的ID和NAMN.
+*******************************************************************************************
+3.1#20180620
+[提交人]	
+	wudapei
+[新增/修改文件]
+	SystemInitListener.java
+[修改说明]
+	修改   1:N/N:N DSS集群 的初始化
+*******************************************************************************************
+3.1#20180619
+[提交人]	
+	wangsh
+[新增/修改文件]
+	FaceRedListService.java
+[修改说明]
+	删除红名单时，把相应申请单更新状态，涉及的红名单列表页删除
+*******************************************************************************************
+3.1#20180613
+[提交人]	
+	wangsh
+[新增/修改文件]
+	AlarmHandleRecordDao.java
+	AlarmHandleRecordService.java
+	Constants.java
+[修改说明]
+	顺德需求：如果已抓拍，发短信给布控人员，短信通知不包含全国在逃库
+*******************************************************************************************
+3.1#20180616
+[提交人]	
+	linsj
+[新增/修改文件]
+	/efacecloud_3.1/WebRoot/META-INF/appconfig.xml
+[修改说明]
+	删除1：N，N:N配置项，移到console配置下
+*******************************************************************************************
+3.0.0#20180316
+[提交人]	
+	wudapei
+[新增/修改文件]
+	/efacecloud/WebRoot/page/alarm/personAlarmHistoryList.html
+[修改说明]
+	增加更多历史告警页面
+*******************************************************************************************
+3.0.0#20171011
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	增加了汽车驾驶员和非汽车驾驶员
+*******************************************************************************************
+3.0.0#20170914
+[提交人]	
+	lx
+[新增/修改文件]
+	
+[修改说明]
+	增加基于内存ES的索引1；N检索,需更新eap-framework.jar、datacollision-api.jar、console及网关落地模块gwf-face-feature-store-memory.jar
+*******************************************************************************************
+2.0.2#20170907
+[提交人]	
+	gaos
+[新增/修改文件]
+	
+[修改说明]
+	专题库导出增加了性别、户籍地址列;
+	修复专题库人脸导入时页面左侧库人员、人脸统计不刷新的bug
+*******************************************************************************************
+2.0.2#20170831
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	增加了人脸质量检测日志的打印工作
+*******************************************************************************************
+2.0.2#20170828
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	新比对引擎改造，需更新的jar包为模块doc目录下datacollision-api.jar，elasticsearch-bigdata.jar，face-compare-sdk-1.0.0.jar，surveil-task-manage-sdk-2.0.0.jar
+*******************************************************************************************
+2.0.2#20170807
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	档案库人员，人脸导出
+*******************************************************************************************
+2.0.2#20170807
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	修复了档案库导入时标签为undefined的问题
+*******************************************************************************************
+2.0.2#20170807
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	档案库中增加qq，微信，电话和工作单位的字段
+*******************************************************************************************
+2.0.2#20170801
+[提交人]	
+	gaos
+[新增/修改文件]
+	
+[修改说明]
+	增加了专题库人员导入，导出的接口实现
+*******************************************************************************************
+2.0.2#20170717
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	人员技战法频繁出入后台接口完成测试
+*******************************************************************************************
+2.0.2#20170715
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	人员技战法团伙分析后台接口完成测试
+*******************************************************************************************
+2.0.2#20170714
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	档案库人员检索和人脸检索后台自测完毕
+*******************************************************************************************
+2.0.2#20170714
+[提交人]	
+	swq
+[新增/修改文件]
+	
+[修改说明]
+	档案库增删改接口完成后台自测
+*******************************************************************************************
+2.0.2#20170704
+[提交人]	
+	lx
+[新增/修改文件]
+	
+[修改说明]
+	初始定义util/service/provier及文档索引，库表
+*******************************************************************************************
+2.0.2#20170627
+[提交人]	
+	gaos
+[新增/修改文件]
+	
+[修改说明]
+	增加了应用的基础包分类，补充了应用的注解指向
+*******************************************************************************************
+[发布版本号] 
+提交/修改人姓名：
+最后修改日期：
+备注：模块第一次写provider及service后台代码的同事，
+	请修改/webdemo/WebRoot/WEB-INF/rest-servlet.xml
+	里面的component-scan标签的base-package值
+[第一版本]
+*******************************************************************************************
+

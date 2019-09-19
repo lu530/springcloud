@@ -1,0 +1,36 @@
+@charset 'utf-8';
+.filter-tag .time-control{
+	width:143px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default {
+	background: url(/efacecloud/images/icon-circle.png) 50% 50% repeat-x;
+	border: none;
+}
+
+.ui-widget-header {
+	background: none;
+}
+
+.ui-widget-content {
+	border: none;
+}
+
+.ui-slider-horizontal {
+	height: 22px;
+	background: url(/efacecloud/images/threshold-bg2.png) no-repeat;
+	background-size: 100% 100%;
+	width: 185px;
+	display: inline-block;
+}
+.sliderNum .ui-slider-horizontal {
+    background: url(/efacecloud/images/threshold-bg1.png) no-repeat;
+}
+.ui-slider .ui-slider-handle {
+	height: 18px;
+	width: 18px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+	top: 12px;
+}

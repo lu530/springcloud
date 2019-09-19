@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"> 
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" >
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />	
+	<link rel='stylesheet' type='text/css' href='/efacecloud/css/common.css'>
+	<link rel='stylesheet' type='text/css' href='/efacecloud/css/importantPersonLib/personRelationGraph.css'>
+	<title>关联图谱</title>
+</head>
+<body >
+	<div class="item">
+		<div class="main-title hide">
+				<div class="search-box fr">
+						<input class="search-input" type="text" id="keyWord" name="keyWord" placeholder="请输入对象身份证" maxlength="50">
+						<span class="icon-search2" id="searchBtn"></span>
+		  		</div>
+		</div>
+			<div class="item-title">
+				<dl class="tools-menu">
+			 		<dd class="hide"><span class="list-icon sprit-icon"></span><span>列表操作</span></dd>
+					<dd><span class="relist-icon sprit-icon"></span><span>重新布局</span></dd>
+					<dd><span class="exp-icon sprit-icon"></span><span>对象扩展</span></dd>
+					<dd><span class="full-icon sprit-icon"></span><span>全图扩展</span></dd>
+					<dd class="hide"><span class=" ele-icon sprit-icon"></span><span>对象关系</span></dd>
+					<dd class="hide"><span class=" fullimg-icon sprit-icon"></span><span>全图关系</span></dd>
+					<dd class="hide"><span class=" sparse-icon sprit-icon"></span><span>删除稀疏</span></dd>
+					<dd class="hide"><span class=" look-icon sprit-icon"></span><span>物品查看</span></dd>
+					<dd class="hide"><span class=" hide-icon sprit-icon"></span><span>物品隐藏</span></dd>
+					<dd class="hide"><span class=" expo-icon sprit-icon"></span><span>判研报告导出</span></dd>
+				</dl>
+			</div>
+	</div>
+	<div class="item-frame">
+			<iframe frameborder="no" id="person" class=" full-screen" id="tabFrame" src="/efacecloud/page/neo4j/relations.html"></iframe>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+</html>

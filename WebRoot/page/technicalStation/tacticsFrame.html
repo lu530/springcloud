@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>技战法</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap.css">
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/tacticsFrame.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/mapLayer.css" />
+<link type="text/css" rel="stylesheet" href="/dbcollision/css/technicalStation/task/taskList.css" />
+<!--[if lt IE 9]>
+	<script src="/gis/js/es5-shim.js"></script>
+	<script src="/gis/js/es5-sham.js"></script>
+	<![endif]-->
+</head>
+<body class="redListWrap">
+	<div class="frame-side oh" id="leftMainDiv" style="width: 410px;">
+		<iframe class="full-screen" frameborder="0" name="leftFrameCon" id="leftFrameCon"></iframe>
+		<iframe class="bgwhite full-screen hide" frameborder="0" name="leftFrameListCon" id="leftFrameListCon"></iframe>
+	</div>
+	<div class="frame-con hide iframeContent" id="rightMainDiv" style="left: 410px;">
+		<iframe class="full-screen" id="rightMainFrame" name="rightMainFrame" frameborder="0"></iframe>
+	</div>
+	<div class="map-con t0">
+		<div id="map" style="height:100%;width:100%;"></div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen"  frameborder="0"></iframe>
+	</div>
+
+	<div class="float-window hide">
+		<iframe class="full-screen"  frameborder="0"></iframe>
+	</div>
+	<!-- 这个不用于展示，只用于存储部分公共的模板dom结构 -->
+	<div class="hide tmplStorage">
+		<iframe class="full-screen" src="tmplStorage.html" frameborder="0" name="tmplStorage" id="tmplStorage"></iframe>
+	</div>
+	<script type="text/x-tmpl" id="faceTmpl">
+	<div class="maplayer-wrap">
+		<div class="layer">
+			<div class="main-msg">
+				<p>类型：<span>{%= o.DEVICE_TYPE %}</span></p>
+				<p>设备ID：<span>{%= o.DEVICE_ID %}</span></p>
+				<p>时间：<span>{%= o.JGSK %}</span></p>
+			</div>
+		</div>
+	</div>
+	</script>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/gis/js/jsts.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/gis/js/map/suntekmap.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-map.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/initJsMap.js?v=20190825"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsFrame.js"></script>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>机场人脸布控视频页</title>
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css">
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">	
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/realAlarmMinitor/camera.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/realAlarmMinitor/realAlarmVideoModel.css" />
+	</head>
+	<body class="oh"  id="videoPlayerCenter">
+		<div class="left-part select-plate">
+			<div class="hide-item hideItem leftHide"><span class="icon-real-alarm left-arrow"></span></div>
+			<div class="flight-title-box">
+				<div class="flight-title">摄像机列表</div>
+			
+			</div>
+				
+				
+				<div class="frame-side ">
+					<div class="tab-content">
+						<div class="tab-pane active" id="structureTreeContain">
+							<div class="search-box menu-search-box">
+								<input class="search-input" type="text" id="searchCon" placeholder="请输入关键字" maxlength="50">
+								<span class="icon-search2" id="search"></span>
+								<span class="icon-close2 hide icon-clearbtn" id="clearSearchTextBtn"></span>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane active" id="structureTreeWrap">
+									<ul id="structureTree" class="ztree" ui-control="treeview" ui-options="orgTreeOpts" ui-parameters="structureTreeParam"></ul>
+								</div>
+								<div class="tab-pane" id="deviceListWrap">
+									<ul class="search-list" id="searchList">
+						        	</ul>
+									<script id="cameraListTemplate" type="x-tmpl">
+										{% for(var i=0;i<o.length;i++){ %}
+												<li orgcode='{%=o[i].ORG_CODE%}' deviceid='{%=o[i].DEVICE_ID%}' deviceidInt='{%=o[i].DEVICE_ID_INT%}' originalid='{%=o[i].ORIGINAL_DEVICE_ID%}'
+											 orgcode='{%=o[i].ORG_CODE%}' devicename="{%=o[i].DEVICE_NAME%}">{%=o[i].DEVICE_NAME+'('+ o[i].DEPT_NAME +')'%}</li>
+										{% } %}
+									</script>
+								</div>
+							</div>
+						</div>
+					</div>
+						
+				</div>
+				
+				
+				
+		</div>
+		<div class="video-part select-plate">
+				<div class="live-video-box" id="liveVideoBox">
+					<div class="video-box real-video" id="videoPlayer" ui-control="databind" ui-service="video/register" >
+				
+					</div>
+					<div id="realConf" ui-control="databind" ui-service="conf/real"></div>
+				</div>
+
+			<div class="video-contain">
+				<div class="video-toolbar" suntekplayer-control="">
+					<div class="play-control">
+						<input id="playVideoRecord" class="play disable" playerbtn="play" type="button" title="播放"><span class="line"></span>
+						<input id="suspendRecord" class="suspend disable" playerbtn="suspend" type="button" title="停止">
+						<ul class="multi-screen">
+							<li title="一分屏" class="multiScreen" screenNum="1"><i class="icon-real-alarm active icon-screen1"></i></li>
+							<li title="四分屏" class="multiScreen"  screenNum="4"><i class="icon-real-alarm icon-screen4"></i></li>
+							<li title="六分屏" class="multiScreen"  screenNum="6"><i class="icon-real-alarm icon-screen6"></i></li>
+							<li title="九分屏" class="multiScreen"  screenNum="9"><i class="icon-real-alarm icon-screen9"></i></li>
+						</ul>
+					</div>
+				 </div>
+			</div>
+		</div>
+		<div class="bottom-part select-plate">
+			<div class="hide-item hideItem bottom-hide"><span class="icon-real-alarm bottom-arrow"></span></div>
+				<div class="flight-title-box bottom-title">
+					<div class="flight-title">抓拍人脸</div>
+				</div>	
+				
+			<div class="scroll-box">
+			<div class="content-box alarmBox">
+			
+
+			</div>
+			</div>
+		</div>
+		<script id="devicePhotoData" type="x-tmpl">
+			
+			<div class="tilelist vertical">
+			
+				<dl class="list-node oh imgOrder picMessage">
+											<dt class="node-img  three-compare-img">
+												<span>
+					    							<img src="{%=renderImg(o.FACE_IMG)%}" compareimg="captureZoom" class="mb0" >
+					    							<div class="btn-group fr edit-space">
+					    								<a fileUrl="{%=o.FACE_IMG%}" LATITUDE="{%= o.LATITUDE %}" LONGITUDE="{%= o.LONGITUDE %}" attr-time="{%=renderNullToNotKnow(o.JGSK)%}" attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}" class="btn-i-t btn-xs locationBtn location-btn"  ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+															<i class="btn-icon location-icon"></i> 
+														</a>
+														<a class="btn-i-t btn-xs searchBtn search-btn" imgSrc="{%=o.FACE_IMG%}"  title="搜索">
+															<i class="btn-icon search-icon"></i>
+														</a>
+														<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.FACE_IMG%}">
+															<i class="btn-icon trajectory-icon"></i>
+														</a>																												
+														<a class="btn-i-t btn-xs collectionBtn"  ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.FACE_IMG%}&jgsj={%=o.JGSK%}" title="收藏">
+															<i class="btn-icon collection-icon"></i>
+														</a>
+													    <a class="btn-i-t btn-xs verification-search detailFace" title="抓拍详情" 
+													    	objPic="{%=o.FACE_IMG%}" LATITUDE="{%= o.LATITUDE %}" LONGITUDE="{%= o.LONGITUDE %}" jgsk="{%=o.JGSK%}" 
+													    	deviceAddr="{%=o.DEVICE_ADDR %}" faceImg="{%= o.FACE_IMG %}"  deviceId="{%= o.DEVICE_ID %}"  deviceName="{%= o.DEVICE_NAME %}"  
+													    	infoId="{%=o.INFO_ID%}" pic="{%= o.PIC %}" frameImg="{%=o.FRAME_IMG%}" captureTime="{%=o.CAPTURE_TIME%}"  
+													    	>
+															<i class="btn-icon verification-icon"></i>
+														</a>
+														
+														
+													</div>
+												</span>
+											</dt>
+										</dl>
+				<div class="time">{%=o.CAPTURE_TIME%}</div>
+			</div>
+			</script>
+	</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/suntekplayer/suntekplayer.realinclude.js"></script>
+<script type="text/javascript" src="/ui/plugins/suntekplayer/suntekplayer.historyplayer.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/realAlarmMinitor/realAlarmVideoModel.js?v20180817"></script>
+</html>

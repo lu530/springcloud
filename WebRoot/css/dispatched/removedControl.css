@@ -1,0 +1,194 @@
+@CHARSET 'utf-8';
+
+.wrap-con {
+	position: absolute;
+	top: 0;
+	bottom: 60px;
+	width: 100%;
+	padding: 10px 20px 0;
+	overflow-y: auto;
+}
+
+.add-header .frame-side, .add-header .frame-con {
+	top: 50px;
+	left: 0;
+}
+
+.add-header {
+	left: 82px;
+}
+
+.mborder {
+	border-bottom: 1px solid #E0E0E0;
+	height: 43px;
+	margin-right: 22px;
+	margin-bottom: 10px;
+}
+
+.side-title {
+	padding-left: 20px;
+}
+
+.side-form {
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.btn-submit {
+	border-radius: 0;
+	background: #0078D7;
+	color: #fff;
+	width: 100%;
+}
+
+.time-group {
+	float: left;
+	width: auto;
+	height: 28px;
+	line-height: 28px;
+}
+
+.time-group input {
+	width: 150px !important;
+	height: 28px;
+}
+
+.btn-group-link .time-link {
+	color: #0072c6;
+	display: inline-block;
+	height: 28px;
+	line-height: 28px;
+	padding: 0 5px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.no-search-result {
+	font-size: 100px;
+	color: #ddd;
+	text-align: center;
+	margin: 100px 0;
+}
+
+.no-search-icon {
+	display: inline-block;
+	position: relative;
+	top: 12px;
+	margin-right: 15px;
+}
+
+.filter-bar .form-control {
+	width: 150px;
+	/* display:inline-block; */
+}
+
+.filter-bar .control-label {
+	color: #333;
+	font-weight: bold !important;
+	font-size: 13px;
+	min-width: inherit;
+}
+
+.btn-group-link button {
+	border-radius: 0 !important;
+}
+
+.page-head {
+	margin: 0px 10px;
+	padding: 16px 0 10px;
+}
+
+.match-score {
+	position: absolute;
+	font-weight: normal;
+	color: #FF7400;
+	font-size: 30px;
+	top: -2px;
+	right: 0px;
+}
+
+.dis-table {
+	padding: 0 0 0 135px;
+	position: relative;
+}
+
+.dis-table .dis-table-cell {
+	/* display:table-cell; */
+	
+}
+
+.date-style {
+	margin: 7px 15px 0 0;
+	font-weight: bold;
+	color: #1570a6;
+	font-size: 14px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.address-style {
+	font-weight: bold;
+	color: #2A4F83;
+	margin: 2px 0 8px 0;
+	font-size: 17px;
+	position: relative;
+	top: 6px;
+}
+
+.day-block {
+	position: relative;
+	top: 3px;
+	margin-right: 15px;
+}
+
+.head {
+	height: 40px;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.approval-form label.control-label {
+	line-height: 29px;
+}
+
+.approval-form .form-control {
+	height: 29px;
+}
+
+.filter-bar-wrap {
+	border: 1px solid #EDEDED;
+	box-shadow: inset 0 1px 0 #FFF, 0 1px 1px rgba(0, 0, 0, .1);
+	-webkit-box-shadow: inset 0 1px 0 #FFF, 0 1px 1px rgba(0, 0, 0, .1);
+	background-color: #fafafa;
+	border-radius: 4px;
+	position: relative;
+}
+
+@media screen and (min-width: 750px) {
+	.media-center-wrap {
+		width: 720px;
+		margin: 0 auto;
+	}
+}
+
+@media screen and (min-width: 1100px) {
+	.media-center-wrap {
+		width: 1086px;
+		margin: 0 auto;
+	}
+}
+
+@media screen and (min-width: 1480px) {
+	.media-center-wrap {
+		width: 1450px;
+		margin: 0 auto;
+	}
+}
+
+@media screen and (min-width: 1830px) {
+	.media-center-wrap {
+		width: 1816px;
+		margin: 0 auto;
+	}
+}

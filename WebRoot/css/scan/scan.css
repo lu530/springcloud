@@ -1,0 +1,81 @@
+.scan-con{
+	width: 100%;
+	height: 100%;
+}
+.cut-box{
+	position: absolute;
+	left: 70px;
+	right: 70px;
+	top: 50px;
+	bottom: 92px;
+	margin: auto;
+}
+.parent-img{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	margin: auto;
+	width: auto;
+	height: auto;
+}
+.self-adaption{
+	max-height: 100%;
+	max-width: 100%;
+}
+.rect{
+	border: 1px solid #4c72d5;
+	position: absolute;
+}
+.rect:hover,.rect.active{
+	border-color: red;
+}
+.distinguish-img{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: url(/efacecloud/images/distinguish.gif) center center;
+}
+.btn.blue-btn,.btn.gray-btn{
+	width: 58px;
+}
+.decorate{
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	background: url(/efacecloud/images/scan-icon.png) no-repeat;
+}
+.decorate-top-left{
+	background-position: 0 0;
+	top: -8px;
+	left: -8px;
+}
+.decorate-top-right{
+	background-position: -78px 0;
+	top: -8px;
+	right: -13px;
+}
+.decorate-bottom-left{
+	background-position: 0 -96px;
+	bottom: -11px;
+	left: -8px;
+}
+.decorate-bottom-right{
+	background-position: -78px -96px;
+	bottom: -12px;
+	right: -15px;
+}
+.draw-picture{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.draw-mapping{
+	width: 100%;
+	height: 100%;
+}

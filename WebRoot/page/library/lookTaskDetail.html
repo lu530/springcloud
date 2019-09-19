@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>待审核任务详情</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/lookTask.css"/>
+</head>
+<body>
+<div class="pager-wrap">
+	<div class="pager-content pr">
+		<div class="page-left">
+			<div class="page-title">
+				<span>目标人脸</span>
+			</div>
+			<div class="top-box">
+				<div class="photo-tools pl0" style="display: inline-block; padding-right:60px;">
+					<div class="top-pic-box">
+						<div class="img-wrap">
+							<img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-right">
+			<div class="page-title">
+				<span>红名单相似人脸</span>
+			</div>
+			<div class="page-con pt0">
+				<div id="dataList" class="tilelist vertical"><!-- checkbox 类做选择 -->
+				</div>
+					<script id="faceTemplate" type="text/x-tmpl">
+						{% for(var i=0;i<o.length;i++){ %}
+						<div class="list-node-wrap" style="height:250px;width: 33%;">
+				 		<dl class="list-node">
+							<dt class="node-img person-img">
+								<span>
+									<img src="{%=randerImg(o[i].SIMILARITY_PIC)%}" attrimg="zoom">
+								</span>
+								<b class="similar color-blue" key="similar">{%=renderScore(o[i].SIMILARITY)%}</b>
+							</dt>
+							<dd class="node-text">
+								<p class="node-title similar-name" title="{%=o[i].NAME?o.NAME:'暂无'%}"><label>姓名：</label><span class="orange">{%=o[i].NAME?o[i].NAME:'暂无'%}</span></p>
+								<p style="width:106%;" class="fl" title="{%=o[i].IDENTITY_ID%}"><label>证件：</label><span title="证件号码：{%=o[i].IDENTITY_ID%}">{%=o[i].IDENTITY_ID%}</span></p>
+							</dd>
+						</dl>
+						</div>
+						{% } %}
+					</script>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/lookTaskDetail.js"></script>
+</html>

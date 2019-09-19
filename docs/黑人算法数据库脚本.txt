@@ -1,0 +1,86 @@
+﻿ALTER TABLE `VPLUS_FACE_ALGORITHM_TYPE`
+ADD COLUMN `ALGORITHM_TYPE`  varchar(50) NULL DEFAULT 0 COMMENT '0 特征提取算法 1 分类算法' ;
+
+
+--路由表
+CREATE TABLE `VPLUS_FACE_ROTER` (
+  `ROTER_ID` varchar(32) NOT NULL,
+  `ROTER_NAME` varchar(50) NOT NULL COMMENT '路由名',
+  `ROTER_DESC` varchar(255) DEFAULT NULL COMMENT '描述',
+  `ROTER_STATUS` int(10) NOT NULL DEFAULT '1' COMMENT '0:停用，1:启用',
+  `CREATE_TIME` datetime NOT NULL,
+  PRIMARY KEY (`ROTER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+--路由配置表
+CREATE TABLE `VPLUS_FACE_ROTER_OPTIONS` (
+  `ID` varchar(32) NOT NULL,
+  `ROTER_ID` varchar(32) NOT NULL COMMENT '路由id',
+  `CLASSIFICATION_ALGORITHM_ID` varchar(32) NOT NULL COMMENT '分类算法id',
+  `STANDARD_TYPE_ID` varchar(32) NOT NULL COMMENT '分类算法值id',
+  `EXTRACT_ALGORITHM_ID` varchar(32) NOT NULL COMMENT '提取算法id',
+  `CREATE_TIME` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+--算法标准分类表
+CREATE TABLE `VPLUS_FACE_TYPE_STANDARD` (
+  `STANDARD_TYPE_ID` varchar(32) NOT NULL,
+  `STANDARD_TYPE` varchar(50) NOT NULL COMMENT '分类算法分类(人种、年龄段等)',
+  `TYPE_NAME` varchar(50) NOT NULL COMMENT '分类名',
+  `TYPE_VALUE` varchar(50) NOT NULL COMMENT '分类值',
+  `CREATE_TIME` datetime NOT NULL,
+  `TYPE_STATUS` int(10) NOT NULL DEFAULT '1' COMMENT '1:启用,0停用',
+  PRIMARY KEY (`STANDARD_TYPE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--设备路由关系表
+CREATE TABLE `VPLUS_FACE_CAMERA_ROTER` (
+  `ID` varchar(32) NOT NULL,
+  `ROTER_ID` varchar(32) NOT NULL COMMENT '路由id',
+  `DEVICE_ID` varchar(32) NOT NULL COMMENT '设备编号',
+  `CREATE_TIME` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `VPLUS_FACE_TYPE_STANDARD` VALUES ('0aa53b3be21d1dfe0ce2f101c615eb2d', '人种分类', '黑', '3', '2018-8-31 18:05:22', 1);
+INSERT INTO `VPLUS_FACE_TYPE_STANDARD` VALUES ('20f8db385354d431d35fd97c81ac56c5', '人种分类', '白', '2', '2018-8-31 18:05:13', 1);
+INSERT INTO `VPLUS_FACE_TYPE_STANDARD` VALUES ('989c40a18fa1172e047549e2f64871d1', '人种分类', '未知', '0', '2018-8-31 18:04:44', 1);
+INSERT INTO `VPLUS_FACE_TYPE_STANDARD` VALUES ('e52969fa462b0d2120cc5088fa935b6d', '人种分类', '黄', '1', '2018-8-31 18:05:02', 1);
+
+
+-- 功能关联算法脚本初始化：
+-- 布控策略告警设置主算法配置
+delete from EFACE_FUNLIST_ALGO_REL where ALGORITHM_ID='80002' and MENUID='EFACE_faceDispatchedMain';
+INSERT INTO `EFACE_FUNLIST_ALGO_REL` ( `ALGORITHM_ID`, `MENUID`, `DEFAULT_SCORE`) VALUES ('80002', 'EFACE_faceDispatchedMain', '60');
+
+-- 路人检索华云算法
+delete from EFACE_FUNLIST_ALGO_REL where ALGORITHM_ID='80002' and MENUID='EFACE_faceCapture';
+INSERT INTO `EFACE_FUNLIST_ALGO_REL` ( `ALGORITHM_ID`, `MENUID`, `DEFAULT_SCORE`) VALUES ('80002', 'EFACE_faceCapture', '60');
+
+-- 布控库检索华云算法
+delete from EFACE_FUNLIST_ALGO_REL where ALGORITHM_ID='80002' and MENUID='EFACE_faceDispatchedCustom';
+INSERT INTO `EFACE_FUNLIST_ALGO_REL` ( `ALGORITHM_ID`, `MENUID`, `DEFAULT_SCORE`) VALUES ('80002', 'EFACE_faceDispatchedCustom', '60');
+
+-- 一人一档检索华云算法
+delete from EFACE_FUNLIST_ALGO_REL where ALGORITHM_ID='80002' and MENUID='DEFENCE_faceBaseManager';
+INSERT INTO `EFACE_FUNLIST_ALGO_REL` ( `ALGORITHM_ID`, `MENUID`, `DEFAULT_SCORE`) VALUES ('80002', 'DEFENCE_faceBaseManager', '60');
+
+
+--汇聚平台更新
+insert into DB_VERSION(VERSION,VERSION_TYPE, REMARK) values('1.0.1#01_20180903_1', 1,'汇聚平台库表升级');
+create table VPLUS_DEVICE_VIRTUAL_CATALOG_REL
+(
+   ID                   int not null auto_increment,
+   ORG_CODE             varchar(20) not null comment '行政区划',
+   DEVICE_ID            varchar(20) not null comment '设备id',
+   primary key (ID),
+   key IDX_ORGCODE(ORG_CODE),
+   key IDX_DEVICE_ID(DEVICE_ID) 
+) comment '虚拟组织的关联表';

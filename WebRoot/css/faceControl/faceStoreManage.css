@@ -1,0 +1,286 @@
+.light-frame {
+    padding-top: 0px;
+    width: 245px;
+    position: relative;
+    height: 100%;
+}
+
+.frame-bar {
+    width: 68px;
+    height: 100%;
+    background-color: #273961;
+    position: absolute;
+    color: #7687aa;
+    z-index: 2;
+}
+
+.frame-bar .bar-list {
+    padding: 0px;
+    text-align: center;
+}
+
+.frame-bar .bar-list .item-list {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+.bar-list .item-list.active {
+    color: #fff;
+}
+
+.bar-list .item-list .subitem.active {
+    color: #fff;
+}
+
+.bar-list .item-list .subitem {
+    color: #7687aa;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#dispatchedLibList {
+    height: 100%;
+    width: 245px;
+}
+
+.bar-title {
+    margin-top: 5px;
+}
+
+.frame-bar .bar-list .line {
+    height: 1px;
+    width: 50%;
+    background-color: #7687aa;
+    padding-top: 0px;
+    margin: 0 auto;
+}
+
+.sprite-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    background: url(/efacecloud/images/iconbar.png) no-repeat;
+}
+
+.sprite-icon.library {
+    background-position: -50px -15px;
+}
+
+.bar-list .item-list.active .sprite-icon.library {
+    background-position: -14px -15px;
+}
+
+.sprite-icon.distributionControl {
+    background-position: -122px -15px;
+}
+
+.bar-list .item-list.active .sprite-icon.distributionControl {
+    background-position: -86px -15px;
+}
+
+.sprite-icon.withdrawalControl {
+    background-position: -416px -15px;
+}
+
+.bar-list .item-list.active .sprite-icon.withdrawalControl {
+    background-position: -380px -15px;
+}
+
+.sprite-icon.drop-down-icon {
+    background-position: -484px -25px;
+    height: 10px;
+}
+
+.bar-list .item-list.active .sprite-icon.drop-down-icon {
+    background-position: -452px -25px;
+}
+
+.sprite-icon.examine {
+    background-position: -267px -15px;
+}
+
+.bar-list .subitem.active .examine {
+    background-position: -228px -15px;
+}
+
+.sprite-icon.approve {
+    background-position: -342px -15px;
+}
+
+.bar-list .subitem.active .approve {
+    background-position: -306px -15px;
+}
+
+.sprite-icon.application {
+    background-position: -192px -15px;
+}
+
+.bar-list .subitem.active .application {
+    background-position: -156px -15px;
+}
+
+.frame-title {
+    padding: 0 18px;
+    height: 74px;
+}
+
+.sum-total {
+    display: block;
+    line-height: 0;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.created-store {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 12px;
+    color: #466acd;
+    cursor: pointer;
+}
+
+.square-pager .page-data {
+    padding: 10px 0;
+}
+
+.search-input.search-text {
+    text-indent: 6px;
+    font-size: 11px;
+    width: 100%;
+}
+
+.menu-search-box {
+    width: 90%;
+    margin: 5px 0 0 12px;
+}
+
+.all-type {
+    position: absolute;
+    top: 78px;
+    font-size: 12px;
+    right: 6px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.all-type:hover .icon-arrow-down7 {
+    color: #466acd;
+}
+
+.all-type:hover .type-item {
+    display: block;
+}
+
+.type-item {
+    position: absolute;
+    top: 30px;
+    right: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    width: 74px;
+    z-index: 2;
+    padding: 2px;
+    display: none;
+}
+
+.type-item span {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    padding: 5px 0;
+    cursor: default;
+}
+
+.type-item span:hover {
+    background-color: #c0cde3;
+}
+
+.select-condition {
+    padding: 5px 13px;
+    font-size: 12px;
+}
+.select-library,.select-state{
+	width:50%;
+	text-align:center;
+}
+
+.select-library:hover .icon-arrow-down7,
+.select-state:hover .icon-arrow-down7 {
+    color: #466acd;
+}
+
+.select-library:hover .library-wrap,
+.select-state:hover .state-wrap {
+    display: block;
+}
+
+.library-wrap span:hover,
+.state-wrap span:hover {
+    background-color: #c0cde3;
+}
+
+.select-condition div {
+    padding: 5px;
+    cursor: default;
+}
+
+.library-wrap,
+.state-wrap {
+    position: absolute;
+    top: 24px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 2;
+    background-color: #fff;
+    padding: 2px;
+    display: none;
+}
+
+.library-wrap span,
+.state-wrap span {
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: 5px 3px;
+}
+.library-wrap span{
+	cursor: pointer;
+}
+.btn-group-icons{
+	line-height: 28px;
+}
+
+.type-tip {
+    padding: 5px;
+    border-radius: 5px;
+    width: 50px;
+    font-size: 12px;
+    display: inline-block;
+    color:#ffffff !important;
+}
+.type-tip.bgwhite{
+	color:#848c98 !important;
+}
+.listview .list-node .node-text .icon {
+    color: #818181;
+    padding: 3px;
+    margin-right: 3px;
+}
+.listview .list-node{
+	border-right: 3px solid transparent;
+}
+.control-store-list .nodata{
+	display: none;
+}
+.control-store-list{
+	bottom: 52px;
+}
+.total-num{
+	color: #4C72D5;
+    margin-left: 8px;
+    font-weight: bold;
+}

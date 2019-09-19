@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>布控库管理</title>
+<link rel="stylesheet" type="text/css"  href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/dispatched/tableBase.css" />
+</head>
+<body class="oa">
+	<div class="wrap-body l0" ui-control="listview" ui-service="controlPerson/lib/getData" id="storeList"
+		ui-template='areaStoreTemplate' ui-parameters="queryParams" >
+		<div class="tools-bar">
+	    	<!--查询区域下拉列表  --> 
+  			<div class="fifler-group fr mr0">
+  				<label class="control-label">区域 ：</label>
+  				<div class="search-box">
+					<div class="form-control fl ov p0 dropdown-tree" id="orgTree" name="orgTree" type="dropdown-tree" 
+							ui-control="dropdowntree" ui-service="user/org/getTree" ui-options="orgTreeOpts"></div>
+					<input type="hidden" id="orgCode">
+  				</div>
+			</div>
+			<div class="fifler-group fr">
+  				<label class="control-label">关键字 ：</label>
+  				<div class="search-box">
+					<input class="search-input" type="text" id="storeName" placeholder="查询布控库名称" maxlength="50"> 
+				<span class="icon-search2" id="storeSearch"></span>
+  				</div>
+			</div>
+			<div class="btn-group-link">
+	    		 <button class="btn btn-primary" id="addTemporary" type="button">添加库</button>			    		
+	    	</div>
+		</div>
+		<div class="">
+			<div class="table-head">
+				<table cellspacing="0" cellpadding="0">	
+					<thead>
+						<tr>
+							<!-- <th class="w5 tc"><input class="check-all" listview-checkall type="checkbox"></th> -->
+							<th class="w10 tc"><span>归属地</span></th>
+							<th class="w25 tc"><span>布控库名称</span></th>
+							<th class="w20 tc"><span>已布控数/总数</span></th>
+							<th class="w25 tc"><span>修改时间</span></th>
+<!-- 							<th class="w10 tc"><span>布控状态</span></th>
+ -->							<th class="tc" style="width:190px;"><span>操作</span></th>			
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="table-body">
+				<table cellspacing="0" cellpadding="0">
+					<tbody>	
+						<tr id="areaStoreTemplate" style="display:none;">
+							<!-- <td class="w5 tc"><input listview-check="" type="checkbox" value=""></td> -->
+							<td class="w10 tc"><span>{%=o.NODE_NAME%}</span></td>
+							<td class="w25 tc"><span>{%=o.StoreName%}</span></td>
+							<td class="w20 tc"><span>{%=renderNum(o.PassNum)%}/{%=renderNum(o.StoreNum)%}</span></td>	
+							<td class="w25 tc"><span>{%=o.StoreTime%}</span></td>	
+<!-- 							<td class="w10 tc"><span>{%=renderStatus(o.STATUS_CODE, o.SYNC_STATUS)%}</span></td>
+ -->							<td style="width:190px;">
+								<span>
+									<ul class="btn-group-icons list-inline">
+<!-- 									<li class="reStationing {%=hideStatus(o.STATUS_CODE, o.SYNC_STATUS)%}" dbName="{%=o.StoreName%}" dbId="{%=o.StoreID%} "><i class="icon-redo2"></i> <b>重发</b></li>
+ -->										<li class="checkinfo" dbId="{%=o.StoreID%}" dbName="{%=o.StoreName%}"><i class="icon-eye2"></i> <b>管理</b></li>
+										<li class="editBtn hide"  dbId="{%=o.StoreID%}" dbName="{%=o.StoreName%}" orgCode="{%=o.ORG_CODE%}"><i class="icon-pencil3"></i> <b>修改</b></li>
+										<li class="delBtn"  dbId="{%=o.StoreID%}" dbName="{%=o.StoreName%}" passNum="{%=renderNum(o.PassNum)%}" taskNum="{%=renderNum(o.TaskNum)%}"><i class="icon-trash" ></i> <b>删除</b></li>
+									</ul>
+								</span>
+							</td>			
+						</tr>
+					</tbody>																		
+				</table>
+			</div>
+		</div>
+		<div class="page-info-metro hide" listview-page="">
+			<div class="page-data fr">
+				<span class="page-num">总数 <i class="page-num" listview-counts="">0</i> 条，</span> 
+				<a class="page-prev" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i> 上一页</a>
+				<a class="current-page"><i listview-current="">0</i> / <i listview-total="">0</i></a>
+				<!-- <select listview-page-select=""></select> -->
+				<a class="page-next" listview-next-btn="" href="#">下一页 <i class="icon-arrow-right7"></i></a>
+			</div>				    		
+	   	</div>
+	</div>		
+	<div class="frame-form-view">
+		<iframe class="full-screen" id="mainForm" frameborder="0" ></iframe>
+	</div>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/efacecloud/js/dispatched/dispatchedCommon.js	"></script>
+<script type="text/javascript" src="/efacecloud/js/dispatched/temporaryControl.js"></script>	
+</body>
+</html>

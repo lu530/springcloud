@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>黑名单</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<body class="oa">
+<div class="pager-wrap" style="height:auto">
+	<div class="pager-content pb20">
+		<div class="content-center">
+			<div class="content-title">统计分析-黑名单人员</div>
+				<!-- 筛选菜单 -->
+			<div class="filter-view">
+				<dl class="filter-bar">
+					<dt class="filter-arrt">告警时间：</dt>
+					<dd class="filter-tag ">
+						<div class="tagslist " id="timeTagList">
+							<span class="tag-item active tagsTime" time-control="jt">今天</span>
+							<span class="tag-item tagsTime" time-control="zt">昨天</span>
+							<span class="tag-item tagsTime" time-control="bz">本周</span>
+							<span class="tag-item tagsTime" time-control="by">本月</span>
+							<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+							<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+							<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+							<div class="opera-group">
+								<input class="time-control bg-calendar-icon" id="beginTime" readonly type="text">
+								<input class="time-control bg-calendar-icon" id="endTime" readonly type="text">
+								<button class="btn btn-i-t bsline zdyTimeBtn">确定</button>
+							</div>
+						</div>
+					</dd>
+				</dl> 
+				<dl class="filter-bar">
+					<dt class="filter-arrt">行政区划：</dt>
+					<dd class="filter-tag">	
+						<div class="ov p0 dropdown-tree form-control treetwo" id="orgTree" name="orgTree" type="dropdown-tree" 
+							ui-control="dropdowntree" ui-service="/datadefence/rest/dept" ui-options="orgTreeOpts"></div>
+						<input type="hidden" id="orgCode">
+						<div class="map-location-btn hide" id="mapLocationBtn"><span class="icon-location22" ></span></div>
+					</dd>
+				</dl> 
+			</div>
+			
+			<div class="draw bgwhite mt10" id="areaStatistics" style="width:100%;height:600px;"></div>
+		</div>
+	</div>
+	
+	<div class="bgwhite mt20 hide">
+		<div class="content-center"><div class="content-title">统计分析</div></div>
+		<div class="content-bg">
+			<div class="content-center pt0">	
+				<div class="table-wrap" id="mobieList" ui-control="listview" ui-service="control/localCommunityTerminal/getMobileData"  ui-template='listTemplate'  ui-options="{usePage:false}">
+					<table class="table" cellspacing="0" cellpadding="0">	
+						<thead>
+							<tr>
+								<th class="w15"><span class="pl10">姓名</span></th>
+								<th><span>组织</span></th>
+								<th class="w10 tc"><span>职务</span></th>
+								<th class="w10 tc"><span>警号</span></th>
+								<th class="w10 tc"><span>人员核查数量</span> 
+								<th class="w10 tc"><span>车辆核查数量</span></th>
+								<th class="w10 tc"><span>核查总数</span></th>
+							</tr>
+						</thead>
+						<tbody>
+						<script id="listTemplate" type="text/x-tmpl">
+							<tr>
+								<td class="w15"><span class="pl10" title="{%=o.NAME%}">{%=o.NAME%}</span></td>
+								<td><span title="{%=o.ORGANIZATION%}">{%=o.ORGANIZATION%}</span></td>
+								<td class="w10 tc"><span title="{%=o.JOB%}">{%=o.JOB%}</span></td>
+								<td class="w10 tc"><span title="{%=o.POLICE_NUM%}">{%=o.POLICE_NUM%}</span></td>
+								<td class="w10 tc"><span title="{%=o.PERSON_NUM%}">{%=o.PERSON_NUM%}</span></td>
+								<td class="w10 tc"><span title="{%=o.CAR_NUM%}">{%=o.CAR_NUM%}</span></td>
+								<td class="w10 tc"><span title="{%=o.TOTAL_NUM%}">{%=o.TOTAL_NUM%}</span></td>
+							</tr>
+						</script>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="content-center pt0">
+			<div class="page-info-metro full ">
+				<div class="page-data fr " listview-page="">
+					<span class="page-num">总数 <i class="page-num" listview-counts="">0</i> 条，</span> 
+					<a class="page-prev disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i> 上一页</a>
+					<a class="current-page"><i listview-current="">1</i> / <i listview-total="">1</i></a>
+					<a class="page-next disable" listview-next-btn="" href="#">下一页 <i class="icon-arrow-right7"></i></a>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/chart/echarts.min.js"></script>
+<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/report/blacklistReport.js"></script>
+</html>

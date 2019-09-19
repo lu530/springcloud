@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人员档案库管理</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/personnelFileMagDetail.css" />
+</head>
+<body>
+	<div class="page-top">
+		<div>
+			<span><a id="backBtn">返回</a></span> <span>人员档案库管理</span>
+		</div>
+	</div>
+	<div class="pager-content">
+		<div class="filter-view clearfix">
+			<div class="detail-img">
+				<div class="img-wrap">
+					<img id="personImg" src="" attrimg="zoom" class="mb0"> </img>
+				</div>
+			</div>
+			<div class="detail-info">
+				<p>
+					<span class="item"><label>姓名</label><span id="NAME"></span></span>
+				</p>
+				<p>
+					<span class="item"><label>性别</label><span id="SEX"></span></span> <span
+						class="item"><label>证件类型</label><span id="idTypeName"></span></span>
+				</p>
+				<p>
+					<span class="item"><label>出生日期</label><span id="BIRTHDAY"></span></span>
+					<span class="item"><label>证件号码</label><span id="IDENTITY_ID"></span></span>
+				</p>
+				<p>
+					<span class="item"><label>户籍居住地</label><span
+						id="PERMANENT_ADDRESS_NAME"></span></span> <span class="item"><label>现住居住地</label><span
+						id="PRESENT_ADDRESS_NAME"></span></span>
+				</p>
+				<p class="tag">
+					<span class="item"><label>人员标签:</label><span
+						class="tag-item" id="tagItem"></span></span>
+				</p>
+			</div>
+		</div>
+
+		<div class="page-tab full">
+			<ul>
+				<li id="tabAll" class="active"><span class=""></span> 所有<span
+					class="count"></span></li>
+				<li id="tabTrain"><span class="icon-road"></span> 火车<span
+					class="count"></span></li>
+				<li id="tabLine"><span class="icon-airplane"></span> 民航<span
+					class="count"></span></li>
+				<li id="tabCar"><span class="icon-car001"></span> 汽车<span
+					class="count"></span></li>
+				<li id="tabAccommodation"><span class="icon-house"> 住宿<span
+						class="count"></span></li>
+				<li id="tabWeb"><span class="icon-keyboard"> 网吧<span
+						class="count"></span></li>
+				<li id="tabImmigration" class=""><span class="icon-earth">
+						出入境<span class="count"></span></li>
+				<li id="tabPolice"><span class="icon-users4"> 涉警<span
+						class="count"></span></li>
+				<li id="tabOthers"><span class=""></span>其他<span class="count"></span></li>
+			</ul>
+		</div>
+		<!-- 页码 end -->
+		<div class="library-info">
+			<div class="picture-wrap">
+				<div class="compare-picture person pr">
+					<div class="image-item">
+						<span class="close-img-btn">×</span>
+						<div class="upload-img">
+							<img src="/ui/plugins/eapui/img/nophoto.jpg" id="vehicleImg"
+								attrimg="zoom" hasImg="0">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tilelist vertical listviewImgBox">
+				<div id="listWrap">
+					<script id="picListTmpl" type="x-tmpl">
+				{% for(i=0;i<o.length;i++){ %}
+		           <div class="list-node-wrap" infoId="{%=o[i].INFO_ID%}">
+		               <dl class="list-node">
+		                   <dt class="node-img person-img">
+					   		<span>
+					    		<img src="{%=o[i].PIC%}" attrimg="zoom" class="mb0">
+					   		</span>
+		                   </dt>
+		                   <dd class="node-text picMessage">
+		                       <input type="checkbox" listview-check class="checkbox-opacity hide"/>
+		                       <p class="w100 fl" picMsg="图片质量:{%=o[i].PIC_QUALITY%}">
+									<label>图片质量：</label>
+									<span>{%=o[i].PIC_QUALITY%}</span>
+								</p>
+		                       <p class="w100 fl" picMsg="时间:{%=o[i].CREATE_TIME%}">
+									<label>时间：</label>
+									<span title="采集时间：{%=o[i].CREATE_TIME%}">{%=o[i].CREATE_TIME%}</span>
+								</p>
+		                       <div class="btn-group fr">
+		                       <a class="btn-i-t btn-xs btn-cover" title="设置为封面" pic="{%=o[i].PIC%}">
+									<i class="btn-icon cover-icon"></i>
+								</a>
+								<a class="btn-i-t btn-xs btn-trash" title="删除">
+									<i class="btn-icon deleteItem-icon"></i>
+								</a>
+							</div>
+		                   </dd>
+		               </dl>
+		           </div>
+				{% } %}
+		     </script>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/personnelFileMagDetail.js"></script>
+</html>

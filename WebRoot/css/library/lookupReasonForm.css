@@ -1,0 +1,40 @@
+@charset 'utf-8';
+.case-list {
+	position:relative;
+}
+.case-list .dropdown-menu{
+	left: 167px;
+	width: 50%;
+	margin: 0;
+	margin-top: -1px;
+}
+.list-con {
+	padding:0;
+	margin:0;
+}
+.list-con li{
+	width: 100%;
+	color: #000;
+	line-height: 22px;
+	padding: 0 8px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+}
+.list-con li:hover{
+	background:#efefef;
+	cursor: pointer;
+}
+
+.menu-search-box{
+	display:inline-block;
+	vertical-align:middle;
+	margin-left:5px;
+	width: 50%;
+	border: 1px solid #ccc;
+}
+.menu-search-box input[type="text"]{
+	background:#fff;
+	color: #666;
+}

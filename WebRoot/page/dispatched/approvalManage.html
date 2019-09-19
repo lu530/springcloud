@@ -1,0 +1,108 @@
+<!DOCTYPE html> 
+<html lang="en" class="full-screen"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>审批管理</title>
+<link rel="stylesheet" type="text/css"  href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/dispatched/peopleList.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/dispatched/removedControl.css" />
+</head>
+<body class="oa">
+	<div class="wrap-body">
+		<div class="form-header">
+			<h3 class="form-title" id="StoreName">待审核布控人员</h3>
+		</div>	
+		<div class="filter-bar clearfix pt20">
+			<div class="fifler-group">
+				<label class="control-label" style="min-width: 70px;font-weight: normal !important;">关键字：</label>
+				<div class="search-box">
+					<input class="search-input" type="text" id="xxName" placeholder="请输入姓名/身份证" maxlength="50"> 
+				<span class="icon-search2" id="xxSearch"></span>
+				</div>
+			</div>
+		</div>
+		<div id="dispatchedApprovalList" ui-control="listview" ui-service="controlPerson/object/getData/approvalManage" 
+		 ui-template='tableApprovalTemplate' ui-parameters="queryParam" >
+	    <div class=" clearfix people-list mt5 listviewImgBox">
+	    	<script id="tableApprovalTemplate"  type="text/x-tmpl">
+			  <dl class="list-node compare-pic" style="width: 355px;height: 165px;display: block;">
+				<dt class="node-img">
+					<span style="width:121px">
+						<img src="{%=o.FaceImgUrl%}" attrimg="zoom" style="width:121px;height:151px;">
+					</span>
+				</dt>
+				<dd class="node-text pr picMessage" style="width:210px;">
+					<p class="node-text-p-name text-overflow" picMsg="姓名:{%=o.PersonName?o.PersonName:'暂无'%}">
+						<span>{%=o.PersonName?o.PersonName:'暂无'%}</span>
+					</p>
+					<p class="text-overflow" picMsg="性别:{%=o.PersonSex == 1 ? '女' : '男'%}">
+						<label>性别：</label>
+						<span>{%=o.PersonSex == 1 ? '女' : '男'%}</span>
+					</p>
+					<p class="text-overflow" picMsg="身份证号:{%=o.IDCard%}">
+						<label>身份证号：</label>
+						<span>{%=o.IDCard%}</span>
+					</p>
+					<p class="text-overflow" picMsg="布控时间:{%=o.CONTROL_TIME%}">
+						<label>布控时间：</label>
+						<span>{%=o.CONTROL_TIME%}</span>
+					</p>
+					<p class="text-overflow fl" picMsg="类型:{%=CONSTANTS.SURVEIL_CAR_TYPE[o.ControlType]%}">
+						<label>类型：</label>
+						<span>{%=CONSTANTS.SURVEIL_CAR_TYPE[o.ControlType]%}</span>
+					</p>
+					<p class="text-overflow fl mb0 w75" picMsg="布控人:{%=o.Controler%}">
+						<label>布控人：</label>
+						<span>{%=o.Controler%}</span>
+					</p>
+					<div class="btn-control" >
+						<button class="btn btn-primary editBtn" PortraitID="{%=o.PortraitID%}" 
+								StoreID="{%=o.StoreID%}" type="button">审批</button>
+					</div>
+				</dd>
+			  </dl>
+			</script>
+			<!--  
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width:121px">
+						<img src="/efacecloud/images/img/image1.jpg" attrimg="zoom" style="width:121px;height:151px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width:210px;">
+					<p class="node-text-p-name"><span>张璐璐</span></p>
+					<p class="text-overflow"><label>身份证号：</label><span>445121199669366352</span></p>
+					<p class="text-overflow"><label>生效时间：</label><span>2016-02-03 23:57:80</span></p>
+					<p class="text-overflow"><label>失效时间：</label><span>2016-02-03 23:57:80</span></p>
+					<p class="text-overflow fl"><label>类型：</label><span>管控</span></p>
+					<p class="text-overflow fl mb0"><label>布控人：</label><span>管理员</span></p>
+					<div class="btn-control">
+						<button class="btn btn-primary editBtn" type="button">审批</button>
+					</div>
+				</dd>
+			</dl>
+			-->
+		</div>
+		<div class="page-info-metro mr25 hide" listview-page="">
+			<div class="page-data fr">
+				<span class="page-num">总数 <i class="page-num" listview-counts="">0</i> 条，</span> 
+				<a class="page-prev" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i> 上一页</a>
+				<a class="current-page"><i listview-current="">0</i> / <i listview-total="">0</i></a>
+				<a class="page-next" listview-next-btn="" href="#">下一页 <i class="icon-arrow-right7"></i></a>
+			</div>				    		
+	   	</div>
+	   	</div>
+	</div>
+	
+<div class="frame-form-view l0">
+	<iframe class="full-screen" id="frameFormView" frameborder="0" ></iframe>
+</div>	
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/dispatched/dispatchedCommon.js"></script>	
+<script type="text/javascript" src="/efacecloud/js/dispatched/approvalManage.js"></script>	
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+</body>
+</html>

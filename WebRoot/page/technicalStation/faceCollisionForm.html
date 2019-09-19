@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人脸区域碰撞</title> 
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+</head>
+<body class="full-screen" menuId="personTechnicalStation-FaceAreaCollision">
+	<div class="page-list-head">
+		<a id="backBtn" class="back-btn">
+			<i class="icon-arrow-left10"></i>
+			<em>返回</em>
+		</a>
+		<span>区域碰撞</span>
+		<div class="icon-group">
+			<i class="icon-plus22 addRegion"></i>
+			<i class="icon-minus22 mt10 deleRegion"></i>
+		</div>
+	</div>
+<div class="form-con form-inline form-silde pt15 w100" style="background-color: #f6f7fb;">
+	<input style="display:none;" id="kkbhIdx"/>
+	<div id="fieldsetList">
+	<fieldset class="pr">
+		<div class="field-top"><span class="field-index">1</span><span class="field-title">区域</span><span class="operation-btn operationBtn hide">×</span></div>
+		 <div class="crossing">
+			<div class="form-group time-wrap time-style-1 mb15">
+			 	<div class="begin-time mt10 clearfix">
+			 		<label class="control-label fl tl mr0 mt5" >时间范围：</label>
+					<div class="time-box ml0">
+						<label>从</label>
+						<input class="form-control w100 beginTime" ui-validate="{pattern:'required'}" name="beginTime" type="text" readonly="readonly" ui-vtext="区域1开始时间"/>
+					</div>
+					<span class="red">*</span>
+			 	</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">      
+						<label>到</label>
+						<input class="form-control w100 endTime" ui-validate="{pattern:'required'}" name="endTime" type="text" readonly="readonly" ui-vtext="区域1结束时间"/>
+					</div>
+					<span class="red">*</span>
+				</div>
+			</div>
+		    <dl class="sort-cell clearfix">
+				<dd class="form-group form-group-block mb10" >
+					<label class="control-label fl">选择区域：</label>
+					<ul class="map-icon-list clearfix" index="1" layerName="L_CAMERA_FACE">
+						<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+						<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+						<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+						<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+						<!-- <li title="自定义选择"><i map="mapBtn" togglebtn="kktree" class="map-icon map-icon-area icon-list22" name="showKKTree"></i></li> -->
+						<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+					</ul>
+					<span class="red">*</span>
+					<!-- <div class="table-wrap hide">
+						<table class="table" cellspacing="0" cellpadding="0" index="1">  
+							<tbody id="bayonetList1">
+							</tbody>                                                                                            
+			        	</table>
+						<input type="hidden" id="selectedBayonet1" ui-validate="required" name="CAMERA_IDS" ui-vtext="选择区域">
+					</div> -->
+				</dd>
+				<dd class="form-group form-group-block">
+					<label class="control-label">感知设备：</label>
+					<div class="dropdown-list dropdown-list1 device-select">
+									<div class="dropdown-list-text dropdown-list-text1">
+										<span class="list-title" id="deviceNames1"></span> 
+										<input type="hidden" id="faceDetect1"> 
+										<input type="hidden"id="deviceIdInt1"> 
+										<a class="dropdown hide"> 
+											<i class="icon-arrow-down8"></i>
+										</a>
+									</div>
+									<div class="dropdown-menu">
+										<ul class="list-con" id="deviceNameList1">
+										</ul>
+									</div>
+					</div>
+				</dd>
+			</dl>
+		</div>
+	</fieldset>
+	<fieldset class="pr">
+		<div class="field-top"><span class="field-index">2</span><span class="field-title">区域</span><span class="operation-btn operationBtn hide">×</span></div>
+		 <div class="crossing">
+			<div class="form-group time-wrap time-style-1 mb15">
+			 	<div class="begin-time mt10 clearfix">
+			 		<label class="control-label fl tl mr0 mt5" >时间范围：</label>
+					<div class="time-box ml0">
+						<label>从</label>
+						<input class="form-control w100 beginTime" ui-validate="{pattern:'required'}" name="beginTime" type="text" readonly="readonly" ui-vtext="区域2开始时间">
+					</div>
+					<span class="red">*</span>
+			 	</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">      
+						<label>到</label>
+						<input class="form-control w100 endTime" ui-validate="{pattern:'required'}" name="endTime" type="text" readonly="readonly" ui-vtext="区域2结束时间">
+					</div>
+					<span class="red">*</span>
+				</div>
+			</div>
+		    <dl class="sort-cell clearfix">
+				<dd class="form-group form-group-block mb10">
+					<label class="control-label fl">选择区域：</label>
+					<ul class="map-icon-list clearfix" index="2" layerName="L_CAMERA_FACE">
+						<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+						<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+						<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+						<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+						<!-- <li title="自定义选择"><i map="mapBtn" togglebtn="kktree" class="map-icon map-icon-area icon-list22" name="showKKTree"></i></li> -->
+						<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+					</ul>
+					<span class="red">*</span>
+					<!-- <div class="table-wrap hide">
+						<table class="table" cellspacing="0" cellpadding="0" index="2">  
+							<tbody id="bayonetList2">
+							</tbody>                                                                                            
+			        	</table>
+						<input type="hidden" id="selectedBayonet2" ui-validate="required" name="CAMERA_IDS" ui-vtext="选择区域">
+					</div> -->
+				</dd>
+				<dd class="form-group form-group-block">
+					<label class="control-label">感知设备：</label>
+					<div class="dropdown-list dropdown-list1 device-select">
+									<div class="dropdown-list-text dropdown-list-text2">
+										<span class="list-title" id="deviceNames2"></span> 
+										<input type="hidden" id="faceDetect2"> 
+										<input type="hidden"id="deviceIdInt2"> 
+										<a class="dropdown hide"> 
+											<i class="icon-arrow-down8"></i>
+										</a>
+									</div>
+									<div class="dropdown-menu">
+										<ul class="list-con" id="deviceNameList2">
+										</ul>
+									</div>
+					</div>
+				</dd>
+			</dl>
+		</div>
+	</fieldset>
+	</div>
+	
+	<dl class="bgwhite">
+		<dd class="form-inline" style="height: 70px;padding-top: 20px;">
+			<label class="control-label pl20" style="width:85px;">检索阈值：</label>
+			<div id="sliderThreshold" class="ml10" style="width:197px;display:inline-block;"></div>
+			<input class="form-control ml20 tc b5" style="width:30px; padding:2px" id="THRESHOLD" name="THRESHOLD" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="检索阈值" value=70><span class="red"> *</span>
+		</dd>
+		<dd class="form-inline"  style="height: 70px;padding-top: 20px;">
+			<label class="control-label pl20" style="width:85px;">特征分数：</label>
+			<div id="sliderScore" class="ml10" style="width:197px;display:inline-block;"></div>
+			<input class="form-control ml20 tc b5" style="width:30px; padding:2px" id="FACESCORE" name="FACE_SCORE" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="特征分数" value=65><span class="red"> *</span>
+		</dd>
+	</dl>
+	
+	<div class="click-add hide">
+		<span class="add-btn" id="addFiledBtn">
+		<i class="icon-add-field"></i><span>请点击添加区域</span>
+		</span>
+	</div>
+	<div class="btn-wrap ml10 mr10">
+		<button id="searchBtn" class="btn w100 ">查询</button>
+	</div>
+</div>
+
+<div class="frame-form-full l0" style="display: none;">
+	<iframe class="frame-form" id="frameFormFull" frameborder="0"></iframe>
+</div>	
+<script id="filedTmpl" type="text/x-tmpl">
+<fieldset class="pr">
+<div class="field-top"><span class="field-index">{%=o.i%}</span><span class="field-title">区域</span><span class="operation-btn operationBtn hide">×</span></div>
+ <div class="crossing">
+	<div class="form-group time-wrap time-style-1 mb15">
+	 	<div class="begin-time mt10 clearfix">
+	 		<label class="control-label fl tl mr0 mt5" >时间范围：</label>
+			<div class="time-box ml0">
+				<label>从</label>
+				<input class="form-control w100 beginTime" ui-validate="{pattern:'required'}" name="beginTime" readonly="readonly" type="text" ui-vtext="区域{%=o.i%}开始时间">
+			</div>
+			<span class="red">*</span>
+	 	</div>
+		<div class="end-time mt10 clearfix">
+			<label class="control-label fl tl mr0 mt5"></label>
+			<div class="time-box ml0">      
+				<label>到</label>
+				<input class="form-control w100 endTime" ui-validate="{pattern:'required'}" name="endTime" readonly="readonly" type="text" ui-vtext="区域{%=o.i%}结束时间">
+			</div>
+			<span class="red">*</span>
+		</div>
+	</div>
+    <dl class="sort-cell clearfix">
+		<dd class="form-group form-group-block mb10" >
+			<label class="control-label fl">选择区域：</label>
+			<ul class="map-icon-list clearfix" index="{%=o.i%}" layerName="L_CAMERA_FACE">
+				<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+				<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+				<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+				<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+				
+				<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+			</ul>
+			<span class="red">*</span>
+			
+		</dd>
+		<dd class="form-group form-group-block">
+					<label class="control-label">感知设备：</label>
+					<div class="dropdown-list dropdown-list{%=o.i%} device-select">
+									<div class="dropdown-list-text dropdown-list-text{%=o.i%}">
+										<span class="list-title" id="deviceNames{%=o.i%}"></span> 
+										<input type="hidden" id="faceDetect{%=o.i%}"> 
+										<input type="hidden"id="deviceIdInt{%=o.i%}"> 
+										<a class="dropdown hide"> 
+											<i class="icon-arrow-down8"></i>
+										</a>
+									</div>
+									<div class="dropdown-menu">
+										<ul class="list-con" id="deviceNameList{%=o.i%}">
+										</ul>
+									</div>
+					</div>
+		</dd>
+	</dl>
+</div>
+</fieldset>
+</script>
+<script id="bayonetListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<tr deviceId="{%=o[i].DEVICE_ID%}" deviceName="{%=o[i].DEVICE_NAME%}" >
+		<td class="w5 tc"><span class="circle"></span></td>                                           
+                 <td class="w70"><span title="">{%=o[i].DEVICE_NAME%}</span></td>	                	                                                   
+		<td class="tc w15">
+			<ul class="btn-group-icons list-inline">
+			    <li class="delete"><span title="删除" class="delete-bayonet-item icon-cross2"></span></li>
+			</ul>
+		</td>
+	</tr>
+	{% } %}
+</script>
+<script id="deviceNameListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<li>
+		<a>
+		<span class="deviceName">{%=o[i].DEVICE_NAME%}</span>
+		<span class="removeDeviceBtn operate-btn" deviceid="{%=o[i].DEVICE_ID%}">×</span>
+		</a>
+	</li>
+	{% } %}
+	</script>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/StringUtil.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/faceCollisionForm.js"></script>
+</body>
+</html>

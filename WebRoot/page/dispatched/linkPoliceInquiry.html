@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>警务通关联选择</title>
+<link href="/ui/plugins/font-images/font.css" rel="stylesheet"
+	type="text/css" />
+<link href="/ui/plugins/bootstrap4.0/css/bootstrap.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/tableBase.css">
+</head>
+<body>
+	<div class="wrap-body" id="policeTerminalList" ui-control="listview"
+		ui-service="efacecloud/localOtherPoliceTerminal/getData"
+		ui-template='tableTemplate'>
+		<div class="filter-bar">
+			<div class="search-box pl20 fr">
+				<input class="search-input" type="text" id="condition"
+					placeholder="请输入警号/姓名" maxlength="50" tabindex="1"> <span
+					class="icon-search2" id="searchSpan"></span>
+			</div>
+			<div class="fr policeTree">
+				<div class="form-control fr ov p0" id="orgTree" name="orgTree"
+					type="dropdown-tree" ui-control="dropdowntree"
+					ui-service="user/org/getTree" ui-options="orgTreeOpts"
+					style="border: 1px solid #ccc; width: 252px"></div>
+				<input type="hidden" id="orgCode">
+			</div>
+		</div>
+		<div class="table-con" style="top: 63px; bottom: 50px;">
+			<div class="table-title table-head" id="tableheader">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="w5 tc"><input class="check-all" listview-checkall
+								type="checkbox"></th>
+							<th class="w10 "><span>警号</span></th>
+							<th class="w15 "><span>姓名</span></th>
+							<th class="w15 "><span>终端IMEI号</span></th>
+							<th class="w15 "><span>部门名称</span></th>
+							<th class="w20 "><span>部门编号</span></th>
+							<th class="tc operate"><span>操作</span></th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="table-view table-body" style="bottom: 65px; top: 38px;">
+				<table cellspacing="0" cellpadding="0">
+					<tbody id="tablebody">
+						<tr id="tableTemplate" style="display: none;">
+							<td class="w5 tc"><span><input listview-check
+									type="checkbox" value=""></span></td>
+							<td class="w10 "><span>{%=o.ZRRJH %}</span></td>
+							<td class="w15 "><span>{%=o.USERNAME %}</span></td>
+							<td class="w15 "><span>{%=o.ZDIMEI %}</span></td>
+							<td class="w15 "><span>{%=o.NODE_NAME %}</span></td>
+							<td class="w20 "><span>{%=o.ORG_CODE %}</span></td>
+							<td class="tc operate"><span>
+									<ul class="btn-group-icons list-inline">
+										<li class="relate-info link" obj-id="{%=o.OBJ_ID %}"><i
+											class="icon-gallery"></i> <b>关联</b></li>
+									</ul>
+							</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="page-info-metro hide" listview-page>
+				<div class="page-data fr">
+					<span class="page-num">总数 <i class="page-num"
+						listview-counts></i> 条，
+					</span> <a class="page-prev disable" listview-prev-btn><i
+						class="icon-arrow-left7"></i> 上一页</a> <a class="current-page"><i
+						listview-current></i> / <i listview-total></i></a>
+					<!-- <select listview-page-select=""></select> -->
+					<a class="page-next disable" listview-next-btn>下一页 <i
+						class="icon-arrow-right7"></i></a>
+				</div>
+			</div>
+		</div>
+		<!-- begin of page -->
+
+	</div>
+
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-primary mr5" id="sendBtn">发送</button>
+		<button class="btn btn-sm btn-primary mr5" id="confirmBtn">关联</button>
+		<button class="btn btn-sm btn-gray" id="cancelBtn">取消</button>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/dispatched/linkPoliceInquiry.js"></script>
+</html>

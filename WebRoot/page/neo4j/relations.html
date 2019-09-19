@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style>
+#container {
+	position: absolute;
+	width: 90%;
+	height: 90%;
+}
+
+.sigma-edge {
+	stroke: #14191C;
+}
+
+.sigma-node {
+	fill: green;
+	stroke: #14191C;
+	stroke-width: 2px;
+}
+
+.sigma-node:hover {
+	fill: #2196F3;
+}
+
+.muted {
+	fill-opacity: 0.1;
+	stroke-opacity: 0.1;
+}
+</style>
+
+<script src="src/sigma.core.js"></script>
+<script src="src/conrad.js"></script>
+<script src="src/utils/sigma.utils.js"></script>
+<script src="src/utils/sigma.polyfills.js"></script>
+<script src="src/sigma.settings.js"></script>
+<script src="src/classes/sigma.classes.dispatcher.js"></script>
+<script src="src/classes/sigma.classes.configurable.js"></script>
+<script src="src/classes/sigma.classes.graph.js"></script>
+<script src="src/classes/sigma.classes.camera.js"></script>
+<script src="src/classes/sigma.classes.quad.js"></script>
+<script src="src/classes/sigma.classes.edgequad.js"></script>
+<script src="src/captors/sigma.captors.mouse.js"></script>
+<script src="src/captors/sigma.captors.touch.js"></script>
+<script src="src/renderers/sigma.renderers.canvas.js"></script>
+<script src="src/renderers/sigma.renderers.webgl.js"></script>
+<script src="src/renderers/sigma.renderers.svg.js"></script>
+<script src="src/renderers/sigma.renderers.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.labels.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.hovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.nodes.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+<script
+	src="src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.utils.js"></script>
+<script src="src/renderers/svg/sigma.svg.nodes.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.curve.js"></script>
+<script src="src/renderers/svg/sigma.svg.labels.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.hovers.def.js"></script>
+<script src="src/middlewares/sigma.middlewares.rescale.js"></script>
+<script src="src/middlewares/sigma.middlewares.copy.js"></script>
+<script src="src/misc/sigma.misc.animation.js"></script>
+<script src="src/misc/sigma.misc.bindEvents.js"></script>
+<script src="src/misc/sigma.misc.bindDOMEvents.js"></script>
+<script src="src/misc/sigma.misc.drawHovers.js"></script>
+<!-- END SIGMA IMPORTS -->
+
+<script src="plugins/sigma.renderers.edgeLabels/settings.js"></script>
+<script
+	src="plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js"></script>
+<script src="plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js"></script>
+
+<script
+	src="plugins/sigma.plugins.neighborhoods/sigma.plugins.neighborhoods.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/worker.js"></script>
+
+<script src="../jquery.js"></script>
+<body>
+
+	<div id="container"></div>
+
+</body>
+
+<script>
+	
+sigma.utils.pkg('sigma.canvas.nodes');
+
+sigma.canvas.nodes.image = (function() {
+  var _cache = {},
+      _loading = {},
+      _callbacks = {};
+
+  // Return the renderer itself:
+  var renderer = function(node, context, settings) {
+    var args = arguments,
+        prefix = settings('prefix') || '',
+        size = node[prefix + 'size'],
+        color = node.color || settings('defaultNodeColor'),
+        url = node.url;
+
+    if (_cache[url]) {
+      context.save();
+
+      // Draw the clipping disc:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.closePath();
+      context.clip();
+
+      // Draw the image
+      context.drawImage(
+        _cache[url],
+        node[prefix + 'x'] - size,
+        node[prefix + 'y'] - size,
+        2 * size,
+        2 * size
+      );
+
+      // Quit the "clipping mode":
+      context.restore();
+
+      // Draw the border:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.lineWidth = size / 6;
+      context.strokeStyle = node.color || settings('defaultNodeColor');
+      context.stroke();
+      
+    } else {
+      sigma.canvas.nodes.image.cache(url);
+      sigma.canvas.nodes.def.apply(
+        sigma.canvas.nodes,
+        args
+      );
+    }
+  };
+
+  // Let's add a public method to cache images, to make it possible to
+  // preload images before the initial rendering:
+  renderer.cache = function(url, callback) {
+    if (callback)
+      _callbacks[url] = callback;
+
+    if (_loading[url])
+      return;
+
+    var img = new Image();
+
+    img.onload = function() {
+      _loading[url] = false;
+      _cache[url] = img;
+
+      if (_callbacks[url]) {
+        _callbacks[url].call(this, img);
+        delete _callbacks[url];
+      }
+    };
+
+    _loading[url] = true;
+    img.src = url;
+  };
+
+  return renderer;
+})();
+
+var urls = [
+      'img/img1.png',
+      'img/img2.png',
+      'img/img3.png'
+    ],
+    
+	g = {
+  		nodes: [],
+  		edges: []
+	},
+
+	loaded = 0,
+
+	toKeep = {};
+
+var anchorDraging = false;
+
+var anchor = {};
+
+var personJson = [{ name:'陈某国', id:'44512152211325215',flag:'1',x:'2.2',y:'0.2',url:'img/img1.png'},
+                  { name:'某轲',   id:'4485212354513214',flag:'2',x:'0.8',y:'0.3',url:'img/img2.png'},
+                  { name:'张某颖', id:'44215266632s55421',flag:'3',x:'1.8',y:'0.5',url:'img/img2.png'},
+                  { name:'陈某',   id:'44512152211325215',flag:'4',x:'1.2',y:'0.6',url:'img/img2.png'},
+                  { name:'荆某',   id:'4485212354513214',flag:'5',x:'2.7',y:'0.7',url:'img/img2.png'},
+                  { name:'粤A0253', id:'',flag:'6',x:'2.5',y:'0.5',url:'img/img3.png'},
+                  { name:'张某遇', id:'44512152211325215',flag:'7',x:'0.8',y:'0.8',url:'img/img1.png'},
+                  { name:'陈某晨', id:'4485212354513a214',flag:'8',x:'1.2',y:'1.0',url:'img/img1.png'},
+                  { name:'李某露', id:'4421526663255s421',flag:'9',x:'1.8',y:'0.8',url:'img/img1.png'},
+                  { name:'粤B8976', id:' ',flag:'10',x:'2.2',y:'0.8',url:'img/img3.png'},
+                  { name:'陈某券', id:'4485212354513214',flag:'11',x:'0.8',y:'0.5',url:'img/img1.png'},
+                  { name:'陆某宇', id:'4421526663255421',flag:'12',x:'1.7',y:'0.2',url:'img/img1.png'}]
+var relations = [
+				   {id: 'e1', label: '同伙', source: 'n11', target: 'n2', size: 1, color: '#2196F3'},
+				   {id: 'e2', label: '同住', source: 'n2', target: 'n1', size: 1, color: '#2196F3'},
+				   {id: 'e3', label: '同行', source: 'n3', target: 'n7', size: 1, color: '#2196F3'},
+				   {id: 'e4', label: '所有人', source: 'n5', target: 'n4', size: 1, color: '#2196F3'},
+				   {id: 'e5', label: '作案工具', source: 'n2', target: 'n5', size: 1, color: '#2196F3'},
+				   {id: 'e6', label: '肇事逃逸', source: 'n2', target: 'n9', size: 1, color: '#2196F3'},
+				   {id: 'e7', label: '上司', source: 'n3', target: 'n2', size: 1, color: '#2196F3'},
+				   {id: 'e8', label: '同伙', source: 'n6', target: 'n10', size: 1, color: '#2196F3'},
+				   {id: 'e9', label: '朋友', source: 'n2', target: 'n8', size: 1, color: '#2196F3'},
+				   {id: 'e10', label: '夫妻', source:'n5', target: 'n4', size: 1, color: '#2196F3'},
+				   {id: 'e11', label: '肇事逃逸', source: 'n10', target: 'n12', size: 1, color: '#2196F3'},
+				   {id: 'e12', label: '入室盗窃', source: 'n11', target: 'n12', size: 1, color: '#2196F3'}
+				   
+				]                  
+
+      
+urls.forEach(function(url) {
+  sigma.canvas.nodes.image.cache(
+    url,
+    function() {
+    	if (++loaded === urls.length) {
+    		
+			var s = new sigma({
+				renderer: {
+			    	container: document.getElementById('container'),
+			        type: 'canvas'
+			    },
+			    settings: {
+					minNodeSize: 4,
+					maxNodeSize: 16,
+				    minEdgeSize: 1,
+				    maxEdgeSize: 2,
+				    enableEdgeHovering: true,
+				    edgeHoverSizeRatio: 2,
+					defaultNodeColor: '#FF5722',
+    				defaultEdgeColor: '#E24',
+    				enableHovering: true,
+    				nodesPowRatio: 0.1,
+    				edgesPowRatio: 0.1,
+    				zoomingRatio: 1.2,
+    				doubleClickZoomingRatio: 1.2,
+    				edgeHoverColor:  'edge',
+    				mouseWheelEnabled: false,
+    				doubleClickZoomingRatio: false,
+    				enableCamera: false,
+    				defaultLabelColor: '#666'
+				}
+			});
+			
+			for (var i=0; i<12; i++) {
+				var c = '#2196F3';
+				if (i%3 == 2) {
+					c = '#FF5722';
+					size = 4;
+				} else {
+					size = 4;
+				}
+				_x = Math.random() * 1.5;
+				_y = Math.random() * 1.1;
+				s.graph.addNode({
+					id: 'n' + i,
+				    //label: '嫌疑人' + i + '(' + _x + ',' + _y +')',
+				    label:  personJson[i].name+personJson[i].id,
+				    x: personJson[i].x,
+				    y: personJson[i].y,
+				    type: 'image',
+				    url: personJson[i].url,
+				    size: size,
+				    color: c
+				})
+			}
+			for (var i=0; i<10; i++) {
+				s.graph.addEdge(relations[i]);
+			}
+						
+			sigma.plugins.dragNodes(s, s.renderers[0]);	
+						
+			s.bind('clickStage', function() {	
+				$('.sigma-node, .sigma-edge').each(function() {
+			    	unmute(this);
+			  	});
+			});
+			
+			s.bind("clickNode", function(e) {
+				toKeep = {};
+				toKeep[e.data.node.id] = {};
+				
+				selectId = e.data.node.id;
+								
+		        s.graph.edges().forEach(function(e) {
+		           /* 
+		          	if (e.target == selectId) {
+		          		toKeep[e.source] = {}
+		        		e.color = '#E24';
+		          	}
+		          	else if (e.source == selectId) {
+		          	 	toKeep[e.target] = {}
+		             	e.color = '#E24';
+		          	}    
+		          	else {		          
+		          		e.color = '#444';
+		          	} */
+		        });	  	
+		        
+				s.graph.nodes().forEach(function(n) {
+		          	/* if (toKeep[n.id]) {
+		          		if (n.url == 'img/img3.png') {
+		            		n.color = '#2196F3';
+		            	} else {
+		            		n.color = '#FF5722';
+		            	}
+		          	} else {
+		          		n.color = '#ddd';
+		          	} */
+		        });
+
+		        //s.graph.dropNode(e.data.node.id)
+		        
+		        s.refresh()
+			});
+									
+			s.bind("clickEdge", function(e) {				
+				console.log(e);
+				console.log(s.graph.nodes(e.data.edge.target));
+				var eventX = sigma.utils.getX(e) + sigma.utils.getCenter(e).x;
+				var eventY = sigma.utils.getX(e) + sigma.utils.getCenter(e).y;
+				s.graph.addNode({
+					id: 'n' + e.data.edge.source + '-' + e.data.edge.target,				    
+				    x: eventX,
+				    y: eventY,
+				    type: 'image',
+				    url: urls[0],
+				    size: 2,
+				    color: '#2196F3'
+				});
+				s.graph.addEdge({
+				    id: 'e' + e.data.edge.source + '-' + e.data.edge.target,
+				    source: 'n' + e.data.edge.source + '-' + e.data.edge.target,
+				    target: e.data.edge.source,
+				    size: 1,
+				    color: '#E24'
+				})
+			});
+					
+			s.refresh();
+    	}
+        
+    }
+  )
+});
+
+function mute(node) {
+  if (!~node.getAttribute('class').search(/muted/))
+    node.setAttributeNS(null, 'class', node.getAttribute('class') + ' muted');
+}
+
+function unmute(node) {
+  node.setAttributeNS(null, 'class', node.getAttribute('class').replace(/(\s|^)muted(\s|$)/g, '$2'));
+}
+
+</script>
+</html>

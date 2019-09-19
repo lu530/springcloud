@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>云搜索</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/addPersonDispatched.css" />
+</head>
+<body>
+	<div class="form-body" id="dvrForm">
+		<!-- 表单标题开始 -->
+		<div class="form-con pt10 form-inline t0">
+			<div class="form-warper">
+				<div class="form-header">
+					<i class="equipment-icon"></i> 人像维护
+					<div class="btn-group fr hide">
+						<a href="#" title="关闭"><i class="icon-cancel btn-close"></i></a>
+					</div>
+				</div>
+
+				<div class="sort-cell">
+					<div class="main-title">
+						<a href="#none"><h4>人像列表</h4></a>
+						<p class="fr"></p>
+					</div>
+					<div class="pic-list-wrap w100">
+						<ul class="pic-list-item" id="picList">
+							<li id="addPhotoBtn" class="vphoto" ptg="photo2">
+								<div class="upload-bg">
+									<b class="icon-upload icon-image2 mt50 pt20"></b>
+									<p class="mt5">添加人像图片</p>
+									<input id="photo5" name="photo5" class="file-style" type="file"
+										size="1">
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="sort-cell">
+					<div class="main-title">
+						<a href="#none"><h4>基础信息</h4></a>
+					</div>
+					<div class="mt20 clearfix dataForm">
+						<dl>
+							<dd class="form-group">
+								<label class="control-label">身份证：</label> <input
+									class="form-control ml5" name="IDCard" id="IDCard" type="text"
+									ui-validate="{pattern: 'required,idCard'}" ui-vtext="身份证">
+								<span class="red">*</span>
+							</dd>
+							<dd class="form-group">
+								<label class="control-label">姓名：</label> <input
+									class="form-control ml5" name="PersonName" id="PersonName"
+									maxlength="20" type="text" ui-vtext="姓名">
+							</dd>
+							<dd class="form-group">
+								<label class="control-label">性别：</label> <select
+									class="form-control ml5" name="PersonSex"
+									ui-validate="{pattern: 'required'}">
+									<option value="0" selected="selected">男</option>
+									<option value="1">女</option>
+								</select> <span class="red">*</span>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="sort-cell">
+					<div class="main-title">
+						<a href="#none"> <!-- <span class="icon-plus4 show-box" style="display: none;"></span>
+							<span class="icon-minus4 hide-box" style="display:block"></span> -->
+							<h4>布控信息</h4>
+							</span>
+						</a>
+					</div>
+					<dl class="middle dataForm">
+						<dd class="form-group">
+							<label class="control-label">布控人：</label> <input
+								class="form-control ml5" name="Monitor" readonly id="Monitor"
+								type="text" ui-vtext="布控人员"> <input type="hidden"
+								name="UserCode" id="UserCode" />
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">布控单位：</label> <input
+								class="form-control ml5" name="MonitorDept" readonly
+								id="MonitorDept" type="text" ui-vtext="布控部门">
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">联系电话：</label> <input
+								class="form-control ml5" readonly name="MonitorPhone"
+								id="MonitorPhone" type="text" ui-vtext="联系电话">
+						</dd>
+						<!-- 	<dd class="form-group">
+							<label class="control-label">布控类型：</label>
+							<label class="radio-inline p0 ml5"><input class="dispatchedType" type="radio" id="control" name="ControlType" value="2">管控</label> 
+							<label class="radio-inline p0"><input class="dispatchedType" type="radio" name="ControlType" value="1">抓捕</label>
+							<span class="red" style="float:none">*</span>
+						</dd> -->
+						<dd class="form-group">
+							<label class="control-label">布控类型：</label> <select
+								class="form-control ml5" id="ControlType" name="ControlType"
+								ui-validate="required" ui-vtext="布控类型">
+								<option value="-1">请选择</option>
+								<option value="0">涉案</option>
+								<option value="1">盗抢</option>
+								<option value="2">涉稳</option>
+								<option value="3">其他</option>
+							</select> <span class="red">*</span>
+						</dd>
+						<!-- <dd class="form-group">
+							<label class="control-label">生效时间：</label>
+							<input class="form-control ml5 bg-calendar-icon" ui-validate="{pattern: 'required'}" name="EffBeinTime" id="commenceDate" type="text" ui-vtext="生效时间">
+							<span class="red">*</span>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">失效时间：</label>
+							<input class="form-control ml5 bg-calendar-icon" ui-validate="{pattern: 'required'}"name="EndBeinTime" id="failureTime" type="text" ui-vtext="失效时间">
+							<span class="red">*</span>
+						</dd> -->
+						<dd class="form-group form-group-block">
+							<label class="control-label">布控原因：</label>
+							<textarea class="ml5" id="dispatchedReason" maxlength="200"
+								ui-validate="{pattern: 'required'}" ui-vtext="布控原因"
+								name="ControlReason"></textarea>
+							<span class="red">*</span>
+						</dd>
+					</dl>
+				</div>
+				<div class="sort-cell clearfix">
+					<div class="main-title">
+						<a href="#none"> <!-- <span class="icon-plus4 show-box" style="display: none;"></span>
+							<span class="icon-minus4 hide-box" style="display:block"></span> -->
+							<h4>关联信息</h4>
+							</span>
+						</a>
+					</div>
+					<dl class="infomation dataForm">
+						<dd class="form-table w75 fl iphone">
+							<div class="title iphone-title">
+								<h4>
+									<i class="icon-iphone"></i> 手机关联<i
+										class="icon-arrow-down10 fr mr5"></i>
+								</h4>
+							</div>
+							<div class="table-info">
+								<div class="table-head">
+									<table cellspacing="0" cellpadding="0">
+										<thead>
+											<tr>
+												<th>手机号码<b class="red w30 ml5">*</b></th>
+												<th class="w25">Mac地址</th>
+												<th class="w25">IMEI地址</th>
+												<th class="w25">IMSI地址</th>
+												<th class="tc" width="30px;"><i
+													class="iphone-add-tr add-new-tr fr" title="添加一行">+</i></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<div class="table-body">
+									<table cellspacing="0" cellpadding="0">
+										<tbody id="iphoneInfo">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</dd>
+						<dd class="form-table w20 fr car">
+							<div class="title car-title">
+								<!-- <h4><i class="icon-car001"></i> 车辆关联 <i class="car-add-tr add-new-tr fr icon-arrow-down10" title="添加一行">+</i></h4> -->
+								<h4>
+									<i class="icon-car001"></i> 车辆关联 <i
+										class="icon-arrow-down10 fr mr5"></i>
+								</h4>
+							</div>
+							<div class="table-info">
+								<div class="table-head">
+									<table cellspacing="0" cellpadding="0">
+										<thead>
+											<tr>
+												<th>车牌号码<b class="red w30 ml5">*</b></th>
+												<th class="tc" width="30px;"><i
+													class="car-add-tr add-new-tr fr" title="添加一行">+</i></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<div class="table-body">
+									<table cellspacing="0" cellpadding="0">
+										<tbody id="carInfo">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</dd>
+					</dl>
+				</div>
+
+				<div class="sort-cell mt10 hide" id="auditOpinion">
+					<div class="main-title">
+						<a href="#none"><h4>审核信息</h4></a>
+					</div>
+					<dl>
+						<dd class="form-group form-group-block">
+							<label class="control-label">审核意见：</label> <label
+								class="radio-inline pl0"><input type="radio" value="1"
+								name="agree" checked="checked" />同意</label> <label
+								class="radio-inline pl0"><input type="radio" value="2"
+								name="agree" />不同意</label>
+						</dd>
+						<dd class="form-group form-group-block">
+							<label class="control-label">反馈内容：</label>
+							<textarea class="ml5" id="Comment" name="Comment" maxlength="200"
+								ui-validate="{pattern: 'required',maxlength: 200}"
+								ui-vtext="反馈内容"></textarea>
+							<span class="red">*</span>
+						</dd>
+					</dl>
+				</div>
+
+			</div>
+		</div>
+		<div class="form-footer">
+			<button class="btn btn-primary mr15" id="submitBtn" type="button">保存</button>
+			<button class="btn btn-gray btn-close" type="button">关闭</button>
+		</div>
+	</div>
+	<script type="text/x-tmpl" id="phoneTmpl"> 
+	<tr>
+		<td>
+			<input class="form-control table-input" value="{%=o.PhoneNum%}" placeholder="请输入" maxlength="11" ui-validate="{pattern: 'required,mobilePhone'}" type="text" name="PhoneNum" ui-vtext="关联信息-手机号码"/>
+		</td>
+		<td class="w25">
+			<input class="form-control table-input" value="{%=o.PhoneMac%}" placeholder="请输入" maxlength="32" ui-validate="{pattern: 'mac'}" type="text" name="PhoneMac" ui-vtext="关联信息-Mac地址"/>
+		</td>
+		<td class="w25">
+			<input class="form-control table-input" value="{%=o.Imei%}" placeholder="请输入" maxlength="32" type="text" name="Imei" value="" ui-vtext="关联信息-IMEI地址"/>
+		</td>
+		<td class="w25">
+			<input class="form-control table-input" value="{%=o.Imsi%}" placeholder="请输入" maxlength="32" type="text" name="Imsi" ui-vtext="关联信息-IMSI地址"/>
+		</td>
+		<td class="tc" width="30px;"><i class="dele-tr-btn" title="删除一行">x</i></td>
+	</tr>
+	</script>
+	<script type="text/x-tmpl" id="carTmpl"> 
+	<tr>
+		<td>
+			<input class="form-control table-input" value="{%=o[0]%}" maxlength="15" name="carPlate" ui-validate="{pattern: 'required,carCode'}" type="text" placeholder="请输入" ui-vtext="关联信息-车牌号码">
+		</td>
+		<td class=" tc" width="30px;"><i class="dele-tr-btn" title="删除一行">x</i></td>
+	</tr>
+	</script>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/eapui/main/eapui-fileupload.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<!-- <script type="text/javascript" src="/efacecloud/js/common.js"></script> -->
+<script type="text/javascript" src="/viid/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/dispatched/addPersonDispatched.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>批量导入重点人员</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/executeControl/controlForm.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/dispatched/importLibrary.css" />
+</head>
+<body class="oa">
+	<div class="window-content" id="addPersonForm">
+		<div class="main-con mt30">
+			<div id="messageForm" class="form-con form-inline ps pt5" style="margin: 0 auto; overflow-y: initial;">
+				<div class="sort-cell">
+				  <dl class="form-single">
+					<label class="control-label">人员标签：</label>
+					<dd class="filter-tag filter-bread" id="filterBread" style="width:60%;">
+							<div class="bread-selected-title" data-toggle="dropdown" id="personTab" style="color:#79838C;">
+								<span class="selectedArea">请选择 </span>
+								<span class="icon-arrow-down8 tc" style="width:25px;"></span>
+							</div>
+							<div class="dropdown-menu w100">
+								<div class="bread-title">
+									<ul class="bread-list bread-list-subtitle">
+										<li><span>人员标签</span></li>
+									</ul>
+									<a class="fr p5 m5 breadEditBtn" title="编辑"><i class="icon-pencil3 fl mt3 mr3"></i>编辑</a>
+								</div>
+								<div class="tab-content no-data">
+									<div class="tab-pane" id="commonTab">
+										<div class="bread-con">
+											<div class="bread-right-con l0 b0">
+												<dl>
+													<dd>
+														<!-- <span class="right-item" casecode="030540">金融凭证诈骗案</span> -->
+													</dd>
+												</dl>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane active" id="caseTab">
+										<div class="bread-con">
+											<div class="bread-left-nav"></div>
+											<div class="bread-right-con bread-right-item-con"></div>
+											<div class="bread-btn">
+												<a class="btn btn-purple breadSureBtn ">确定</a>
+												<a class="btn btn-white" id="showAllTab">清除</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</dd>
+					
+						<dd class="form-group linFlag mt15">
+					        <label class="control-label">选择视频源：</label>
+					        <div class="dropdown-list videoChose">
+								<div class="dropdown-list-text">
+									<span class="list-title" id="deviceName"></span> <input
+										type="hidden" id="deviceCode"> <input type="hidden"
+										id="orgCodeInt"> <a class="dropdown hide"> <i
+										class="icon-arrow-down8"></i>
+									</a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="deviceNameList">
+										<!-- <li>
+										<a>
+											<span class="deviceName">广东省</span>
+											<span class="removeBtn operate-btn">×</span>
+										</a>
+									</li> -->
+									</ul>
+								</div>
+							</div>
+				        </dd>
+						<dd class="form-group linFlag">
+					        <label class="control-label">布控时限：</label>
+					        <label class="radio-inline p0"><input type="radio" name="TASK_TIME_LIMIT" value="2" checked="checked">自定义</label>
+					        <label class="radio-inline p0"><input type="radio" name="TASK_TIME_LIMIT" value="1">长期有效</label>
+					        <div class="time-wrap time mt5" id="controlTimeWrap">
+								<div class="time-box mr20">
+									<label>从</label>
+									<input class="form-control" id="BEGIN_TIME" name="BEGIN_TIME" value="" type="text" readonly="readonly">
+								</div>
+								<div class="time-box">
+									<label>到</label>
+									<input class="form-control" id="END_TIME" name="END_TIME" value="" type="text" readonly="readonly">
+								</div>			
+							</div>
+				        </dd>
+						<dd class="form-group linFlag">
+		                    <label class="control-label">告警等级：</label>
+		                    <label class="radio-inline p0">
+		                    	<input type="radio" name="TASK_LEVEL" value="1" checked="checked">红色告警
+		                    </label>
+		                    <label class="radio-inline p0">
+		                    	<input type="radio" name="TASK_LEVEL" value="0">黑色告警
+		                    </label>
+		                    <label class="radio-inline p0">
+		                    	<input type="radio" name="TASK_LEVEL" value="2">黄色告警
+		                    </label>
+		                    <label class="radio-inline p0">
+		                    	<input type="radio" name="TASK_LEVEL" value="3">蓝色告警
+		                    </label>
+		                </dd>
+						<dd class="form-group linFlag">
+			                <label class="control-label">告警核查方式：</label>
+			                <label class="checkbox-inline p0">
+			                	<input type="checkbox" class="checkWay" val="1" checked="checked">从算法验证
+			                </label>
+			                <label class="checkbox-inline p0">
+			                	<input type="checkbox" class="checkWay" name="IS_FEISHI" val="2">飞识认证
+			                </label>
+			                 <label class="checkbox-inline p0">
+			                	<input type="checkbox" class="checkWay" name="IS_ARCHIVE" val="3">一人一档认证
+			                </label>
+			                <label class="checkbox-inline p0">
+			                	<input type="checkbox" class="checkWay" val="4">无
+			                </label>
+							<div class="form-group-wrap" id="examineWayWrap">
+								<div class="form-group mb0">
+									<label class="control-label">验证算法:</label>
+									<select class="form-control ml5" id="checkType" name="CHECK_ALGO_TYPE">
+									</select>
+									<script id="checkTypeTmpl" type="x-tmpl">
+								<option value="{%=o.ALGORITHM_ID%}">{%=o.ALGORITHM_NAME%}</option>
+							</script>
+								</div>
+							</div>	                      
+		                </dd>
+						<dd class="form-group linFlag">
+		                  	<label class="control-label fl" style="vertical-align:top;">告警阈值设置：</label>
+		                  	<div class="form-group form-group-wrap ml0 mb5 w50">
+			                  	<label class="control-label">默认阈值：</label>
+			                  	<input type="text" class="threshold form-control" name="THRESHOLD" value="75.00" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+		                  	</div>
+		                  	<div class="form-group form-group-wrap mb5 w50">
+				                <label class="checkbox-inline p0">
+				                	<input type="checkbox" name="thresholdSetting" val="1">按摄像机设置
+				                </label>
+				                <div class="list-wrap hide" id="cameraList">
+					                <ul class="list-con">
+					                </ul>
+					                <script id="cameraListTemplate" type="x-tmpl">
+							{% for(var i=0;i<o.deviceId.length;i++){ %}
+			                	<li deviceid="{%=o.deviceId[i]%}"><a>
+			                		<span class="deviceName">{%=o.deviceName[i]%}</span>
+			                		<span class="threshold-wrap">
+										<input type="text" class="threshold form-control cameraThreshold" value="{%=o.threshold[i]%}" devicename="{%=o.deviceName[i]%}" deviceid="{%=o.deviceId[i]%}" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+									</span>
+			                	</a></li>
+							{% } %}
+							</script>
+				                </div>
+		                  	</div>
+				        </dd>
+						<dd class="form-group linFlag">
+					        <label class="control-label">权限控制：</label>
+							<div class="dropdown-list powerWrap">
+								<div class="dropdown-list-text">
+									<span class="list-title" id="powerNames"></span>
+									<input type="hidden" name="PERSON_PERMISSION" id="powerCode">
+									<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="powerNameList">
+									</ul>
+								</div>
+							</div>
+				        </dd>
+						<dd class="form-group linFlag">
+					        <label class="control-label">告警提醒方式：</label>
+					        <label class="checkbox-inline p0"><input type="checkbox" name="IS_MSG" checked="checked">短信提醒</label>
+					        <div id="msgWrap" class="pt5" style="margin-left:158px;">
+						        <div class="dropdown-list warnWrap">
+									<div class="dropdown-list-text">
+										<span class="list-title" id="warnNames"></span>
+										<input type="hidden" name="ALARM_REMIND" id="warnCode">
+										<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+									</div>
+									<div class="dropdown-menu">
+										<ul class="list-con" id="warnNameList">
+										</ul>
+									</div>
+								</div>
+					        </div>
+				        </dd>
+						
+						<dd class="form-group">
+							<label class="control-label">选择文件：</label>
+                            <input class="form-control" type="text" id="LIBRARY_FILE" name="MODULE_FILE" readonly="readonly" style="width: 52%">
+							<div class="upload-file">
+								浏览···
+                                <input class="file-input" type="file" name="dataFile" id="dataFile">
+							</div>
+							<span class="red">*</span>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label"></label> <span class="ml5 red">提示:上传文件为zip压缩包,文件包含(
+								人员图片 , 人员图片的命名规则： 姓名-证件号码.jpg )</span>
+						</dd>
+					</dl>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-blue mr5 " id="savePersonBtn">确定</button>
+		<button class="btn btn-sm btn-white" id="cancelBtn">取消</button>
+	</div>
+
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-fileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/StringUtil.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/Map.js"></script>
+<script type="text/javascript" src="/efacecloud/js/executeControl/policyCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/importPersonalLibrary.js"></script>
+</html>

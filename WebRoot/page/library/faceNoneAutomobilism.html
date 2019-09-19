@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>非汽车驾驶人员抓拍库</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/personnelFileMagList.css" />
+</head>
+<body>
+	<div class="pager-wrap" container="scroll" id="dispatchedNonmotorList"
+		ui-control="listview" ui-service="face/non_motor/query"
+		ui-template="nonMotorTemplate" ui-parameters="queryParams">
+		<div class="pager-content">
+			<div class="page-title">
+				<span>非汽车驾驶人员抓拍库</span>
+			</div>
+			<div class="top-box">
+				<div class="photo-tools">
+					<div class="top-pic-box">
+						<div class="img-wrap">
+							<img id="filterImg" src="/efacecloud/images/noPhoto2.png"
+								foruploadimg="uploadImg,picBtn"> <input
+								class="file-style searchImgButton" type="file" id="uploadImg"
+								name="uploadImg" issearch=true />
+						</div>
+						<ul>
+							<li class="re-upload"><i class="icon-image2"></i> <input
+								class="file-style searchImgButton" type="file" id="picBtn"
+								name="picBtn" issearch=true /></li>
+							<li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+						</ul>
+					</div>
+					<!--<ul class="bottom-pic-bar hide" id="thresholdValidate">
+               <li><i class="icon-search4"></i>阈值<input type="text" value="60" id="threshold" ui-validate="{pattern:'required,integer',max:100,min:60}" ui-vtext="阈值应为60-100的整数"></li>
+           </ul>-->
+				</div>
+				<div class="filter-view">
+					<dl class="filter-bar hide">
+						<dd class="filter-bar-search">
+							<div class="fifler-group mr5">
+								<div class="search-box upload-img" clearsearchkey="true">
+									<input class="search-input" type="text" id="searchText"
+										name="keyWord" placeholder="请输入关键字" maxlength="50">
+									<div class="sttb" id="uploadSearchImgBtn">
+										<i class="upload-icon"></i> <input class="file-style"
+											type="file" id="searchImgButton" name="uploadLibraryPic">
+										<a class="st-tips" id="">上传图片，搜索相关信息</a>
+									</div>
+									<span class="icon-search2" id="searchBtn"></span>
+								</div>
+							</div>
+							<div class="fifler-group">
+								<div class="search-bar-tips">
+									<span class="icon-info22"></span> <span>提示：模糊搜索时，“？”代表单个字符匹配，“*”不限字符数匹配。</span>
+								</div>
+							</div>
+						</dd>
+					</dl>
+					<dl class="filter-bar">
+						<dt class="filter-arrt">抓拍时间：</dt>
+						<dd class="filter-tag ">
+							<div class="tagslist timelist" id="timeTagList">
+								<span class="tag-item active tagsTime" time-control="jt">今天</span>
+								<span class="tag-item tagsTime" time-control="zt">昨天</span>
+								<span class="tag-item tagsTime" time-control="bz">本周</span>
+								<span class="tag-item tagsTime" time-control="by">本月</span>
+								<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+								<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+								<span class="tag-item tagsTime" time-control="tp" id="tp">时间段</span>
+								<span class="tag-item tagsTime" time-control="zdy" id="zdy">自定义</span>
+								<!-- 自定义时间选择 -->
+								<div class="opera-group" id="zdyControl">
+									<div class="time-control-item">
+										<input class="time-control" id="beginTime" readonly
+											type="text"> <i></i>
+									</div>
+									<div class="time-control-item">
+										<input class="time-control" id="endTime" readonly type="text">
+										<i></i>
+									</div>
+								</div>
+								<!--  时间段的时间选择  -->
+								<div class="day-input-wrap opera-group hide" id="tpControl" style="margin-top: -4px;">
+									<div class="time-control-item">
+										<input class="time-control" id="beginDay" readonly type="text">
+										<i></i>
+									</div>
+									<div class="time-control-item">
+										<input class="time-control" id="endDay" readonly type="text">
+										<i></i>
+									</div>
+									<!-- <input class="time-control" readonly name="" id="beginDay" type="text"><i></i>
+							<input class="time-control" readonly name="" id="endDay" type="text"><i></i> -->
+									<input class="time-control form-control time" readonly name=""
+										id="beginDayTime" type="text"> <input
+										class="time-control form-control time" readonly name=""
+										id="endDayTime" type="text">
+									<button id="confirmDayTimeBtn" class="btn btn-i-t bsline hide">确定</button>
+								</div>
+
+							</div>
+						</dd>
+					</dl>
+
+					<dl class="filter-bar" id="carPlate">
+						<dt class="filter-arrt">抓拍地点：</dt>
+						<dd class="filter-tag pt3">
+							<!-- <input class="device-name" type="text" name="country" id="deviceNames" readonly="readonly" />
+					<input type="hidden" id="orgCode">
+					<span class="select-place" id="deviceListBtn" style="width: initial;padding: 0 10px;"><i class="icon-list22"></i></span>
+					<span class="select-place" id="locate"><i class="icon-locate"></i> 感知设备</span> -->
+
+
+							<div class="dropdown-list">
+								<div class="dropdown-list-text">
+									<span class="list-title" id="deviceNames"></span> <input
+										type="hidden" id="orgCode"> <input type="hidden"
+										id="orgCodeInt"> <a class="dropdown hide"> <i
+										class="icon-arrow-down8"></i>
+									</a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="deviceNameList">
+										<!-- <li>
+									<a>
+										<span class="deviceName">广东省</span>
+										<span class="removeBtn operate-btn">×</span>
+									</a>
+								</li> -->
+									</ul>
+								</div>
+							</div>
+							<span class="select-place b0" id="locate"><i
+								class="icon-locate"></i> 地点选择</span>
+						</dd>
+					</dl>
+					<dl class="filter-bar">
+						<dt class="filter-arrt">车辆类型：</dt>
+						<dd class="filter-tag">
+							<!-- 				<select id="cllx" name="cllx" class="form-control" ui-control="databind" ui-service="important/vehicle/getNotVehicleType">
+				    </select> -->
+							<ul id="vehicleTagsList" class="tagslist" ui-control="uitags"
+								ui-options="{selectNullDefalut:{value:'', text: '全部'}}"
+								ui-service="vehicle/common/getNotVehicleType"></ul>
+						</dd>
+					</dl>
+					<dl class="filter-bar">
+						<dt class="filter-arrt">车灯类型：</dt>
+						<dd class="filter-tag">
+							<!-- 				<select id="cdlx" name="cdlx" class="form-control" ui-control="databind" ui-service="important/vehicle/getlampType"> -->
+							<ul id="lightTagsList" class="tagslist" ui-control="uitags"
+								ui-options="{selectNullDefalut:{value:'', text: '全部'}}"
+								ui-service="vehicle/common/getlampType"></ul>
+						</dd>
+					</dl>
+					<dl class="filter-bar">
+						<dt class="filter-arrt">是否戴头盔：</dt>
+						<dd class="filter-tag">
+							<div class="tagslist" id="helmet">
+								<span class="tag-item active" val="">全部</span> <span
+									class="tag-item" val="1">是</span> <span class="tag-item"
+									val="0">否</span>
+							</div>
+						</dd>
+					</dl>
+					<dl class="filter-bar filter-bar-hide hide">
+						<dt class="filter-arrt">性别:</dt>
+						<dd class="filter-tag">
+							<div class="tagslist tagItmeList" id="SEX">
+								<span class="tag-item active tagAll" val="">全部</span> <span
+									class="tag-item" val="1">男</span> <span class="tag-item"
+									val="2">女</span> <span class="tag-item" val="0">未知</span>
+							</div>
+						</dd>
+					</dl>
+					<dl class="filter-bar filter-bar-hide hide" id="ageTag">
+						<dt class="filter-arrt">年龄段：</dt>
+						<dd class="filter-tag">
+							<div class="tagslist" id="age">
+								<span class="tag-item active" data="">全部</span> <span
+									class="tag-item" data="1">少年</span> <span class="tag-item"
+									data="2">青年</span> <span class="tag-item" data="3">中年</span> <span
+									class="tag-item" data="4">老年</span> <span class="tag-item"
+									data="0">未知</span>
+							</div>
+						</dd>
+					</dl>
+
+					<div class="filter-state">
+						<div class="filter-state-box" id="fiflerState">
+							<em class="fifler-text">查看更多</em> <i class="icon icon-more"></i>
+						</div>
+					</div>
+
+					<div class="confirm-wrap">
+						<button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+					</div>
+				</div>
+			</div>
+			<!-- 筛选 end -->
+
+			<!-- 页码 -->
+			<div class="page-info-metro full">
+
+				<div class="page-wrap">
+					<div class="page-info-metro square-pager">
+						<div class="page-data tc" listview-page="">
+							<a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+								class="icon-arrow-left7"></i></a> <span class="page-num">共有<i
+								class="page-num" listview-counts="">0</i>条记录
+							</span> <a class="current-page"><i listview-current="">1</i>/<i
+								listview-total="">1</i></a> <a class="page-next fr"
+								listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 页码 end -->
+			<div class="library-info">
+				<div class="picture-wrap">
+					<div class="compare-picture person pr">
+						<div class="image-item">
+							<span class="close-img-btn">×</span>
+							<div class="upload-img">
+								<img src="/ui/plugins/eapui/img/nophoto.jpg" id="vehicleImg"
+									attrimg="zoom" hasImg="0">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="tilelist vertical ver-caselist checkbox vehicle">-->
+				<div class="page-con ">
+					<div class="library-info">
+						<div class="tilelist vertical ver-caselist two-pictrues-small listviewImgBox">
+							<script id="nonMotorTemplate" type="text/x-tmpl">					
+						<div class="list-node-wrap" id="">
+					 		<dl class="list-node">
+								<dt class="node-img compare-img" attrimg="doublezoom">
+									<span class="compare-small">
+										<img src="{%= o.PIC_DRIVER ? o.PIC_DRIVER : renderImg() %}" zoom-url="{%= o.PIC_DRIVER ? o.PIC_DRIVER : renderImg() %}">
+										<em>驾驶人</em>
+									</span>
+									<span class="compare-large ml0">
+										<img src="{%= o.PIC_VEHICLE ? o.PIC_VEHICLE : renderImg() %}" zoom-url="{%= o.PIC_ABBREVIATE ? o.PIC_ABBREVIATE : renderImg() %}">
+										<em>原图</em>
+									</span>
+									{% if( o.SIMILARITY!=""&&typeof o.SIMILARITY!="undefined"){ %}
+										<b class="similar color-blue" key="similar">{%=o.SIMILARITY%}%</b>
+									{% } %}
+
+								</dt>
+						  		<dd class="node-text picMessage">
+									<p picMsg="车辆类型:{%= o.CLLX_NAME %}">
+										<label>车辆类型：</label>
+										<span title="{%= o.CLLX_NAME %}"><a class="orange carType" cllx="{%=o.CLLX %}">【{%= o.CLLX_NAME %}】</a></span>
+									</p>
+									<p class="w100" picMsg="抓拍时间:{%= o.JGSK %}">
+										<label>抓拍时间：</label>
+										<span title="{%= o.JGSK %}">{%= o.JGSK %}</span>
+									</p>
+									<p class="w100" picMsg="地点:{%= o.KKMC %}">
+										<label>地点：</label>
+										<span title="{%= o.KKMC %}">{%= o.KKMC %}</span>
+									</p>
+									<!-- <p class="w100"><label>地点：</label><span title="{%= o.KKMC %}">{%= o.KKMC %}</span></p> -->
+									<p class="w100" picMsg="注册状态:{%= o.FACE_SCORE %}">
+										<label>注册状态：</label>
+										<span title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE %}</span>
+									</p>
+									<p picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">
+										<label>算法类型：</label>
+										<span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</span>
+									</p>
+									<div class="btn-group fr">
+										{%if(o.PIC_DRIVER){ %}
+										<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.PIC_DRIVER%}">
+											<i class="btn-icon verification-icon"></i>
+										</a>
+										<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.PIC_DRIVER%}">
+											<i class="btn-icon trajectory-icon"></i>
+										</a>
+										{% } %}
+										<a fileUrl="{%= o.PIC_DRIVER %}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+											<i class="btn-icon search-icon"></i>
+										</a>
+										<a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=4&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.KKMC%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC_ABBREVIATE%}&objPci={%=o.PIC_DRIVER%}&jgsj={%=o.JGSK%}" title="收藏">
+											<i class="btn-icon collection-icon"></i>
+										</a>
+									</div>	
+								</dd>
+	
+							</dl>
+						</div>  
+						</script>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen" id="frameFormFull" frameborder="0"></iframe>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/DateUtil.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/faceNoneAutomobilism.js"></script>
+</html>

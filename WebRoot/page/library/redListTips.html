@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>涉红提示</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">
+</head>
+<body class="oa">
+<div class="form-body">
+    <div class="form-con form-inline" style="border-bottom:1px solid #ccc;">
+        <div class="form-warper">
+            <div class="sort-cell">
+                <dl class="form-single mb0">
+                    <dd class="form-group">
+                        <label class="control-label w100 tc">您检索的目标人脸为红名单疑似人员，进一步操作需要通过审核。是否继续操作?</label>
+                    </dd>
+                    <dd class="form-group">
+						<label class="control-label">申请有效截止期：</label>
+						<div class="filter-tag ml5" style="display: inline-block">
+                           <div class="opera-group active">
+                               <div class="time-control-item">
+                                   <input class="time-control no-time" id="controlTime" name="controlTime" ui-validate="required" ui-vtext="出生日期" readonly type="text">
+                                   <i></i>
+                               </div>
+                           </div>
+                       </div>
+					</dd>
+					<!-- <dd class="form-group">
+	                    <label class="control-label">案情类型：</label>
+                        <label class="radio-inline">aaaa</label>
+                    </dd> -->
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="form-footer">
+        <button class="btn btn-small blue-btn mr15" id="submitBtn" type="button">确定</button>
+        <button class="btn btn-small gray-btn" id="closeBtn" type="button">取消</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/redListTips.js"></script>
+</html>

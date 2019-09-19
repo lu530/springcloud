@@ -1,0 +1,295 @@
+/* 公用样式 */
+a:hover{
+   text-decoration: none
+}
+.container-face{
+	width:100%;
+	height:100%;
+	color:#f6ffff;
+	background:url(/efacecloud/images/menu-bg.jpg);
+	font-family:"Microsoft YaHei"
+}
+
+
+
+/* 导航栏样式 */
+.tabs .tabs-title{
+	margin-bottom:54px;
+	font-size:30px;
+}
+.tabs{
+	width: 25%;
+	padding: 50px 0 0 5%;
+}
+.tabs .face-tabs{
+	padding:0;
+}
+.face-tabs .line{
+	position:absolute;
+	left: 21px;
+  		top: 41px;
+	width:1px;
+	height:80%;
+	background:#fff;
+}
+ .face-tabs .line-last{
+	height:50%;
+}
+ .face-tabs>.face-tab{
+	padding-left:19px;
+	position:relative;
+	cursor:pointer;
+	margin-bottom:10px;
+	width: 90%;
+}
+.face-tabs>.face-tab
+{
+	transition:all 0.5s;
+}
+.face-tabs .tab-name:before{
+	transition:background-color 0.5s;
+}
+ .face-tabs .face-tab .tab-name{
+	display:inline-block;
+	height:61px;
+	line-height:61px;
+	padding-left:28px;
+	font-size:17px;
+	width:94%;
+}
+
+.face-tabs .tab-name:before{
+	content:"";
+	width:17px;
+	height:17px;
+	position:absolute;
+	left:14px;
+	top:22px;
+	padding:10px;
+	background:url(/efacecloud/images/menu-tab.png) no-repeat;
+	background-color:#446dc9;
+	background-position:-81px -91px;
+}
+.face-tabs .faceControl-tab:before{
+	background-position:-81px -170px;
+}
+.face-tabs .faceTechniques-tab:before{
+	background-position:-80px -240px;
+}
+.face-tabs .faceBreakRule-tab:before{
+	background-position:-81px -399px;
+}
+.face-tabs .faceport-tab:before{
+	background-position:-81px -470px;
+}
+/* 导航选中样式 */
+.face-tabs>.face-tab.active{
+	background:#fff;
+	color:#3458b8;
+	box-shadow:0px 0px 10px 8px rgba(37,73,185,.9);
+	width: 100%;
+}
+.face-tabs>.active .tab-name:before{
+	content:" ";
+	background:#fff;
+}
+.face-tabs>.active .tab-name:after{
+	content:"▶";
+	font-size:20px;
+	line-height:62px;
+	color:#3458b8;
+	float:right;
+}
+
+
+
+/* 主要内容样式 */
+ .face-main{
+	position:absolute;
+	left: 25%;
+	right:0;
+	top: 20px;
+}
+.main-content{
+	position:absolute;
+	width:100%;
+}
+.main-content .info-title{
+	height:83px;
+	margin-bottom:12px;
+	padding-top:18px;
+}
+.main-content>.face-info{		
+	width:100%;
+	padding-left:3%;
+	padding-right:12%;
+}
+
+.main-content>.face-info .face-icon{
+	width:82px;
+	height:60px;
+	display:inline-block;
+	background:url(/efacecloud/images/efacecloud-main-icon.png) no-repeat -545px -181px; 
+
+}
+.main-content>.face-info .archives{background-position:-843px -189px;}
+.main-content>.face-info .specialLibrary{background-position:-1150px -185px;}
+.main-content>.face-info .nonMotorFace{background-position:-1149px -1045px;}
+.main-content>.face-info .driverFace{background-position:-831px -1048px;}
+
+.main-content>.face-info .real-timeControl{background-position:-560px -466px;}
+.main-content>.face-info .faceControl{background-position:-843px -466px;}
+.main-content>.face-info .controlLibrary{background-position:-1150px -466px;}
+.main-content>.face-info .alarmRecord{background-position:-1461px -466px;}
+.main-content>.face-info .event-alarm{background-position:-1453px -1843px;}
+
+.main-content>.face-info .trackAnalysis{background-position:-563px -751px;}
+.main-content>.face-info .frequentlyAppear{background-position:-843px -751px;}
+.main-content>.face-info .regionalCollision{background-position:-1150px -751px;}
+.main-content>.face-info .associatesAnalysis{background-position:-1461px -751px;}		
+.main-content>.face-info .patrol{background-position:-557px -1047px;}
+.main-content>.face-info .verification{background-position:-1445px -1622px;}
+.main-content>.face-info .one-people{background-position:-1140px -1838px;}
+.main-content>.face-info .people-face {
+    background-position: -1152px -1832px;
+}
+
+.main-content>.face-info .staffLibrary{background-position:-560px -1329px;}
+.main-content>.face-info .personnelLibrary{background-position:-843px -1329px;}
+.main-content>.face-info .mobileFaceLibrary{background-position:-1150px -1329px;}
+.main-content>.face-info .identityFace{background-position:-1453px -1329px;}
+
+
+.main-content>.face-info .passengFace{background-position:-554px -1833px;}
+.main-content>.face-info .passengersFace{background-position:-850px -1828px;}
+
+.main-content>.face-info .redListLib {
+    background-position: -1456px -1833px;
+}
+
+.main-content>.face-info .myCollection{background-position:-555px -1616px;}
+
+.main-content>.face-info .faceStatistics{background-position:-841px -1616px;}
+.main-content>.face-info .faceResources{background-position:-1145px -1616px;}
+
+
+
+.main-content .title{
+	font-size:16px;
+	font-weight:500;
+	margin:12px 0;
+
+}
+.main-content .detials{
+	font-size:12px;
+	height:40px;
+	margin-bottom:0;
+	color:#d3d3ed;
+	line-height:17px;
+}
+.container-face .main-content .in-details{
+	display:inline-block;
+	border:1px solid #fcffff;
+	color:#eff4f7;
+	width:144px;
+	height:28px;
+	line-height:28px;
+	text-align:center;
+	cursor:pointer;
+}
+.main-content .content-box{
+	float:left;
+	display:inline-block;
+	padding: 20px;
+	padding-bottom: 0;
+	width: 280px;
+	margin:0;
+	color: #eff4f7;
+    cursor: pointer;
+}
+.main-content .content-box .info-box{
+	padding-bottom:20px;
+	transition:all 0.5s;
+	border-color:transparent;
+	border-width:1px;
+	border-style:solid;
+	display:inline-block;
+	width: 85%;
+}
+.main-content .info-box .info-title,
+.main-content .info-box .info,
+.main-content .info-box .in-details{
+	transition:all 0.5s;
+}
+
+
+/* 内容选中样式 */
+ .face-info.active{
+	background:rgba(14,48,154,.3);
+	filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#300e309a,endColorstr=#300e309a);
+	box-shadow:2px 8px 5px rgba(14,14,154,.4);
+}
+
+.main-content>.active .content-box.active dl,
+.main-content .content-box:hover dl{
+	border:1px solid #fff;
+	text-align:center;
+	width: 100%
+}
+ .main-content .active .active .info-title,
+ .main-content .content-box:hover .info-title{
+	background:#fff;
+}
+ .main-content .active .active .info,
+ .main-content .content-box:hover .info{
+	padding:0 20px;
+}
+ .main-content .active .active .in-details,
+ .main-content .content-box:hover .in-details{
+	margin:0 auto;
+	color:#fff;
+	background-color:#2e71f3;
+	border:1px solid #2e71f3;
+}
+.main-content .active .active .face-icon,
+.main-content .content-box:hover .face-icon{
+	background:url(/efacecloud/images/efacecloud-main-icon-active.png) no-repeat -545px -186px;
+}
+.main-content .content-box:hover .archives,.main-content .active .active .archives{background-position:-825px -189px;}
+.main-content .content-box:hover .specialLibrary,.main-content .active .active .specialLibrary{background-position:-1139px -185px;}
+.main-content .content-box:hover .nonMotorFace,.main-content .active .active .nonMotorFace{background-position:-1149px -1045px;}
+.main-content .content-box:hover .driverFace,.main-content .active .active .driverFace{background-position:-831px -1048px;}
+
+.main-content .content-box:hover .real-timeControl,.main-content .active .active .real-timeControl{background-position:-552px -465px;}
+.main-content .content-box:hover .faceControl,.main-content .active .active .faceControl{background-position:-828px -465px;}
+.main-content .content-box:hover .controlLibrary,.main-content .active .active .controlLibrary{background-position:-1147px -467px;}
+.main-content .content-box:hover .alarmRecord,.main-content .active .active .alarmRecord{background-position:-1444px -466px;}
+.main-content .content-box:hover .event-alarm,.main-content .active .active .event-alarm{background-position:-1434px -1841px;}
+
+.main-content .content-box:hover .trackAnalysis,.main-content .active .active .trackAnalysis{background-position:-549px -757px;}
+.main-content .content-box:hover .frequentlyAppear,.main-content .active .active .frequentlyAppear{background-position:-835px -755px;}
+.main-content .content-box:hover .regionalCollision,.main-content .active .active .regionalCollision{background-position:-1145px -755px;}
+.main-content .content-box:hover .associatesAnalysis,.main-content .active .active .associatesAnalysis{background-position:-1457px -755px;}
+.main-content .content-box:hover .patrol,.main-content .active .active .patrol{background-position:-554px -1046px;}
+.main-content .content-box:hover .verification,.main-content .active .active .verification{background-position:-1445px -1622px;}
+.main-content .content-box:hover .people-face, .main-content .active .active .people-face {
+    background-position: -1149px -1832px;
+}
+
+.main-content .content-box:hover .staffLibrary,.main-content .active .active .staffLibrary{background-position:-545px -1329px;}
+.main-content .content-box:hover .one-people,.main-content .active .active .one-people{background-position:-1136px -1847px;}
+.main-content .content-box:hover .personnelLibrary,.main-content .active .active .personnelLibrary{background-position:-834px -1329px;}
+.main-content .content-box:hover .mobileFaceLibrary,.main-content .active .active .mobileFaceLibrary{background-position:-1146px -1328px;}
+.main-content .content-box:hover .identityFace,.main-content .active .active .identityFace{background-position:-1443px -1326px;}
+
+.main-content .content-box:hover .redListLib, .main-content .active .active .redListLib {
+    background-position: -1456px -1833px;
+}
+
+.main-content .content-box:hover .passengFace,.main-content .active .active .passengFace{background-position:-544px -1833px;}
+.main-content .content-box:hover .passengersFace,.main-content .active .active .passengersFace{background-position:-850px -1834px;}
+
+.main-content .content-box:hover .myCollection,.main-content .active .active .myCollection{background-position:-543px -1616px;}
+
+.main-content .content-box:hover .faceStatistics,.main-content .active .active .faceStatistics{background-position:-840px -1620px;}
+.main-content .content-box:hover .faceResources,.main-content .active .active .faceResources{background-position:-1137px -1626px;}

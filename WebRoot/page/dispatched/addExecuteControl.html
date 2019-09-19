@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>布控库管理</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/addExecuteControl.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/tableBase.css">
+</head>
+<body class="full-screen">
+	<div class="form-con pt10">
+		<div class="form-header ml20 mr20">
+			<h3 class="form-title" id="myModalLabel">布控添加任务</h3>
+		</div>
+		<div class="clearfix dataForm">
+			<div class="filter-bar form-inline">
+				<div class="form-group ml20 mt10">
+					<label class="fl mt5">任务名称：</label> <input type="hidden"
+						id="taskId" name="taskId"> <input class="form-control ml4"
+						id="taskName" name="taskName" ui-validate="{pattern: 'required'}"
+						ui-vtext="任务名称" maxlength="50"> <span class="red">*</span>
+				</div>
+				<div class="form-group ml20 mt10">
+					<label class="fl mt5">告警阈值：</label> <input class="form-control ml4"
+						id="taskScore" name="taskScore"
+						ui-validate="{pattern: 'required,integer'}" ui-vtext="告警阈值"
+						maxlength="50"> <span class="red">*</span>
+				</div>
+				<div class="form-group ml20 mt10">
+					<label class="fl mt5">场景选择：</label> <select class="form-control"
+						id="manufacturer" name="manufacturer" ui-validate="required"
+						ui-parameters="queryParam" ui-control="databind" ui-vtext="场景选择"
+						ui-service="person/control/community/list">
+						<!-- <option value="-1"> 场景选择</option> -->
+					</select> <span class="red">*</span>
+
+				</div>
+			</div>
+			<div class="control-title clearfix">
+				<p class="fl w50 f15 mb5">布控库列表</p>
+				<p class="fl ml10 f15 mb5">已选布控库</p>
+			</div>
+
+			<div class="selection selection-right w40 fl ml20">
+				<ul id="subMenuTab" class="sub-memu oh">
+					<li class="hide" ref="#synchronizationLibrary"><a href="#">常控库</a></li>
+					<li class="active w100" ref="#proLibrary"><a href="#">布控库</a></li>
+				</ul>
+				<div id="synchronizationLibrary" class="tab-info hide">
+					<ul id="SynchronizationList"
+						class="list-unstyled selection-list-box" library="tb">
+					</ul>
+				</div>
+				<div id="proLibrary" class="tab-info">
+					<ul id="proList" class="list-unstyled selection-list-box"
+						library="lk">
+					</ul>
+				</div>
+			</div>
+
+			<div class="setting-btn-box w10 fl">
+				<span title="批量右移" id="btn-add-one" class="icon-arrow-right4"></span>
+				<span title="批量左移" id="btn-remove-one" class="icon-arrow-left4"></span>
+			</div>
+
+			<div class="w40 fl">
+				<div class="selection selection-left">
+					<ul id="leftList" class="list-unstyled selection-list-box">
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<div class="mr20 ml20" id="localCommunityTerminalList"
+			ui-control="listview"
+			ui-service="efacecloud/localCommunityTerminal/getData"
+			ui-template='terminalTemplate'>
+			<div class="filter-bar mb5">
+				<p class="f15 fwb mt5 fl">警务通推送设置</p>
+				<div class="fr">
+					<!-- <div class="form-control fl ov p0 nb" id="orgTree" name="orgTree" type="dropdown-tree" 
+									ui-control="dropdowntree" ui-service="user/org/getTree" ui-options="orgTreeOpts"></div>
+					<input type="hidden" id="orgCode"> -->
+					<button class="btn btn-primary" id="cancelBtn" type="button">取消关联</button>
+					<button class="btn btn-primary" id="linkBtn" type="button">关联警务通</button>
+				</div>
+			</div>
+
+			<div class="table-head">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="w5 tc"><input class="check-all" listview-checkall
+								type="checkbox"></th>
+							<th class="w10 "><span>警号</span></th>
+							<th class="w10 "><span>姓名</span></th>
+							<th class="w10 "><span>终端IMEI号</span></th>
+							<th class="w10 "><span>部门名称</span></th>
+							<th class="w10 "><span>部门编号</span></th>
+							<th class="w25 tc"><span>操作</span></th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="table-body">
+				<table cellspacing="0" cellpadding="0">
+					<tbody id="tablebody">
+						<tr id="terminalTemplate" style="display: none;"
+							obj-id="{%=o.ZRRJH %}">
+							<td class="w5 tc"><span><input listview-check
+									type="checkbox" value=""></span></td>
+							<td class="w10 "><span>{%=o.ZRRJH %}</span></td>
+							<td class="w10 "><span>{%=o.NAME %}</span></td>
+							<td class="w10 "><span>{%=o.ZDIMEI %}</span></td>
+							<td class="w10 "><span>{%=o.NODE_NAME %}</span></td>
+							<td class="w10 "><span>{%=o.ORG_CODE %}</span></td>
+							<td class="w25 tc"><span>
+									<ul class="btn-group-icons list-inline">
+										<li class="relate-info del-term" obj-id="{%=o.ZRRJH %}"
+											bind-style="{%=o.STYLE %}"><i class="icon-trash"></i> <b>取消关联</b></li>
+									</ul>
+							</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="page-info-metro hide" listview-page
+				style="display: none !important;">
+				<div class="page-data fr">
+					<span class="page-num">总数 <i class="page-num"
+						listview-counts></i> 条，
+					</span> <a class="page-prev" listview-prev-btn><i
+						class="icon-arrow-left7"></i> 上一页</a> <a class="current-page"><i
+						listview-current></i> / <i listview-total></i></a> <select
+						listview-page-select=""></select> <a class="page-next"
+						listview-next-btn>下一页 <i class="icon-arrow-right7"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-footer">
+		<button class="btn btn-primary btn-add mr15" id="submitBtn"
+			type="button">保存</button>
+		<button class="btn btn-gray btn-close" data-dismiss="modal"
+			type="button">关闭</button>
+	</div>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript"
+		src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/dispatchedCommon.js"></script>
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/addExecuteControl.js"></script>
+</body>
+</html>

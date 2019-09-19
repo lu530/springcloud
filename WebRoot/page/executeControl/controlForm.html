@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>新增布控任务</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/executeControl/controlForm.css" />
+</head>
+<body>
+<div class="window-content">
+		<div class="form-con form-wrap form-inline" id="mainContent">
+			<div class="item-info">
+				<div class="form-group form-group-block">
+			        <label class="control-label">选择视频源：</label>
+			        <div class="dropdown-list videoChose">
+						<div class="dropdown-list-text">
+							<span class="list-title" id="deviceName"></span> <input
+								type="hidden" id="deviceCode"> <input type="hidden"
+								id="orgCodeInt"> <a class="dropdown hide"> <i
+								class="icon-arrow-down8"></i>
+							</a>
+						</div>
+						<div class="dropdown-menu">
+							<ul class="list-con" id="deviceNameList">
+								<!-- <li>
+								<a>
+									<span class="deviceName">广东省</span>
+									<span class="removeBtn operate-btn">×</span>
+								</a>
+							</li> -->
+							</ul>
+						</div>
+					</div>
+		        </div>
+				<div class="form-group form-group-block">
+			        <label class="control-label">布控时限：</label>
+			        <label class="radio-inline p0"><input type="radio" name="TASK_TIME_LIMIT" value="2" checked="checked">自定义</label>
+			        <label class="radio-inline p0"><input type="radio" name="TASK_TIME_LIMIT" value="1">长期有效</label>
+			        <div class="time-wrap time mt5" id="controlTimeWrap">
+						<div class="time-box mr20">
+							<label>从</label>
+							<input class="form-control" id="BEGIN_TIME" name="BEGIN_TIME" value="" type="text" readonly="readonly">
+						</div>
+						<div class="time-box">
+							<label>到</label>
+							<input class="form-control" id="END_TIME" name="END_TIME" value="" type="text" readonly="readonly">
+						</div>			
+					</div>
+		        </div>
+		       <div class="form-group form-group-block">
+                    <label class="control-label">告警等级：</label>
+                    <label class="radio-inline p0">
+                    	<input type="radio" name="TASK_LEVEL" value="1" checked="checked">红色告警
+                    </label>
+                    <label class="radio-inline p0">
+                    	<input type="radio" name="TASK_LEVEL" value="0">黑色告警
+                    </label>
+                    <label class="radio-inline p0">
+                    	<input type="radio" name="TASK_LEVEL" value="2">黄色告警
+                    </label>
+                    <label class="radio-inline p0">
+                    	<input type="radio" name="TASK_LEVEL" value="3">蓝色告警
+                    </label>
+                </div>
+                <div class="form-group form-group-block">
+	                <label class="control-label">告警核查方式：</label>
+	                <label class="checkbox-inline p0">
+	                	<input type="checkbox" class="checkWay" val="1" checked="checked">从算法验证
+	                </label>
+	                <label class="checkbox-inline p0">
+	                	<input type="checkbox" class="checkWay" name="IS_FEISHI" val="2">飞识认证
+	                </label>
+	                 <label class="checkbox-inline p0">
+	                	<input type="checkbox" class="checkWay" name="IS_ARCHIVE" val="3">一人一档认证
+	                </label>
+	                <label class="checkbox-inline p0">
+	                	<input type="checkbox" class="checkWay" val="4">无
+	                </label>
+					<div class="form-group-wrap" id="examineWayWrap">
+						<div class="form-group mb0">
+							<label class="control-label">验证算法:</label>
+							<select class="form-control ml5" id="checkType" name="CHECK_ALGO_TYPE">
+							</select>
+							<script id="checkTypeTmpl" type="x-tmpl">
+								<option value="{%=o.ALGORITHM_ID%}">{%=o.ALGORITHM_NAME%}</option>
+							</script>
+						</div>
+					</div>	                      
+                </div>
+                <div class="form-group form-group-block">
+                  	<label class="control-label" style="vertical-align:top;">告警阈值设置：</label>
+                  	<div class="form-group form-group-wrap ml0 mb5">
+	                  	<label class="control-label">默认阈值：</label>
+	                  	<input type="text" class="threshold form-control" name="THRESHOLD" value="75.00" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+                  	</div>
+                  	<div class="form-group form-group-wrap mb5">
+		                <label class="checkbox-inline p0">
+		                	<input type="checkbox" name="thresholdSetting" val="1">按摄像机设置
+		                </label>
+		                <div class="list-wrap hide" id="cameraList">
+			                <ul class="list-con">
+			                </ul>
+			                <script id="cameraListTemplate" type="x-tmpl">
+							{% for(var i=0;i<o.deviceId.length;i++){ %}
+			                	<li deviceid="{%=o.deviceId[i]%}"><a>
+			                		<span class="deviceName">{%=o.deviceName[i]%}</span>
+			                		<span class="threshold-wrap">
+										<input type="text" class="threshold form-control cameraThreshold" value="{%=o.threshold[i]%}" devicename="{%=o.deviceName[i]%}" deviceid="{%=o.deviceId[i]%}" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+									</span>
+			                	</a></li>
+							{% } %}
+							</script>
+		                </div>
+                  	</div>
+               	</div>
+				<div class="form-group form-group-block">
+			        <label class="control-label">权限控制：</label>
+					<div class="dropdown-list powerWrap">
+						<div class="dropdown-list-text">
+							<span class="list-title" id="powerNames"></span>
+							<input type="hidden" name="PERSON_PERMISSION" id="powerCode">
+							<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+						</div>
+						<div class="dropdown-menu">
+							<ul class="list-con" id="powerNameList">
+							</ul>
+						</div>
+					</div>
+		        </div>
+				<div class="form-group form-group-block">
+			        <label class="control-label">告警提醒方式：</label>
+			        <label class="checkbox-inline p0"><input type="checkbox" name="IS_MSG" checked="checked">短信提醒</label>
+			        <div id="msgWrap" class="pt5" style="margin-left:158px;">
+				        <div class="dropdown-list warnWrap">
+							<div class="dropdown-list-text">
+								<span class="list-title" id="warnNames"></span>
+								<input type="hidden" name="ALARM_REMIND" id="warnCode">
+								<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+							</div>
+							<div class="dropdown-menu">
+								<ul class="list-con" id="warnNameList">
+								</ul>
+							</div>
+						</div>
+			        </div>
+		        </div>
+			</div>
+		</div>
+	</div>
+<div class="window-bottom">
+	<button class="btn btn-sm btn-blue mr5" id="submitBtn" type="button">保存</button>
+	<button class="btn btn-sm btn-white" id="cancelBtn" type="button">关闭</button>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/executeControl/policyCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/executeControl/controlForm.js"></script>
+</html>

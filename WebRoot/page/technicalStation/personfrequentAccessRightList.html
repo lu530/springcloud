@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>查询结果</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/form.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/pageTop.css"/>
+</head>
+<body class="oa">
+<div class="pt0 pager-wrap pager-npt" container="technicalStationScroll">
+<div class="pager-content">
+		<div class="form-header nb">
+			<a class="close-btn" id="closeBtn">×</a>
+			<h3 class="form-title ml20">查询结果</h3>
+		</div>
+		<!-- 页码 -->
+		<div class="page-info-metro square-pager list-wrap full">
+			<div class="action-btn-group hide">
+				<label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall>全选</label>
+				<a class="btn btn-i-t">
+					<i class="btn-icon export-icon"></i>
+					<span>导出</span>
+				</a>
+			</div>
+			<div class="page-wrap">
+				<div class="page-info-metro square-pager">
+		            <div class="page-data tc" listview-page="">
+		                <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+		                <span class="page-num">共有<i class="page-num" listview-counts="">0</i>条记录</span>
+		                <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+		                <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+		            </div>
+		        </div>
+			</div>
+		</div>
+	    <!-- 页码 end -->
+	<div class="tilelist vertical" id="faceTable">
+	<script id="faceTmpl" type="text/x-tmpl">
+		{% for(var i=0; i<o.length; i++) { %} 
+		<div class="list-node-wrap" style="width:auto"> 
+		<dl class="list-node {%=renderTwenty(i+1)%}" page="{%=renderCurrentPage(i+1)%}" index="{%=i%}"  style="width:142px;height:180px;">
+			<dt class="node-img person-img">
+				<span>
+					<img src="{%=o[i].PIC%}" class="rIMG">
+				</span>
+				<p class="text-overflow mb0 mt5 fwb f14 black">{%=o[i].REPEATS%}次</p>
+			</dt>
+		</dl>
+		</div>
+		{% } %}
+	</script>
+	</div>
+	<!-- <div class="page-info-metro tr" listview-page="">
+   		<div class="page-data">
+   			<span class="page-num">总数<i class="page-num" listview-counts="">0</i>条，</span>
+			<a class="page-prev disable" href="#" listview-prev-btn=""><i class="icon-arrow-left7"></i> 上一页</a>
+			<a class="current-page"><i listview-current="">1</i> / <i listview-total="">1</i></a>
+			<a class="page-next disable" listview-next-btn="" href="#">下一页 <i class="icon-arrow-right7"></i></a>
+		</div>					    		
+   	</div> -->
+</div>
+</div>
+<div class="frame-form-full">
+	<iframe class="full-screen" id="frameFormFull" frameborder="0" ></iframe>
+</div>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="/efacecloud/js/technicalStation/mapSelect.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/faceSearchPerson.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/personfrequentAccessRightList.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人员档案库表单</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/form.css" />
+<!--<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/formAdd.css" />-->
+</head>
+<body>
+	<div class="pager-wrap">
+		<div class="container-wrap fixation-wrap">
+			<div class="form-body" id="messageForm">
+				<div class="form-con form-inline mb20 bgwhite">
+					<div class="form-warper">
+						<div class="form-head-title">
+							<i class="icon"></i> <span>添加人员档案</span>
+						</div>
+						<div class="sort-cell">
+							<div class="main-title">
+								<h4>人像信息</h4>
+							</div>
+							<div class="photo-tools">
+								<div class="no-edit" id="picNoEdit"></div>
+								<div class="top-pic-box" style="border: none;">
+									<div class="img-wrap">
+										<img id="filterImg" src="/efacecloud/images/noPhoto2.png"
+											foruploadimg="uploadImg,picBtn"> <input
+											class="file-style searchImgButton" type="file" id="uploadImg"
+											name="uploadImg" />
+									</div>
+									<ul>
+										<li class="re-upload"><i class="icon-image2"></i> <input
+											class="file-style searchImgButton" type="file" id="picBtn"
+											name="picBtn"></li>
+										<li class="del-pic" id="deleteImgBtn"><i
+											class="icon-trash"></i></li>
+									</ul>
+									<input type="hidden" foruploadform="uploadImg,picBtn"
+										name="PIC" ui-validate="required" ui-vtext="人脸图片">
+								</div>
+							</div>
+						</div>
+						<div class="sort-cell">
+							<div class="main-title">
+								<h4>基础信息</h4>
+							</div>
+							<dl class="form-single">
+								<dd class="form-group">
+									<label class="control-label">姓名：</label> <input
+										class="form-control ml5" name="NAME" type="text"
+										maxlength="20"
+										ui-validate="{pattern:'required', maxlength:20}" ui-vtext="姓名">
+									<span class="red">*</span>
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">性别：</label> <label
+										class="radio-inline p0 ml5"><input type="radio"
+										name="SEX" value="1" checked="checked">男</label> <label
+										class="radio-inline p0"><input type="radio" name="SEX"
+										value="2">女</label> <label class="radio-inline p0"><input
+										type="radio" name="SEX" value="0">未知</label>
+								</dd>
+								<!--                         <dd class="form-group">
+                                                     <label class="control-label">数据来源：</label>
+                                                     <select id="DATA_SOURCE" name="DATA_SOURCE" class="form-control ml5" ui-control="databind" ui-options="{data: CONSTANTS.LYLX}"></select>
+                                                     <span class="red">*</span>
+                                                   </dd> -->
+								<!-- <dd class="form-group">
+                              <label class="control-label">数据来源：</label>
+                              <select class="form-control ml5" id="DATA_SOURCE" name="DATA_SOURCE" ui-validate="required" ui-vtext="证件类型">
+                                <option value="-1">其他</option>
+                                <option value="0">自建</option>
+                                <option value="1">火车</option>
+                                <option value="2">民航</option>
+                                <option value="3">汽车</option>
+                                <option value="4">住宿</option>
+                                <option value="5">网吧</option>
+                                <option value="6">出入境</option>
+                                <option value="7">涉警</option>
+                              </select>
+                              <span class="red">*</span>
+                         </dd> -->
+								<dd class="form-group">
+									<label class="control-label">证件类型：</label> <select
+										class="form-control ml5" id="IDENTITY_TYPE"
+										name="IDENTITY_TYPE" ui-vtext="证件类型">
+										<option value="1">身份证</option>
+										<option value="2">护照</option>
+										<option value="3">驾驶证</option>
+										<option value="4">港澳通行证</option>
+									</select> <span class="red">*</span>
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">证件号码：</label> <input
+										class="form-control ml5" name="IDENTITY_ID" id="IDENTITY_ID"
+										type="text" maxlength="20"
+										ui-validate='{pattern:"required,idCard"}' ui-vtext="证件号码">
+									<span class="red">*</span>
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">出生日期：</label>
+									<div class="filter-tag ml5" style="display: inline-block">
+										<div class="opera-group active">
+											<div class="time-control-item">
+												<input class="time-control no-time" id="BIRTHDAY"
+													ui-validate="required" ui-vtext="出生日期" name="BIRTHDAY"
+													readonly type="text"> <i></i>
+											</div>
+										</div>
+									</div>
+									<span class="red">*</span>
+								</dd>
+								<dd class="filter-bar form-group">
+									<label class="control-label">户籍地址：</label>
+									<div class="filter-tag form-control ml5" id="domicile">
+										<script id="childNodeListTemplate" type="x-tmpl">
+									{% for(var i = 0; i< o.length; i++){ %}
+										<label nodeid="{%= o[i].id %}" title="{%= o[i].text %}">{%= o[i].text %}</label>
+									{% } %}
+								</script>
+									</div>
+								</dd>
+								<dd class="filter-bar form-group">
+									<label class="control-label">现住地址：</label>
+									<div class="filter-tag form-control ml5" id="nowAddress">
+									</div>
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">QQ：</label> <input
+										class="form-control ml5" name="QQ" id="QQ" type="text"
+										maxlength="20" ui-validate="{maxlength:20}" ui-vtext="QQ">
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">电话：</label> <input
+										class="form-control ml5" name="TELEPHONE" id="TELEPHONE"
+										type="text" maxlength="11" ui-validate="{maxlength:11}"
+										ui-vtext="电话">
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">微信：</label> <input
+										class="form-control ml5" name="WECHAT" id="WECHAT" type="text"
+										maxlength="50" ui-validate="{maxlength:50}" ui-vtext="微信">
+								</dd>
+								<dd class="form-group">
+									<label class="control-label">工作单位：</label> <input
+										class="form-control ml5" name="WORK_ADDRESS" id="WORK_ADDRESS"
+										type="text" maxlength="200" ui-validate="{maxlength:200}"
+										ui-vtext="工作单位">
+								</dd>
+								<dd class="filter-bar form-group">
+									<label class="control-label">人员标签：</label>
+									<div class="filter-tag form-control nb">
+										<div class="mark-wrap">
+											<div class="mark-list tagslist" id="personTab">
+												<script id="tagTemplate" type="x-tmpl">
+												{% for(var i=0;i<o.length;i++){ %}
+													<span class="tag-item" tagCode="{%=o[i].TAG_CODE%}" dbId="{%=o[i].DB_ID%}" select-type="{%=o[i].TAG_CODE==14||o[i].TAG_CODE==15?2:1%}" >{%=o[i].TAG_NAME%}</span>
+												{% } %}
+											</script>
+											</div>
+											<input type="hidden" name="PERSON_TAG" id="personTagVal"
+												value=""> <input type="hidden" name="PERSON_TAG_DB"
+												id="personTagDb" value="">
+										</div>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+				<div class="form-footer bgwhite">
+					<button class="btn blue-btn btn-big mr15" id="submitBtn"
+						type="button">保存</button>
+					<button class="btn gray-btn btn-big btn-close mr30" type="button">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/library/personnelFileMagAdd.js"></script>
+</html>

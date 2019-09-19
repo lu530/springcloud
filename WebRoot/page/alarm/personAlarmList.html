@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>人脸告警</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/alarm/alarmCommon.css" />
+    <style>
+        #identi:hover {
+            background-color: rgb(76, 114, 213);
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pager-wrap" container="scroll">
+        <div class="pager-content pt0">
+            <div class="page-title pt20 pr">
+                <span>人脸告警</span>
+                <div class="look-task hide">
+                    <span class="icon-look-task"></span> 查看所有告警
+                </div>
+            </div>
+
+            <div class="title-view" id="tabTitle">
+                <span class="tab-btn hide" ref="freqView">
+                    <i class="icon-file-powerpoint"></i>频次分析
+                </span>
+                <span class="tab-btn actives" is_first='false' ref="tabList">
+                    <i class="icon-file-powerpoint"></i>所有告警比中列表
+                </span>
+                <span class="tab-btn hide flyKnowledge" ref="tabList" thirdImpl="true">
+                    <i class="icon-file-powerpoint"></i>二次告警比中列表
+                </span>
+                <span class="tab-btn flyKnowledge" ref="flyKnowledge">
+                    <i class="icon-file-powerpoint"></i>二次告警比中列表
+                </span>
+                <span class="tab-btn hide" ref="sanfeiView" url='/efacecloud/page/alarm/sanfeiAlarmList.html'>
+                    <i class="icon-file-powerpoint"></i>自动识别三非人员
+                </span>
+                <span class="tab-btn" ref="tabDraw">
+                    <i class="icon-file-powerpoint"></i>告警统计
+                </span>
+            </div>
+
+            <div class="tab-content clearfix">
+
+                <div class="tab-pane" id="flyKnowledge" ui-control="listview"
+                    ui-service="face/dispatchedAlarm/grouping/getData" ui-template="personTemplate"
+                    ui-parameters="flyParams" ui-options="{unload:true, toPage: true}">
+                    <!-- 筛选菜单 -->
+                    <div class="filter-view clearfix">
+                        <dl class="filter-bar search-bar">
+                            <dd class="filter-bar-search">
+                                <div class="fifler-group mr5">
+                                    <div class="search-box">
+                                        <input class="search-input searchFlyCon" type="text" placeholder="请输入姓名、证件号码"
+                                            maxlength="20"> <span class="icon-search2 searchFlyBarBtn"></span>
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">相似度阈值：</dt>
+                            <dd class="filter-tag pt2" id="thresholdValidate">
+                                <input class="form-control search-similar searchSimilarCon" placeholder="请输入1-100之间的整数"
+                                    ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">告警时间：</dt>
+                            <dd class="filter-tag ">
+                                <div class="tagslist timelist" id="flyTimeList">
+                                    <span class="tag-item active tagsTime" time-control="jt">今天</span>
+                                    <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                                    <span class="tag-item tagsTime" time-control="bz">本周</span>
+                                    <span class="tag-item tagsTime " time-control="by">本月</span>
+                                    <span class="tag-item tagsTime" time-control="nW">近7天</span>
+                                    <span class="tag-item tagsTime byzdy" time-control="nM">近30天</span>
+                                    <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                                    <div class="opera-group">
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="flyBeginTime" readonly type="text"> <i></i>
+                                        </div>
+                                        <span>-</span>
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="flyEndTime" readonly type="text">
+                                            <i></i>
+                                        </div>
+                                        <button class="btn btn-i-t zdyTimeBtn">确定</button>
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar" id="carPlate">
+                            <dt class="filter-arrt">感知设备：</dt>
+                            <dd class="filter-tag pt3">
+                                <div class="dropdown-list">
+                                    <div class="dropdown-list-text">
+                                        <span class="list-title" id="deviceNames_3"></span>
+                                        <input type="hidden" id="orgCode_3">
+                                        <a class="dropdown hide"> <i class="icon-arrow-down8"></i></a>
+                                    </div>
+                                    <div class="dropdown-menu">
+                                        <ul class="list-con" id="deviceNameList_3" index="3"></ul>
+                                    </div>
+                                </div>
+                                <span class="select-place" id="locate_3"><i class="icon-locate"></i>感知设备</span>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">布控库</dt>
+                            <dd class="filter-tag pt3" id="flyLibrary">
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">排序：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="sortList">
+                                    <span class="tag-item active" type="timeSort">时间</span>
+                                    <span class="tag-item " type="scoreSort">相似度</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">处置状态：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="alarmHandle">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="0">未签收</span>
+                                    <span class="tag-item tagItem" value="1">已签收</span>
+                                    <span class="tag-item tagItem" value="2">未反馈</span>
+                                    <span class="tag-item tagItem" value="3">已反馈</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">告警等级：</dt>
+                            <dd class="filter-tag">
+                                <ul id="colorTags" class="tagslist filter-color">
+                                    <li class="tag-item active active" val=""><span>全部</span></li>
+                                    <li class="tags-list-item" val="0"><span><i class="red"></i>红色（在逃类）</span></li>
+                                    <li class="tags-list-item" val="1"><span><i class="orange"></i>橙色（抓捕类）</span></li>
+                                    <li class="tags-list-item" val="2"><span><i class="yellow"></i>黄色（管控类）</span></li>
+                                    <li class="tags-list-item" val="3"><span><i class="blue"></i>蓝色（关注类）</span></li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">是否在逃：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="ztFilter">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">是</span>
+                                    <span class="tag-item tagItem" value="0">否</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">是否已抓捕：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="captureFilter">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">是</span>
+                                    <span class="tag-item tagItem" value="0">否</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <!-- 算法 -->
+	                    <dl class="filter-bar clearfix arithmetic hide" no-score='true' id="arithmetic">
+	                        <dt class="filter-arrt">算法：</dt>
+	                        <dd class="arithmetic-item">
+	                            <div class="arithmetic-min arithmetic-tools all">
+	                                <span>综合</span>|<i></i>
+	                            </div>
+	                            <div class="arithmetic-max">
+	                                <div class="arithmetic-header clearfix">
+	                                    <div class="arithmetic-name fl">综合</div>
+	                                    <div class="arithmetic-input fr">
+	                                        <input type="text" algo_type="10003"
+	                                            ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="综合"
+	                                            value="60">
+	                                    </div>
+	                                </div>
+	                                <div class="arithmetic-btn"></div>
+	                            </div>
+	                        </dd>
+	                        <script id="ALGTemplate" type="x-tmpl">
+                        <dd class="arithmetic-item">
+                            <div class="arithmetic-min arithmetic-tools" algo_type="{%=o.ALGORITHM_ID%}" score-rate="{%=o.SCORE_RATE%}"><span>{%=o.ALGORITHM_NAME%}</span>|<i></i></div>
+                            <div class="arithmetic-max">
+                                <div class="arithmetic-header clearfix">
+                                    <div class="arithmetic-name fl">{%=o.ALGORITHM_NAME%}</div>
+                                    <div class="arithmetic-input fr">
+                                        <input type="text" algo_type="{%=o.ALGORITHM_ID%}" ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="{%=o.ALGORITHM_DESC%}" value="60">
+                                    </div>
+                                </div>
+                                <div class="arithmetic-btn"></div>
+                            </div>
+                        </dd>
+                    </script>
+	                    </dl>
+	                    <button class="btn-confirm btn hide" id="confirmSearch">确认检索</button>
+                    </div>
+
+                    <div class="page-info-metro square-pager full">
+                        <p class="zt-tips">(<i class="zt-icon-small"></i>表示此人在追逃中)</p>
+                        <div class="action-btn-group ">
+                            <label class="checkbox-inline"><input type="checkbox" id="checkAll"
+                                    listview-checkall="">全选</label>
+                            <a class="btn btn-i-t" title="最大支持导出前1000条数据" id="export">
+                                <i class="btn-icon export-icon"></i> <span>导出</span>
+                            </a>
+                            <a class="btn btn-i-t" id="freshBtn">
+                                <i class="btn-icon fresh-icon"></i> <span>刷新</span>
+                            </a>
+                            <a class="btn btn-i-t hide sureAlarmBtn hide">
+		                        <span class="btn-icon and-set-icon"></span>
+		                        <span>比中批量确认</span>
+		                    </a>
+                        </div>
+                        <div class="page-data fr hide" listview-page="">
+                            <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+                                    class="icon-arrow-left7"></i></a>
+                            <span class="page-num">共有 <i class="page-num" listview-counts="">0</i>条记录,</span>
+                            <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+                            <a class="page-next fr disable" listview-next-btn="" href="#"><i
+                                    class="icon-arrow-right7"></i></a>
+                        </div>
+                        <p class="zt-tips fr mr30">告警总数：<b class="red" id="alarmTotal">0</b></p>
+                    </div>
+                    <!-- list -->
+                    <div class="page-con alarm-card">
+                        <div class="tilelist vertical checkbox listviewImgBox" id="flyList">
+                            <!-- repeat -->
+                            <script id="personTemplate" type="x-tmpl">
+                                    <div class="list-node-wrap" obj_id="{%=o.OBJECT_ID%}">
+                                        {% var flag = o.OBJECT_EXTEND_INFO && JSON.parse(o.OBJECT_EXTEND_INFO) && JSON.parse(o.OBJECT_EXTEND_INFO).ESCAPEE_FLAG; if(flag){  %}
+                                            {% if(parseInt(flag) == 1) { %}
+                                                <i class="zt-icon-big"></i>
+                                            {% } else if(parseInt(flag) == 2) { %}
+                                                <i class="zt-icon-what"></i>
+                                            {% } %}
+                                        {%  }  %}
+                                        {% var extendInfo = o.OBJECT_EXTEND_INFO && JSON.parse(o.OBJECT_EXTEND_INFO), flag = extendInfo && extendInfo.ESCAPEE_FLAG;  %}
+                                        <dl class="list-node oh imgOrder picMessage" data-ACTIVITY_NAME="{%=o.ACTIVITY_NAME%}" data-ACTIVITY_TIME="{%=o.ACTIVITY_TIME%}" data-ACTIVITY_PLACE="{%=o.ACTIVITY_PLACE%}" data-PURCHASER_NAME="{%=o.PURCHASER_NAME%}" data-PURCHASER_SEAT_NO="{%=o.PURCHASER_SEAT_NO%}" >
+                                            <dt class="node-img compare-img three-compare-img">
+                                                <span>
+                                                    <img src="{%=renderImg(o.ALARM_IMG)%}" compareimg="captureZoom" class="mb0"/>
+                                                    <em class="text-overflow" title="抓拍人脸">抓拍人脸</em>
+                                                </span>
+                                                <span>
+                                                    <img src="{%=renderImg(o.TEMPLET_IMG)%}" compareimg="controlZoom" class="mb0"/>
+                                                    <em class="text-overflow" title="布控人脸">布控人脸</em>
+                                                </span>
+                                                <span>
+                                                    <img src="{%=renderImg(o.FS_PIC)%}" compareimg="flyZoom" class="mb0"/>
+                                                    <em class="text-overflow" title="飞识比中人脸">飞识比中人脸</em>
+                                                </span>
+                                                <b class="{%= isBlack?"hide":""%} similar {%=renderColor(o.ALARM_LEVEL)%} b20 mr15"   {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %} key="similar" picMsg="相似度:{%=o.SCORE%}%">{%=o.SCORE%}%</b>
+                                            </dt>
+                                            <dd class="node-text">
+                                                <input type="checkbox" listview-check="" class="checkbox-opacity hide">
+                                                <p class="similar-name" picMsg="档案姓名:{%=renderNullToNotKnow(o.PERSON_NAME)%}">
+                                                    <label>档案姓名：</label>
+                                                    <span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
+                                                    {% if(o.STATUS_TXT){ %}
+                                                    <span class="{%= renderTagColor(o.STATUS_TXT) %} tag">{%= o.STATUS_TXT %}</span>
+                                                    {%  }  %}
+                                                </p>
+
+
+                                                <p style="width:102%;" picMsg="档案证件:{%=renderNullToNotKnow(o.IDENTITY_ID)%}">
+                                                    <label>档案证件：</label>
+                                                    <span title="证件号码：{%=renderNullToNotKnow(o.IDENTITY_ID)%}">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span>
+                                                </p>
+
+
+                                                <p picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+                                                    <label>地点：</label>
+                                                    <span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span>
+                                                </p>
+
+
+
+                                                <p picMsg="告警时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+                                                    <label>告警时间：</label>
+                                                    <span title="告警时间：{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}</span>
+                                                </p>
+
+
+                                                
+                                                <p picMsg="抓拍时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+                                                    <label>抓拍时间：</label>
+                                                    <span title="抓拍时间：{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}</span>
+                                                </p>
+
+
+
+
+                                                <p picMsg="布控库:{%=renderNullToNotKnow(o.DB_NAME)%}">
+                                                    <label>布控库：</label>
+                                                    <span title="{%=renderNullToNotKnow(o.DB_NAME)%}">{%=renderNullToNotKnow(o.DB_NAME)%}</span>
+                                                </p>
+
+
+
+
+                                                {% try { var extraInfo = JSON.parse(o.OBJECT_EXTEND_INFO);  %}
+                                                    {% if(extraInfo.POLICE_STATION_INFO && extraInfo.POLICE_STATION_INFO.IS_SHOW == '1') { %}
+                                                    <p picMsg="当前派出所:{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}">
+                                                        <label>当前派出所:</label>
+                                                        <span title="{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}">{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span>
+                                                    </p>
+                                                    {% } %}
+                                                {% } catch(error) { UI.util.debug(error); } %}
+                                                <p picMsg="比中姓名:{%=renderFields(o.FS_NAME)%}">
+                                                    <label>比中姓名：</label>
+                                                    <span title="{%=renderFields(o.FS_NAME)%}">{%=renderFields(o.FS_NAME)%}</span>
+                                                </p>
+                                                <p picMsg="比中证件:{%=renderFields(o.FS_IDENTITY_ID)%}">
+                                                    <label>比中证件：</label>
+                                                    <span title="{%=renderFields(o.FS_IDENTITY_ID)%}">{%=renderFields(o.FS_IDENTITY_ID)%}</span>
+                                                </p>
+                                                <p picMsg="比中时间:{%=renderFields(o.FS_HIT_TIME)%}">
+                                                    <label>比中时间：</label>
+                                                    <span title="{%=renderFields(o.FS_HIT_TIME)%}">{%=renderFields(o.FS_HIT_TIME)%}</span>
+                                                </p>
+                                                <p class="{%= o.REPEATS == 1?"":"openRepeat open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
+
+								{% if(isBlack){ %}
+								<p class='hide'>
+                                    <label>比中状态:</label>
+									<span class='switch-wrap'>
+                    					<span class='switch-btn switchBtn {%=o.RACE_CONFIRM==1?"active":""%}'>
+                    						<span class="circle"></span>
+                    					</span>
+                    				</span>
+                                </p>
+								<div>
+                                    <label>外籍判定:</label>
+									<span class="alg-tag-wrap">
+										{%= renderAlgo(o.FOREIGN_ALGO_IDS||'')%}
+                    				</span>
+                                </div>
+								{% } %}
+                                                <div class="btn-group w100 clearfix">
+                                                    
+                                                    <span class="" style="width: 100%;display: block;">
+                                                    <a class="btn-i-t btn-xs searchBtn" title="检索" fileUrl="{%=o.ALARM_IMG%}">
+                                                        <i class="btn-icon search-icon"></i>
+                                                    </a>
+                                                    <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.ALARM_IMG%}" zjhm="{%= o.IDENTITY_ID %}">
+                                                        <i class="btn-icon trajectory-icon"></i>
+                                                    </a>
+                                                    
+                                                    <a class="btn-i-t  btn-xs controlDetailBtn" title="布控详情" objectid="{%=o.OBJECT_ID%}">
+                                                        <i class="btn-icon library-icon"></i>
+                                                    </a>
+                                                    <a class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
+                                                        <i class="btn-icon intelligence-icon"></i>
+                                                    </a>
+                                                    <a class="btn-i-t  btn-xs detailBtn" title="详情" ALARM_ID="{%=o.ALARM_ID%}" alarm-level="{%=o.ALARM_LEVEL%}"
+                                                        name="{%=renderFields(o.FS_NAME)%}" idcard="{%=renderFields(o.FS_IDENTITY_ID)%}" time="{%=renderFields(o.FS_HIT_TIME)%}" 
+                                                        alarmtime="{%=o.ALARM_TIME%}" objectid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}" alarm-img="{%= o.ALARM_IMG %}">
+                                                        <i class="btn-icon more-icon"></i>
+                                                    </a>
+                                                    <a class="btn-i-t  btn-xs compareBtn" title="比对">
+                                                        比对
+                                                    </a>
+                                                    {% if(!isBlack) { %}
+                                                    <a class="btn-i-t  btn-xs refreshBtn" title="在逃检测" ALARM_ID="{%= o.ALARM_ID %}" IDENTITY_ID="{%= o.IDENTITY_ID %}">
+                                                        在逃检测
+                                                    </a>
+                                                    {% } %}
+                                                    {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                                    <a class="btn-i-t btn-xs structuredSearch" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
+                                                       结构化检索
+                                                    </a>
+                                                    {% } %}
+                                                    </span>
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </script>
+
+                        </div>
+                    </div>
+                    <!-- list end -->
+                </div>
+
+
+                
+                <div class="pager-wrap" container="scroll" id="dispatchedApprovalList" ui-control="listview"
+                    ui-service="facestore/archivesPerson/getData" ui-template="tableTemplate"
+                    ui-parameters="queryParams" ui-options="{listviewCallback:[getdatatosync],unload:true, toPage: false}" hidden>
+                    <div class="pager-content pr">
+                        <div class="library-info">
+                            <div class="page-con pl10 pr10">
+                                <div class="tilelist" id="dataList">
+                                    <script id="tableTemplate" type="x-tmpl">
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane active" id="tabList" ui-control="listview"
+                    ui-service="face/dispatchedAlarm/grouping/getData" ui-template="listTemplate"
+                    ui-parameters="queryParamsList" ui-options="{unload:true, toPage: true}">
+                    <!-- 筛选菜单 -->
+                    <div class="filter-view clearfix">
+                        <dl class="filter-bar search-bar">
+                            <dd class="filter-bar-search">
+                                <div class="fifler-group mr5">
+                                    <div class="search-box">
+                                        <input class="search-input searchCon" type="text" placeholder="请输入姓名、证件号码"
+                                            maxlength="20"> <span class="icon-search2 searchBarBtn"></span>
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">相似度阈值：</dt>
+                            <dd class="filter-tag pt2" id="thresholdValidateAll">
+                                <input class="form-control search-similar searchSimilarConAll"
+                                    placeholder="请输入1-100之间的整数" ui-validate="{pattern:'integer',max:100,min:1}"
+                                    ui-vtext="阈值应为1-100的整数">
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">告警时间：</dt>
+                            <dd class="filter-tag ">
+                                <div class="tagslist timelist" id="timeTagList">
+                                    <span class="tag-item tagsTime active" time-control="jt">今天</span>
+                                    <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                                    <span class="tag-item tagsTime" time-control="bz">本周</span>
+                                    <span class="tag-item tagsTime " time-control="by">本月</span>
+                                    <span class="tag-item tagsTime" time-control="nW">近7天</span>
+                                    <span class="tag-item tagsTime byzdy" time-control="nM">近30天</span>
+                                    <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                                    <div class="opera-group">
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="beginTime" readonly type="text"> <i></i>
+                                        </div>
+                                        <span>-</span>
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="endTime" readonly type="text">
+                                            <i></i>
+                                        </div>
+                                        <button class="btn btn-i-t zdyTimeBtn">确定</button>
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar" id="carPlate">
+                            <dt class="filter-arrt">感知设备：</dt>
+                            <dd class="filter-tag pt3">
+
+                                <div class="dropdown-list">
+                                    <div class="dropdown-list-text">
+                                        <span class="list-title" id="deviceNames_1"></span>
+                                        <input type="hidden" id="orgCode_1">
+                                        <a class="dropdown hide"> <i class="icon-arrow-down8"></i></a>
+                                    </div>
+                                    <div class="dropdown-menu">
+                                        <ul class="list-con" id="deviceNameList_1" index="1"></ul>
+                                    </div>
+                                </div>
+                                <span class="select-place" id="locate_1"><i class="icon-locate"></i>感知设备</span>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">布控库</dt>
+                            <dd class="filter-tag pt3" id="domicileAll">
+                                <script id="childNodeListTemplateAll" type="x-tmpl">
+                                            {% for(var i = 0; i
+                                            < o.length; i++){ %} <label ORG_CODE="{%=o[i].DB_ID %}" NODE_ID="{%= o[i].DB_ID %}">{%= o[i].DB_NAME %}</label>
+                                                {% } %}
+                                        </script>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">排序：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="sortListAll">
+                                    <span class="tag-item active" type="timeSort">时间</span>
+                                    <span class="tag-item" type="scoreSort">相似度</span>
+                                </div>
+                            </dd>
+                        </dl>
+
+
+
+
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">是否在逃：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="ztFilterAll">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">是</span>
+                                    <span class="tag-item tagItem" value="0">否</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">是否已抓捕：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="captureFilterAll">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">是</span>
+                                    <span class="tag-item tagItem" value="0">否</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt"><span class="flyName"></span>比中：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="zfFilter">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">是</span>
+                                    <span class="tag-item tagItem" value="0">否</span>
+                                </div>
+                            </dd>
+                        </dl>
+
+
+
+
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">处置状态：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="alarmHandleAll">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="0">未签收</span>
+                                    <span class="tag-item tagItem" value="1">已签收</span>
+                                    <span class="tag-item tagItem" value="2">未反馈</span>
+                                    <span class="tag-item tagItem" value="3">已反馈</span>
+                                </div>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar filter-half-bar">
+                            <dt class="filter-arrt">比中类型：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="matchType">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="0">人脸</span>
+                                    <span class="tag-item tagItem" value="1">身份</span>
+                                </div>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">告警等级：</dt>
+                            <dd class="filter-tag">
+                                <ul id="colorTagsAll" class="tagslist filter-color">
+                                    <li class="tag-item active active" val=""><span>全部</span></li>
+                                    <li class="tags-list-item" val="0"><span><i class="red"></i>红色（在逃类）</span></li>
+                                    <li class="tags-list-item" val="1"><span><i class="orange"></i>橙色（抓捕类）</span></li>
+                                    <li class="tags-list-item" val="2"><span><i class="yellow"></i>黄色（管控类）</span></li>
+                                    <li class="tags-list-item" val="3"><span><i class="blue"></i>蓝色（关注类）</span></li>
+                                </ul>
+                            </dd>
+                        </dl>
+
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">确认状态：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="confirmStatus">
+                                    <span class="tag-item active tagItem" value="">全部</span>
+                                    <span class="tag-item tagItem" value="1">准确</span>
+                                    <span class="tag-item tagItem" value="0">不准确</span>
+                                    <span class="tag-item tagItem confirmzdy" value="3">已确认</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        <!-- 算法 -->
+	                    <dl class="filter-bar clearfix arithmetic hide" no-score='true' id="tabListArithmetic">
+	                        <dt class="filter-arrt">算法：</dt>
+	                        <dd class="arithmetic-item">
+	                            <div class="arithmetic-min arithmetic-tools all">
+	                                <span>综合</span>|<i></i>
+	                            </div>
+	                            <div class="arithmetic-max">
+	                                <div class="arithmetic-header clearfix">
+	                                    <div class="arithmetic-name fl">综合</div>
+	                                    <div class="arithmetic-input fr">
+	                                        <input type="text" algo_type="10003"
+	                                            ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="综合"
+	                                            value="60">
+	                                    </div>
+	                                </div>
+	                                <div class="arithmetic-btn"></div>
+	                            </div>
+	                        </dd>
+	                    </dl>
+	                    <button class="btn-confirm btn hide" id="confirmAllSearch">确认检索</button>
+                    </div>
+
+
+
+
+                    <div class="page-info-metro page-info-metro-all square-pager full">
+                        <p class="zt-tips">(<i class="zt-icon-small"></i>表示此人在追逃中)</p>
+                        <div class="action-btn-group ">
+                            <label class="checkbox-inline"><input type="checkbox" id="checkAll"
+                                    listview-checkall="">全选</label>
+                            <a class="btn btn-i-t" id="freqAnalysisBtn">
+                                <span class="btn-icon import-icon"></span> <span>频次分析</span>
+                            </a>
+                            <a class="btn btn-i-t" title="最大支持导出前1000条数据" id="exportAll">
+                                <i class="btn-icon export-icon"></i> <span>导出</span>
+                            </a>
+                            <a class="btn btn-i-t" id="freshBtnAll"> <i class="btn-icon fresh-icon"></i> <span>刷新</span>
+                            </a>
+                            <a class="btn btn-i-t hide sureAlarmBtn hide">
+		                        <span class="btn-icon and-set-icon"></span>
+		                        <span>比中批量确认</span>
+		                    </a>
+                            <a class="btn btn-i-t hide" id="toHisBtn"> <i class="btn-icon morealarm-icon"></i>
+                                <span>更多历史告警</span>
+                            </a>
+                        </div>
+                        <div class="page-data fr" listview-page="">
+                            <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+                                    class="icon-arrow-left7"></i></a>
+                            <span class="page-num">共有 <i class="page-num" listview-counts="">0</i>条记录,</span>
+                            <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+                            <a class="page-next fr disable" listview-next-btn="" href="#"><i
+                                    class="icon-arrow-right7"></i></a>
+                        </div>
+                        <p class="zt-tips fr mr30">告警总数：<b class="red" id="alarmTotalAll">0</b></p>
+                    </div>
+
+
+
+
+
+                    <!-- list -->
+                    <div class="tilelist vertical checkbox listviewImgBox tmplbox">
+                        <!-- repeat -->
+                        <script id="listTemplate" type="x-tmpl">
+                            <div class="list-node-wrap" obj_id="{%=o.OBJECT_ID%}" person-name="{%= renderNullToNotKnow(o.PERSON_NAME) %}" pic = "{%= renderImg(o.TEMPLET_IMG) %}" personId="{%= o.OBJECT_ID %}" identityNum="{%= o.IDENTITY_ID %}" rpID = "{%= o.OBJECT_ID %}" person-tag-name="{%= o.PERSON_TAG_NAME %}" person-tag-code="{%= o.PERSON_TAG %}" birthday="{%= renderSex(o.BIRTHDAY) %}" present-address="{%= renderSex(o.PRESENT_ADDRESS) %}" sex="{%= renderSex(o.SEX) %}" identity-id="{%= o.IDENTITY_ID %}" tagCode ="{%= o.PERSON_TAG %}" telephone="{%= o.TELEPHONE %}"
+                            >
+                                {% var extendInfo = o.OBJECT_EXTEND_INFO && JSON.parse(o.OBJECT_EXTEND_INFO), flag = extendInfo && extendInfo.ESCAPEE_FLAG; %}
+                                {% if(flag && parseInt(flag) == 1) { %}
+                                    <i class="zt-icon-big"></i>
+                                {% } else if(flag && parseInt(flag) == 2) { %}
+                                    <i class="zt-icon-what"></i>
+                                {% } %}
+                                <dl class="list-node oh picMessage activitydata" style="min-height: 345px;" data-ACTIVITY_NAME="{%=o.ACTIVITY_NAME%}" data-ACTIVITY_TIME="{%=o.ACTIVITY_TIME%}" data-ACTIVITY_PLACE="{%=o.ACTIVITY_PLACE%}" data-PURCHASER_NAME="{%=o.PURCHASER_NAME%}" data-PURCHASER_SEAT_NO="{%=o.PURCHASER_SEAT_NO%}" {%= getactivitydata(o)%}>
+                                    <dt class="node-img compare-img" title="点击查看告警详情">
+                                        <span class="compare-large">
+                                            <img src="{%=o.ALARM_IMG%}" class="face">
+                                            <em>抓拍图片</em>
+                                        </span>
+                                        <span class="ml0 compare-small">
+                                            <img src="{%=o.TEMPLET_IMG%}" class="">
+                                            <em>布控图片</em>
+                                        </span> 
+                                        <b class="{%= isBlack?"hide":""%} similar {%=renderColor(o.ALARM_LEVEL)%}"  {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %} key="similar">{%=o.SCORE%}%</b>
+                                    </dt>
+                                    <dd class="node-text mt10 {%= (isBlack && o.THIRDIMPL_HIT == '1')?'fly-bg-wjr':(o.FS_HIT==1 ?'fly-bg' : "") %} {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'identity-confirm' : '' %}">
+                                        <input type="ch(eckbox" listview-check="" class="checkbox-opacity hide">
+                                        <p class="similar-name">
+                                            <label>姓名：</label>
+                                            <span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
+                                            {% if(o.STATUS_TXT) { %}
+                                            <span class="{%= renderTagColor(o.STATUS_TXT) %} tag">{%= o.STATUS_TXT %}</span>
+                                            {% } %}
+                                        </p>
+                                        <!-- 证件号码：{%=renderNullToNotKnow(o.IDENTITY_ID)%} -->
+                                        <p style="width:106%;" picMsg="证件:{%=renderNullToNotKnow(o.IDENTITY_ID)%}"><label>证件：</label><span title="查看四标四实" id="identi" data-zjhm={%= renderNullToNotKnow(o.IDENTITY_ID) %} data-name={%= renderNullToNotKnow(o.PERSON_NAME) %}>{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
+                                        <p picMsg="告警地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}"><label>告警地点：</label><span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span></p>
+                                        <p picMsg="布控库:{%=renderNullToNotKnow(o.DB_NAME)%}"><label>布控库：</label><span title="{%=renderNullToNotKnow(o.DB_NAME)%}">{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
+                                        {% try { var extraInfo = JSON.parse(o.OBJECT_EXTEND_INFO); %}
+
+                                            {% if(extraInfo.POLICE_STATION_INFO && extraInfo.POLICE_STATION_INFO.IS_SHOW == '1') { %}
+                                            <p picMsg="当前派出所:{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}">
+                                                <label>当前派出所：</label>
+                                                <span title="{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}">{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span>
+                                            </p>
+                                            {% } %}
+
+                                        {% } catch(error) { UI.util.debug(error); } %}
+
+                                        {%  if(o.IS_COVER){  %}
+                                        <p picMsg="多脸告警:{%=o.IS_COVER%}"><label>多脸告警：</label><span title="多脸告警：{%=o.IS_COVER%}">{%=o.IS_COVER%}</span></p>
+                                        {%  }  %}
+
+                                        {%  if(o.CONFIRM_STATUS){  %}
+                                        <p picMsg="确认状态:{%=o.CONFIRM_STATUS%}"><label>确认状态：</label><span title="确认状态：{%=o.CONFIRM_STATUS%}">{%=o.CONFIRM_STATUS%}</span></p>
+                                        {%  }  %}
+
+
+                                        <p picMsg="告警时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}"><label>告警时间：</label><span title="告警时间：{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}</span></p>
+
+                                        <p picMsg="抓拍时间:{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.CAPTURE_TIME%}' class='icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>"><label>抓拍时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}</span></p>
+
+                                        <p picMsg="质量分数:{%=renderNullToNotKnow(o.FACE_SCORE)%}"><label>质量分数：</label><span title="质量分数：{%=renderNullToNotKnow(o.FACE_SCORE)%}">{%=renderNullToNotKnow(o.FACE_SCORE)%}</span></p>
+
+                                        <p class="{%= o.REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
+
+								{% if(isBlack){ %}
+								<p class='hide'>
+                                    <label>比中状态:</label>
+									<span class='switch-wrap'>
+                    					<span class='switch-btn switchBtn {%=o.RACE_CONFIRM==1?"active":""%}'>
+                    						<span class="circle"></span>
+                    					</span>
+                    				</span>
+                                </p>
+
+								<div>
+                                    <label>外籍判定:</label>
+									<span class="alg-tag-wrap">
+										{%= renderAlgo(extendInfo.MULIT_ALGO_ALARM_RESULT||'')%}
+                    				</span>
+                                </div>
+								{% } %}
+                                        
+                                        <div class="btn-group w100">
+                                            <span class="tr">
+                                                <a config-control="1" class="btn-i-t btn-xs verification-search hide" title="身份核查" url="{%= o.ALARM_IMG %}"
+                                                    identity-id="{%= o.IDENTITY_ID %}" capture-time="{%= o.CAPTURE_TIME %}"
+                                                    algo-id="{%= algoID %}">
+                                                    身份
+                                                </a>
+                                                <a config-control="2" class="btn-i-t btn-xs trajectory-searchAll hide" title="轨迹分析" url="{%=o.ALARM_IMG%}" zjhm="{%= o.IDENTITY_ID %}">
+                                                    轨迹
+                                                </a>
+                                                <a config-control="3" class="btn-i-t btn-xs searchBtnAll hide" title="检索" fileUrl="{%=o.ALARM_IMG%}">
+                                                    检索
+                                                </a>
+                                                <a config-control="4" class="btn-i-t  btn-xs controlDetailBtn hide" title="布控详情" objectid="{%=o.OBJECT_ID%}">
+                                                    布控
+                                                </a>
+                                                <a config-control="5" class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
+                                                    情报
+                                                </a>
+                                                <a config-control="6" class="btn-i-t  btn-xs detailBtnAll hide" title="详情" data-zjhm="{%= renderNullToNotKnow(o.IDENTITY_ID) %}" ALARM_ID="{%=o.ALARM_ID%}" alarm-level="{%=o.ALARM_LEVEL%}" 
+                                                    isfs="{%=o.FS_HIT%}" name="{%=renderFields(o.FS_NAME)%}" idcard="{%=renderFields(o.FS_IDENTITY_ID)%}" time="{%=renderFields(o.FS_HIT_TIME)%}"
+                                                    alarmtime="{%=o.ALARM_TIME%}" objid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}" alarm-img="{%= o.ALARM_IMG %}">
+                                                    详情
+                                                </a>
+                                                <a config-control="7" class="btn-i-t  btn-xs compareBtn hide" title="比对">
+                                                    比对
+                                                </a>
+                                                {% if(!isBlack) { %}
+                                                <a config-control="8" class="btn-i-t  btn-xs refreshBtn hide" title="在逃检测" ALARM_ID="{%= o.ALARM_ID %}" IDENTITY_ID="{%= o.IDENTITY_ID %}">
+                                                    在逃检测
+                                                </a>
+                                                {% } %}
+                                                <a config-control="9" class="btn-i-t btn-xs btn-more searchPage hide" title="档案 " data-flag="{%=o.IDENTITY_ID%}" >
+                                                        档案
+                                                </a>
+                                                {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                                                <a config-control="10" class="btn-i-t btn-xs structuredSearch hide" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
+                                                   结构化检索
+                                                </a>
+                                                {% } %}
+                                            </span>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            </script>
+                    </div>
+                    <!-- list end -->
+                </div>
+
+                <div class="tab-pane" id="tabDraw">
+                    <!-- 筛选菜单 -->
+                    <div class="filter-view">
+                        <dl class="filter-bar">
+                            <dt class="filter-arrt">告警时间：</dt>
+                            <dd class="filter-tag" style="padding-top: 4px;">
+                                <div class="tagslist" id="timeTagDraw">
+                                    <!-- <span class="tag-item" time-control="jt" val="1">今天</span>
+                                        <span class="tag-item" time-control="zt" val="2">昨天</span>
+                                        <span class="tag-item" time-control="bz" val="3">本周</span>
+                                        <span class="tag-item" time-control="by" val="4">本月</span>
+                                        <span class="tag-item active" time-control="nW" val="5">近7天</span> 
+                                        <span class="tag-item" time-control="nM" val="6">近30天</span> 
+                                        <input class="time-control" id="beginTimeDraw" readonly>
+                                        <input class="time-control" id="endTimeDraw" readonly> -->
+                                    <div class="opera-group" style="display: block;">
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="beginTimeDraw" readonly type="text"><i></i>
+                                        </div>
+                                        <span>-</span>
+                                        <div class="time-control-item">
+                                            <input class="time-control" id="endTimeDraw" readonly type="text"
+                                                disabled><i></i>
+                                        </div>
+                                        <button class="btn btn-i-t zdyTimeBtn">确定</button>
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+                        <!-- <dl class="filter-bar" id="carPlate">
+                                <dt class="filter-arrt">感知设备：</dt>
+                                <dd class="filter-tag pt3">
+
+                                    <div class="dropdown-list">
+                                        <div class="dropdown-list-text">
+                                            <span class="list-title" id="deviceNames_2"></span> <input type="hidden" id="orgCode_2">
+                                            <a class="dropdown hide"> <i class="icon-arrow-down8"></i>
+                                            </a>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <ul class="list-con" id="deviceNameList_2" index="2"></ul>
+                                        </div>
+                                    </div>
+                                    <span class="select-place" id="locate_2"><i
+                                        class="icon-locate"></i>感知设备</span>
+                                </dd>
+                            </dl> -->
+                        <!-- <dl class="filter-bar">
+                                <dt class="filter-arrt">布控库</dt>
+                                <dd class="filter-tag pt3" id="domicile">
+                                </dd>
+                            </dl> -->
+                        <script id="childNodeListTemplate" type="x-tmpl">
+                                {% for(var i = 0; i
+                                < o.length; i++){ %} <label ORG_CODE="{%=o[i].DB_ID %}" NODE_ID="{%= o[i].DB_ID %}">{%= o[i].DB_NAME %}</label>
+                                    {% } %}
+                            </script>
+                        <!-- <dl class="filter-bar">
+                                <dt class="filter-arrt">统计数据：</dt>
+                                <dd class="filter-tag">
+                                    <div class="tagslist" id="statistical">
+                                        <span class="tag-item tabItem active" attr-type="total">全部告警</span>
+                                        <span class="tag-item tabItem" attr-type="fsbz">二次告警比中</span>
+                                    </div>
+                                </dd>
+                            </dl> -->
+                    </div>
+
+                    <div class="tab-view hide">
+                        <ul class="tab-view-type" id="drawType">
+                            <li class="active" ref="type">预警类型统计</li>
+                            <li class="" ref="area">预警区域统计</li>
+                        </ul>
+                    </div>
+                    <!-- draw -->
+                    <div class="tab-content page-con">
+                        <div class="tab-pane  active" id="type">
+                            <div class="draw-view pb20 pt10" id="drawView"></div>
+                        </div>
+                        <div class="tab-pane " id="area">
+                            <div class="draw-view" id="drawViewArea"></div>
+                        </div>
+                    </div>
+                    <!-- draw end -->
+                </div>
+
+                <!-- three -->
+                <div class="tab-pane freq-view title-sib" id="freqView">
+                    <iframe class="full-screen" src="/efacecloud/page/alarm/alarmStatistics.html"
+                        frameborder="0"></iframe>
+                </div>
+                <!-- three end -->
+                <!-- 三非 -->
+                <div class="tab-pane freq-view title-sib" id="sanfeiView">
+                    <iframe class="full-screen" frameborder="0"></iframe>
+                </div>
+                <!-- 三非 end -->
+            </div>
+            <div class="frame-form-full">
+                <iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+    <iframe class="alarm-export hide" id="alarmExport" frameborder="0"></iframe>
+</body>
+<script type="text/javascript">
+    function getactivitydata(data) {
+        top.ACTIVITY_NAME = data.ACTIVITY_NAME;
+        top.ACTIVITY_TIME = data.ACTIVITY_TIME;
+        top.ACTIVITY_PLACE = data.ACTIVITY_PLACE;
+        top.PURCHASER_NAME = data.PURCHASER_NAME;
+        top.PURCHASER_SEAT_NO = data.PURCHASER_SEAT_NO;
+    }
+</script>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/chart/echarts.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js?v=20180826"></script>
+<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/personAlarmList.js?v=20190826"></script>
+
+</html>

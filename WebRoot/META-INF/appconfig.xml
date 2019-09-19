@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+	<param key="FACE_SIMILARITY" name="人脸相似度阈值" type="String" description="人脸相似度阈值:0-100">70</param>
+
+	<param key="APP_FACE_ADDRESS" name="人脸APP提取特征地址" type="String" description="人脸APP提取特征地址"></param>
+	<param key="FACE_COMPARE_JOB" name="是否启用人脸APP提取特征，0禁用1启用" type="String" description="是否启用人脸APP提取特征，0禁用1启用">0</param>
+	<param key="COMPARE_CRON" name="人脸APP提取特征任务周期表达式" type="String" description="人脸APP提取特征任务周期表达式">15 */1 * * * ?</param>
+	<param key="FACE_INDICE_BEGIN_MONTH" name="人脸抓拍索引起始月份，yyMM" type="String" description="人脸索引起始月份,yyMM">1707</param>
+	<param key="SEARCH_HOT_DATA" name="是否启用基于内存ES集群1:N检索，0禁用1启用" type="String" description="是否启用基于内存ES集群1:N检索，0禁用1启用">0</param>
+	<param key="VRS_ALGO_TYPE" name="人脸算法类型，只能配置一个" type="String" description="10001云从2.6人脸算法 ；10002云从3.1人脸算法，10003云从3.5人脸算法，默认算法类型；20000依图人脸算法；30000像素人脸算法,80002华云黑人算法">10003</param>
+	<param key="VRS_ALGO_TYPES" name="人脸多算法类型，可多个，用于路人检索" type="String" description="10001云从2.6人脸算法 ；10002云从3.1人脸算法，10003云从3.5人脸算法，默认算法类型；20000依图人脸算法；30000像素人脸算法,80002华云黑人算法">10003</param>
+	<param key="BATCH_IMPORT_SIZE" name="批量导入单次数量" type="String" description="批量导入单次数量">100</param>
+	<param key="BATCH_IMPORT_SLEEP" name="批量导入单次睡眠时间(秒)" type="String" description="单位秒">60</param>
+	<param key="ENABLE_SEND_SMS" name="是否启用发送短信功能，0禁用1启用" type="String" description="是否启用发送短信功能，0禁用1启用">0</param>
+	<param key="FACE_INFO_MEM_INDICE_PREFIX" name="内存es索引前缀" type="String" description="内存es索引前缀">face_info_mem</param>
+   	<param key="MEM_ES_MONTH_INTERVAL" name="内存索引保存月份间隔,既保存最近几个月的数据" type="String" description="内存索引保存月份间隔,既保存最近几个月的数据">3</param>
+
+	<param key="FACE_N_WIFI_INTERVAL" name="人脸wifi碰撞跟随时间，单位（分钟）" type="String" description="人脸wifi碰撞跟随时间，单位（分钟）">1</param>
+	
+	<param key="MAX_FACE_SEARCH_COUNT" name="人脸库查询最大记录条数（非内存es）" type="String" description="人脸库查询最大记录条数（非内存es）">10000000</param>
+	<param key="MAX_HOT_FACE_SEARCH_COUNT" name="基于内存ES人脸库查询最大记录条数" type="String" description="基于内存ES人脸库查询最大记录条数">10000000</param>
+	
+	<param key="FACE_N2N_THRESHOLD" name="N:N检索阈值" type="String" description="N:N检索阈值">80000</param>
+	
+	<param key="RED_LIST_OPEN" type="String" name="是否开启涉红名单检索过滤" description="0不开启，1开启">0</param>
+   	<param key="RED_SIMILARITY" type="String" name="红名单检索阈值(0-100，建议80分以上)" description="红名单检索阈值(0-100，建议80分以上)">80</param>
+   	<param key="RED_APPROVAL_SEND_PHONE" type="String" name="红名单审批发送手机号码,逗号分隔" description="红名单审批发送手机号码,逗号分隔"></param>
+   	<param key="SEARCH_CAUSE_OPEN" type="String" name="是否开启操作事由" description="0不开启，1开启">0</param>
+   	<param key="FACE_TYPE_ALGO_TYPES" type="String" name="人脸分类算法" description="人脸分类算法"></param>
+   	<param key="POLICE_TASK_TIMEOUT" type="String" name="警情处置超时设置" description="警情处置超时设置。单位：分钟 ">3</param>
+   	<param key="FED_BACK_JSON" type="String" name="反馈json" description="反馈json ">[{'name':'是否出警','type':'show','key':'IS_POLICE_OUT','是':[{'key':'IS_FOUND'},{'key':'NOTE'}],'否':[{'key':'IS_CANCEL_DISPATCHED'}]},{'name':'是否发现可疑人员','type':'hide','key':'IS_FOUND','是':[{'key':'IS_CONTROL'},{'key':'NOTE'}],'否':[]},{'name':'是否已控制可疑人员','type':'hide','key':'IS_CONTROL','是':[{'key':'IS_CONSISTENT'},{'key':'NOTE'}],'否':[{'key':'NOTE'}]},{'name':'可疑人员身份是否与告警一致','type':'hide','key':'IS_CONSISTENT','是':[{'key':'NOTE'}],'否':[{'key':'NOTE'}]},{'name':'是否撤控','type':'hide','key':'IS_CANCEL_DISPATCHED','是':[],'否':[{'key':'IS_SEX_MATCHING'},{'key':'IS_IDENTITY_ID_MATCHING'},{'key':'IS_APPEARANCE_MATCHING'}]},{'name':'性别是否一致','type':'hide','key':'IS_SEX_MATCHING','是':[{'key':'OTHER'}],'否':[{'key':'OTHER'}]},{'name':'年龄是否一致','type':'hide','key':'IS_IDENTITY_ID_MATCHING','是':[{'key':'OTHER'}],'否':[{'key':'OTHER'}]},{'name':'样貌是否一致','type':'hide','key':'IS_APPEARANCE_MATCHING','是':[{'key':'OTHER'}],'否':[{'key':'OTHER'}]},{'name':'是否有其他不出警理由','showTheCondition':{'IS_SEX_MATCHING':'1','IS_IDENTITY_ID_MATCHING':'1','IS_APPEARANCE_MATCHING':'1'},'type':'hide','key':'OTHER','是':[{'key':'NOTE'}],'否':[]},{'name':'备注','type':'show','key':'NOTE'}]</param>
+   	<param key="MASK_IDENTITYID_AND_NAME" name="一人一档导入对身份生和姓名脱敏处理" description="一人一档导入对身份生和姓名脱敏处理 0不开启，1开启" type="String">0</param>
+   	
+   	<param key="YITU_FACE_SEARCH_URL" type="String" name="依图1:n人脸比对" description="依图1:n人脸比对">http://68.26.12.4:9082/service/business/api/retrieval_repository</param>
+   	
+   	<param key="RELATIVE_POLICESTATION_INFO_INTERVAL" type="String" name="人脸告警详情查询最近某个人告警列表的派出所信息的时间间隔，单位（天）0禁用" description="查询最近（如7天）某个人告警列表的其他派出所信息，单位（天）0禁用">0</param>
+   	<param key="NEED_DISPATCHED_PERSON_STATUS" type="String" name="是否开启人员布控状态功能" description="是否开启人员布控状态功能">0</param>
+	<param key="IS_PERSONEL_CONTROL_ELABORATION" name="人员布控精细化配置配置" description="人员布控、人脸告警，精细选项配置，0不开启，1开启，默认不开启" type="String">0</param>
+	<param key="HISTORY_ALARM_DEFAULT_TAB" name="历史告警页面默认显示tab页" description="历史告警页面默认显示tab页。1：默认显示所有告警  2：默认显示二次告警" type="String">1</param>
+	<param key="SECOND_ALARM_PAGE" name="二次告警使用的页面" description="二次告警使用的页面。1：飞识 接口 2：其他三方接口" type="String">1</param>
+	
+	<param key="FACEALARM_CARD_OPERATION" name="人脸告警卡片底部操作按钮配置，身份-轨迹-检索-布控-情报-详情-比对-在逃检测-档案-结构化检索" 
+	description="人脸告警列表卡片底部操作按钮配置，按照名称的顺序，0不开启，1开启" type="String">1,1,1,1,1,1,1,1,1,1</param>
+	
+	
+	<param key="MOCKYITU_JSON_URL" name="模拟依图json的url" description="如果该url不为空窜,则模拟返回依图json,而不是实际调用接口返回的" type="String"></param>
+	
+	<param key="FACE_MAINTAIN" name="多脸维护是否开启，0关闭，1开启，默认开启" description="多脸维护是否开启，0关闭，1开启，默认开启" type="String">0</param>
+	
+	<param key="CATCH_CONFIRM" name="确认抓捕自动撤控否开启，0关闭，1开启，默认关闭" description="确认抓捕自动撤控否开启，0关闭，1开启，默认关闭" type="String">0</param>
+	
+	
+</config>

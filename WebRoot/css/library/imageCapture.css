@@ -1,0 +1,72 @@
+.window-content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+}
+.image-content{
+    height: 100%;
+    margin-right: 400px;
+    padding: 25px;
+    border-right: 1px solid #ccc;
+}
+.list-content{
+    width: 400px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: auto;
+    padding: 25px;
+}
+#imgListCon{
+    position: absolute;
+    width: 320px;
+    height: 250px;
+    line-height: 250px;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+.raphael-img-list{
+    position: relative;
+}
+.raphael-img-list .img-item{
+    width: 104px;
+    text-align: center;
+    display: block;
+    margin: 0;
+    height: 103px;
+    margin: 0 0 10px 10px;
+    position: relative;
+  }
+  
+ 
+.raphael-img-list .img-view{
+    width: 100%;
+    background: #F7F7F7;
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+}
+.raphael-img-list .img-shot{
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+.raphael-img-list .img-bg{
+    position: absolute;
+    left:0;
+    right: 0;
+    display: block;
+    background-repeat: no-repeat;
+}
+ 
+.window-bottom button.btn{
+    width: 65px;
+    padding: 3px 0;
+}

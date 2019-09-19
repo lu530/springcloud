@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>红名单管理</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/lookupReasonForm.css" />
+</head>
+<body class="oh">
+	<div class="form-con form-inline">
+		<div class="form-warper">
+			<div class="sort-cell">
+				<dl class="form-single">
+					<!-- <dd class="form-group">
+						<label class="control-label red">[提示]：</label>
+						<div class="ml5 red" style="display: inline-block;">案件名称/案件编号回车或者点击放大镜可查询历史查询条件</div>
+					</dd> -->
+					<dd class="form-group">
+						<label class="control-label">案情类型：</label> 
+						<label class="radio-inline p0 ml5"><input type="radio" name="CASE_ID_TYPE" value="0" checked="checked">案件</label> 
+						<label class="radio-inline p0"><input type="radio" name="CASE_ID_TYPE" value="1">警情</label>
+						<label class="radio-inline p0"><input type="radio" name="CASE_ID_TYPE" value="2">其他</label>
+					</dd>
+					<dd class="form-group caseItem case-list">
+						<label class="control-label caseName">案件名称：</label>
+						<div class="search-box menu-search-box">
+							<input class="search-input" name="CASE_NAME" listsearch="searchName" type="text" maxlength="100" ui-validate="required" ui-vtext="案件名称" placeholder="请输入案件名称">
+							<span class="icon-arrow-down10" id="searchName" listid="caseNameCon"></span>
+						</div>
+						<div class="dropdown-menu">
+							<ul class="list-con" id="caseNameCon"></ul>
+						</div>
+						<span class="red">*</span>
+					</dd>
+					<dd class="form-group caseItem case-list">
+						<label class="control-label caseId">案件编号：</label>
+						<div class="search-box menu-search-box">
+							<input class="search-input" name="CASE_ID" listsearch="searchId" type="text" maxlength="25" ui-validate="required" ui-vtext="案件编号" placeholder="请输入案件编号">
+							<span class="icon-arrow-down10" id="searchId" listid="caseIdCon"></span>
+						</div>
+						<div class="dropdown-menu">
+							<ul class="list-con" id="caseIdCon"></ul>
+						</div>
+						<span class="red">*</span>
+					</dd>
+					<dd class="form-group reasonItem">
+						<label class="control-label">操作事由：</label>
+						<label class="radio-inline p0 ml5"><input type="radio" name="CAUSE_TYPE" value="0" checked="checked">管控</label> 
+						<label class="radio-inline p0"><input type="radio" name="CAUSE_TYPE" value="1">侦查</label>
+						<label class="radio-inline p0"><input type="radio" name="CAUSE_TYPE" value="2">便民服务</label>
+						<label class="radio-inline p0"><input type="radio" name="CAUSE_TYPE" value="3">其它</label>
+						<span class="red">*</span>
+					</dd>
+					<dd class="form-group otherReasonItem hide">
+						<label class="control-label"></label>
+						<textarea class="form-control ml5 w50" style="height:70px;" name="SEARCH_CAUSE" maxlength="200" placeholder="操作事由" ui-vtext="操作事由"></textarea>
+						<span class="red">*</span>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="form-footer tc">
+		<button class="btn btn-primary mr15" id="submitBtn" type="button">保存</button>
+		<button class="btn btn-gray" id="cancelBtn" type="button">关闭</button>					
+	</div>		
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/lookupReasonForm.js"></script>
+</html>

@@ -1,0 +1,209 @@
+.form-con{
+	top: 75px;
+	position: static;
+	margin-top: 30px;
+}
+.form-warper{
+	width: 100%;
+}
+.form-warper dl{
+	padding-left: 20px;
+}
+.form-con .control-label{
+	width: 122px;
+	text-align: left;
+	color: #666666;
+}
+.form-con .form-control{
+	border-radius: 5px;
+}
+.tag-item-form{
+	background:#d9d9d9;
+	color: #fff;
+	padding: 4px 20px 4px 8px;
+	border-radius: 3px;
+	position: relative;
+	margin-right: 10px;
+}
+.tag-item-form:hover{
+	background: #4877d3;
+}
+.form-con .tag-box{
+	height: 34px;
+    padding: 8px 6px;
+}
+.close-btn{
+	position: absolute;
+	right: 4px;
+	top: 0px;
+	bottom: 0;
+	font-size: 18px;
+	color: #999999;
+	cursor: pointer;
+}
+.tag-item-form:hover .close-btn{
+	color:#fff;
+}
+.dropdown-list .dropdown-list-text .dropdown{
+	text-align: right;
+	padding-right: 4px;
+}
+.dropdown-list .dropdown-list-text .dropdown{
+	position: absolute;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    line-height: 30px;
+}
+.video-resource-text{
+	position: absolute;
+	right: 32px;
+    left: 0;
+    height: 100%;
+    padding-left: 10px;
+}
+.loaction-select{
+	cursor: pointer;
+	color:  #4877d3;
+}
+.loaction-select span{
+	margin-left: 3px;
+}
+.form-con .form-single .form-group{
+	margin-bottom: 26px;
+}
+.time-wrap{
+	display: block;
+    margin-left: 131px;
+    margin-top: 10px;
+}
+.time-control-item {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+    margin-top: -2px;
+}
+.opera-group.active {
+    float: none;
+    display: inline-block;
+    margin-top: -6px;
+}
+.opera-group.active {
+    display: block;
+    float: right;
+    vertical-align: middle;
+}
+.time-control-item {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+    margin-top: -2px;
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+.form-con .time-control {
+   display: inline-block;
+    cursor: pointer;
+    background-color: transparent;
+    width: 222px;
+    float: none;
+    height: 32px;
+    text-indent: 44px;
+    padding: 4px;
+    color: #7f8ea1;
+    background: url(/efacecloud/images/calendar.png) no-repeat;
+    background-position: 198px 9px;
+    line-height: 22px;
+    border: none;
+}
+.time-control-item i {
+    background: transparent url(/efacecloud/images/btn-icon.png);
+    height: 32px;
+    width: 30px;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.time-control-item i {
+    background-position: -166px -8px;
+    left: auto;
+    right: 0;
+    z-index: -1;
+}
+.time-text{
+	color: #fff;
+	background: #4877d3;
+	display: inline-block;
+	position:  absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	line-height:  30px;
+	width: 30px;
+	text-align:  center;
+}
+.ml131{
+	margin-left: 131px;
+}
+.form-con .sub-label{
+	width: auto;
+	margin-right: 5px;
+	margin-top: 6px;
+}
+.form-con .form-single .form-control-input {
+    width: 200px;
+}
+.form-con .form-single .threshold{
+	width: 80px;
+}
+.video-set input,.video-set span{
+	vertical-align: top;
+	font-size: 14px;
+	color: #333333;
+	font-weight: normal;
+}
+.add-icon {
+	background: url(/efacecloud/images/btnIcon.png);
+    background-position: -9px -248px;
+    width: 17px;
+    height: 16px;
+    display: inline-block;
+}
+.form-control,.dropdown-list{
+  border-color: #eaeaea;
+}
+.remind-way input{
+	vertical-align: top;
+}
+.unremind{
+	color: #cdcdcd;
+}
+.unremind-line{
+	width: 1px;
+	background: #cdcdcd;
+	display: inline-block;
+	height: 14px;
+	position: relative;
+    top: 3px;
+    margin-left: 20px;
+    margin-right: 10px;
+}
+.form-con .form-single .message-remind{
+	width: 108px;
+}
+.form-con .form-single .message-remind .form-control-input{
+	width: 100%;
+}
+.remind-select{
+	margin-left: 20px;
+	position: relative;
+    top: 2px;
+}
+.threshold-input{
+	display: inline-block;
+}

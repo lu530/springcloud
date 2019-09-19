@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>查询结果</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/timeAxis.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/pageTop.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/trackFaceRightList.css" />
+</head>
+<body>
+	<div class="wrap pager-wrap pager-npt" id="wrapBody" container="technicalStationScroll">
+		<div class="pager-content">
+				<div class="form-header nb">
+					<a class="close-btn" id="closeBtn">×</a>
+					<h3 class="form-title ml20">查询结果</h3>
+				</div>
+				<div class="tool-bar fr mr10 multiple hide">
+					<button class="btn btn-gray" id="generatingLocusBtn">生成轨迹</button>
+				</div>
+				<!-- <div class="tool-bar fr mr10 multiple hide">
+			<button class="btn btn-gray" id="trajectoryGeneBtn">生成轨迹2</button>
+		</div> -->
+				<!-- <div class="clearfix list-wrap">
+			<div class="tool-bar right-bar fr mr10 gangs  hide">
+				<span class="tool-btn hide"><i class="icon-tool icon-out"></i> 导出</span>
+				<span class="tool-btn" id="gangsAnalysisBtn"><i class="icon-tool icon-track"></i> 团伙分析</span>
+			</div>
+		</div> -->
+				<!-- 页码 -->
+				<div class="page-info-metro square-pager list-wrap full">
+					<div class="action-btn-group">
+						<label class="checkbox-inline"><input type="checkbox" id="checkAll">全选</label>
+						<a class="btn btn-i-t hide"> <i class="btn-icon export-icon"></i>
+							<span>导出</span>
+						</a> 
+						<a class="btn btn-i-t disabled" id="gangsAnalysisBtn"
+							title="生成轨迹至少勾选两条记录！"> <i class="icon-tool icon-track"></i> <span>同伙分析</span>
+						</a>
+						<a class="btn btn-i-t disabled" id="gjSearch" > 
+							<span class="btn-icon gjsearch-icon"></span>
+							<span>轨迹查看</span>
+						</a>
+					</div>
+				</div>
+				<!-- 页码 end -->
+			<div class="people-list listviewImgBox">
+				<script id="personTmpl" type="text/x-tmpl">
+			{% for(var  i=0;i<o.length;i++){ %}
+				<div class="dis-table">
+					<!--<h4 class="date-style">{%=o[i].DATE_TIME%}</h4>-->
+					<div class="date-style dis-table-cell" style="width:98px;">
+						<div class="day-block"><b class="f18">{%= dayTimeFormat(o[i].DATE_TIME)[1] +'-'+ dayTimeFormat(o[i].DATE_TIME)[2] %}</b><b style="display: block;">{%= dayTimeFormat(o[i].DATE_TIME)[0] %} </b></div>	
+						<div class="timeline">
+							<span class="circle-top">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+							<span class="line"></span>
+							<span class="circle-bottom">
+								<img src="/efacecloud/images/icon-circle.png">
+							</span>
+						</div>
+					</div>
+					<div class="dis-table-cell">
+					{% for(var j=0;j<o[i].LIST.length;j++){ %}
+							<div class="clearfix">
+								<p class="address-style">{%=o[i].LIST[j].PLACE%}</p>
+								{% for(var k=0, obj=o[i].LIST[j].LIST;k<obj.length;k++){ %}
+									<dl class="list-node mt0 mb5 pr p0 pb5 picMessage" style="width:132px;">
+										<dt class="node-img vertical w100 pr m0">
+											<span class="m0" attrimg='doublezoom'>
+												<img class="rIMG test hide" src= "{%=obj[k].BIG_PIC %}">
+												<img class="rIMG test" src= "{%=obj[k].OBJ_PIC%}">
+											</span>
+											<p class="text-overflow mb0 mt5 black" picMsg="时间:{%= showTime(obj[k].TIME)%}">{%= showTime(obj[k].TIME)%}</p>
+											<p class="lb-elm text-overflow mb0 mt5 tc">
+												<input class="mr5 gangs-checkbox" type="checkbox" index="{%=i+'-'+j+'-'+k%}"/>
+											</p>
+											<span class="rb-elm" picMsg="相似度:{%=formatScore(obj[k].SCORE)%}%">
+												<b class="orange">{%=formatScore(obj[k].SCORE)%}%</b>
+											</span>
+										</dt>
+										<div class="btn-group fr">
+											<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=obj[k].OBJ_PIC%}">
+												<i class="btn-icon verification-icon"></i>
+											</a>
+											<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=obj[k].OBJ_PIC%}">
+												<i class="btn-icon trajectory-icon"></i>
+											</a>
+										</div>
+									</dl>
+								{% } %}
+							</div>
+
+
+
+
+					{% } %}
+					</div>
+				</div>
+			{% } %}
+		</script>
+
+				<!-- {% if(pageType == 'gangs'){ %} -->
+			</div>
+		</div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen" name="frameFormFull" id="frameFormFull" frameborder="0"></iframe>
+	</div>
+
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/trackFaceRightList.js"></script>
+</body>
+</html>

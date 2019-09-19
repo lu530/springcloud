@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>查看设备表</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">
+<style>
+	.hadData td{
+		color: #445aa3 !important;
+	}
+</style>
+</head>
+
+<body class="oa">
+	<!-- 本页面仅供开发使用 -->
+	<div class="page-info-metro square-pager full">
+            <div class="action-btn-group">
+                <a class="btn btn-i-t" title="最大支持导出1000条数据" id="export">
+                    <i class="btn-icon export-icon"></i>
+                    <span>导出</span>
+                </a>
+            </div>
+        </div>
+	<div class="table-wrap">
+		<table class="table listBox" cellspacing="0" cellpadding="0">  
+	        <thead>             
+	            <tr> 
+	                <th class="w20 tc"><span>设备名称</span></th>      
+	                <th class="w20 tc"><span>设备IP</span></th> 
+	                <th class="w20 tc"><span>设备编号</span></th> 
+	                <th class="w20 tc"><span>采集量</span></th>      
+	                <th class="w20 tc"><span>行政区域</span></th>
+	            </tr>
+	        </thead>
+	        <tbody class="listviewImgBox"></tbody>
+	    </table>
+	</div>	
+    <script id="faceTableTemplate" type="x-tmpl">
+    	{% for(i = 0;i<o.length; i++){ %}
+        <tr class="picMessage{%=o[i].NUMBER?' hadData':''%}">
+            <td class="tc">{%=o[i].NAME||'--'%}</td>
+            <td class="tc">{%=o[i].IP_ADDR||'--'%}</td>
+            <td class="tc">{%=o[i].DEVICE_ID||'--'%}</td>
+            <td class="tc">{%=(o[i].NUMBER==0?'0':o[i].NUMBER)||''%}</td>
+            <td class="tc">{%=o[i].ORG_NAME||'--'%}</td>
+        </tr>
+        {% } %}
+    </script>
+</body>
+<script type="text/javascript" src="/gis/js/es5-shim.js"></script>
+<script type="text/javascript" src="/gis/js/es5-sham.js"></script>
+<script type="text/javascript" src="/gis/js/json2.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/gis/js/suntekmapAPI.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-map.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script>
+	UI.control.remoteCall('face/equipment/query', {}, function (resp) {
+		var data = resp.data.existencemap.concat(resp.data.notData);
+		$(".listviewImgBox").html(tmpl("faceTableTemplate",data));
+	});
+	$("#export").click(function() {
+		console.log(123);
+        var url = UI.control.getRemoteCallUrl("face/equipment/exportFace");
+        bigDataToDownload(url, "exportFrame", {});
+    });
+</script>
+</html>

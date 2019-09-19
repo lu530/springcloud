@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>人员信息</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/verificationExpand.css" /> -->
+    <style>
+    .page-content{
+        width: 100%;
+        height: 100%;
+		padding:15px;
+    }
+    .node-img.person-img{
+        float: left;
+        width: 260px;
+    }
+    .node-text{
+        float: left;
+    }
+    .msg-wrap{
+	    padding:15px;
+	    margin-bottom: 15px;
+    }
+	.table-content{
+		padding-left: 280px;
+	}
+	.table-content p{
+		width: 50%;
+		float: left;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+    </style>
+</head>
+<body>
+    <div class="page-content" id="tableContent">
+
+	<script type="x-tmpl" id="tableTemplate">
+		{% for(var i=0;i<o.length;i++){ %}
+            <div class="list-node-wrap ellipsis-wrap" personId="{%=o[i].PERSON_ID %}" identityNum="{%=o[i].IDENTITY_ID %}">
+                <dl class="msg-wrap clearfix">
+                    <dt class="node-img person-img">
+                        <span>
+                            <img src="" class="rIMG peoplePic w100" attrimg="zoom">
+                        </span>
+                    </dt>
+					
+                    <dd class="table-content">
+                        <p>
+                            <label><i class="data-source-icon"></i>入境签证种类:</label>
+                            <span class="ellipsis-list" title="{%= o[i].accede009 && o[i].accede009.value %}">{%= renderNullToNotKnow(o[i].accede009 && o[i].accede009.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>性别:</label>
+                            <span class="ellipsis-list" title="{%= o[i].gender.value %}">{%= renderNullToNotKnow(o[i].gender && o[i].gender.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>预期停留天数数字:</label>
+                            <span class="ellipsis-list" title="{%= o[i].intendDayNum %}">{%= renderNullToNotKnow(o[i].intendDayNum && o[i].intendDayNum) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>签发机关:</label>
+                            <span class="ellipsis-list" title="{%= o[i].grantCertOrg.value %}">{%= renderNullToNotKnow(o[i].grantCertOrg && o[i].grantCertOrg.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>预期停留天数:</label>
+                            <span class="ellipsis-list" title="{%= o[i].intendDay %}">{%= renderNullToNotKnow(o[i].intendDay) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>证件号码:</label>
+                            <span class="ellipsis-list" title="{%= o[i].certificateNO %}">{%= renderNullToNotKnow(o[i].certificateNO) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>有效期至:</label>
+                            <span class="ellipsis-list" title="{%= o[i].visaDateTo %}">{%= renderNullToNotKnow(o[i].visaDateTo) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>签证号码:</label>
+                            <span class="ellipsis-list" title="{%= o[i].visaNO %}">{%= renderNullToNotKnow(o[i].visaNO) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>核查用证件号码:</label>
+                            <span class="ellipsis-list" title="{%= o[i].certificateNOCheck %}">{%= renderNullToNotKnow(o[i].certificateNOCheck) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>人员类别:</label>
+                            <span class="ellipsis-list" title="{%= o[i].personType.value %}">{%= renderNullToNotKnow(o[i].personType && o[i].personType.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>入境日期:</label>
+                            <span class="ellipsis-list" title="{%= o[i].ioDate %}">{%= renderNullToNotKnow(o[i].ioDate) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>入境签证号码:</label>
+                            <span class="ellipsis-list" title="{%= o[i].accede022 %}">{%= renderNullToNotKnow(o[i].accede022) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>入境理由:</label>
+                            <span class="ellipsis-list" title="{%= o[i].outReason.value %}">{%= renderNullToNotKnow(o[i].outReason && o[i].outReason.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>签发日期:</label>
+                            <span class="ellipsis-list" title="{%= o[i].visaDate %}">{%= renderNullToNotKnow(o[i].visaDate) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>入境时间:</label>
+                            <span class="ellipsis-list" title="{%= o[i].ioTime %}">{%= renderNullToNotKnow(o[i].ioTime) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>出入口岸:</label>
+                            <span class="ellipsis-list" title="{%= o[i].ioPort.value %}">{%= renderNullToNotKnow(o[i].ioPort && o[i].ioPort.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>出生日期:</label>
+                            <span class="ellipsis-list" title="{%= o[i].birth %}">{%= renderNullToNotKnow(o[i].birth) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>签证种类:</label>
+                            <span class="ellipsis-list" title="{%= o[i].visaType.value %}">{%= renderNullToNotKnow(o[i].visaType && o[i].visaType.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>入库时间:</label>
+                            <span class="ellipsis-list" title="{%= o[i].inTime %}">{%= renderNullToNotKnow(o[i].inTime) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>国籍:</label>
+                            <span class="ellipsis-list" title="{%= o[i].nationality.value %}">{%= renderNullToNotKnow(o[i].nationality && o[i].nationality.value) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>预期有效停留日期:</label>
+                            <span class="ellipsis-list" title="{%= o[i].intendDayTo %}">{%= renderNullToNotKnow(o[i].intendDayTo) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>人员姓名:</label>
+                            <span class="ellipsis-list" title="{%= o[i].name %}">{%= renderNullToNotKnow(o[i].name) %}</span>
+                        </p>  
+                        <p>
+                            <label><i class="data-source-icon"></i>人员种类:</label>
+                            <span class="ellipsis-list" title="{%= o[i].tfType %}">{%= renderNullToNotKnow(o[i].tfType) %}</span>
+                        </p>                                        
+                        <p>
+                            <label><i class="data-source-icon"></i>有效期数据来源:</label>
+                            <span class="ellipsis-list" title="{%= o[i].dataSource %}">{%= renderNullToNotKnow(o[i].dataSource) %}</span>
+                        </p>   
+                        <p>
+                            <label><i class="data-source-icon"></i>证件类型:</label>
+                            <span class="ellipsis-list" title="{%= o[i].certificateType.value %}">{%= renderNullToNotKnow(o[i].certificateType && o[i].certificateType.value) %}</span>
+                        </p>  
+					</dd>
+					
+                </dl>
+            </div>
+			{% } %}
+        </script>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/plupload/js/moxie.js"></script>
+<script type="text/javascript" src="/ui/plugins/simpleupload/js/underscore.min.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/verificationExpand.js"></script>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>待审核任务</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/lookTask.css"/>
+</head>
+<body class="oa">
+<div class="pager-content pt0" id="taskList" ui-control="listview" ui-service="face/redTask/getData" ui-template='listTemplate' ui-parameters="params" >
+	<div class="filter-view pt10 pb5">
+		<dl class="filter-bar search-bar">
+            <dt class="filter-arrt pt3">搜索</dt>
+            <dd class="filter-bar-search">
+                <div class="fifler-group mr5">
+                    <div class="search-box">
+                        <input class="search-input" type="text" placeholder="请输入申请用户、申请IP、所属部门、操作事由" maxlength="50" style="width: 350px;" id="searchText">
+                        <span class="icon-search22" id="searchBtn"></span>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl class="filter-bar">
+			<dt class="filter-arrt">时间：</dt>
+			<dd class="filter-tag ">
+				<div class="tagslist timelist" id="timeTagList">
+					<span class="tag-item active tagsTime" time-control="jt">今天</span>
+					<span class="tag-item tagsTime" time-control="zt">昨天</span>
+					<span class="tag-item tagsTime" time-control="bz">本周</span>
+					<span class="tag-item tagsTime" time-control="by">本月</span>
+					<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+					<div class="opera-group">
+					<div class="time-control-item">
+						<input class="time-control" id="beginTime" readonly="" type="text">
+						<i></i>
+					</div>
+					<div class="time-control-item">
+						<input class="time-control" id="endTime" readonly="" type="text">
+						<i></i>
+					</div>
+					<button class="btn btn-i-t zdyTimeBtn">确定</button>
+					</div>
+				</div>
+			</dd>
+		</dl>
+		<dl class="filter-bar">
+			<dt class="filter-arrt">审批状态：</dt>
+			<dd class="filter-tag ">
+				<label class="radio-inline p0 mt0 mb0"><input type="radio" checked="checked" value="0" name="APPROVAL_STATUS">待审核</label>
+				<label class="radio-inline p0 mt0 mb0"><input type="radio" value="1" name="APPROVAL_STATUS">通过</label>
+				<label class="radio-inline p0 mt0 mb0"><input type="radio" value="2" name="APPROVAL_STATUS">不通过</label>
+				<label class="radio-inline p0 mt0 mb0"><input type="radio" value="3" name="APPROVAL_STATUS">已撤销</label>
+			</dd>
+		</dl>
+	</div>
+	<!-- 页码 -->
+	<div class="page-info-metro full">
+
+		<div class="page-wrap">
+			<div class="page-info-metro square-pager">
+				<div class="page-data tc" listview-page="">
+					<a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+					<span class="page-num">共有<i class="page-num" listview-counts="">1</i>条记录</span>
+					<a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+					<a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="table-wrap pb10">
+        <table class="table" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr>
+                <th class="w12 tc"><span>申请用户</span></th>
+                <th class="w12 tc"><span>所属部门</span></th>
+                <th class="w10 tc"><span>申请IP</span></th>
+                <th class="w12 tc"><span>操作日期</span></th>
+                <th class="w10 tc"><span>申请截止期</span></th>
+                <th><span>操作事由</span></th>
+                <th class="w8 tc"><span>审核状态</span></th>
+                <th class="w12"><span>使用功能</span></th>
+                <th class="tc" style="width: 226px;"><span>操作</span></th>
+            </tr>
+            </thead>
+            <tbody id="tableList">
+            <script id="listTemplate" type="text/x-tmpl">
+			<tr>
+                <td class="w12 tc"><span title="{%=o.CREATOR%}">{%=o.CREATOR%}</span></td>
+                <td class="w12 tc"><span title="{%=o.DEPT_NAME%}">{%=o.DEPT_NAME%}</span></td>
+                <td class="w10 tc"><span title="{%=o.CREATOR_IP%}">{%=o.CREATOR_IP%}</span></td>
+                <td class="w12 tc"><span title="{%=o.CREATE_TIME%}">{%=o.CREATE_TIME%}</span></td>
+                <td class="w10 tc"><span title="{%=o.EXPIRY_DATE%}">{%=o.EXPIRY_DATE%}</span></td>
+                <td><span title="{%=renderCause(o.CAUSE_TYPE,o.SEARCH_CAUSE)%}">{%=renderCause(o.CAUSE_TYPE,o.SEARCH_CAUSE)%}</span></td>
+                <td class="w8 tc"><span title="{%=randerStatus(o.APPROVAL_STATUS)%}">{%=randerStatus(o.APPROVAL_STATUS)%}</span></td>
+                <td class="w12"><span title="{%=o.SEARCH_TYPE_TEXT%}">{%=o.SEARCH_TYPE_TEXT%}</span></td>
+                <td class="tc" style="width: 226px;">
+                    <ul class="btn-group-icons list-inline">
+					  	{% if (o.APPROVAL_STATUS == 0) { %}
+                        <li class="passBtn {%=showBtn('passBtn',o.APPROVAL_STATUS)%}" taskid="{%=o.TASK_ID%}" type="1"><b><i class="icon-checkmark3"></i> 通过</b></li>
+                        <li class="noPassBtn {%=showBtn('noPassBtn',o.APPROVAL_STATUS)%}" taskid="{%=o.TASK_ID%}" type="2"><b><i class="icon-cross2"></i> 不通过</b></li>
+                      	{% } %}  
+						<li class="detailBtn" taskid="{%=o.TASK_ID%}"><b><i class="icon-list3"></i> 详情</b></li>
+                    </ul>
+                </td>
+            </tr>
+			</script>
+			</tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/lookTask.js"></script>
+</html>

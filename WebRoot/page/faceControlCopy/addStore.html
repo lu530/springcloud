@@ -1,0 +1,62 @@
+<!--* Created by 黎镇华 .  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>添加布控库</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <style>
+        .form-con .control-label{
+            width: 136px;
+        }
+        .form-con .form-single .form-control{
+            width: 60%;
+        }
+        .form-con .control-label{
+            width: 113px;
+        }
+    </style>
+</head>
+<body class="oa">
+<div class="form-body" id="mobileForm">
+    <div class="form-con form-inline">
+        <div class="form-warper">
+            <div class="sort-cell">
+                <dl class="form-single">
+                    <dd class="form-group">
+                        <label class="control-label">库名：</label>
+                        <input class="form-control ml5" name="DB_NAME" id="name" type="text" maxlength="50" ui-validate="{pattern:'required', maxlength:50}" ui-vtext="库名">
+                        <span class="red">*</span>
+                    </dd>
+                    <dd class="form-group">
+                        <label class="control-label">告警阈值：</label>
+                        <input class="form-control ml5" name="ALARM_THRESHOLD" id="vpt" value="70" type="text" placeholder="请输入 0-100的阈值" maxlength="" ui-validate="{pattern:'numeric,required',max:100,min:0}"  ui-vtext="告警阈值">
+                        <span class="red">*</span>
+                    </dd>
+                    <dd class="form-group">
+                        <label class="control-label">告警等级：</label>
+                        <select class="form-control ml5" name="ALARM_LEVEL" id="level" maxlength="" ui-validate="required" ui-vtext="告警等级">
+                            <option value="1">红色告警</option>
+                            <option value="2">黄色告警</option>
+                            <option value="3">事后关注</option>
+                        </select>
+                        <span class="red">*</span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="form-footer">
+        <button class="btn btn-small blue-btn btn-add mr15" id="submitBtn" type="button">保存</button>
+        <button class="btn btn-small gray-btn btn-close" data-dismiss="modal" type="button">关闭</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControlCopy/addStore.js"></script>
+</html>

@@ -1,0 +1,67 @@
+.date-style {
+	/* margin:7px 15px 0 10px; */
+	font-weight: bold;
+	color: #4977cd;
+	font-size: 14px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.day-block {
+	position: absolute;
+	top: 8px;
+	left: 0;
+	right: -12px;
+	background: #f6f7fb;
+	height: 56px;
+	text-align: center;
+	padding-top: 6px;
+}
+
+.day-block.px {
+	left: 10px;
+	position: fixed;
+}
+
+.timeline {
+	position: absolute;
+	top: 12px;
+	bottom: -30px;
+	left: 66px;
+}
+
+.timeline .circle-top {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	left: 25px;
+	top: 14px;
+	z-index: 2;
+}
+
+.timeline .circle-top.px {
+	position: fixed;
+	left: 102px;
+	top: 4px;
+	z-index: 2;
+}
+
+.timeline .circle-bottom {
+	position: absolute;
+	left: 25px;
+	bottom: -16px;
+	z-index: 2;
+}
+
+.timeline .line {
+	width: 2px;
+	display: inline-block;
+	background: #eaedf2;
+	left: 33px;
+	position: absolute;
+	top: 26px;
+	bottom: 4px;
+	z-index: 1;
+}

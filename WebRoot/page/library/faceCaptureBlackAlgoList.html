@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>算法确认统计</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+
+<body>
+<div class="pager-wrap p0">
+	<div class="pager-content pt0">
+		<div class="page-info-metro full">
+             <!-- 顶部过滤条件 -->
+             <div class="action-btn-group">
+                 <a class="btn btn-i-t" id="exportBtn" title="最大支持导出1000条数据"> <span class="btn-icon export-icon"></span>
+                     <span>导出</span>
+                 </a>
+             </div>
+         </div>
+         <div class="page-con p0">
+         	<div class="algo-type-list">
+            	<div class="table-wrap mul-table">
+                    <table class="table" cellspacing="0" cellpadding="0">
+                    </table>
+                    <script id="tableTmpl" type="text/x-tmpl">
+                        <!-- 头部区域 -->
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="tc w5 second-col"><span>序号</span></th>
+                                <th rowspan="2" class="tc w15 second-col"><span>时间段</span></th>
+                                <th rowspan="2" class="tc second-col"><span>分类准确数</span></th>
+								{% for(var i=0;i<o.algoNameList.length;i++){ %}
+                                <th colspan="2" class="tc"><span>{%=o.algoNameList[i]%}</span></th>
+								{% } %}
+                            </tr>
+                            <tr>
+								{% for(var i=0;i<o.algoNameList.length;i++){ %}
+                            	<th class="tc"><span>准确数</span></th>
+                            	<th class="tc"><span>错误数</span></th>
+								{% } %}
+                            </tr>
+                        </thead>
+                        <!-- 内容列表 -->
+                        <tbody>
+								{% for(var i=0;i<o.data.length;i++){ %}
+                               <tr>
+                                   <td class="tc w5"><span>{%= (i+1) %}</span></td>
+                                   <td class="tc w15"><span>{%= o.data[i].beginTime %} ~ {%= o.data[i].endTime %}</span></td>
+                                   <td class="tc"><span>{%= o.data[i].correctCount %}</span></td>
+									{% for(var j=0;j<o.data[i].algo.length;j++){ %}
+                                   <td class="tc"><span>{%= o.data[i].algo[j].correctCount %}</span></td>
+                                   <td class="tc"><span>{%= o.data[i].algo[j].wrongCount %}</span></td>
+									{% } %}
+                               </tr>
+								{% } %}
+                        </tbody>
+					</script>
+                </div>
+            </div>
+         </div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/faceCaptureBlackAlgoList.js"></script>
+</html>

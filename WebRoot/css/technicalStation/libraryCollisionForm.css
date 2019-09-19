@@ -1,0 +1,22 @@
+.filter-bar .filter-arrt{
+    width:16%;
+    margin-left:4%;
+}
+.filter-tag .form-control{
+    max-width:100%;
+}
+.filter-arrt{
+    padding-top:4px;
+}
+fieldset{
+    min-height:135px;
+    
+}
+.btn-wrap{
+    margin:0 auto;
+    width:60%;
+}
+.btn-wrap .btn{
+    border-radius: 3px;
+    height:auto;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>旅客人脸库管理</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/passengersFaceDetail.css"/>
+</head>
+<body>
+<div class="page-top">
+    <div>
+        <span><a id="backBtn">返回</a></span> <span>旅客人脸库管理</span>
+    </div>
+</div>
+<div class="pager-content">
+    <div class="filter-view clearfix">
+        <div class="detail-img">
+            <div class="img-wrap">
+                <img id="personImg" src="" attrimg="zoom" class="mb0"> </img>
+            </div>
+        </div>
+        <div class="detail-info">
+            <p>
+                <span class="item"><label>旅客编号</label><span id="CCODE"></span></span>
+                <span class="item"><label>团号</label><span id="GCODE"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>英文姓</label><span id="SURNAME"></span></span>
+                <span class="item"><label>英文名</label><span id="FIRSTNAME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>中文姓名</label><span id="CNAME"></span></span>
+                <span class="item"><label>性别</label><span id="SEX"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>出生日期</label><span id="BDATE"></span></span>
+                <span class="item"><label>国籍(地区)</label><span id="NATION"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>证件类别</label><span id="IDTYPE"></span></span>
+                <span class="item"><label>证件号码</label><span id="IDCODE"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>签证种类</label><span id="VISATYPE"></span></span>
+                <span class="item"><label>签证(注)号码</label><span id="VISACODE"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>在华停留期至</label><span id="OUTDATE"></span></span>
+                <span class="item"><label>签发机关</label><span id="VISAUNIT"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>入境时间</label><span id="INDATE"></span></span>
+                <span class="item"><label>入境口岸</label><span id="INPORT"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>接待单位</label><span id="RECUNIT"></span></span>
+                <span class="item"><label>入住旅馆</label><span id="HNAME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>入住房号</label><span id="NOROOM"></span></span>
+                <span class="item"><label>入住时间</label><span id="LTIME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>入住当班人员</label><span id="LWAITER"></span></span>
+                <span class="item"><label>退房时间</label><span id="ETIME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>退房当班人员</label><span id="EWAITER"></span></span>
+                <span class="item"><label>从何处来</label><span id="COMEFROM"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>到何处去</label><span id="GOTO"></span></span>
+                <span class="item"><label>信用卡类型</label><span id="CARDTYPE"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>信用卡号码</label><span id="CARDNO"></span></span>
+                <span class="item"><label>发送时间</label><span id="STIME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>接收时间</label><span id="RTIME"></span></span>
+                <span class="item"><label>记录建立时间</label><span id="CREATETIME"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>入住日期</label><span id="LDATE"></span></span>
+                <span class="item"><label>辖区</label><span id="XQ"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>数据入库时间</label><span id="INPUTTIME"></span></span>
+                <span class="item"><label>来源地</label><span id="LYD"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>去往地</label><span id="QWD"></span></span>
+                <span class="item"><label>备注</label><span id="REMARK"></span></span>
+            </p>
+            <p>
+                <span class="item"><label>未携带证件</label><span id="WXDZJ"></span></span>
+                <!--<span class="item hide"><label></label><span id="FULLNAME"></span></span>-->
+                <span class="item"><label>换房时间</label><span id="CHANGETIME"></span></span>
+            </p>
+            <p>
+
+                <span class="item"><label>住宿人联系方式</label><span id="STAYPHONE"></span></span>
+                <span class="item"><label>订房人联系方式</label><span id="BOOKPHONE"></span></span>
+            </p>
+            <p>
+
+                <span class="item"><label>银行卡号</label><span id="BANKCARD"></span></span>
+                <span class="item"><label>微信号</label><span id="WXNUMBER"></span></span>
+            </p>
+            <p>
+
+                <span class="item"><label>旅客QQ号</label><span id="QQNUMBER"></span></span>
+                <span class="item"><label>登记点号</label><span id="CURPOINT"></span></span>
+            </p>
+            <p>
+
+                <span class="item"><label>前台IP地址</label><span id="CURIP"></span></span>
+                <span class="item"><label>旅客EMAIL地址</label><span id="EMAIL"></span></span>
+            </p>
+            <!--<p>-->
+                <!--<span class="item hide"><label></label><span id="VISAEXP"></span></span>-->
+                <!--<span class="item hide"><label></label><span id="RELATE"></span></span>-->
+            <!--</p>-->
+            <p class="nb">
+                <!--<span class="item hide"><label></label><span id="EFFECT"></span></span>-->
+
+                <span class="item"><label>前台数据录入来源</label><span id="DATASOURCE"></span></span>
+                <span class="item"><label>预退房时间</label><span id="PETIME"></span></span>
+            </p>
+            <!--<p >-->
+
+            <!--</p>-->
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/passengersFaceDetail.js"></script>
+</html>

@@ -1,0 +1,1164 @@
+@CHARSET "UTF-8";
+
+.bgWhite {
+	background: #fff;
+}
+
+ul {
+	padding: 0;
+	list-style: none;
+}
+
+.ico-passport-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 175px;
+	display: inline-block;
+}
+
+.form-control .bayonet-input {
+	overflow: visible !important;
+	border-radius: 0 !important;
+	border: none;
+	background-color: #FFFFFF;
+}
+
+.page-list-head {
+	background-color: #FFFFFF;
+	position: relative;
+	padding: 14px 10px;
+	height: 46px;
+	color: #444;
+	font-size: 15px;
+	border-bottom: 1px solid #dedde2;
+}
+
+.page-list-head h2 {
+	margin: 0;
+	padding: 0;
+	font-size: 22px;
+}
+
+.page-list-head .back-btn {
+	display: block;
+	float: left;
+	height: 18px;
+	padding: 0 12px 0 0;
+	margin: 1px 10px 0 0;
+	line-height: 18px;
+	color: #686868;
+	text-decoration: none;
+	cursor: pointer;
+	border-right: 1px solid #c5c5c5;
+}
+
+.page-list-head .back-btn i {
+	float: left;
+	margin: 0 5px 0 0;
+	font-size: 12px;
+	line-height: 21px;
+}
+
+.page-list-head .back-btn i:before {
+	color: #686868;
+}
+
+.page-list-head .back-btn em {
+	font-size: 13px;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.page-list-head .title-icon {
+	display: inline-block;
+	width: 23px;
+	height: 11px;
+	margin-right: 15px;
+	background: url(/efacecloud/images/technicalStation-icon.png);
+}
+
+.page-list-head .icon-track {
+	background-position: -14px -20px;
+}
+
+.page-list-head .icon-btn {
+	display: inline-block;
+	height: 40px;
+	position: absolute;
+	top: 3px;
+	color: #444;
+	line-height: 42px;
+	width: 40px;
+	text-decoration: none !important;
+	cursor: pointer;
+	text-align: center;
+	font-size: 24px;
+}
+
+.page-list-head .icon-btn:hover {
+	/*background-color: #EDEDED; */
+	animation: rubberBand .5s ease;
+	color: #118AE1;
+}
+
+.page-list-head .icon-btn.left-btn {
+	left: 0;
+}
+
+.page-list-head .icon-btn.right-btn {
+	right: 0;
+	font-weight: bold;
+	font-size: 26px;
+	line-height: 37px;
+}
+
+.form-con.form-silde {
+	width: auto;
+	top: 46px;
+	bottom: 0;
+	padding-top: 0;
+	border-right: 1px solid #f0f0f0;
+}
+
+.form-con.form-silde .btn-wrap .btn {
+	margin-bottom: 20px;
+}
+
+.form-con.form-silde .control-label {
+	text-align: left;
+	padding: 0 0 0 24px;
+	width: 105px;
+	color: #525151;
+	font-weight: normal;
+}
+
+.form-con.form-silde .form-control {
+	width: 235px;
+	height: 32px;
+}
+
+.form-con.form-silde select.form-control {
+	padding: 5px 3px;
+}
+
+.form-con.form-silde .form-group-wrap {
+	width: 260px;
+	float: left;
+}
+
+.form-con.form-silde .input-group.form-control .form-control {
+	width: 220px;
+}
+
+.form-con.form-silde .input-group.form-control .form-control[disabled] {
+	background: #F9F9F9;
+	border-radius: 0;
+}
+
+.form-con.form-silde .input-group.form-control .clearBtn {
+	position: absolute;
+	top: 8px;
+	right: 39px;
+	z-index: 2;
+	font-size: 18px;
+	color: #D3D3D3;
+}
+
+.form-con.form-silde .input-group-addon {
+	padding: 6px 10px;
+}
+
+.form-con.form-silde .input-group-addon i {
+	font-size: 14px;
+}
+
+.form-con .form-group {
+	margin-bottom: 22px;
+}
+
+.head-background {
+	height: 300px;
+	width: 100%;
+	background: url('/cloudsearch/images/background-car.jpg') 100% 100%;
+	opacity: 0.5;
+	z-index: -1;
+}
+
+/* 上传图片样式 */
+.photo-tools {
+	width: 240px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.photo-tools .top-pic-box img {
+	width: auto;
+	height: 155px;
+}
+
+.person-face-upload {
+	background: #f6f7fb;
+	padding: 20px 0;
+}
+
+.device-select {
+	line-height: 28px;
+	text-indent: 5px;
+	cursor: pointer;
+	/* overflow: hidden !important; */
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default {
+	background: url(/efacecloud/images/icon-circle.png) 50% 50% repeat-x;
+	border: none;
+}
+
+.ui-widget-header {
+	background: none;
+}
+
+.ui-widget-content {
+	border: none;
+}
+
+.ui-slider-horizontal {
+	height: 22px;
+	background: url(/efacecloud/images/threshold-bg.png) no-repeat;
+	background-size: 100% 100%;
+	width: 185px;
+	display: inline-block;
+}
+.sliderNum .ui-slider-horizontal {
+    background: url(/efacecloud/images/threshold-bg1.png) no-repeat;
+}
+.ui-slider .ui-slider-handle {
+	height: 18px;
+	width: 18px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+	top: 12px;
+}
+
+.form-con.form-silde .form-control.tc {
+	position: relative;
+	bottom: 12px;
+	margin-left: 16px !important;
+	color: #3564b9;
+}
+/***************************/
+/* .time-wrap .time-box .form-control {
+  width: 100%;
+  height: 35px;
+  padding: 8px 20px 8px 42px;
+  text-indent: 0;
+} */
+.time-wrap .time-box {
+	width: 240px;
+	margin-left: 8px;
+}
+
+.time-wrap.time-style-1 {
+	width: 100%;
+}
+
+.time-wrap.time-style-1 .time-box {
+	border: none;
+	margin-bottom: 2px;
+	border: 1px solid #ececec;
+	height: 32px;
+}
+
+.time-wrap.time-style-1 .time-box label {
+	background: #4876d1;
+	border: none;
+	height: 32px;
+	width: 32px;
+	line-height: 32px;
+	color: white;
+}
+
+.time-wrap .control-label {
+	font-size: 13px;
+	color: #fff;
+}
+/* .time-wrap .time-box input[type="text"].form-control{
+  background: url("/ui/plugins/bootstrap3.3/img/btn/calendar.png") no-repeat 96% 10px !important;
+} */
+.toolbar-icons-text .back {
+	background: url(/cloudsearch/images/back-btn.png) no-repeat 100% 100%;
+}
+
+/**************   carBrandBox  *************/
+.carBrandBox {
+	height: 47px;
+	padding-left: 5px;
+	vertical-align: middle;
+	border: 1px solid #C7C7C7;
+	line-height: 30px;
+	background: #FFFFFF;
+	width: 250px;
+	float: left;
+	position: relative;
+	border-radius: 3px;
+}
+
+.carBrandBox li {
+	float: left;
+	width: 40px;
+	height: 32px;
+	margin: 5px 9px 0 0;
+	border: 1px solid #121313;
+	list-style: none;
+	overflow: hidden;
+}
+
+.carBrandBox li:hover {
+	border: 1px solid red;
+}
+
+.carBrandBox li img {
+	width: 100%;
+	height: 100%;
+}
+
+.dropdownMenu {
+	position: absolute;
+	top: 46px;
+	left: 5px;
+	z-index: 1000;
+	height: 305px;
+	margin-right: 5px;
+	padding-left: 5px;
+	vertical-align: middle;
+	border: 1px solid #C7C7C7;
+	line-height: 30px;
+	background: #FFFFFF;
+	border-radius: 4px;
+	width: 386px;
+	display: none;
+	webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 7px rgba(0, 0, 0, .3);
+}
+
+.dropdownMenu .condition {
+	padding: 10px;
+}
+
+.dropdownMenu .condition li {
+	float: left;
+	width: 26px;
+	height: 26px;
+	line-height: 24px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.dropdownMenu .condition li:hover {
+	border: 1px solid red;
+}
+
+.dropdownMenu .condition li.active {
+	border: 1px solid red;
+}
+
+.dropdownMenu .option {
+	margin-top: 30px;
+}
+
+.dropdownMenu .option li {
+	float: left;
+	width: 55px;
+	height: 68px;
+	margin: 5px 10px 5px 10px;
+	border: 1px solid #121313;
+}
+
+.dropdownMenu .option li:hover {
+	border: 1px solid red;
+}
+
+.dropdownMenu .option li img {
+	width: 100%;
+	height: 44px;;
+}
+
+.dropdownMenu .option li span {
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	height: 20px;
+	line-height: 20px;
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.carBrand {
+	padding-left: 10px;
+	border: 1px solid #C7C7C7;
+	background: #FFFFFF;
+	display: none;
+}
+
+.carBrand .icon-cross2 {
+	font-size: 20px;
+	padding: 4px;
+	cursor: pointer;
+	position: absolute;
+	top: 0px;
+	right: 2px;
+}
+
+.carBrandTree .more-car-Brand {
+	position: absolute;
+	right: 8px;
+	top: 14px;
+	cursor: pointer;
+	color: #222;
+}
+
+.carBrandTree .more-car-Brand:hover {
+	text-decoration: underline !important;
+}
+
+.btn-wrap .btn {
+	height: 34px;
+	font-size: 15px;
+	background-color: #4876d1;
+	color: #fff;
+	line-height: 22px;
+}
+
+.tags-list {
+	width: 260px;
+	float: left;
+	margin-bottom: 0;
+}
+
+.tags-list .tags-list-item {
+	border: none;
+	color: #2F2F2F;
+	padding: 2px 8px 2px 8px;
+	background-color: transparent;
+	outline: none;
+	float: left;
+	margin: 0 3px 8px;
+	cursor: pointer;
+}
+
+.tags-list .tags-list-item:hover {
+	background: #EAF7FF;
+	color: #0072c6;
+}
+
+.tags-list .tags-list-item.active {
+	background: #444;
+	color: #FFFFFF;
+}
+
+.color-link-select li {
+	float: left;
+	width: auto;
+	padding: 0 5px;
+	cursor: pointer;
+	color: #1B1B1B;
+}
+
+.color-link-select li.active {
+	color: #FFFFFF;
+	background: #6AB3FA;
+}
+
+.color-link-select.moreSelect li.active {
+	color: #ffcc73;
+	background: transparent;
+}
+
+.moreSelectionBtn.active {
+	background: transparent;
+}
+
+.color-link-select li:hover {
+	color: #ffcc73;
+}
+
+.color-link-select li label {
+	width: auto;
+	cursor: pointer;
+	display: inline-block;
+	height: 22px;
+	line-height: 25px;
+	text-align: right;
+	vertical-align: middle;
+	font-weight: normal;
+}
+
+.color-link-select li label input[type="checkbox"] {
+	height: auto;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 0;
+	border: none;
+}
+
+.color-link-select.moreSelect input[type="checkbox"] {
+	display: inline-block;
+}
+
+.color-link-select.singleSelect input[type="checkbox"] {
+	display: none;
+}
+
+.color-more {
+	border: 1px solid #444C52;
+	padding: 2px 6px;
+	color: #4D4D4D;
+	font-size: 12px;
+	line-height: 25px;
+}
+
+.color-more:hover {
+	border: 1px solid #0080D8;
+	color: #0080D8;
+	background-color: #fff;
+}
+
+.dropdown-tree .dropdown-tree-text {
+	top: 0px;
+	border: none;
+}
+
+.dropdown-tree .dropdown-tree-text {
+	height: 30px;
+	border-radius: 4px;
+}
+
+.dropdown-tree-area {
+	top: 34px;
+}
+
+/************** fieldset ***************/
+fieldset {
+	height: auto;
+	margin-bottom: 10px;
+	padding: 0 10px;
+	background-color: #ffffff /* border: 1px solid #ccc; */
+}
+
+legend {
+	width: auto;
+	margin-bottom: 5px;
+	font-size: 13px;
+	border: 0;
+	padding: 3px 10px;
+	color: #FFFFFF;
+	background-color: #007ED8;
+	margin: 0 5px;
+}
+
+fieldset .time-wrap.time-style-1 .time-box {
+	background-color: #fff;
+}
+
+.form-con.form-silde fieldset .control-label {
+	padding: 0 0 0 10px;
+	width: 85px;
+}
+
+.form-con.form-silde fieldset .form-control, fieldset .time-wrap .time-box
+	{
+	width: 67%;
+}
+
+.form-con.form-silde fieldset .form-control .bayonet-input {
+	width: 86%;
+}
+
+.form-control .bayonet-input {
+	width: 216px;
+	height: 100%;
+	float: left;
+}
+
+.bayonet-select-btn {
+	width: 32px;
+	height: 33px;
+	line-height: 34px;
+	background-color: #0290EA;
+	display: inline-block;
+	text-align: center;
+	font-size: 16px;
+	color: #FFFFFF;
+	float: right;
+}
+
+/****************/
+.icon-group {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	width: 81px;
+	cursor: pointer;
+}
+
+.icon-group i {
+	float: left;
+	display: inline-block;
+	width: 30px;
+	height: 28px;
+	line-height: 26px;
+	margin-top: 10px;
+	text-align: center;
+	font-size: 18px;
+	margin-left: 10px;
+	background: #EAF7FF;
+	color: #4876d1;
+	border: 1px solid #4876d1;
+}
+
+.icon-group i:hover {
+	border: 1px solid #D8ECFF;
+	color: #fff;
+	background: #4876d1;
+}
+
+.nav-tab-style1 {
+	width: 280px;
+	height: 40px;
+	line-height: 30px;
+	/* border: 1px solid #eee; */
+	margin: 15px auto;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 -1px 0 rgba(0, 0, 0, .02);
+}
+
+.nav-tab-style1>li {
+	float: left;
+	line-height: 14px;
+	width: 50%;
+	background-color: #eee;
+	height: 100%;
+}
+
+.nav-tab-style1>li span {
+	color: #CACACA;
+}
+
+.hand {
+	cursor: pointer;
+	width: 28%;
+	text-align: center;
+}
+
+.nav-tabs>li>a {
+	line-height: 14px;
+}
+
+.nav-tab-style1>li.hand.active a {
+	color: #FFFFFF;
+	background-color: #3C92F5;
+}
+
+.nav-tab-style1>li.hand a {
+	color: #020202;
+	padding: 0;
+	text-align: center;
+	line-height: 40px;
+	font-size: 17px;
+}
+
+.tab-contents.warninng {
+	position: absolute;
+	left: 0;
+	top: 36px;
+	bottom: 0;
+	right: 0;
+	background-color: #999;
+}
+
+.warninng-tab-contents.warninng .tab-pan {
+	display: none;
+	height: 100%;
+	width: 100%;
+}
+
+/*************** upload-bg-box **************/
+.upload-bg .file-style {
+	height: 100%;
+	width: 100%;
+	z-index: 2;
+	font-size: 86px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	filter: alpha(opacity = 0);
+}
+
+.upload-bg {
+	display: block;
+	height: 100%;
+	color: #666;
+	z-index: 1;
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	text-align: center;
+}
+
+.upload-bg .icon-upload {
+	font-size: 45px;
+	margin: 15px 0 5px 0;
+	display: inline-block;
+}
+
+.upload-bg-box {
+	position: relative;
+}
+
+.upload-bg-box img {
+	width: 100%;
+	height: 100%;
+	max-width: 100%;
+}
+
+.upload-bg-box .icon-btn-wrap {
+	position: absolute;
+	right: 3px;
+	bottom: 3px;
+	color: #FFFFFF;
+	background: #000000;
+	line-height: 20px;
+	text-align: center;
+	display: none;
+}
+
+.upload-bg-box:hover .icon-btn-wrap {
+	display: block;
+}
+
+.upload-bg-box .icon-btn-wrap span {
+	display: block;
+	float: left;
+	padding: 3px 5px;
+}
+
+.upload-bg-box .icon-btn-wrap span:active {
+	background: #0080CF;
+}
+
+.upload-bg-box.upload-img-car {
+	border: 1px solid #ddd;
+	margin-left: 12px;
+	height: 298px;
+}
+
+.upload-img-car-bar {
+	width: 370px;
+	background: #FFFFFF;
+	margin: 0px 0 0 0px;
+	height: 35px;
+	border-bottom: 1px solid #ddd;
+}
+
+.upload-img-car-bar li {
+	display: block;
+	margin: 5px 0px 0px 10px;
+	float: left;
+	height: 25px;
+	width: 26px;
+	text-align: center;
+	line-height: 26px;
+	border: #fff 1px solid;
+}
+
+.upload-img-car-bar span {
+	font-size: 15px;
+	color: #00a0e9;
+	margin: 6px 0 4px 0;
+	float: left;
+}
+/**********************  car-dropdown-menu begin ************************/
+.car-dropdown-menu {
+	width: 100%;
+	border-radius: 0;
+	max-height: 300px;
+	position: absolute;
+	top: 33px;
+	padding-top: 10px;
+	border-radius: 4px;
+}
+
+.car-dropdown-menu .attr-list dt {
+	color: #E51C1C;
+}
+
+.form-con dt {
+	border: none;
+	width: 20px;
+	height: 20px;
+	text-indent: 6px;
+}
+
+.attr-list-head {
+	width: 65px;
+}
+
+.car-nav {
+	list-style: none;
+	height: 28px;
+	border-bottom: 3px solid #ddd;
+}
+
+.car-nav li {
+	float: left;
+	font-size: 14px;
+	height: 28px;
+	cursor: pointer;
+	width: 20%;
+}
+
+.car-nav li a {
+	display: block;
+	height: 100%;
+	text-align: center;
+	text-decoration: none;
+	font-size: 14px;
+	color: #1E79E2;
+}
+
+.car-nav li.active a, .car-nav li:hover a {
+	border-bottom: 3px solid #1E79E2;
+}
+
+.car-series {
+	width: 250px;
+	left: 113px;
+}
+
+.car-series ul.group-menu-item {
+	overflow-y: auto;
+	max-height: 260px;
+}
+
+.car-series ul.group-menu-item a {
+	padding-left: 12px;
+	text-indent: 0px;
+	font-size: 12px;
+}
+
+.car-series ul.group-menu-item li {
+	padding-bottom: 2px;
+}
+
+.car-series ul.group-menu-item a:hover {
+	background-color: #BEE1FD;
+}
+
+.car-series ul.group-menu-item li.active a {
+	background-color: #0F81E0;
+	color: #fff;
+}
+
+.form-control.car-series-input {
+	height: auto !important;
+	max-height: 80px;
+	overflow: auto;
+	cursor: pointer;
+	min-height: 35px;
+	padding: 8px 10px;
+}
+
+.form-control.car-plate-input {
+	cursor: pointer;
+	position: relative;
+	line-height: 35px;
+	padding: 0 10px !important;
+}
+
+.form-control.car-plate-input .icon-btn-car {
+	position: absolute;
+	right: 5px;
+	bottom: 8px;
+	font-size: 16px;
+}
+
+.btn-sure {
+	height: 34px;
+	font-size: 15px;
+	background-color: #DFDFDF;
+	color: #353535;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+/********************  car-dropdown-menu  end**************************/
+
+/************** .map-icon-list ****************/
+.map-icon-list {
+	margin: 0;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.map-icon-list li {
+	float: left;
+	margin: 0 6px 0 0;
+}
+
+.map-icon-list .map-icon {
+	display: block;
+	height: 30px;
+	width: 30px;
+	/* background-color: #D7ECF7; */
+	cursor: pointer;
+	line-height: 30px;
+	text-align: center;
+	font-size: 17px;
+	color: #b1b4c1;
+}
+
+.map-icon-list li.active [class^="icon-"]:before, .map-icon-list li.active [class*=" icon-"]:before
+	{
+	color: #4876d1;
+}
+
+.map-icon-list .map-icon:hover {
+	color: #2B759D;
+}
+
+.map-icon-list .map-icon.disable:hover {
+	background-color: #D7ECF7 !important;
+	color: #2B759D !important;
+	opacity: 0.4 !important;
+}
+
+.map-icon-list .map-icon[name="delete"]:active:before {
+	color: #4876d1;
+}
+
+.tree-title {
+	width: 85% !important;
+}
+
+.btn-blue {
+	background-color: #1E79E2;
+	color: #fff;
+}
+
+.dropdown-check .dropdown-tree-area {
+	max-height: 220px;
+	overflow: auto;
+}
+
+.time-wrap .time-box input[type="text"].form-control {
+	background: url(/efacecloud/images/calendar.png) no-repeat 96% 8px
+		!important;
+}
+
+.time-wrap .time-box .form-control {
+	text-indent: 33px;
+	padding: 9px 10px;
+}
+
+.dropdown-tree.drop-down {
+	border-radius: 4px;
+	height: 35px;
+	border: 1px solid #ccc;
+	width: 222px !important;
+	background: #fff;
+}
+
+.position-bottom  .dropdown-tree-area {
+	max-height: 300px;
+}
+
+.late-night .position-top .dropdown-tree-area {
+	max-height: 270px;
+	bottom: inherit;
+}
+
+.person-face-upload .upload-bg {
+	display: block;
+	height: 100%;
+	color: #666;
+	z-index: 1;
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	text-align: center;
+	background: url(/efacecloud/images/upload1.png) no-repeat center;
+}
+
+.person-face-upload .upload-bg-box.upload-img-car {
+	height: 300px;
+	border: none;
+}
+
+.person-face-upload .upload-bg-box {
+	position: relative;
+}
+
+.upload-bg-box.upload-img-car {
+	border: 1px solid #ddd;
+	margin-left: 0px;
+	height: 260px;
+}
+
+.person-face-upload .upload-bg-box.upload-img-car:hover .upload-bg {
+	background: url(/efacecloud/images/upload2.png) no-repeat center;
+}
+
+.person-face-upload .wrap-img {
+	width: 100%;
+	height: 100%;
+	padding: 5px;
+}
+
+.person-face-upload .upload-bg-box img {
+	max-width: 100%;
+	height: 230px;
+	width: auto;
+	margin: 0 auto;
+	display: block;
+}
+
+.person-face-upload .ocx-wrap {
+	position: absolute;
+	top: 5px;
+	bottom: 5px;
+	left: 5px;
+	right: 5px;
+}
+
+/* 重置所选区域列表样式 */
+.table-wrap {
+	width: 62%;
+	margin: 10px 0 10px 103px;
+	max-height: 122px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.table-wrap .table {
+	border: 1px solid #cececc;
+	margin: 0;
+}
+
+.table-wrap .table td {
+	border: none;
+	background: none;
+	height: 24px;
+	line-height: 24px;
+}
+
+.table-wrap .table td>span {
+	height: 24px;
+	line-height: 24px;
+}
+
+.table-wrap .table tr:nth-child(even) {
+	background-color: #f6f7fb;
+}
+
+.table-wrap .table tr:hover td {
+	background: none;
+	color: #587ac1;
+}
+
+.table-wrap .table tr:hover td span[class^="icon-"]:before, .table-wrap .table tr:hover td span[class*=" icon-"]:before
+	{
+	color: #587ac1;
+}
+
+/* 重置区域标题样式 */
+.field-top {
+	height: 55px;
+	line-height: 55px;
+	border-bottom: 1px solid #dedede;
+}
+
+.field-top .field-index {
+	padding: 0 3px;
+	margin-right: 8px;
+	display: inline;
+	color: white;
+	background: #4876d1;
+}
+
+.field-top .field-title {
+	color: #4876d1;
+	font-size: 16px;
+}
+
+/* 点击添加区域 */
+.click-add {
+	line-height: 100px;
+	text-align: center;
+}
+
+.click-add .add-btn {
+	display: inline-block;
+	line-height: 35px;
+	padding: 0 43px;
+	color: #ced0da;
+	cursor: pointer;
+	background: url(/efacecloud/images/technicalStation-modify.png);
+	background-position: -130px -40px;
+}
+
+.click-add .add-btn:hover span {
+	text-decoration: underline;
+}
+
+.icon-add-field {
+	display: inline-block;
+	vertical-align: text-bottom;
+	margin-right: 8px;
+	width: 17px;
+	height: 16px;
+	background: url(/efacecloud/images/technicalStation-modify.png);
+	background-position: -67px -67px;
+}
+
+.control-wrap span{
+	color: #4a75ba;
+	font-size: 12px;
+}
+.control-wrap span:hover{
+	color:#00a0e9;
+	text-decoration: underline;
+}
+.operation-btn {
+    float: right;
+    font-size: 14px;
+    color: #4876d1;
+    cursor: pointer;
+    border: 1px solid #4876d1;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 16px;
+    margin-top: 18px;
+}
+.operation-btn:hover {
+	color: #bb0000cf;
+	border-color: #bb0000cf;
+}
+.dropdown-list.device-select{
+	width:235px;
+}
+.dropdown-list .dropdown-list-text .list-title{
+	background-position: 200px -60px;
+}
+.dropdown-list:hover .dropdown-list-text .list-title{
+	background-position: 200px -89px;
+}
+.dropdown-list .dropdown-menu{
+	padding: 0;
+    margin: 0;
+}

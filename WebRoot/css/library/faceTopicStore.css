@@ -1,0 +1,157 @@
+/**
+ * Created by 黎镇华 .
+ * email：1030858753@qq.com
+ */
+.full-screen{
+    background-color: #e7ecf0;
+}
+.frame-side{
+    width: 410px;
+    background: #f4f8fa;
+    top: 15px;
+    padding: 0;
+}
+.frame-con{
+    left:410px;
+}
+
+.frame-title{
+    background-color: #fff;
+    font-size: 17px;
+    vertical-align: middle;
+    border-bottom: 1px solid #ebecf1;
+}
+.frame-title i{
+    margin-right: 10px;
+    margin-top: 5px;
+}
+.frame-title i:before{
+    color:#000;
+}
+.light-frame .menu-search-box{
+	width:254px;
+}
+.menu-search-box{
+    border: 1px solid #cccdcf;
+    border-radius: 0;
+    width: 254px;
+    float: left;
+    color:#939393;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 15px;
+    height: 36px;
+}
+.setting-search{
+    color:#939393;
+}
+.created-store{
+    float: left;
+    width: 106px;
+    height:36px;
+    border: 1px solid #cccdcf;
+    line-height: 23px;
+    font-size: 13px;
+    background-color: #ffffff;
+    color:#2e68b2;
+    border-color:#c1c4d7;
+}
+.created-store i:before{
+    color: #2e68b2;
+}
+.created-store:hover{
+    background-color: #c4c8cc;
+    color:#1f477a;
+    border-color:#9193a2 ;
+}
+.created-store:hover i:before{
+    color: #1f477a;
+}
+
+
+.created-store i{
+    margin-right: 10px;
+}
+.tools-box{
+    margin:20px 0;
+}
+.menu-search-box input[type="text"]{
+    height: 34px;
+}
+.search-box > span{
+    height: 34px;
+}
+.control-store-list{
+    top: 132px;
+}
+.listview .list-node{
+    background-color: #fff;
+    font-size: 13px;
+}
+.listview .list-node .node-text p{
+    padding-left: 35px;
+}
+.listview .list-node .node-text .p-name{
+    padding-left: 0;
+    font-size: 15px;
+}
+.listview .list-node .top-btn-group{
+    top:30px;
+}
+.listview .list-node:hover{
+    background-color: #eaeff2;
+}
+.listview .list-node:hover .node-text .p-name{
+    color:#4355c3;
+}
+.listview .list-node:hover .icon-user2:before{
+    color:#4355c3;
+}
+.listview .list-node:hover .node-text label, .listview .list-node:hover .node-text span{
+    color:#4355c3;
+}
+.listview .list-node:hover .top-btn-group .icon-btn:before{
+    color:#4355c3;
+}
+
+.listview .list-node.active{
+    background-color: #eaeff2;
+}
+.listview .list-node.active .node-text .p-name{
+    color:#4355c3;
+}
+.listview .list-node.active .icon-user2:before{
+    color:#4355c3;
+}
+.listview .list-node.active .node-text label, .listview .list-node.active .node-text span{
+    color:#4355c3;
+}
+.listview .list-node.active .top-btn-group .icon-btn:before{
+    color:#4355c3;
+}
+.page-info-position{
+    background-color: #fff;
+    color:#595959;
+}
+.square-pager .page-data .page-prev:hover, .square-pager .page-data .page-next:hover{
+    background-color: #3462ba!important;
+}
+.square-pager .page-data .page-prev:hover i:before{
+    color: #fff!important;
+}
+.square-pager .page-data .page-next:hover i:before{
+    color: #fff!important;
+}
+
+
+@media screen and (min-width: 1086px) and (max-width: 1300px){
+	.frame-con {
+	    left: 390px;
+	}
+	.frame-side {
+    	width: 390px;
+    }
+    .light-frame .menu-search-box {
+	    width: 234px;
+	}
+}

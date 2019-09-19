@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>红名单库</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/personnelFileMagList.css"/>
+</head>
+<body>
+<div class="pager-wrap" container="scroll" id="dispatchedApprovalList"  ui-control="listview" ui-service="face/redlist/query"  ui-template="personListTemplate" ui-parameters="queryParams" ui-options="{toPage:true}">
+    <div class="pager-content pr">
+        <div class="page-title pr">
+            <span>红名单库</span>
+            <div class="look-task-wrap" id="checkTaskBtn">
+	            <span class="icon-wrap">
+	            	<b class="icon-look-task"></b>
+	            </span>
+	            <span class="txt-wrap">审批任务</span>
+	        </div>
+        </div>
+        <div class="top-box">
+            <div class="photo-tools">
+                <div class="top-pic-box">
+                    <div class="img-wrap">
+                        <img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+                        <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" issearch=true />
+                    </div>
+                    <ul>
+                        <li class="re-upload">
+                            <i class="icon-image2"></i>
+                            <input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn" issearch=true />
+                        </li>
+                        <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+                    </ul>
+                </div>
+                <ul class="bottom-pic-bar hide" id="thresholdValidate">
+                    <li><i class="icon-search4"></i>阈值<input type="text" value="70" id="threshold" ui-validate="{pattern:'required,integer',max:100,min:70}" ui-vtext="阈值应为60-100的整数"></li>
+                </ul>
+            </div>
+            <div class="filter-view">
+                <dl class="filter-bar search-bar">
+                    <dt class="filter-arrt pt3">搜索</dt>
+                    <dd class="filter-bar-search">
+                        <div class="fifler-group mr5">
+                            <div class="search-box">
+                                <input class="search-input" type="text" placeholder="请输入姓名、证件号码" maxlength="50">
+                                <span class="icon-search22" id="inputSearch"></span>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="filter-bar">
+                    <dt class="filter-arrt">性别</dt>
+                    <dd class="filter-tag">
+                        <div class="tagslist tagItmeList" id="SEX">
+                            <span class="tag-item active tagAll" val="">全部</span>
+                            <span class="tag-item" val="1">男</span>
+                            <span class="tag-item" val="2">女</span>
+                            <span class="tag-item" val="0">未知</span>
+                        </div>
+                    </dd>
+                </dl>
+                <!--<dl class="filter-bar">
+                    <dt class="filter-arrt">证件号码：</dt>
+                    <dd class="filter-tag">
+                        <input class="form-control" id="cardNumber" name="karNumber"></input>
+                    </dd>
+                </dl>-->
+                <dl class="filter-bar time-bar hide" id="birthdayTagsWrap">
+                    <dt class="filter-arrt">年龄段</dt>
+                    <dd class="filter-tag">
+                        <ul class="tagslist age-group" id="birthdayTagsList" ui-control="uitags" ui-options="{data: CONSTANTS.AGE,selectData:'-1'}"></ul>
+                        <div class="opera-group">
+                            <div class="time-control-item">
+                                <input class="time-control no-time" id="beginTime" readonly type="text">
+                                <i></i>
+                            </div>
+                            <span>-</span>
+                            <div class="time-control-item">
+                                <input class="time-control no-time" id="endTime" readonly type="text">
+                                <i></i>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="filter-bar">
+                    <dt class="filter-arrt">户籍居住地</dt>
+                    <dd class="filter-tag pt3" id="domicile">
+                        <script id="childNodeListTemplate" type="x-tmpl">
+						{% for(var i = 0; i< o.length; i++){ %}
+							<label nodeid="{%= o[i].id %}" title="{%= o[i].text %}">{%= o[i].text %}</label>
+						{% } %}
+					</script>
+                    </dd>
+                </dl>
+                <dl class="filter-bar">
+                    <dt class="filter-arrt">现在居住地</dt>
+                    <dd class="filter-tag pt3" id="nowAddress">
+                    </dd>
+                </dl>
+                <button class="btn-confirm btn b5" id="confirmSearch">确认检索</button>
+            </div>
+        </div>
+        <!-- 筛选 end -->
+        <!-- 页码 -->
+        <div class="page-info-metro full">
+            <div class="action-btn-group">
+                <label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall>全选</label>
+                <a class="btn btn-i-t  " id="addItem">
+                    <i class="btn-icon import-icon"></i>
+                    <span>新增</span>
+                </a>
+                <a class="btn btn-i-t" id="batchImportBtn">
+                    <i class="btn-icon import-icon"></i>
+                    <span>批量导入</span>
+                </a>
+                <a class="btn btn-i-t  " id="deleteItem">
+                    <i class="btn-icon delete-icon"></i>
+                    <span>删除</span>
+                </a>
+                <a class="btn btn-i-t" id="export" title="最大支持导出1000条数据">
+                    <i class="btn-icon export-icon"></i>
+                    <span>导出</span>
+                </a>
+                <!--<a class="btn btn-i-t searchPage hide" id="freshBtn">-->
+                    <!--<i class="btn-icon fresh-icon"></i>-->
+                    <!--<span>刷新</span>-->
+                <!--</a>-->
+            </div>
+
+            <div class="page-wrap">
+                <div class="page-info-metro square-pager">
+                    <div class="page-data tc" listview-page="">
+                        <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+                        <span class="page-num">共有<i class="page-num" listview-counts="">1</i>条记录</span>
+                        <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+                        <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 页码 end -->
+        <div class="library-info">
+            <div class="picture-wrap">
+                <div class="compare-picture person pr">
+                    <div class="image-item">
+                        <span class="close-img-btn">×</span>
+                        <div class="upload-img">
+                            <img src="/ui/plugins/eapui/img/nophoto.jpg" id="vehicleImg" attrimg="zoom" hasImg="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="tilelist vertical ver-caselist checkbox vehicle">-->
+            <div class="page-con">
+                <div class="tilelist vertical checkbox" id="dataList">
+                    <div class="list-node-wrap" id="personListTemplate" infoId="{%=o.INFO_ID%}" style="display: none">
+                        <dl class="list-node">
+                            <dt class="node-img person-img">
+					   		<span>
+					    		<img src="{%=o.PIC%}" attrimg="zoom" class="mb0">
+					   		</span>
+                                {% if(o.SCORE){ %}
+                                <b class="similar color-blue similarData"><b>{%=renderScore(o.SCORE)%}</b></b>
+                                {% } %}
+                            </dt>
+                            <dd class="node-text">
+                                <input type="checkbox" listview-check class="checkbox-opacity hide"/>
+                                <p class="node-title similar-name" title="{%=o.NAME?o.NAME:'暂无'%}"><label>姓名：</label><span class="orange"><a class="detailBtn" info_id="{%=o.INFO_ID%}">{%=o.NAME?o.NAME:'暂无'%}</a></span></p>
+                                <p style="width:106%;" class="fl" title="{%=o.IDENTITY_ID%}"><label>身份证：</label><span title="身份证号码：{%=o.IDENTITY_ID%}">{%=o.IDENTITY_ID%}</span></p>
+                                <div class="btn-group fr">
+                                    <!-- <a class="btn btn-i-t btn-xs searchBtn" filterUrl="{%=o.PIC%}" title="搜索">
+                                        <i class="btn-icon search-icon"></i>
+                                    </a> -->
+                                    <a class="btn-i-t btn-xs btn-more" title="详情 " info_id="{%=o.INFO_ID%}" archive_pic_info_id="{%=o.ARCHIVE_PIC_INFO_ID%}">
+                                        <i class="btn-icon more-icon"></i>
+                                    </a>
+                                    <a class="btn btn-i-t btn-xs btn-edit" title="编辑" info_id="{%=o.INFO_ID%}" archive_pic_info_id="{%=o.ARCHIVE_PIC_INFO_ID%}">
+                                        <i class="btn-icon edit-icon"></i>
+                                    </a>
+                                    <a class="btn-i-t btn-xs nb deleteBtn" title="删除" source_db="{%=o.SOURCE_DB%}"  info_id="{%=o.INFO_ID%}" archive_pic_info_id="{%=o.ARCHIVE_PIC_INFO_ID%}">
+                                        <i class="btn-icon deleteItem-icon"></i>
+                                    </a>
+                                </div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="frame-form-full">
+    <iframe class="full-screen" id="frameFormFull" frameborder="0" ></iframe>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/redListLibrary.js"></script>
+</html>

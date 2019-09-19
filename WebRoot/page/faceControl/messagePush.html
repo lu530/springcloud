@@ -1,0 +1,43 @@
+<!--* Created by 黎镇华 on ${DATE}.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>短信推送</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/form.css"/>-->
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/form.css"/>
+    <style>
+        .form-group label {
+            color: #222;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body class="oh">
+    <div class="window-content p20 oh" id="validateForm">
+        <div class="form-group form-group-block">
+            <label class="control-label">推送阈值：</label>
+            <div id="sliderThreshold" style="width:185px;height:22px;display: inline-block;"></div>
+            <input class="form-control ml20 tc" style="width:30px; padding:2px;display: inline-block;" id="THRESHOLD" name="THRESHOLD" maxlength="" ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="推送阈值" value=70>
+            <span class="red"> *</span>
+        </div>
+        <div class="form-group ">
+            <label class="fl">手机号码：</label>
+            <textarea id="PHONE" name="PHONE" ui-vtext="手机号码" class="form-control w100" style="height:100px;" maxlength="200" ui-validate="{maxlength:200}" placeholder="手机号以逗号分隔，请勿以逗号结尾！"></textarea>
+        </div>
+    </div>
+    <div class="window-bottom">
+        <button class="btn blue-btn mr15" id="saveBtn" type="button">确定</button>
+        <button class="btn gray-btn btn-close " data-dismiss="modal" type="button">关闭</button>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/StringUtil.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControl/messagePush.js"></script>
+</html>

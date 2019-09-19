@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>告警反馈</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacesurveillance/css/common.css">
+    <style>
+        .form-con .control-label{
+            width: 136px;
+        }
+        .form-con .form-single .form-control{
+            width: 60%;
+        }
+        .form-con .control-label{
+            width: 113px;
+        }
+        .modal-warper, .form-warper{
+        	position: absolute;
+		    left: 24px;
+		    width: 400px;
+        }
+    </style>
+</head>
+<body class="oa">
+<div class="form-body">
+    <div class="form-con form-inline" style="border-bottom:1px solid #ccc;">
+        <div class="form-warper">
+            <div class="sort-cell">
+                <dl class="form-single mb0">
+                    <dd class="form-group">
+                        <label class="control-label w50 tl fl">是否抓捕：</label>
+                        <div class="w50 tr fl">
+                            <label class="radio-inline p0"><input type="radio" name="IS_ARREST" value="1">是</label>
+                            <label class="radio-inline p0"><input type="radio" name="IS_ARREST" value="0">否</label>
+                        </div>
+                    </dd>
+                    <dd class="form-group hide">
+                        <label class="control-label w50 tl fl">是否移交：</label>
+                        <div class="w50 tr fl">
+                            <label class="radio-inline p0"><input type="radio" name="IS_HANDOVER" value="1">是</label>
+                            <label class="radio-inline p0"><input type="radio" name="IS_HANDOVER" value="0">否</label>
+                        </div>
+                    </dd>
+                    <dd class="form-group hide">
+                        <label class="control-label w100 tl">移交部门：</label>
+                        <div class="tc">
+                            <textarea class="w100" style="border-radius:5px;" name="DEPARTMENT" maxlength="200"></textarea>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="form-footer">
+        <button class="btn btn-small blue-btn btn-add mr15" id="submitBtn" type="button">保存</button>
+        <button class="btn btn-small gray-btn" id="closeBtn" type="button">取消</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/realTimeAlarm/hasCatchForm.js"></script>
+</html>

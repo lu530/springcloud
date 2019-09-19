@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>轨迹查看</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/trackSearch.css" />	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/form.css" />
+</head>
+<body class="oh">
+	<div class="left-list">
+	
+		<div class="page-list-head">
+			<a id="backBtn" class="back-btn btn-close">
+				<i class="icon-arrow-left10"></i>
+				<em>返回</em>
+			</a>
+			<span id="myModalLabel">轨迹列表</span>
+		</div>
+		<div class="list-box" id="searchResult">
+			<div class="livtview-list-wrap b0 list" style="top:3px;">
+				<ul class="icon-text-list list-unstyled" id="listTmplBox">
+				</ul>
+				<script id="listTmpl" type="x-tmpl">
+				{% for(var i=0; i<o.length; i++) { %}
+				<li class="livtview-list-node searchLi p5" id="{%=i+1%}" LATITUDE="{%=o[i].LATITUDE%}" LONGITUDE="{%=o[i].LONGITUDE%}" name="{%=o[i].DEVICE_NAME%}" time="{%=o[i].JGSK%}" obj_pic="{%=o[i].OBJ_PIC %}">
+				   	<span class="car-img-left" style="width:85px; height:75px;">
+						<img src="{%= o[i].OBJ_PIC %}" class="rIMG test" attrimg="zoom"/>
+					</span>	
+				    <div class="node-text fl ml20" style="width:59%;padding:18px;">
+				    	<span class="icon serial-num serial-pa t20">{%= i+1 %}</span>
+				         <p class="node-text-attr fwb">
+				         	<span>时间：</span><span>{%= o[i].JGSK %}</span>
+				         </p>
+				         <p class="node-text-attr">
+				         	<span>地点：</span><span title="">{%= o[i].DEVICE_ADDR %}</span>
+				         </p>
+				    </div>			    
+				</li>
+				{%  }  %}
+				</script>
+			</div>
+		</div>
+	</div>
+	
+	<div id="map" class="map"></div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/trackSearch.js"></script>
+</html>

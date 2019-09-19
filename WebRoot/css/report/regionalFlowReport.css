@@ -1,0 +1,9 @@
+.zdyTimeBtn:focus {
+	outline: 0;
+	border-color: #859dc9;
+	color: #4a75ba;
+}
+
+.zdyTimeBtn:hover {
+	color: #fff;
+}

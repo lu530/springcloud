@@ -1,0 +1,31 @@
+.filter-tag .form-control {
+    float: left;
+    /* width: 500px; */
+    height: 32px;
+    border: 1px solid #eaeaea;
+    margin-top: 1px;
+}
+.filter-view .filter-bar .multiple-wrap {
+    float: left;
+    line-height: 20px;
+    width: 500px;
+}
+.filter-bar .filter-tag .tree-wrap{
+	display:inline-block;
+}
+.btn-i-t .btn-icon, .operation .btn-icon {
+    width: 17px;
+    height: 16px;
+    margin-right: 5px;
+    background: url(/efacecloud/images/grkicon.png);
+}
+
+.operation .btn-icon.details-icon {
+    background-position: -319px -706px;
+}
+.operation .btn-i-t:hover .btn-icon.details-icon {
+    background-position: -345px -706px;
+}
+.page-con{
+	padding:20px;
+}

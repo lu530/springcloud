@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人脸抓拍量统计详情</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<style>
+.item-detail{
+    color: #0087C3;
+    cursor: pointer;
+}
+.page-title span{
+    margin-left: 5px;
+}
+</style>
+<body class="oa">
+<div class="pager-wrap" container="scroll">
+	<div class="pager-content">
+		<div class="page-title">
+            <a id="backBtn" class="back-btn btn-close mt8">
+                <i class="icon-arrow-left10"></i>
+                <em>返回</em>
+            </a>
+			<span></span>
+		</div>
+				<div class="filter-view">
+			<dl class="filter-bar">
+				<dd class="filter-bar-search">
+					<div class="fifler-group mr5">
+		  				<div class="search-box mb5">
+							<input class="search-input" id="searchText" type="text" placeholder="请输入设备ID、设备名称">
+							<span class="icon-search22" id="searchBtn"></span>
+		  				</div>
+					</div> 
+				</dd>
+			</dl>	
+									
+			<dl class="filter-bar">
+				<dt class="filter-arrt">时间：</dt>
+				<dd class="filter-tag ">
+					<div class="tagslist " id="timeTagList">
+						<span class="tag-item active tagsTime" time-control="jt">今天</span>
+						<span class="tag-item tagsTime" time-control="zt">昨天</span>
+						<span class="tag-item tagsTime" time-control="bz">本周</span>
+						<span class="tag-item tagsTime" time-control="by">本月</span>
+						<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+						<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+						<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+						<div class="opera-group">
+							<div class="time-control-item">
+								<input class="time-control" id="beginTime" readonly type="text">
+								<i></i>
+							</div>
+							<div class="time-control-item">
+								<input class="time-control" id="endTime" readonly type="text">
+								<i></i>
+							</div>
+							<button class="btn btn-i-t bsline zdyTimeBtn">确定</button>
+						</div>
+					</div>
+				</dd>
+			</dl>	
+		</div>
+		
+		<div id="personStructuredList" ui-control="listview" ui-service="faceCaptureTemplate" ui-options='{unload: true}' ui-template='faceCaptureTemplate' ui-parameters="queryParams">
+			<div class="page-info-metro square-pager full">
+                <div class="action-btn-group">
+                    <span class="btn btn-i-t" id="export">导出</span>
+                </div>
+	            <div class="page-data fr" listview-page="">
+	                <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+	                <span class="page-num">共有 <i class="page-num" listview-counts="">1</i>条记录</span>
+	                <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+	                <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+	            </div>
+            </div>
+            <div class="table-wrap tableBox">
+                <table class="table listBox" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th class="tc" style="width: 50px;"><input type="checkbox" id="checkAll" listview-checkall=""></th>
+                            <th class="tc"><span>设备ID</span></th>
+                            <th class="tc"><span>设备名称</span></th>
+                            <th class="tc"><span>厂商</span></th>
+                            <th class="tc"><span>状态</span></th>
+                            <th class="tc"><span>路人人脸</span></th>
+                            <th class="tc"><span>旅业人脸</span></th>
+                            <th class="tc"><span>网吧人脸</span></th>
+                            <th class="tc"><span>汽车驾驶员人脸</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="listviewImgBox">
+                        <tr class="structTask" id="faceCaptureTemplate">
+                            <td class="tc" style="width: 50px;">
+                                <input type="checkbox" listview-check="" class="checkbox-opacity tableCheck" >
+                            </td>
+                            <td class="tc"><span class="item-detail">4405002000202202</span></td>
+                            <td class="tc" >2</td>
+                            <td class="tc" >3</td>
+                            <td class="tc" >4</td>
+                            <td class="tc" >5</td>
+                            <td class="tc" >6</td>
+                            <td class="tc" >7</td>
+                            <td class="tc" >8</td>
+                        </tr>
+                    </tbody>                                                                                            
+                </table>
+            </div>
+		</div>
+		
+	</div>
+	<div class="frame-form-full">
+        <iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+    </div>
+	
+</div>
+</body>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/report/faceCaptureReportDetail.js"></script>
+
+</html>

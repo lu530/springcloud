@@ -1,0 +1,134 @@
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>机场实时布控</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css">
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+<link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/mapLayer/mapLayer.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/realAlarmMinitor/realAlarmMinitor.css" />
+
+<body class="full-screen">
+	<div class="frame-con l0">
+		<ul class="tabs left-side">
+			<li class="active tagItem" target="videoModel" id="archive">
+				<i class="lib-icon"></i>
+				<a href="#">视频模式</a>
+			</li>
+			<li class="tagItem" target="mapModel" id="topicLib">
+				<i class="zt-icon"></i>
+				<a href="#">地图模式 </a>
+			</li>
+		</ul>
+		<div class="right-silde videoModel" style="width:auto">
+			<div class="full-screen">
+				<iframe id="mainFrameContent" name="mainFrameContent" class="full-screen" frameborder="0" src="/efacecloud/page/realAlarmMinitor/realAlarmVideoModel.html"></iframe>
+			</div>
+		</div>
+		<div class="right-silde hide mapModel" style="width:auto">	
+			<div class="kktree">
+				<div class="search-box menu-search-box">
+					<input class="search-input" type="text" id="searchCon" placeholder="请输入关键字" maxlength="50">
+					<span class="icon-search2" id="search"></span>
+					<span class="icon-close2 hide icon-clearbtn r40" id="clearSearchTextBtn"></span>
+				</div>
+				<div class="tree-wrap">
+					<ul id="structureTree" class="ztree mt0" ui-control="treeview" ui-options="orgTreeOpts" ui-parameters="structureTreeParam"></ul>
+				</div>
+			</div>
+
+			<div class="full-screen">
+				 <div class="map-box">
+      				 <div id="map" class="map full-screen"></div>
+    			</div>
+			</div>
+		</div>
+		<div class="right-part select-plate listview" ui-control="listview" ui-service="face/dispatchedAlarm/grouping/getData" ui-template="alarmListTemplate" ui-parameters="historyFaceParam" ui-options="historyFaceOptions">
+			<div class="hide-item hideItem right-hide"><span class="icon-real-alarm right-arrow"></span></div>
+			<div class="flight-title-box">
+				<div class="flight-title">实时告警</div>
+				
+				<span class="voice-box active btn-xs voiceControl fr ml10">
+					<i class="btn-icon voice-icon"></i>
+					<audio src="" id="mediaMP3" class="hide"></audio>
+				</span>
+				<div class="switch-btn switchBtn active" title="该按钮被激活才会弹出告警详情">
+						<span class="circle"></span>
+				</div>
+			</div>
+			<div class="tilelist vertical">
+					<div class="alarmList" >
+						<script id="alarmListTemplate" type="x-tmpl">
+										<dl class="list-node oh  picMessage {%=setAlarmColor(o.TASK_LEVEL)%}" ALARM_ID="{%=o.ALARM_ID%}" TASK_TYPE="{%=o.TASK_TYPE%}" OBJ_ID="{%=o.OBJECT_ID%}" >
+											<dt class="node-img compare-img ">
+												<span class="more-width-pic">
+					    							<img src="{%=renderImg(o.ALARM_IMG)%}"  class="mb0" >
+					    							<em class="text-overflow" title="抓拍人脸">抓拍人脸</em>
+												</span>
+												{% if(o.TEMPLET_IMG){ %}
+												<!--历史记录查询的字-->
+					   							<span>
+					    							<img src="{%=renderImg(o.TEMPLET_IMG)%}" class="mb0" >
+					   								<em class="text-overflow" title="布控人脸">布控人脸</em>
+					   							</span>
+					   							{% } %}
+					   							{% if(o.OBJECT_PICTURE){ %}
+					   							<!--实时告警的字段-->
+					   							<span>
+					    							<img src="{%=renderImg(o.OBJECT_PICTURE)%}" class="mb0" >
+					   								<em class="text-overflow" title="布控人脸">布控人脸</em>
+					   							</span>
+					   							{% } %}
+												<b class="similar mr15" key="similar">{%=renderNullToNotKnow(o.SCORE)%}%</b>
+											</dt>
+											<dd class="node-text">											
+												<p class="similar-name" >
+													<label>姓名：</label>
+													<span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
+												</p>
+												<p class="similar-name" >
+													<label>布控库：</label>
+													<span title="{%=renderNullToNotKnow(o.DB_NAME)%}">{%=renderNullToNotKnow(o.DB_NAME)%}</span>
+												</p>	
+												<p class="similar-name" >
+													<label>时间：</label>
+													<span title="{%=renderNullToNotKnow(o.ALARM_TIME)%}">{%=renderNullToNotKnow(o.ALARM_TIME)%}</span>
+												</p>	
+											</dd>
+										</dl>
+									</script>
+									</div>
+				</div>
+		</div>
+	</div>
+	<script type="x-tmpl" id="mapPopup">
+		<div class="maplayer-wrap">
+	      <div class="layer camera">
+	        <div class="layer-caption">
+	          <div class="title">详情</div>
+	        </div>
+	        <div class="layer-content con2">
+	          <div class="main-msg left-msg">
+	            <p>名称：<span class="iB-span">{%=o.DEVICE_NAME%}</span></p>
+	            <p class="btns">
+	              <button type="button" class="btn blue-btn minitor" DEVICE_ID="{%=o.DEVICE_ID%}" NAME="{%=o.DEVICE_NAME%}">监控</button>
+	              <button type="button" class="btn blue-btn last-btn minitorVideo"  DEVICE_ID="{%=o.DEVICE_ID%}" NAME="{%=o.DEVICE_NAME%}">监控视频</button>
+	            </p>
+	          </div>
+	          <div class="bottom-img"></div>
+	        </div>
+	      </div>
+      </div>
+	</script>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/gis/js/suntekmapAPI.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-map.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/realAlarmMinitor/realAlarmVoicePlay.js"></script>
+<script type="text/javascript" src="/efacecloud/js/realAlarmMinitor/realAlarmMinitor.js"></script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>布控库</title>
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/efacecloud/page/new/clothControl.css" />
+</head>
+
+<body>
+	<div class="pager-wrap" container="scroll">
+		<div class="pager-content pt0">
+			<div class="page-title hasReturn">
+				<span><a id="backBtn">返回</a></span> <span>策略配置</span>
+			</div>
+			
+			<div class="form-con form-inline">
+				<div class="form-warper">
+					 <dl class="form-single">
+					 
+	                    <dd class="form-group">
+	                        <label class="control-label">选择视频源：</label>
+	                        <div class="dropdown-list">
+								<div class="dropdown-list-text" data-toggle="dropdown">
+									<p class="text-overflow video-resource-text"></p>
+									<a class="dropdown"> 
+										<i class="icon-arrow-down8"></i>
+									</a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="deviceNameList">
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<span class="ml15 loaction-select">
+								<i class="icon-location2"></i>
+								<span>地图选择</span>
+							</span>
+	                        <div class="form-control ml5 tag-box hide">
+	                        	<a class="dropdown"><i class="icon-arrow-down8"></i></a>
+	                        	<!-- <span class="tag-item-form">是你给 <span class="close-btn">×</span></span>
+	                        	-->
+	                        </div>
+	                        <input class="form-control ml5 hide" name="NAME" id="" type="text" maxlength="20" ui-validate="{pattern:'required', maxlength:20}" ui-vtext="姓名">
+	                    </dd>
+	                    
+	                    <dd class="form-group">
+	                        <label class="control-label">布控时限：</label>
+	                        <label class="radio-inline p0 ml5">
+	                        	<input type="radio" id="" name="prior" value="1" checked="checked">自定义
+	                        </label>
+	                        <label class="radio-inline p0 ml30">
+	                        	<input type="radio" id="" name="prior" value="2">长期有限
+	                        </label>
+	                        
+	                        <div class="time-wrap time mr5">
+	                        	<div class="opera-group">
+									<div class="time-control-item">
+										<span class="time-text">从</span>
+										<input class="time-control" id="beginTime" readonly type="text"> 
+									</div>
+									<div class="time-control-item ml15">
+										<span class="time-text">到</span>
+										<input class="time-control" id="endTime" readonly type="text">
+									</div>
+								</div>
+							</div>
+	                        
+	                    </dd>
+	                    
+	                    <dd class="form-group">
+	                        <label class="control-label">告警等级：</label>
+	                        <label class="radio-inline p0 ml5">
+	                        	<input type="radio" name="alarmLevel" value="1" checked="checked">红色告警
+	                        </label>
+	                        <label class="radio-inline p0 ml30">
+	                        	<input type="radio" name="alarmLevel" value="2">蓝色告警
+	                        </label>
+	                         <label class="radio-inline p0 ml30">
+	                        	<input type="radio" name="alarmLevel" value="3">黄色告警
+	                        </label>
+	                        <label class="radio-inline p0 ml30">
+	                        	<input type="radio" name="alarmLevel" value="4">黑色告警
+	                        </label>
+	                    </dd>
+	                    
+	                    <dd class="form-group">
+	                        <label class="control-label">告警核查方式：</label>
+	                        <label class="radio-inline p0 ml5">
+	                        	<input type="radio" name="examineWay" value="1" checked="checked">从算法验证
+	                        </label>
+	                        <label class="radio-inline p0 ml30">
+	                        	<input type="radio"  name="examineWay" value="2">飞识认证
+	                        </label>
+	                         <label class="radio-inline p0 ml30">
+	                        	<input type="radio" name="examineWay" value="3">一人一档认证
+	                        </label>
+	                        <label class="radio-inline p0 ml30">
+	                        	<input type="radio" name="examineWay" value="4">无
+	                        </label>
+							<div class="ml131 mt10">
+								 <div class="form-group mb0">
+									<label class="control-label sub-label">验证算法:</label>
+									<select class="form-control ml5 form-control-input" id="IDENTITY_TYPE" name="IDENTITY_TYPE" ui-validate="required" ui-vtext="证件类型">
+										<option value="1">算法1</option>
+										<option value="2">算法2</option>
+										<option value="3">算法3</option>
+										<option value="4">算法4</option>
+									</select>
+								</div>
+								
+							</div>	                      
+	                    </dd>
+	                    
+                     	<dd class="form-group">
+                        	<label class="control-label">告警阈值设置：</label>
+                        	<input type="text" class="threshold form-control" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数" />
+                     		<div class="threshold-input">
+                     			<label class="video-set ml20">
+	                     			<input type="checkbox" class="mr5" /> 
+	                     			<span class="">按人脸</span>
+	                     			
+	                     		</label>
+	                     		<label class="video-set ml20">
+	                     			<input type="checkbox" class="mr5"/> 
+	                     			<span class="">按摄像机设置</span>
+	                     		</label>
+                     		</div>
+                     		
+                     	</dd>
+                     	
+                     	<dd class="form-group">
+                        	<label class="control-label">权限控制：</label>
+                        	  <div class="dropdown-list">
+								<div class="dropdown-list-text" data-toggle="dropdown">
+									<p class="text-overflow video-resource-text"></p>
+									<a class="dropdown"> 
+										<i class="icon-arrow-down8"></i>
+									</a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="deviceNameList">
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+										<li>
+											<a>
+												<span class="deviceName">广东省</span>
+												<span class="removeBtn operate-btn">×</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<span class="ml15 loaction-select">
+								<i class="add-icon"></i>
+								<span>选择</span>
+							</span>
+                        </dd>
+                        
+                        <dd class="form-group remind-way">
+                        	<div>
+	                        	<label class="control-label">告警提醒方式：</label>
+	                        	<label class="radio-inline p0 ml5">
+		                        	<input type="checkbox" class="mr5">短信推送
+		                        </label>
+		                         <label class="radio-inline p0 m30">
+		                        	<input type="checkbox" class="mr5">弹窗推送
+		                        </label>
+		                        <span class="unremind-line p0"></span>
+		                        <label class="radio-inline p0 ml30 unremind">
+		                        	<input type="checkbox" class="mr5">不再推送
+		                        </label>
+	                        </div>
+	                        
+	                        <div class="ml131 clearfix">
+	                        
+		                        <div class="form-group mb0 message-remind fl">
+									<select class="form-control form-control-input" id="IDENTITY_TYPE" name="IDENTITY_TYPE" ui-validate="required" ui-vtext="证件类型">
+										<option>按库推送</option>
+										<option>按人脸推送</option>
+									</select>
+								</div>
+								
+								<div class="remind-select fl">
+									<div class="dropdown-list">
+										<div class="dropdown-list-text" data-toggle="dropdown">
+											<p class="text-overflow video-resource-text"></p>
+											<a class="dropdown" > 
+												<i class="icon-arrow-down8"></i>
+											</a>
+										</div>
+										<div class="dropdown-menu">
+											<ul class="list-con" >
+												<li>
+													<a>
+														<span class="deviceName">广东省</span>
+														<span class="removeBtn operate-btn">×</span>
+													</a>
+												</li>
+												<li>
+													<a>
+														<span class="deviceName">广东省</span>
+														<span class="removeBtn operate-btn">×</span>
+													</a>
+												</li>
+												<li>
+													<a>
+														<span class="deviceName">广东省</span>
+														<span class="removeBtn operate-btn">×</span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<span class="ml15 loaction-select">
+										<i class="add-icon"></i>
+										<span>选择</span>
+									</span>
+								</div>
+							</div>
+							
+                        </dd>
+					</dl>
+				</div>
+				
+				<div class="form-footer" style="bottom: 50px;">
+		          <button class="btn btn-big blue-btn mr15" id="submitBtn" type="button">保存</button>
+		          <button class="btn btn-big gray-btn btn-close" data-dismiss="modal" type="button">关闭</button>
+		    	</div>
+		    
+			</div>
+			
+			
+		</div>
+	</div>
+		
+	<div class="frame-form-full">
+		<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+	</div>
+	
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/page/new/clothControl.js"></script>
+</html>

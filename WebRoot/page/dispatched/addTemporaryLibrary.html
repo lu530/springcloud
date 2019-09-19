@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>布控库管理</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/addPersonDispatched.css" />
+</head>
+<body class="full-screen">
+	<div class="window-content pt30">
+		<dl>
+			<dd id="localHide" class="form-group form-inline">
+				<label class="control-label ml20 fwn w15">原始库ID：</label> <input
+					class="form-control ml5 w70" name="SDBID" id="SDBID" type="text"
+					ui-validate="{maxlength: 10}" ui-vtext="原始库ID">
+			</dd>
+			<dd class="form-group form-inline">
+				<label class="control-label ml20 fwn w15">库名称：</label> <input
+					class="form-control ml5 w70" name="storeName" id="storeName"
+					type="text" ui-validate="{pattern:'required',maxlength: 50}"
+					ui-vtext="库名称" maxlength="50"> <span class="red">*</span>
+			</dd>
+			<dd id="sizeHide" class="form-group form-inline">
+				<label class="control-label ml20 fwn w15">库容量：</label> <input
+					class="form-control ml5 w70" name="storeSize" id="storeSize"
+					type="text" placeholder="默认5000" ui-vtext="库容量"
+					ui-validate="{pattern: 'integer'}" maxlength="50">
+			</dd>
+			<!-- <dd class="form-group clearfix">
+			<label class="control-label fl ml20 fwn">区域选择：</label>
+			<div class="area-chose">
+				<div class="tree-view">
+					<ul class="ztree" id="orgTree" ui-control="treeview" ui-service="user/org/getTree" ui-parameters="{}"></ul>
+					<input type="hidden" id="orgCode"/>
+				</div>
+			</div>
+		</dd> -->
+		</dl>
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-primary mr5" id="confirmBtn">确定</button>
+		<button class="btn btn-sm btn-gray" id="cancelBtn">取消</button>
+	</div>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript"
+		src="/ui/plugins/eapui/util/domObjPrototype.js"></script>
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/addTemporaryLibrary.js"></script>
+</body>
+</html>

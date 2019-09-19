@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人员专题库表单</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/form.css" />
+</head>
+<body class="oa">
+	<div class="form-body" id="mobileForm">
+		<div class="form-con form-inline">
+			<div class="form-warper">
+				<div class="form-head-title">
+					<i class="icon"></i> <span>添加人脸</span>
+				</div>
+				<div class="sort-cell">
+					<div class="main-title">
+						<h4>人像信息</h4>
+					</div>
+					<div class="photo-tools">
+						<div class="top-pic-box" style="border: none;">
+							<img id="filterImg" src="/efacecloud/images/noPhoto2.png">
+							<ul>
+								<li class="re-upload"><i class="icon-image2"></i> <input
+									class="file-style" type="file" id="uploadImg" name="uploadImg">
+								</li>
+								<li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="sort-cell">
+					<div class="main-title">
+						<h4>基础信息</h4>
+					</div>
+					<dl class="form-single">
+						<dd class="form-group">
+							<label class="control-label">姓名：</label> <input
+								class="form-control ml5" name="" id="" type="text" maxlength=""
+								ui-validate="required" ui-vtext="姓名"> <span class="red">*</span>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">出生日期：</label>
+							<div class="filter-tag ml5" style="display: inline-block">
+								<div class="opera-group active">
+									<div class="time-control-item">
+										<input class="time-control no-time" id="beginTime" readonly=""
+											type="text"> <i></i>
+									</div>
+									<div class="time-control-item hide">
+										<input class="time-control no-time" id="endTime" readonly=""
+											type="text"> <i></i>
+									</div>
+								</div>
+							</div>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">性别：</label> <label
+								class="radio-inline p0 ml5"><input type="radio" id=""
+								name="sex" value="1" checked="checked">男</label> <label
+								class="radio-inline p0"><input type="radio" id=""
+								name="sex" value="2">女</label> <label class="radio-inline p0"><input
+								type="radio" id="" name="sex" value="3">未知</label>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label">证件号码：</label> <input
+								class="form-control ml5" name="" id="" type="text" maxlength=""
+								ui-validate="{pattern: 'required,idCard'}" ui-vtext="证件号码">
+							<span class="red">*</span>
+						</dd>
+						<dd class="filter-bar form-group">
+							<label class="control-label">户籍地址：</label>
+							<div class="filter-tag form-control ml5">
+								<div class="tree-wrap dropdown">
+									<div class="modular-head dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="selectedArea w95">广东省 </span> <span
+											class="icon-arrow-down8 tc"></span>
+									</div>
+									<div class="dropdown-menu">
+										<div class="city-title">
+											<ul>
+												<li ref=".city" class="active" defaultName="省份">省份</li>
+												<li class="disable" ref=".area" defaultName="地市">地市</li>
+												<li class="disable" ref=".station" defaultName="区县">区县</li>
+											</ul>
+										</div>
+										<div class="city-area">
+											<script id="childNodeListTemplate" type="x-tmpl">
+											{% for(var i = 0; i< o.length; i++){ %}
+												<label ORG_CODE="{%=o[i].ORG_CODE %}" title="{%= o[i].text %}" NODE_ID = "{%= o[i].id %}">{%= o[i].name %}</label>
+											{% } %}
+										</script>
+											<div class="tab-pane active city">
+												<dl class="attr-list">
+													<dd class="attr-list-body" id="registerAreaList"
+														ui-control="databind" ui-service="dataCity/rest/area">
+													</dd>
+												</dl>
+											</div>
+											<div class="tab-pane area">
+												<dl class="attr-list">
+													<dd class="attr-list-body"></dd>
+												</dl>
+											</div>
+											<div class="tab-pane station">
+												<dl class="attr-list">
+													<dd class="attr-list-body"></dd>
+												</dl>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</dd>
+						<dd class="filter-bar form-group">
+							<label class="control-label">现住地址：</label>
+							<div class="filter-tag form-control ml5">
+								<div class="tree-wrap dropdown">
+									<div class="modular-head dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="selectedArea w95">广东省 </span> <span
+											class="icon-arrow-down8 tc"></span>
+									</div>
+									<div class="dropdown-menu">
+										<div class="city-title">
+											<ul>
+												<li ref=".city" class="active" defaultName="省份">省份</li>
+												<li class="disable" ref=".area" defaultName="地市">地市</li>
+												<li class="disable" ref=".station" defaultName="区县">区县</li>
+											</ul>
+										</div>
+										<div class="city-area">
+											<div class="tab-pane active city">
+												<dl class="attr-list">
+													<dd class="attr-list-body" id="areaList"
+														ui-control="databind" ui-service="dataCity/rest/area">
+													</dd>
+												</dl>
+											</div>
+											<div class="tab-pane area">
+												<dl class="attr-list">
+													<dd class="attr-list-body"></dd>
+												</dl>
+											</div>
+											<div class="tab-pane station">
+												<dl class="attr-list">
+													<dd class="attr-list-body"></dd>
+												</dl>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="form-footer">
+			<button class="btn btn-primary btn-add mr15" id="submitBtn"
+				type="button">保存</button>
+			<button class="btn btn-gray btn-close" data-dismiss="modal"
+				type="button">关闭</button>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/library/addStorePerson.js"></script>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>频次分析</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/alarm/alarmStatistics.css"/>
+</head>
+<body class="oa" menuId="dataCenter-archivesLib-person-frequence">
+<div id="alarmStaListView" ui-control="listview" ui-options=""
+     ui-service="face/dispatchedFrequency/getData"
+     ui-template="alarmStaListTmpl" ui-parameters="queryParams">
+    <div class="page-main pt0" container="scroll">
+        <!-- =============== pagerCon ===================-->
+        <div id="pageCon" class="pager-con">
+            <div class="top-box">
+                <div class="filter-view">
+                    <dl class="filter-bar search-bar">
+                        <dd class="filter-bar-search">
+                            <div class="fifler-group mr5">
+                                <div class="search-box">
+                                    <input class="search-input" type="text" id="keyWord"
+                                           name="keyWord" placeholder="请输入姓名或身份证号码" maxlength="50">
+                                    <span class="icon-search2" id="searchBtn"></span>
+                                </div>
+                            </div>
+                            <!--
+                    <div class="fifler-group">
+                        <div class="search-bar-tips">
+                          <span class="icon-info22"></span>
+                          <span>提示：模糊搜索时，“？”代表单个字符匹配，“*”不限字符数匹配。</span>
+                        </div>
+                    </div>
+                    -->
+                        </dd>
+                    </dl>
+                    <!--
+            <dl class="filter-bar hide">
+                <dt class="filter-arrt">场景选择：</dt>
+                <dd class="filter-tag">
+                    <div class="ov p0 dropdown-tree form-control treetwo" id="orgTree" name="orgTree" type="dropdown-tree"
+            ui-control="dropdowntree" ui-service="viid/gate/getFaceDetect" ui-options="orgTreeOpts"></div>
+                    <input type="hidden" id="orgCode">
+                </dd>
+            </dl>  -->
+                    <!-- <dl class="filter-bar">
+                <dt class="filter-arrt">布控库选择：</dt>
+                <dd class="filter-tag multiple-select pt2">
+                    <select id="sdbList" name="sdbList" class="form-control sdb"
+                                ui-parameters="queryParams"
+                                ui-control="databind"
+                                ui-service="vehicle/alarmReport/sdbList"
+                                ui-options="{multiple:true}">
+                            </select>
+                </dd>
+            </dl> -->
+                    <dl class="filter-bar">
+                        <dt class="filter-arrt">布控库</dt>
+                        <dd class="filter-tag pt3" id="domicile">
+                            <script id="childNodeListTemplate" type="x-tmpl">
+						{% for(var i = 0; i< o.length; i++){ %}
+							<label ORG_CODE="{%=o[i].DB_ID %}"  NODE_ID = "{%= o[i].DB_ID %}">{%= o[i].DB_NAME %}</label>
+						{% } %}
+
+
+
+                        </script>
+                        </dd>
+                    </dl>
+                    <dl class="filter-bar">
+                        <dt class="filter-arrt">抓拍时间：</dt>
+                        <dd class="filter-tag ">
+                            <div class="tagslist timelist" id="timeTagList">
+                                <span class="tag-item active tagsTime" time-control="jt">今天</span>
+                                <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                                <span class="tag-item tagsTime" time-control="bz">本周</span>
+								<span class="tag-item tagsTime" time-control="by">本月</span>
+                                <span class="tag-item tagsTime" time-control="nW">近7天</span> 
+								<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+                                <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                                <div class="opera-group">
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="beginTime" readonly
+                                               type="text"> <i></i>
+                                    </div>
+                                    <span>-</span>
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="endTime" readonly type="text">
+                                        <i></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    <button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+                </div>
+            </div>
+
+            <!-- 过虑项结束 -->
+
+            <div class="page-info-metro square-pager" style="width: auto">
+                <div class="page-data fr" listview-page="">
+                    <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a> <span class="page-num">共有 <i class="page-num" listview-counts="">10</i>条记录</span>
+                    <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a> <a class="page-next fr disable" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                </div>
+            </div>
+
+            <!-- 列表开始 -->
+            <div class="page-con">
+                <div class="tilelist vertical checkbox listviewImgBox">
+
+                  <script id="alarmStaListTmpl" type="x-tmpl">
+			<div class="list-node-wrap" >
+			<dl class="list-node picMessage">
+				<dt class="node-img person-img">
+					<img src="{%=o.TEMPLET_IMG%}" class="" attrimg="zoom">
+				</dt>
+				<dd class="node-text">
+					<p class="node-title" picMsg="姓名:{%=o.PERSON_NAME%}"><span>{%=o.PERSON_NAME%}</span></p>
+					<p picMsg="次数:{%=o.COUNT%}次"><label>次数：</label><span class="red">{%=o.COUNT%}次</span></p>
+					<p picMsg="身份证:{%=o.IDENTITY_ID%}"><label>身份证：</label><span>{%=o.IDENTITY_ID%}</span></p>
+					<div class="btn-group fr" attrId="{%=o.IDENTITY_ID%}">
+						<a class="btn-i-t btn btn-xs detail" title="详情"><i class="btn-icon more-icon"></i></a>
+					</div>
+				</dd>
+			</dl>
+			</div>
+
+
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 详情页 -->
+<div class="frame-form-full form-frame-view" style="top: 40px">
+    <iframe class="full-screen" id="frameDetailView" frameborder="0"></iframe>
+</div>
+<!-- 列表结束 -->
+<div class="frame-form-full">
+    <iframe class="full-screen" id="frameFormFull" frameborder="0"></iframe>
+</div>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+        src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+        src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript"
+        src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript"
+        src="/efacecloud/js/alarm/alarmStatistics.js"></script>
+</body>
+</html>

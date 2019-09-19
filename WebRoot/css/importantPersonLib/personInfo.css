@@ -1,0 +1,156 @@
+@charset "utf-8";
+
+.frame-side {
+	background: transparent;
+	width: 320px;
+	/* padding:10px; */
+	border-right: 1px solid #ccc;
+}
+
+.frame-con {
+	left: 320px;
+	padding-right: 20px;
+}
+
+.item {
+	border-bottom: 1px solid #ccc;
+	padding: 10px;
+	overflow: hidden;
+}
+
+.item h4 {
+	color: #7E7E7E;
+	font-size: 14px;
+	margin: 0;
+}
+
+.mark-group {
+	/* text-align:center; */
+	
+}
+
+.mark {
+	padding: 2px 5px;
+	background: #E66968;
+	color: #fff;
+	border-radius: 10px;
+	font-size: 12px;
+}
+
+.tilelist .list-node .person-img img {
+	width: auto;
+	max-width: 100%;
+	height: 100px;
+}
+
+.tilelist.vertical .list-node:hover {
+	border-color: transparent;
+}
+
+.node-text p span, .node-text p i {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.node-text p i {
+	margin-right: 5px;
+	color: #888;
+}
+
+.item .title {
+	/* text-align:center; */
+	/* z-index: 1; */
+	/* position: relative; */
+	padding-top: 10px;
+}
+
+.item .title span {
+	/* background: #f3f3f3; */
+	/* padding: 0 10px; */
+	
+}
+
+.item-con {
+	position: relative;
+	z-index: 0;
+}
+
+.item-con:before {
+	/* content:""; */
+	/* position:absolute; */
+	/* border: 1px solid #E2E2E2; */
+	/* left: 20px; */
+	/* right: 20px; */
+	/* top: -17px; */
+	
+}
+
+.item-con p {
+	margin: 0 0 1px 0;
+	overflow: hidden;
+	font-size: 13px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.item-con p label {
+	font-weight: normal;
+	color: #888;
+	min-width: 75px;
+	display: inline-block;
+}
+
+.item-con ul {
+	padding: 0;
+	margin: 0;
+}
+
+.item-con ul li {
+	width: 33%;
+	float: left;
+	padding: 5px;
+	text-align: center;
+}
+
+.item-con ul li img {
+	width: auto;
+	max-width: 100%;
+	height: 68px;
+}
+
+.item-con ul li p {
+	text-align: center;
+	margin-top: 5px;
+}
+
+.item-group {
+	overflow: hidden;
+}
+
+.nav-bar {
+	/* padding:0; */
+	margin: 0;
+	height: 38px;
+	background: #F0F0F0;
+	border-bottom: 1px solid #ddd;
+}
+
+.nav-bar li {
+	padding: 10px 20px;
+	float: left;
+	cursor: pointer;
+}
+
+.nav-bar li.active, .nav-bar li:hover {
+	background: #007FDE;
+	color: #fff;
+}
+
+.item-panel {
+	width: 50%;
+	float: left;
+}
+
+.table-wrap .table th span {
+	font-size: 13px;
+}

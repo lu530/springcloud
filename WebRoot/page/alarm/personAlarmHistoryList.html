@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>人脸告警</title>
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/alarm/alarmCommon.css" />
+	</head>
+	<body>
+		<div class="pager-wrap" container="scroll">
+			<div class="pager-content pt0">
+				<!-- <div class="page-title hasReturn">
+					<span><a id="backBtn">返回</a></span> <span>所有告警列表</span>
+				</div> -->
+				<div id="tabList" ui-control="listview" ui-service="face/dispatchedAlarm/getData" ui-template='listTemplate' ui-parameters="queryParamsList">
+
+					<!-- 筛选菜单 -->
+						<div class="filter-view">
+							<dl class="filter-bar search-bar">
+								<dd class="filter-bar-search">
+									<div class="fifler-group mr5">
+										<div class="search-box">
+											<input class="search-input searchCon" type="text" placeholder="请输入姓名、证件号码" maxlength="20"> <span class="icon-search2 searchBarBtn"></span>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<dl class="filter-bar">
+								<dt class="filter-arrt">相似度阈值：</dt>
+								<dd class="filter-tag pt2" id="thresholdValidate">
+									<input class="form-control search-similar searchSimilarCon" placeholder="请输入1-100之间的整数" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+								</dd>
+							</dl>
+							<dl class="filter-bar">
+								<dt class="filter-arrt">告警时间：</dt>
+								<dd class="filter-tag ">
+									<div class="tagslist timelist" id="timeTagList">
+										<div class="opera-group active">
+											<div class="time-control-item">
+												<input class="time-control" id="beginTime" readonly type="text"> <i></i>
+											</div>
+											<span>-</span>
+											<div class="time-control-item">
+												<input class="time-control" id="endTime" readonly type="text">
+												<i></i>
+											</div>
+											<button class="btn btn-i-t zdyTimeBtn">确定</button>
+										</div>
+									</div>
+								</dd>
+							</dl>
+
+							<dl class="filter-bar" id="carPlate">
+								<dt class="filter-arrt">感知设备：</dt>
+								<dd class="filter-tag pt3">
+									
+
+									<div class="dropdown-list">
+										<div class="dropdown-list-text">
+											<span class="list-title" id="deviceNames_1"></span>
+											<input type="hidden" id="orgCode_1">
+											<a class="dropdown hide"> <i class="icon-arrow-down8"></i></a>
+										</div>
+										<div class="dropdown-menu">
+											<ul class="list-con" id="deviceNameList_1" index="1"></ul>
+										</div>
+									</div>
+									<span class="select-place" id="locate_1"><i class="icon-locate"></i>感知设备</span>
+								</dd>
+							</dl>
+							
+							<dl class="filter-bar">
+								<dt class="filter-arrt">排序：</dt>
+								<dd class="filter-tag">
+									<div class="tagslist" id="sortList">
+										<span class="tag-item active" type="scoreSort">相似度</span>
+										<span class="tag-item" type="timeSort">时间</span>
+									</div>
+								</dd>
+							</dl>
+						</div>
+
+					<div class="page-info-metro square-pager full">
+						<div class="action-btn-group ">
+							<label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall="">全选</label>
+							<a class="btn btn-i-t" title="最大支持导出前1000条数据" id="export">
+								<i class="btn-icon export-icon"></i> <span>导出</span>
+							</a>
+						</div>
+						<div class="page-data fr" listview-page="">
+							<a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+							<span class="page-num">共有 <i class="page-num" listview-counts="">0</i>条记录,</span>
+							<a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+							<a class="page-next fr disable" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+						</div>
+					</div>
+					<!-- list -->
+						<div class="tilelist vertical checkbox listviewImgBox">
+							<!-- repeat -->
+							<script id="listTemplate" type="x-tmpl">
+									<div class="list-node-wrap" obj_id="{%=o.OBJECT_ID%}">
+										<dl class="list-node oh">
+											<dt class="node-img compare-img" attrimg="doublezoom">
+												<span class="compare-large">
+													<img src="{%=o.ALARM_IMG%}" class="face">
+													<em>抓拍图片</em>
+												</span>
+												<span class="ml0 compare-small">
+													<img src="{%=o.TEMPLET_IMG%}" class="">
+													<em>布控图片</em>
+												</span> 
+												<b class="similar {%=renderColor(o.ALARM_LEVEL)%}" key="similar">{%=o.SCORE%}%</b>
+											</dt>
+											<dd class="node-text mt10 {%=o.FS_HIT==1?"fly-bg":""%} picMessage">
+												<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+												<p class="similar-name" picMsg="姓名:{%=renderNullToNotKnow(o.PERSON_NAME)%}">
+													<label>姓名：</label>
+													<span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
+												</p>
+												<p style="width:106%;" picMsg="证件:{%=renderNullToNotKnow(o.IDENTITY_ID)%}">
+													<label>证件：</label>
+													<a class="active-acolor" title="证件号码：{%=renderNullToNotKnow(o.IDENTITY_ID)%}">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</a>
+												</p>
+												<p picMsg="告警地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+													<label>告警地点：</label>
+													<span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span>
+												</p>
+												<p picMsg="布控库:{%=renderNullToNotKnow(o.DB_NAME)%}">
+													<label>布控库：</label>
+													<span title="{%=renderNullToNotKnow(o.DB_NAME)%}">{%=renderNullToNotKnow(o.DB_NAME)%}</span>
+												</p>
+												<p picMsg="时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+													<label>时间：</label>
+													<span title="告警时间：{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}</span>
+												</p>
+												<div class="btn-group fr">
+													<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.ALARM_IMG%}">
+														<i class="btn-icon verification-icon"></i>
+													</a>
+													<a class="btn-i-t btn-xs trajectory-search" title="综合轨迹分析" url="{%=o.ALARM_IMG%}">
+														<i class="btn-icon trajectory-icon"></i>
+													</a>
+													<a class="btn-i-t btn-xs searchBtn" title="检索" fileUrl="{%=o.ALARM_IMG%}">
+														<i class="btn-icon search-icon"></i>
+													</a>
+													<a class="btn-i-t  btn-xs detailBtn" title="详情" ALARM_ID="{%=o.ALARM_ID%}" alarm-level="{%=o.ALARM_LEVEL%}" isfs="{%=o.FS_HIT%}"
+														name="{%=renderFields(o.FS_NAME)%}" idcard="{%=renderFields(o.FS_IDENTITY_ID)%}" time="{%=renderFields(o.FS_HIT_TIME)%}" objid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}">
+														<i class="btn-icon more-icon"></i>
+													</a>
+												</div>
+											</dd>
+										</dl>
+									</div>
+								</script>
+						</div>
+					<!-- list end -->
+				</div>
+			</div>
+		</div>
+		<div class="frame-form-full">
+			<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+		</div>
+		<iframe class="alarm-export hide" id="alarmExport" frameborder="0"></iframe>
+	</body>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/ui/plugins/chart/echarts.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+	<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/alarm/personAlarmAllList.js"></script>
+
+</html>

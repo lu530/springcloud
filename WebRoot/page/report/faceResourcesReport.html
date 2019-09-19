@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人脸资源一览图</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/report/faceResourcesReport.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/efacecloud/js/gis/suntekmap.css">  -->
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+</head>
+<body>
+	<div class="map-con"><div id="map" class="full-screen"></div></div>
+
+	<div class="left-silde silde">
+		<div class="silde-title">
+			<p>人脸大数据资源概览 </p>
+		</div>
+		<div class="data-block-wrap">
+			<div class="data-block">
+				<p class="data-block-title"><label>人脸总资源：</label><span><b id="libraryFaceNum">0</b>千张</span></p>
+				<div class="data-block-draw" id="totalResourcesReport"></div>
+			</div>
+	
+			<div class="data-block mb0">
+				<p class="data-block-title"><label>人脸采集总资源：</label><span><b id="monthFaceNum">0</b>千次</span></p>
+				<div class="data-block-draw" id="flowPersonReport"></div>
+			</div>
+		</div>
+		<div class="side-bg"></div>
+	</div>
+	
+	<div class="right-silde silde">
+		<div class="silde-title">
+			<p>摄像机设备资源 ：<b id="deviceNum">0</b></p>
+		</div>
+		<div class="data-block-wrap">
+			<div class="data-block" style="height:30%;">
+				<p class="data-block-title"><label>人脸采集(今天)：</label><span><b id="todayFaceNum">0</b>千张</span></p>
+				<div class="data-block-draw" id="todayFaceCaptureReport"></div>
+			</div>
+			
+			<div class="data-block mb0" style="height:68%;">
+				<p class="data-block-title"><span>区域人脸采集统计</span></p>
+				<div class="data-block-draw" id="areaFaceReport">
+				</div>
+			</div>
+		</div>
+		<div class="side-bg"></div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/chart/echarts.min.js"></script>
+
+<!-- <script type="text/javascript" src="/efacecloud/js/gis/suntekmap-src.js"></script>
+<script type="text/javascript" src="/efacecloud/js/gis/leaflet.labelTextCollision.js"></script> -->
+
+<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapmapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/report/faceResourcesReport.js"></script>
+</html>

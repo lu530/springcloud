@@ -1,0 +1,57 @@
+.filter-tag .form-control{
+	max-width:400px;
+}
+.filter-tag .form-control.dropdown-tree .dropdown-tree-text{
+	width:400px !important;
+}
+.filter-tag .form-control.dropdown-tree .dropdown-tree-area{
+	width:400px !important;
+}
+.filter-view .btn-cancel{
+	background-color: #dddddd;
+    color: #000!important;
+    outline:none;
+}
+.filter-view .btn-cancel:hover{
+	background-color: #aaaaaa;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 55px;
+    left: -40px;
+    bottom: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 27px;
+    opacity: 1;
+    border-radius: 50%;
+    filter: alpha(opacity=50);
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.carousel-control.left {
+	background-image: none;
+	background-color: #c0c0c0;
+}
+.carousel-control.right {
+    left: auto;
+    right: -40px;
+	background-image: none;
+	background-color: #c0c0c0;
+}
+.carousel em {
+    display: inline-block;
+    width: 100%;
+    margin-top: 5px;
+    color: #666;
+    text-align: center;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+}
+ .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    height: 130px;
+}

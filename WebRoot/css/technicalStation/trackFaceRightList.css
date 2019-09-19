@@ -1,0 +1,409 @@
+.dis-table {
+	padding: 0 0 0 135px;
+	position: relative;
+}
+
+.tool-bar {
+	display: inline-block;
+	vertical-align: middle;
+	float: right;
+	margin: 11px 40px 0 0;
+}
+
+.tool-bar-item, .tool-bar-item span, .tool-bar-item i {
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.tool-bar-item {
+	padding: 3px 20px;
+	height: 30px;
+	border: 1px solid #d2d1d9;
+	float: left;
+	border-radius: 5px;
+	color: #3462ba;
+}
+
+.tool-bar-item.first {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.tool-bar-item.center{
+	border-radius: 0;
+}
+.tool-bar-item.last {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.tool-bar-item.active {
+	background: #3462ba;
+	color: #fffdff;
+	border-color: #3462ba;
+}
+
+.tool-bar-item .hand {
+	width: 18px;
+	height: 18px;
+	background: url(/efacecloud/images/track-time.png);
+	margin-right: 5px;
+}
+
+.tool-bar-item .hand.similar {
+	background-position: -53px -36px;
+}
+
+.tool-bar-item.active .hand.similar {
+	background-position: -77px -36px;
+}
+
+.tool-bar-item .hand.time {
+	background-position: -106px -36px;
+}
+
+.tool-bar-item.active .hand.time {
+	background-position: -134px -36px;
+}
+.tool-bar-item .place{
+	background: url(/efacecloud/images/place-icon.png) no-repeat;
+	background-position: 2px 0;
+}
+.tool-bar-item.active .place{
+	background-position: -15px 0;
+}
+.address-style {
+	font-weight: bold;
+	color: #325fba;
+	margin: 2px 0 12px 0;
+	font-size: 17px;
+	position: relative;
+	top: 6px;
+	height: 56px;
+	line-height: 56px;
+	background: #f6f7fb;
+	left: -35px;
+	padding-left: 35px;
+	margin-right: -35px;
+}
+
+.list-node {
+	float: left;
+	width: auto;
+	height: auto;
+	width: 132px;
+	overflow: hidden;
+	margin: 5px 5px 0 0;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.node-img.vertical p {
+	color: #4a81db;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center;
+}
+
+.node-img.vertical span img {
+	width: auto;
+	height: 144px;
+	display: inline-block;
+	max-width: 100%;
+}
+
+.list-node .lb-elm {
+	position: absolute;
+	left: 4px;
+	/*bottom: 2px;*/
+	bottom: -2px;
+	height: 20px;
+    width: 24px;
+}
+
+.list-node .rb-elm {
+	position: absolute;
+	right: 3px;
+	/*bottom: 4px;*/
+	bottom: 0px;
+}
+
+/* 切换按钮样式 */
+.list-wrap .nav-tab-style1 {
+	width: 250px;
+	height: 30px;
+	margin-bottom: 0;
+}
+
+.switch li.active {
+	background: #3462ba;
+	border-color: #3462ba;
+}
+
+.nav-tab-style1 {
+	line-height: 30px;
+	margin: 15px auto;
+	/* box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 -1px 0 rgba(0, 0, 0, .02); */
+}
+
+.nav-tab-style1>li.first {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.nav-tab-style1>li.last {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.nav-tab-style1>li {
+	float: left;
+	line-height: 14px;
+	width: 50%;
+	background-color: #fff;
+	height: 100%;
+	border: 1px solid #d2d1d9;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.list-wrap .nav-tab-style1>li.hand a {
+	line-height: 30px;
+}
+
+.nav-tab-style1>li.hand.active a {
+	color: #FFFFFF;
+	background-color: #3462ba;
+}
+
+.nav-tab-style1>li.hand a {
+	padding: 0;
+	text-align: center;
+}
+
+.tilelist .list-node.active:before {
+	background-position: -61px -58px;
+}
+
+.people-list {
+	bottom: 0px;
+	top: 110px;
+	padding-bottom: 60px;
+}
+.place-list .timeline{
+	left: 10px;
+}
+.place-list .dis-table{
+	padding-left: 74px;
+}
+
+
+.mac-list {
+    position: absolute;
+    top: 0;
+    right: -400px;
+    bottom: 0;
+    width: 400px;
+    background: #fff;
+    box-shadow: -2px 0 10px #f1f1f1;
+    transition: right 1s;
+    z-index: 2;
+}
+.mac-list.show {
+    right: 0px;
+}
+.mac-list-title{
+	line-height:47px;
+	color:#333333;
+	font-size:16px;
+	border-bottom: 1px solid #E8EBF0;
+	padding: 0 15px;
+}
+.remove-btn{
+	float:right;
+	width: 20px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 20px;
+}
+.mac-list-detail{
+	position: absolute;
+	top: 48px;
+	right: 0;
+	bottom: 205px;
+	left:0;
+	overflow:auto;
+}
+.mac-list-detail .dis-table{
+	padding-left: 45px;
+}
+.mac-list-detail .timeline{
+	left: -3px;
+    top: 0px;
+    bottom: 0;
+}
+.mac-list-detail .timeline .line{
+	bottom:-18px;	
+}
+.mac-list-detail .timeline .circle-bottom{
+	bottom:-30px;
+}
+.mac-list-detail .address-style{
+	background:#fff;
+	padding-left: 0;
+	font-size:16px;
+	height: 39px;
+	line-height: 39px;
+	margin: 0;
+	left: 0;
+	margin-bottom: 5px;
+}
+.mac-wrap ul{
+	padding-left:20px;
+	list-style-type: disc;
+}
+.mac-wrap ul li{
+	padding:5px 2px
+}
+.mac-title{
+	color:#333333;
+	font-weight:bold;
+	margin-bottom: 5px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.mac-title span{
+	display: inline-block;
+	float:left;
+}
+.detail-times{
+    color: #4a75ba;
+    font-size: 12px;
+    width:20%;
+    text-align:right;
+    padding-right:5px;
+}
+.detail-times span{
+	float:none;
+	margin:0 5px;
+}
+.mac-addr{
+	width:80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mac-list-result{
+	height:205px;
+	position: absolute;
+    right: 0;
+    bottom: 0;
+    left:0;
+}
+.list-result-title{
+	line-height:40px;
+	background:#F1F2F4;
+	color:#333335;
+	padding-left:27px;
+}
+.title-circle{
+	background:#4578D1;
+	width:7px;
+	height:7px;
+	display:inline-block;
+	margin-right:12px;
+}
+.list-result-con{
+	position: absolute;
+	top:40px;
+    right: 0;
+    bottom: 0;
+    left:0;
+    overflow:auto;
+}
+.list-result-con ul{
+	padding-top:10px;
+	padding-left:55px;
+}
+.list-result-con span{
+	display:inline-block;
+	vertical-align:middle;
+}
+.list-con{
+	width:75%;
+}
+.list-result-con .times{
+	padding:3px 5px;
+	background:#4B73D5;
+	color:#FFFEFF;
+	border-radius:5px;
+}
+.mac-wrap{
+	margin:0;
+	padding-right:10px;
+}
+.mac-content .list-con,
+.mac-content .times-details{
+	display: inline-block;
+    float: left;
+    margin: 0;
+    width: 20%;
+}
+.times-details{
+	position:relative;
+}
+.times-details .dropdown-menu{
+	margin:0;
+	padding: 10px;
+	padding-top: 0;
+	max-height: 146px;
+	min-width: 333px;
+	overflow: auto;
+}
+.times-details .dropdown-menu-title{
+	color:#4877CF;
+	line-height:33px;
+}
+.times-details .dropdown-menu-con{
+	/* position:absolute;
+	top:33px;
+	left:0;
+	right:0;
+	bottom:0;
+	overflow:auto; */
+}
+.times-details .dropdown-menu-con span{
+	display:inline-block;
+	vertical-align:middle;
+	width: 25%;
+	float: left;
+	padding: 2px;
+}
+.mac-content .list-con{
+	width:80%;
+}
+.times-details .times{
+	text-align: right;
+    width: 100%;
+    display: inline-block;
+    padding-right: 10px;
+    color: #4678CF;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.times-details .times:hover{
+	color: #FEA434;
+}
+.times-details:hover .dropdown-menu {
+    display: block;
+    left: auto;
+    right: 0px;
+}
+
+.node-img.vertical p {
+	color: #4a81db;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center;
+}

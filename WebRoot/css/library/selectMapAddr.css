@@ -1,0 +1,27 @@
+.map{
+	height: 100%;
+	width: 100%;
+}
+.popup-wrap{
+	padding-top: 10px;
+}
+.popup-wrap span{
+	margin-right: 10px;
+}
+.popup-wrap p{
+	margin: 6px 0;
+	font-size: 13px;
+}
+.popup-wrap img{
+	width: 186px;
+	margin-bottom: 10px;
+}
+.leaflet-container a.leaflet-popup-close-button{
+	color: #2A58AD;
+	font-size: 18px;
+	right: 4px;
+	font-weight: normal;
+}
+.leaflet-popup-content-wrapper{
+	border-radius: 4px;
+}

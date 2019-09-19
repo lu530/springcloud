@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menus>
+	<!-- <menu name="菜单名称(通常是中文名称)" id="菜单的ID" target="打开目标方式" type="菜单类型" url="菜单对应的URL" 
+		appname="菜单所属应用"> 菜单中可以嵌套子菜单 </menu> //默认是独立应用 -->
+
+	<menu name=" " id="efacecloud_menu" target="_blank" type="menu" url="" appname="webcontext">
+	</menu>
+</menus>
+
+<!-- menu:每一个menu对应的是应用的一个菜单项。 name:菜单的名称，例如：用户信息维护 id:菜单的唯一ID，生成规则：模块名称_功能名称，例如：eapadmin_userinfo,菜单id用于进行用户的权限鉴定，AppHandle提供权限的认证接口。 
+	target:菜单的打开方式，target取值包括：_blank和_default,_blank代表点击菜单时候采用弹出窗口的方式打开，_default用缺省的方式打开。 
+	type:菜单的类型，menu:代表是菜单级权限，function:代表是功能级权限。 url:菜单对应的URL。 appname:菜单所在的应用名称，如果该属性不存在缺省应用为"OA门户" -->

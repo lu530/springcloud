@@ -1,0 +1,155 @@
+@charset 'utf-8';
+
+.form-con .filter-tag.form-control {
+	float: none;
+}
+
+.form-con .filter-bar .filter-tag {
+	padding: 0;
+	padding-left: 5px;
+	overflow: inherit;
+}
+
+.form-con .filter-bar .filter-tag .tree-wrap {
+	height: 28px;
+}
+
+.form-con .filter-tag .dropdown-menu {
+	left: -7px;
+	max-width: 102%;
+	width: 102%;
+	min-width:500px;
+}
+
+.city-title {
+	height: 30px;
+	width: 100%;
+}
+
+.tree-wrap .modular-head span {
+	width: 10% !important;
+}
+
+.tree-wrap .modular-head span.selectedArea {
+	width: 90% !important;
+}
+
+/* 改版8.04样式 */
+.content-wrap {
+	height: 100%;
+	background-color: #fff;
+	padding: 20px 0px;
+}
+
+.container-wrap {
+	background-color: #fff;
+	height: 100%;
+}
+
+.fixation-wrap .form-con {
+	top: 20px;
+	right: 0px;
+	background-color: #fff;
+	position: static;
+	overflow-y: inherit;
+}
+
+.fixation-wrap .form-con.pb80 {
+	padding-bottom: 80px;
+}
+/*.fixation-wrap .form-con.pb400{
+	padding-bottom: 400px;
+}*/
+.fixation-wrap .form-footer {
+	bottom: 30px;
+	text-align: left;
+	left: 20px;
+	width: auto;
+	margin: 0 auto;
+	position: static;
+	background-color: #fff;
+	padding-left: 5%;
+	z-index: 1;
+}
+
+.fixation-wrap .form-footer .blue-btn {
+	margin-left: 168px;
+}
+
+.fixation-wrap .form-footer.fixation { /* -- 加fixation类 变为定位 */
+	position: absolute;
+	bottom: 0px;
+	right: 32px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: auto;
+	left: 15px;
+	padding-left: 5%;
+	z-index: 2;
+}
+
+.fixation-wrap .form-footer.fixation .blue-btn {
+	margin-left: 163px;
+}
+/* end 改版8.04样式 */
+.photo-tools .top-pic-box {
+	width: 146px;
+	padding-bottom: 10px;
+}
+
+.time-control[disabled] {
+	cursor: not-allowed;
+	background-color: #eee;
+	opacity: 1;
+}
+
+.image-item{
+	width:128px;
+	height:150px;
+	float:none;
+	display:inline-block;
+	vertical-align:middle;
+}
+.image-item .upload-bg .icon-upload{
+	margin-top:40px;
+}
+.image-item .file-name{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #000;
+    padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.image-item .file-name-bg{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top:0;
+    background: #ccc;
+    opacity: 0.4;
+	filter: alpha(opacity=40);
+}
+.text-group{
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.text-group .form-control{
+	cursor: pointer;
+}
+.image-item .file-name{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #000;
+    padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

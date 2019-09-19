@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>撤控库管理</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap3.3/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/dispatched/removedControl.css" />
+</head>
+<body class="full-screen add-header">
+	<div class="form-header">
+		<h3 class="form-title" id="myModalLabel">编辑人像</h3>
+		<div class="btn-group fr">
+			<a href="#" title="关闭"><i class="icon-cancel btn-close"></i></a>
+		</div>
+	</div>
+	<div class="frame-side">
+		<div class="side-title">
+			<h3>
+				<i class="icon-menu3"></i> 信息查询
+			</h3>
+		</div>
+		<div class="side-form">
+			<div class="form-group">
+				<label>姓名：</label> <input class="form-control" placeholder="姓名"
+					name="" type="text">
+			</div>
+			<div class="form-group">
+				<label>身份证：</label> <input class="form-control" placeholder="身份证"
+					name="" type="text">
+			</div>
+			<div class="form-group">
+				<label>性别：</label> <select class="form-control" name=""><option
+						value="-1">性别</option></select>
+			</div>
+			<div class="form-group">
+				<label>民族：</label> <input class="form-control" placeholder="民族"
+					name="" type="text">
+			</div>
+			<div class="form-group">
+				<button class="btn btn-submit" id="submitBtn" type="button">
+					<i class="icon-search22"></i> 查询
+				</button>
+			</div>
+		</div>
+
+	</div>
+	<div class="frame-con">
+		<div class="people-list list-view pl20"
+			style="bottom: 10px; top: 14px;">
+			<div class="mborder">
+				<div class="page-info fl" listview-page="">
+					<button class="btn btn-sm btn-primary" id="btnAdd" type="button">
+						<i class="icon-plus4"></i> 添加人员
+					</button>
+				</div>
+				<div class="page-info fr" listview-page="">
+					<div class="page-btn fr">
+						<a class="page-prev disable" listview-prev-btn="" href="#"><span
+							class="icon-arrow-left8"></span></a> <a class="page-next"
+							listview-next-btn="" href="#"><span class="icon-arrow-right8"></span></a>
+					</div>
+					<div class="page-data fr">
+						记录总数 <span listview-counts="">336</span>， 每页<select
+							listview-page-select=""><option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="50">50</option>
+							<option value="100">100</option></select>条， 第<span listview-current="">1</span>页，
+						共<span listview-total="">23</span> 页
+					</div>
+				</div>
+			</div>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+			<dl class="list-node compare-pic">
+				<dt class="node-img">
+					<span style="width: 143px"> <img src="" fllview=""
+						class="rIMG" style="width: 143px; height: 190px;">
+					</span>
+				</dt>
+				<dd class="node-text pr" style="width: 210px;">
+					<p class="text-overflow fl">
+						<label>姓名：</label><span>张三三</span>
+					</p>
+					<p class="text-overflow">
+						<label>身份证号：</label><span>445121199669366352</span>
+					</p>
+					<p class="text-overflow">
+						<label>生效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow">
+						<label>失效时间：</label><span>2016-02-03 23:57:80</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>类型：</label><span>管控</span>
+					</p>
+					<p class="text-overflow fl">
+						<label>布控人：</label><span>管理员</span>
+					</p>
+					<p class="text-overflow fr mb0 tr">
+						<button class="btn btn-control" id="controlBtn" type="button">续控</button>
+					</p>
+				</dd>
+			</dl>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript"
+		src="/efacecloud/js/dispatched/removedControl.js"></script>
+</body>
+</html>

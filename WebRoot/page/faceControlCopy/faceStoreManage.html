@@ -1,0 +1,64 @@
+<!--* Created by 黎镇华 on ${DATE}.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>布控库管理</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<body>
+    <div class="full-screen">
+        <div class="frame-side light-frame" style="width: 300px;">
+            <div id="dispatchedLibList" ui-control="listview" ui-service="face/hw/dispatchedLib/getData"
+                 ui-template="tableTemplate" ui-options="{pageSize:'7'}">
+                <div class="frame-title">布控库管理</div>
+                <div class="frame-btn-box"><div class="btn frame-btn" id="createdStore"><i class="icon-plus2"></i>创建库</div></div>
+                <div class="search-box menu-search-box mt20">
+	                <input class="search-input" type="text" id="orgName" placeholder="请输入布控库名称" maxlength="50">
+	                <span class="icon-search2" id="settingSearch"></span>
+	            </div>
+                <div class="control-store-list sidelist listview clearfix" style="top:225px;">
+                    <script id="tableTemplate" type="x-tmpl">
+                       <dl class="list-node" task_id="{%=o.DB_ID%}" url-id="{%=o.TASK_ID%}" p_task_id="{%=o.P_TASK_ID%}" v_task_id="{%=o.V_TASK_ID%}">
+                           <dd class="node-text">
+                                   {%if(o.DB_NAME){ %}
+                                   <p class="p-name" title="{%=o.DB_NAME%}" style="max-width:165px;"><span class="p-name">{%=o.DB_NAME%}</span></p>
+                                   {% }else{ %}
+                                   <p class="p-name w100"><span class="p-name">未知</span></p>
+                                   {% }%}
+                                   <p class="w50"><label>入库量数量：</label><span>{%=o.STORE_CNT%}</span></p>
+                                   <p class="w50"><label>告警阈值：</label><span>{%=o.ALARM_THRESHOLD%}</span></p>
+                                   <p class="clearfix w100"><label>告警等级：</label><span class="alarm-span {%=color(o.ALARM_LEVEL)%}">{%=warmText(o.ALARM_LEVEL)%}</span></p>
+                                   <div class="top-btn-group">
+                                       <i class="icon-btn icon-video001 videoBtn" task_id="{%=o.DB_ID%}" title="关联摄像机"></i>
+                                       <i class="icon-btn icon-pencil3 edit-btn" task_id="{%=o.DB_ID%}" name="{%=o.DB_NAME%}"  vpt="{%=o.ALARM_THRESHOLD%}" level="{%=o.ALARM_LEVEL%}"  title="编辑"></i>
+                                       <i class="icon-btn icon-trash del-btn" task_id="{%=o.DB_ID%}" title="删除"></i>
+                                    </div>
+                           </dd>
+                       </dl>
+                     </script>
+                </div>
+                <div class="page-info-metro square-pager page-info-position">
+                    <div class="page-data tc" listview-page="">
+                        <a class="page-prev fl" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+                        <span class="page-num">共有<i class="page-num" listview-counts="">0</i>条记录</span>
+                        <a class="current-page"><i listview-current="">0</i>/<i listview-total="">0</i></a>
+                        <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="frame-con" style="left:300px;">
+            <iframe class="full-screen" id="mainFrameContent" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControlCopy/faceStoreManage.js"></script>
+</html>

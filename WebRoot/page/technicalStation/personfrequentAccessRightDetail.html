@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>查询结果</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/form.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/pageTop.css" />
+</head>
+<body class="full-screen" style="overflow: auto">
+	<div class="pager-wrap pager-npt">
+		<div class="pager-content">
+			<div class="tools-view pt0">
+				<div class="form-header nb ml10 mr10">
+					<a class="back-btn" id="backBtn" style="margin-top: 12px;"><i
+						class="icon-arrow-left10"></i><em>返回</em></a>
+				</div>
+				<!-- 页码 -->
+				<div class="page-info-metro square-pager list-wrap">
+					<div class="mt10">
+						<label class="checkbox-inline"><input type="checkbox" id="checkAll">全选</label>
+						<!-- <label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall>全选</label> -->
+						<a class="btn btn-i-t hide"> <i class="icon-tool icon-out"></i>
+							<span>导出</span>
+						</a>
+						<a class="btn btn-i-t disabled" id="gjSearch" > 
+							<span class="btn-icon gjsearch-icon"></span>
+							<span>轨迹查看</span>
+						</a>
+					</div>
+				</div>
+				<!-- 页码 end -->
+			</div>
+			<!-- 列表-->
+			<div class="filter-bar hide">
+				<div class="page-info fr mr15" listview-page>
+					<div class="page-btn fr">
+						<a class="page-prev disable" listview-prev-btn href="#"><span
+							class="icon-arrow-left8"></span></a> <a class="page-next"
+							listview-next-btn href="#"><span class="icon-arrow-right8"></span></a>
+					</div>
+					<div class="page-data fr">
+						总记录数 <span listview-counts></span>， 第<span listview-current></span>页，
+						共<span listview-total></span> 页
+					</div>
+				</div>
+			</div>
+			<div class="tilelist vertical clearfix listviewImgBox checkbox" id="faceDetail">
+				<script id="faceDetailTmpl" type="text/x-tmpl">
+				{% for(var i=0; i<o.length; i++) { %}
+					<div class="list-node-wrap listNode">
+					<div class="list-node picMessage">
+						<div class="node-img person-img">
+							<span class="pr">
+								<img data-original='{%=o[i].OBJ_PIC%}' src="/ui/plugins/eapui/img/nophoto.jpg" class="rIMG" attrimg="zoom">
+							</span>
+							<p class="text-overflow mb0 mt5" title="{%=o[i].ADDR%}" picMsg="地点:{%=o[i].ADDR%}">{%=o[i].ADDR%}</p>
+							<p class="text-overflow" picMsg="时间:{%=o[i].TIME%}">{%=o[i].TIME%}</p>
+							<input class="mr5 gangs-checkbox checkInput hide" type="checkbox" index="{%=i%}" />
+						</div>
+						<div class="btn-group fr">
+							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
+								<i class="btn-icon verification-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
+								<i class="btn-icon trajectory-icon"></i>
+							</a>
+						</div>
+					</div>
+					</div>
+				{% } %}
+				</script>
+			</div>
+		</div>
+	</div>
+	<iframe class="log-export hide" id="logExport" frameborder="0"></iframe>
+	<div class="frame-form-full" >
+		<iframe class="full-screen"  frameborder="0"></iframe>
+	</div>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<!-- 	<script type="text/javascript" src="/efacecloud/js/technicalStation/faceSearchPerson.js"></script> -->
+	<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/personfrequentAccessRightDetail.js"></script>
+</body>
+</html>

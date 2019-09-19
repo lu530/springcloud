@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+
+.page-body {
+	position: absolute;
+	top: 40px;
+	bottom: 0;
+	width: 100%;
+	left: 0;
+	overflow: auto;
+}
+
+.tool-bar {
+	float: right;
+}
+
+.tool-bar i {
+	padding: 5px;
+	/* background: #288EF2; */
+	font-size: 18px;
+	color: #288EF2;
+}
+
+.tool-bar i:hover {
+	color: #288EF2;
+}
+
+.tool-bar i:active {
+	color: #ddd;
+}
+
+.link-group {
+	position: relative;
+}
+
+.relation-msg {
+	height: 158px;
+	width: 300px;
+	border: 2px solid #D2D2D2;
+	background: #FAFAFA;
+	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 -1px 0
+		rgba(0, 0, 0, .02);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 -1px 0 rgba(0, 0, 0, .02);
+	position: absolute;
+	top: 18px;
+	right: 47px;
+	z-index: 9;
+	display: none;
+	padding: 20px;
+	font-size: 13px;
+}
+
+.form-group label {
+	font-weight: normal;
+	color: #888;
+	width: 90px;
+	display: inline-block;
+}
+
+.form-group span {
+	color: #000;
+}

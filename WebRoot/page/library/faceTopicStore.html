@@ -1,0 +1,74 @@
+<!--* Created by 黎镇华 on ${DATE}.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人员专题库</title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="/efacecloud/css/library/faceTopicStore.css" />
+</head>
+<body>
+	<div class="full-screen">
+		<div class="frame-side light-frame">
+			<div id="dispatchedLibList" ui-control="listview"
+				ui-service="face/special/getData" ui-template="tableTemplate"
+				ui-options="{pageSize:'7'}">
+				<div class="frame-title">
+					<i class="icon-users4"></i>人员专题库
+				</div>
+				<div class="tools-box clearfix">
+					<div class="search-box menu-search-box">
+						<input class="search-input" type="text" id="orgName"
+							placeholder="请输入库名称" maxlength="50"> <span
+							class="icon-search2 setting-search" id="settingSearch"></span>
+					</div>
+					<div class="btn created-store" id="createdStore">
+						<i class="icon-plus2"></i>创建库
+					</div>
+				</div>
+				<div class="control-store-list sidelist listview clearfix">
+					<script id="tableTemplate" type="x-tmpl">
+                       <dl class="list-node" task_id="{%=o.DB_ID%}">
+                           <dd class="node-text" task_id="{%=o.DB_ID%}">
+                               <p class="p-name w100"><i class="icon-user2"></i><span class="p-name">{%=o.DB_NAME%}</span></p>
+                              <!--<p class="w70"><label>人员数量：</label><span class="personNum">{%=o.PERSON_NUM%}</span></p> -->
+                              <p class="w70"><label>人脸数量：</label><span class="faceNum">{%=o.FACE_NUM%}</span></p>
+                               {% if (o.DB_KIND == 1 && pageType != 'subPage') { %}
+                               <div class="top-btn-group edit-bar">
+                                   <i class="icon-btn icon-pencil3 edit-btn" task_id="{%=o.DB_ID%}"  task_name="{%=o.DB_NAME%}"  title="编辑"></i>
+                                   <i class="icon-btn icon-trash del-btn" task_id="{%=o.DB_ID%} title="删除"></i>
+                               </div>
+                               {% } %}
+                           </dd>
+                       </dl>
+                   </script>
+				</div>
+				<div class="page-info-metro square-pager page-info-position">
+					<div class="page-data tc ml15" listview-page="">
+						<a class="page-prev fl" listview-prev-btn="" href="#"><i
+							class="icon-arrow-left7"></i></a> <span class="page-num">共有 <i
+							class="page-num" listview-counts=""></i>条记录
+						</span> <a class="current-page"><i listview-current=""></i>/<i
+							listview-total=""></i></a> <a class="page-next fr"
+							listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="frame-con">
+			<iframe class="full-screen" id="mainFrameContent" frameborder="0"></iframe>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/faceTopicStore.js"></script>
+</html>

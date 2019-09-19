@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>报警详情信息</title>
+<style>
+    p {
+        font-size:14px;
+    }
+</style>
+</head>
+<body>
+    <p id="ACTIVITY_NAME"></p>
+    <p id="ACTIVITY_TIME"></p>
+    <p id="ACTIVITY_PLACE"></p>
+    <p id="PURCHASER_SEAT_NO"></p>
+</body>
+<script type="text/javascript">
+ACTIVITY_NAME.innerHTML="活动名称:"+top.ACTIVITY_NAME
+ACTIVITY_TIME.innerHTML="活动时间:"+top.ACTIVITY_TIME
+ACTIVITY_PLACE.innerHTML="活动场馆:"+top.ACTIVITY_PLACE
+PURCHASER_SEAT_NO.innerHTML="持票人座位:"+top.PURCHASER_SEAT_NO
+</script>
+</html>

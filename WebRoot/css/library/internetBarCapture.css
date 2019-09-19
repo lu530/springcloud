@@ -1,0 +1,46 @@
+.btn-line:before{
+	content: "";
+	position: absolute;
+	background-color: #ced0da;
+	width: 1px;
+	height: 16px;
+	top: 5px;
+	left: -2px;
+}
+.topage {
+	width: 40px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #e2e2e2;
+    padding: 0 4px;
+    text-align: center;
+    text-decoration: none;
+}
+.topage:hover {
+    width: 40px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #e2e2e2;
+    padding: 0 4px;
+    text-align: center;
+    text-decoration: none;
+}
+.topage:focus {
+    width: 40px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #e2e2e2;
+    padding: 0 4px;
+    text-align: center;
+    text-decoration: none;
+}
+.square-pager .page-data .page-prev:hover, .square-pager .page-data .page-next:hover {
+    background: #3d8ce8!important;
+}
+
+.square-pager .page-data .page-prev, .square-pager .page-data .page-next {
+    float: left !important;
+}
+.btn-i-t:hover, .btn-group .btn-i-t:hover{
+	color: #4a4a4a;
+}

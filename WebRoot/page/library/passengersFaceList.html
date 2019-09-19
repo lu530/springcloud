@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>旅客人脸库</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/passengersFaceList.css" />
+<style type="text/css">
+.btn-line:before{
+	content: "";
+	position: absolute;
+	background-color: #ced0da;
+	width: 1px;
+	height: 16px;
+	top: 5px;
+	left: -2px;
+}
+</style>
+</head>
+<body>
+	<div class="pager-wrap" container="scroll" id="dispatchedApprovalList" ui-control="listview" ui-service="face/traveler/query" ui-options="{isMedia:false,toPage:true,unload:true}" ui-template="personListTemplate" ui-parameters="queryParams">
+		<div class="pager-content">
+			<div class="page-title">
+				<span>旅客人脸库</span>
+			</div>
+			<div class="top-box">
+				<div class="photo-tools">
+					<div class="top-pic-box">
+						<div class="img-wrap">
+							<img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+                            <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" issearch=true />
+						</div>
+						<ul>
+							<li class="re-upload"><i class="icon-image2"></i>
+                                <input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn" issearch=true />
+                            </li>
+							<li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+							<li class="fast-search" id="fastImgBtn"><i class="icon-bookmarks"></i></li>
+						</ul>
+					</div>
+				</div>
+				<div class="filter-view">
+					<dl class="filter-bar search-bar">
+						<dt class="filter-arrt">搜索</dt>
+						<dd class="filter-bar-search">
+							<div class="fifler-group mr5">
+								<div class="search-box">
+									<input class="search-input" type="text" placeholder="请输入英文姓/英文名/中文姓名/证件号码/旅馆名称" maxlength="50" style="width:400px;">
+                                    <span class="icon-search22" id="inputSearch"></span>
+								</div>
+							</div>
+						</dd>
+					</dl>
+					<dl class="filter-bar group-hide-bar">
+						<dt class="filter-arrt">性别</dt>
+						<dd class="filter-tag">
+							<div class="tagslist tagItmeList" id="SEX">
+								<span class="tag-item active tagAll" val="">全部</span>
+								<span class="tag-item" val="1">男</span>
+								<span class="tag-item" val="2">女</span>
+                                <span class="tag-item" val="0">未知</span>
+							</div>
+						</dd>
+					</dl>
+                    <dl class="filter-bar group-hide-bar">
+                        <dt class="filter-arrt">人员类型</dt>
+                        <dd class="filter-tag">
+                            <div class="tagslist tagItmeList" id="certificate">
+                                <span class="tag-item active tagAll" val="">全部</span>
+                                <span class="tag-item" val="3">国外</span>
+                                <span class="tag-item" val="2">国内</span>
+                                <span class="tag-item" val="1">港澳台</span>
+                            </div>
+                        </dd>
+                    </dl>
+                   <!-- <dl class="filter-bar hide" id="zeroCaptureBox">
+						<dt class="filter-arrt">抓拍量：</dt>
+						<dd class="filter-tag pt5">
+							<div class="tagslist" id="zeroCapture">
+								<span class="tag-item active" val="">全部</span>
+								<span class="tag-item " val="0">为0</span>
+								<span class="tag-item" val="1">不为0</span>
+							</div>
+						</dd>
+					</dl>-->
+                    <dl class="filter-bar">
+                        <dt class="filter-arrt">入住时间</dt>
+                        <dd class="filter-tag ">
+                            <div class="tagslist timelist " id="timeTagList">
+                                <span class="tag-item active tagsTime" time-control="jt">今天</span>
+                                <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                                <span class="tag-item tagsTime" time-control="bz">本周</span>
+                                <span class="tag-item tagsTime" time-control="by">本月</span>
+                                <span class="tag-item tagsTime" time-control="jqt">近7天</span>
+								<span class="tag-item tagsTime" time-control="jygy">近30天</span>
+                                <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                                <div class="opera-group">
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="beginTime" readonly type="text"> <i></i>
+                                    </div>
+                                    <div class="time-control-item">
+                                        <input class="time-control" id="endTime" readonly type="text">
+                                        <i></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl class="filter-bar group-hide-bar clearfix arithmetic" id="arithmetic">
+                        <dt class="filter-arrt">算法</dt>
+                        <div class="arithmetic-item">
+                            <div class="arithmetic-min arithmetic-tools all">
+                                <span>综合</span>|<i></i>
+                            </div>
+                            <div class="arithmetic-max">
+                                <div class="arithmetic-header clearfix">
+                                    <div class="arithmetic-name fl">综合</div>
+                                    <div class="arithmetic-input fr">
+                                        <input type="text" algo_type="-1" ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="综合" value="60">
+                                    </div>
+                                </div>
+                                <div class="arithmetic-btn"></div>
+                            </div>
+                        </div>
+                        <script id="ALGTemplate" type="x-tmpl">
+                        <div class="arithmetic-item">
+                            <div class="arithmetic-min arithmetic-tools"><span>{%=o.ALGORITHM_NAME%}</span>|<i></i></div>
+                            <div class="arithmetic-max">
+                                <div class="arithmetic-header clearfix">
+                                    <div class="arithmetic-name fl">{%=o.ALGORITHM_NAME%}</div>
+                                    <div class="arithmetic-input fr">
+                                        <input type="text" algo_type="{%=o.ALGORITHM_ID%}" ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="{%=o.ALGORITHM_DESC%}" value="60">
+                                    </div>
+                                </div>
+                                <div class="arithmetic-btn"></div>
+                            </div>
+                        </div>
+                    </script>
+                    </dl>
+
+                    <button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+				</div>
+			</div>
+			<!-- 筛选 end -->
+			<!-- 页码 -->
+			<div class="page-info-metro full">
+				
+				<div class="action-btn-group camera-admin-wrap">
+	 				<a ref="freqAnalysisContent" class="btn btn-i-t active camera-admin cameraAdmin" id="timeSearchBtn">
+						<span class="btn-icon icon-calendar22"></span><span>默认</span>
+					</a>
+					<!-- <a ref="cameraContent" class="btn btn-i-t camera-admin cameraAdmin" grouptype="2" id="cameraSearchBtn">
+						<span class="btn-icon icon-camera2"></span><span>按旅店名分组</span>
+					</a> -->
+					<!--<a ref="cameraContent" class="btn btn-i-t camera-admin zeroAdmin" grouptype="2" id="zeroSearchBtn">
+						<span class="btn-icon icon-library"></span><span>按抓拍量为0查询</span>
+					</a>-->
+					<a class="btn btn-i-t hide" id="exportGroupBtn"> <span class="btn-icon export-icon"></span>
+						<span>导出</span>
+					</a>
+				</div>
+				
+
+
+				<div class="page-wrap" id="pageWrap">
+					<div class="page-info-metro square-pager">
+						<div class="page-data tc hide fr" list-pagination="">
+								<span class="fl page-total-box mr20">共 有 <span
+									class="page-total" listview-counts="">0</span>条记录
+								</span> 
+								<a class="page-prev fl" listview-prev-btn="" href="#"> <i
+									class="icon-arrow-left9"></i>
+								</a>
+								<!-- 具体分页效果 start -->
+								<ul class="ui-pager fl" listview-pager-list>
+									<li class="number active" listview-num="0">1</li>
+								</ul>
+								<!-- 具体分页效果 end -->
+								<a class="page-next fl" listview-next-btn="" href="#"> <i
+									class="icon-arrow-right9"></i>
+								</a> <span class="ml10 mr5">跳转至第</span> <input type="text"
+									class="page-input" listview-current /> <span class="ml5 mr10">页</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 页码 end -->
+			<div class="library-info">
+				<div class="picture-wrap">
+					<div class="compare-picture person pr">
+						<div class="image-item">
+							<span class="close-img-btn">×</span>
+							<div class="upload-img">
+								<img src="/ui/plugins/eapui/img/nophoto.jpg" id="vehicleImg" attrimg="zoom" hasImg="0">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="tilelist vertical ver-caselist checkbox vehicle">-->
+				<div class="page-con algorithm">
+					<div class="tilelist vertical " id="dataList">
+						<div class="list-node-wrap" id="personListTemplate" personId="{%=o.CCODE%}" infoId="{%=o.CCODE%}" sourceId="{%=o.SOURCE%}" style="display: none">
+							<dl class="list-node">
+								<dt class="node-img person-img">
+									<span> <img src="{%=renderImg(o.URL)%}" attrimg="zoom" class="mb0"></span>
+									{% if(o.SCORE!=""&&typeof o.SCORE!="undefined"){ %}
+									<b class="similar similarData"><b>{%=o.SCORE%}</b><i>%</i></b>
+									{% } %}
+								</dt>
+								<dd class="node-text">
+									<!--<input type="checkbox" listview-check class="checkbox-opacity hide" />-->
+									<p class="node-title similar-name" title="{%=o.CNAME?o.CNAME:'暂无'%}">
+										<label>姓名：</label><span class="orange"><a>{%=o.CNAME?o.CNAME:'暂无'%}</a></span>
+									</p>
+									<!--<p class="w100 fl"><label>性别：</label><span>{%=o.PersonSex == 1 ? '女' : '男'%}</span></p>-->
+									<p style="width: 106%;" class="fl" title="{%=o.IDCODE%}">
+										<label>证件：</label><span title="证件号码：{%=o.IDCODE%}">{%=o.IDCODE%}</span>
+									</p>
+                                    <p style="width: 100%;" class="fl" title="{%=CONSTANTS.RYLX[o.SOURCE]%}">
+                                        <label>人员类型：</label><span title="人员类型：{%=CONSTANTS.RYLX[o.SOURCE]%}">{%=CONSTANTS.RYLX[o.SOURCE]%}</span>
+                                    </p>
+                                    <p style="width: 100%;" class="fl" title="{%=o.LTIME%}">
+                                        <label>入住时间：</label><span title="入住时间：{%=o.LTIME%}">{%=o.LTIME%}</span>
+                                    </p>
+                                    <p style="width: 100%;" class="fl" title="{%=o.HNAME%}">
+                                        <label>入住旅馆：</label><span title="入住旅馆：{%=o.HNAME%}">{%=o.HNAME%}</span>
+                                    </p>
+									<!--<p class="w100"><label>布控时间：</label><span>{%=o.CONTROL_TIME%}</span></p>-->
+									<!--<p class="w100 fl"><label>类型：</label><span>{%=CONSTANTS.SURVEIL_CAR_TYPE[o.ControlType]%}</span></p>-->
+									<!--<p class="w100 fl"><label>布控人：</label><span>{%=o.Controler%}</span></p>-->
+									<div class="btn-group fr">
+										<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.URL%}">
+											身份
+										</a>
+										<a class="btn-i-t btn-xs btn-line trajectory-search" title="轨迹分析" url="{%=o.URL%}">
+											轨迹
+										</a>
+                                        <a class="btn-i-t btn-xs btn-line btn-search" title="搜索 ">
+                                            搜索
+                                        </a>
+                                        <a class="btn-i-t btn-xs btn-line collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=2&name={%=o.CNAME%}&identityType=1&identityId={%=o.IDCODE%}&pic={%=o.URL%}&objPci={%=o.URL%}&jgsj={%=o.LTIME%}" title="收藏">
+											收藏
+										</a>
+										<a class="btn-i-t btn-xs btn-line btn-more " title="详情 ">
+											详情
+										</a>
+                                        {% if (pageType != 'subPage') { %}
+										<a class="btn-i-t btn-xs btn-line btn-delete hide" title="删除">
+											删除
+										</a> {% } %}
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+
+					<div id="ALGTemplateDiv"></div>
+					<script id="ALGfaceTemplate" type="text/x-tmpl">
+						{%for(var k=0;k<o.length;k++){ %}
+							<div class="person-item {%=o[k].ALGORITHM_LIST.length==0?'hide':''%}" style="height:342px;">
+								<span class="title">{%=o[k].ALGORITHM_ANME%}</span>
+								<span class="num">（{%=o[k].ALGORITHM_LIST.length%}）</span>
+								<span class="distinguish"></span>
+								<span class="setting-down icon-arrow-down10 setDown"></span>
+								<div class="tilelist vertical ver-caselist two-pictrues-small">
+									<!-- checkbox 类做选择 -->
+									{% for(var i=0;i<o[k].ALGORITHM_LIST.length;i++){ %}
+										<div class="list-node-wrap" id="" data-ds='{%=JSON.stringify(o[k].ALGORITHM_LIST[i])%}'  personId="{%=o[k].ALGORITHM_LIST[i].CCODE%}" sourceId="{%=o[k].ALGORITHM_LIST[i].SOURCE%}" >
+											<dl class="list-node">
+												<dt class="node-img compare-img" attrimg="zoom">
+													<span class="compare-large">
+														<img src="{%=o[k].ALGORITHM_LIST[i].URL%}" zoom-url="{%=o[k].ALGORITHM_LIST[i].URL%}">
+													</span>
+													{% if(o[k].ALGORITHM_LIST[i].SIMILARITY!=""&&typeof o[k].ALGORITHM_LIST[i].SIMILARITY!="undefined"){ %}
+														<b class="similar" key="similar">{%=o[k].ALGORITHM_LIST[i].SIMILARITY%}%</b>
+													{% } %}
+												</dt>
+												<dd class="node-text mt10">
+													<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+													<p class="similar-name"><label>姓名：</label><span title="{%=o[k].ALGORITHM_LIST[i].CNAME%}">{%=o[k].ALGORITHM_LIST[i].CNAME%}</span></p>
+													<p><label>证件：</label><span title="证件：{%=o[k].ALGORITHM_LIST[i].IDCODE%}">{%=o[k].ALGORITHM_LIST[i].IDCODE%}</span></p>
+													<p><label>人员类型：</label><span title="{%=CONSTANTS.RYLX[o[k].ALGORITHM_LIST[i].SOURCE]%}">{%=CONSTANTS.RYLX[o[k].ALGORITHM_LIST[i].SOURCE]%}</span></p>
+													<p><label>入住时间：</label><span title="{%=o[k].ALGORITHM_LIST[i].LTIME%}">{%=o[k].ALGORITHM_LIST[i].LTIME%}</span></p>
+													<div class="btn-group fr">
+														<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[k].ALGORITHM_LIST[i].URL%}">
+															身份
+														</a>
+														<a class="btn-i-t btn-xs btn-line trajectory-search" title="轨迹分析" url="{%=o[k].ALGORITHM_LIST[i].URL%}">
+															轨迹
+														</a>
+														<a fileUrl="{%=o[k].ALGORITHM_LIST[i].URL%}" class="btn-i-t btn-xs btn-line searchBtn btn-search" title="搜索">
+															搜索
+														</a>
+														<a class="btn-i-t btn-xs btn-line collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=2&name={%=o[k].ALGORITHM_LIST[i].CNAME%}&identityType=1&identityId={%=o[k].ALGORITHM_LIST[i].IDCODE%}&infoId={%=o[k].ALGORITHM_LIST[i].INFO_ID%}&pic={%=o[k].ALGORITHM_LIST[i].URL%}&objPci={%=o[k].ALGORITHM_LIST[i].URL%}&jgsj={%=o[k].ALGORITHM_LIST[i].LTIME%}" title="收藏">
+															收藏
+														</a>
+														<a class="btn-i-t btn-xs btn-line btn-more " title="详情 ">
+															详情
+														</a>
+													</div>
+												</dd>
+											</dl>
+										</div>
+									{% } %}
+								</div>
+							</div>
+						{% } %}
+						</script>
+
+				</div>
+				<div class="captureResult hide face-capture-content" id="cameraContent">
+							<div class="table-wrap">
+					            <table class="table" cellspacing="0" cellpadding="0">  
+					                <thead>   
+					                	<tr> 
+					                		<th class="w10 tc"><span>序号</span></th>  
+					                		<th class="w60 tc"><span>旅店名称</span></th> 
+					                		<th class="w20 tc"><span>旅店编号</span></th>      
+					                    	<th class="w10 tc"><span>抓拍量</span></th>      
+							            </tr>          
+						            </thead>
+									<tbody  id="cameraResult">
+									<script id="cameraTmpl" type="x-tmpl">
+									{% for(var i = 0; i < o.length; i++ ) { %}
+										<tr class="cameraItem"> 
+											<td class="tc"><span title="{%= JSON.parse(i+1) %}">{%= JSON.parse(i+1) %}</span></td>   
+											<td class="tc"><span class="h-name" title="{%= o[i].HNAME %}">{%= o[i].HNAME %}</span></td> 
+											<td class="tc"><span class="cameraName" title="{%= o[i].NOHOTEL %}">{%= o[i].NOHOTEL %}</span></td> 
+											<td class="tc"><span title="{%= o[i].NUM %}" class="blue">{%= o[i].NUM %}</span></td>
+										</tr>
+									{% } %}
+									</script>
+									</tbody>                                                                                            
+						        </table>
+					        </div>
+					        <div class="echart-div" id="cameraResultChart">
+					        	
+					        </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen" id="frameFormFull" frameborder="0"></iframe>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/passengersFaceList.js"></script>
+</html>

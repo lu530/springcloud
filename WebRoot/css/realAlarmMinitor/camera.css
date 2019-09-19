@@ -1,0 +1,70 @@
+.video-contain .video-toolbar {
+	right: 0;
+    left: 0;
+    height: 40px;
+    position: absolute;
+    bottom: -40px;
+    overflow: visible;
+    background: #333;
+}
+.live-video-box{
+	height: 100%;
+}
+.video-box{
+	width: 100%;
+	height: 100%;
+	background: #282828;
+}
+.video-contain .video-toolbar .play-control {
+	padding: 0px 12px 0;
+	width: 100%;
+}
+.video-contain .video-toolbar div {
+	float: left;
+	font-size: 12px;
+	color: #79828C;
+	margin-top: 5px;
+}
+.video-contain .video-toolbar [class*="icon-"]{
+	width: 36px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 18px;
+	text-align: center;
+	cursor: pointer;
+	margin: 0 7px 0 5px;
+}
+.video-contain .video-toolbar input {
+	float: left;
+	width: 36px;
+	height: 30px;
+	border: none;
+	border-right: none;
+	background-color: transparent;
+	background-image: url(/efacecloud/images/history-camera-icon.png);
+	position: relative;
+}
+.play-control .line{
+	display: inline-block;
+    height: 10px;
+    width: 1px;
+    float: left;
+    background: #8c9499;
+    position: relative;
+    top: 11px;
+    margin: 0 10px;
+}
+.video-contain .video-toolbar input.play, .video-contain .video-toolbar input.play.disable:hover{
+	background-position: -70px -49px;
+}
+.video-contain .video-toolbar input.play:hover{
+	background-position: -70px -77px;
+}
+.video-contain .video-toolbar input.suspend, .video-contain .video-toolbar input.suspend.disable:hover {
+    background-position: -113px -49px;
+}
+.video-contain .video-toolbar .disable{
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	cursor: no-drop !important;
+}

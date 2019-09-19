@@ -1,0 +1,37 @@
+body{
+    background-color:#fff;
+}
+.clearfx::after{
+    content:'';
+    display:table;
+    clear:both;
+}
+.field-top {
+    height: 55px;
+    line-height: 55px;
+}
+.field-top .field-index {
+    padding: 0 3px;
+    margin-right: 8px;
+    display: inline;
+    color: white;
+    background: #4876d1;
+}
+.field-top .field-title {
+    color: #4876d1;
+    font-size: 16px;
+}
+.library{
+    line-height:20px;
+    padding:10px 20px;
+    border-bottom:1px solid #ccc;
+}
+.library-list .library:last-child{
+    border-bottom:0px solid #ccc;
+}
+.library-name,.device-name{
+    margin:5px 0;
+}
+.library-name-left,.device-name-left{
+    color:#999;
+}

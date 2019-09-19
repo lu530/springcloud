@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>同行分析-人员列表</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/vehicleQuery.css" />	
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/form.css" />	
+</head>
+<body class="oh bgwhite">
+	<!-- <div class="form-header nb">
+		<a class="back-btn  btn-close" id="closeBtn"><i class="icon-arrow-left10"></i><em>返回</em></a>
+		<h3 class="form-title" id="myModalLabel">人像云追踪-轨迹列表</h3>
+	</div> -->
+	<div class="page-list-head">
+		<a id="backBtn" class="back-btn btn-close">
+			<i class="icon-arrow-left10"></i>
+			<em>返回</em>
+		</a>
+		<span id="myModalLabel">轨迹列表</span>
+	</div>
+	<div>
+		<div class="mt15 mr10 ml25 button-group hide">
+			<button class="btn btn-gray" id="relativeMACbtn">碰撞MAC</button>
+			<button class="btn btn-gray" id="relativeDOORbtn">碰撞门禁</button>
+			<button class="btn btn-gray" id="relativeIMEIbtn">碰撞IMEI</button>
+			<button class="btn btn-gray" id="relativeIMSIbtn">碰撞IMSI</button>
+		</div>
+		<div class="livtview-list-wrap b0" style="top:46px;">
+			<ul class="icon-text-list list-unstyled listviewImgBox" id="faceList">
+			<script id="faceListTmpl" type="text/x-tmpl">
+			{% for(var i = 0; i < o.length; i++){ %}
+				<li class="livtview-list-node p5" y="{%=o[i].Y%}" x="{%=o[i].X%}" name="{%=o[i].DEVICE_NAME%}" time="{%=o[i].jgsj%}" obj_pic="{%=o[i].OBJ_PIC%}">
+					{% if(!noPic) { %}
+				   	<span class="car-img-left" style="width:85px; height:75px;">
+						<img data-original='{%=o[i].OBJ_PIC%}' src="/ui/plugins/eapui/img/nophoto.jpg" class="rIMG test" attrimg='zoom' />
+					</span>
+					{% } %}
+				    <div class="node-text fl ml20 picMessage" style="width:59%;padding:18px;">
+				    	<span class="icon serial-num serial-pa t20">{%=i+1%}</span>
+				         <p class="node-text-attr fwb" picMsg="时间:{%=o[i].jgsj%}">
+				         	<span>时间：</span><span>{%=o[i].jgsj%}</span>
+				         </p>
+				         <p class="node-text-attr" picMsg="地点:{%=o[i].DEVICE_NAME%}">
+				         	<span>地点：</span><span title="{%=o[i].DEVICE_NAME%}">{%=o[i].DEVICE_NAME%}</span>
+				         </p>
+				    </div>			    
+				</li>
+			{% } %}
+			</script>
+			</ul>
+		</div>
+	</div>
+<div id="relatListWrap" class="frame-form-full">
+	<!-- <div class="page-list-head">
+		<a id="collisionBackBtn" class="left-btn icon-btn"><span class="icon-arrow-left10"></span></a>
+		<h2 class="tc">碰撞列表</h2>
+	</div> -->
+	<div class="form-header nb">
+		<a class="back-btn  btn-close" id="collisionBackBtn"><i class="icon-arrow-left10"></i><em>返回</em></a>
+		<h3 class="form-title" id="myModalLabel">碰撞列表</h3>
+	</div>
+	<div class="livtview-list-wrap b0 listviewImgBox" id="relationList" style="top:55px;">
+		<script id="resultTmpl" type="text/x-tmpl">
+		{% for(var i=0; i<o.length; i++){ %}
+			<div class="mb20">
+				<div class="pr">
+					<label class="black inline pl15 f14 text-overflow" style="width: 68%;vertical-align: middle;">关联{%=relateDesc%}：
+						<b clipboardattr="MACattr" title="{%=o[i].lists.ORIGINAL_CARD_ID || o[i].lists.MAC || o[i].lists.HPHM || o[i].lists.IMEI || o[i].lists.IMSI%}">{%=o[i].lists.ORIGINAL_CARD_ID || o[i].lists.MAC || o[i].lists.HPHM || o[i].lists.IMEI || o[i].lists.IMSI%}</b></label>
+					<label class="black inline ml5 f14">重合次数：{%=o[i].lists.TRACKS.length%}次</label>
+					<div class="pa t0 ml10 hide"><input type="checkbox" class="parent-check"/> </div>
+				</div>
+				<ul class="icon-text-list list-unstyled" id="faceList">
+					{% for(var j=0; j<o[i].lists.TRACKS.length;j++){ %}
+					<li class="livtview-list-node p5">
+					    <div class="node-text fl ml0 w100 picMessage">
+					         <p class="node-text-attr dark" picMsg="时间:{%=renderJgrq(o[i].lists.TRACKS[j].JGRQ)%} {%=renderJgsj(o[i].lists.TRACKS[j].JGSJ)%}">
+					         	<span>时间：</span><span>{%=renderJgrq(o[i].lists.TRACKS[j].JGRQ)%} {%=renderJgsj(o[i].lists.TRACKS[j].JGSJ)%}</span>
+					         </p>
+					         <p class="node-text-attr light">
+					         	<span>地点：</span>
+								{% if(o[i].lists.TRACKS[j].ADDRESS||o[i].lists.TRACKS[j].ADDR){ %}
+									<span title="{%=o[i].lists.TRACKS[j].ADDRESS||o[i].lists.TRACKS[j].ADDR%}" picMsg="地点:{%=o[i].lists.TRACKS[j].ADDRESS||o[i].lists.TRACKS[j].ADDR%}">
+										{%=o[i].lists.TRACKS[j].ADDRESS||o[i].lists.TRACKS[j].ADDR%}
+									</span>
+								{% } else { %}
+									<span title="{%=deviceInfo[o[i].lists.TRACKS[j].DEVICE_ID||o[i].lists.TRACKS[j].KKBH].DEVICE_ADDR%}" picMsg="地点:{%=deviceInfo[o[i].lists.TRACKS[j].DEVICE_ID||o[i].lists.TRACKS[j].KKBH].DEVICE_ADDR%}">
+										{%=deviceInfo[o[i].lists.TRACKS[j].DEVICE_ID||o[i].lists.TRACKS[j].KKBH].DEVICE_ADDR%}
+									</span>
+								{% } %}
+					         </p>
+					         <div class="childen-select serial-pa ml10" 
+								MAC="{%=o[i].lists.TRACKS[j].MAC%}" DOOR="{%=o[i].lists.TRACKS[j].CARD_ID%}"
+								IMSI="{%=o[i].lists.TRACKS[j].IMSI%}" IMEI="{%=o[i].lists.TRACKS[j].IMEI%}"
+								time="{%=renderJgrq(o[i].lists.TRACKS[j].JGRQ)%} {%=renderJgsj(o[i].lists.TRACKS[j].JGSJ)%}"
+								deviceId="{%=o[i].lists.TRACKS[j].DEVICE_ID%}"> 
+							</div>
+					    </div>			    
+					</li>
+					{% } %}
+				</ul>
+			</div>
+		{% } %}
+	</script>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/Map.js"></script> 
+<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script> 
+<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/persontogetherResultList.js"></script>
+</html>

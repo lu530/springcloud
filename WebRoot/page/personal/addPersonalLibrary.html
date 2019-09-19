@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>新建个人库</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<body class="bgwhite">
+	<div class="window-content pt30" id="personalForm">
+		<dl>
+			<dd class="form-inline mb15">
+				<label class="control-label w20 tr">库名称：</label>
+				<input class="form-control ml5 w70" name="LIBRARY_NAME" id="LIBRARY_NAME" type="text" style="width:318px;" ui-vtext="库名称" ui-validate="required" placeholder="请输入库名称">
+				<input class="form-control ml5 w70 hide" name="LIBRARY_ID" id="LIBRARY_ID" value="" type="text" ui-validate="" ui-vtext="">
+				<input class="form-control ml5 w70 hide" name="LIBRARY_THEME" id="LIBRARY_THEME" value="0">
+				<input class="form-control ml5 w70 hide" name="SOURCE_TYPE" id="SOURCE_TYPE" value="1">
+			</dd>
+			<dd class="form-inline mb15">
+				<label class="control-label w20 tr">数据类型：</label>
+				<label class="radio-inline ml5"><input type="radio" name="LIBRARY_TYPE" value="1" checked="checked"><span>人脸</span></label>
+				<label class="radio-inline hide"><input type="radio" name="LIBRARY_TYPE" value="2"><span>车辆</span></label>
+				<!-- <label class="radio-inline"><input type="radio" name="LIBRARY_TYPE" value="3"><span>人员</span></label>
+				<label class="radio-inline"><input type="radio" name="LIBRARY_TYPE" value="4"><span>案件</span></label>
+				<label class="radio-inline"><input type="radio" name="LIBRARY_TYPE" value="5"><span>视频</span></label>
+				<label class="radio-inline"><input type="radio" name="LIBRARY_TYPE" value="6"><span>图片</span></label> -->
+				<!-- <input type="checkbox" ><span> 人脸</span>
+				<input type="checkbox" ><span> 车辆</span> -->
+				<span class="ml5 red hide">（此为单选项）</span>
+			</dd>
+		</dl>
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-blue mr5 " id="confirmBtn">确定</button>
+		<button class="btn btn-sm btn-white" id="cancelBtn">取消</button>
+	</div>
+		
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/personal/addPersonalLibrary.js"></script>
+</body>	
+</html>

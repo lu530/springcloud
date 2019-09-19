@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>人脸大数据应用系统</title>
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/efacecloud/css/efacecloudMenu.css"/>
+</head>
+<body class="full-screen" style="background:#365fca;">
+	<div class="container-face clearfix">
+		<div class="tabs">
+			<h2 class="tabs-title">人脸智慧应用</h2>
+			<ul class="face-tabs">
+				<li class="face-tab search-tab active hide" scroll-control="faceSearch" ui-permission="EFACE_faceSearch">
+				<span class="tab-name faceSearch-tab">人脸检索</span>
+				<i class="line"></i>
+				</li>
+				<li class="face-tab control-tab hide" scroll-control="faceControl" ui-permission="EFACE_faceDispatched">
+				<span class="tab-name faceControl-tab">人脸布控</span>
+				<i class="line"></i>
+				</li>
+				<li class="face-tab techniques-tab hide" class="active" scroll-control="faceTechniques" ui-permission="EFACE_faceTechnicalTactics">
+				<span class="tab-name faceTechniques-tab">人脸技战法</span>
+				<i class="line"></i>
+				</li>
+				<li class="face-tab rule-tab hide" scroll-control="faceBreakRule" ui-permission="EFACE_faceArchivesManager">
+				<span class="tab-name faceBreakRule-tab">人脸库管理</span>
+				<i class="line"></i>
+				</li>
+				<li class="face-tab faceport-tab hide" scroll-control="faceport" ui-permission="EFACE_statisticalAnalysis">
+				<span class="tab-name faceport-tab">统计分析</span>
+				</li>
+			</ul>
+		</div>
+		<div class="face-main" id="faceMain">
+		 <ul class="main-content" id="mainContent">
+	  		  	<li class="active clearfix face-info" id="faceSearch">
+	  		  		<a class="content-box hide" ui-permission="EFACE_faceCapture" href="#faceSearch" targetframe="fullFrame">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon roadLibrary"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">路人库检索</h3>
+			      				<p class="detials">通过上传人脸照片，对抓拍记录进行检索</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+	      	 		<a class="content-box hide" ui-permission="EFACE_faceArchives" href="#faceSearch" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon archives"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人员档案库检索</h3>
+			      				<p class="detials">通过人员属性，对档案信息进行检索</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      	  <!--  <a class="content-box hide" ui-permission="EFACE_faceSpecial" href="#faceSearch" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon specialLibrary"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人员专题库检索</h3>
+			      				<p class="detials">通过人员属性，对专题库进行检索</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a> -->
+		      		<a class="content-box hide" ui-permission="EFACE_driverFace" href="#faceSearch" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon driverFace"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">汽车驾驶人员抓拍库检索</h3>
+			      				<p class="detials">通过上传人脸照片，对汽车驾驶人员抓拍记录进行检索</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		<a class="content-box hide" ui-permission="EFACE_nonMotorFace" href="#faceSearch" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon nonMotorFace"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">非汽车驾驶人员抓拍库检索</h3>
+			      				<p class="detials">通过上传人脸照片，对非汽车驾驶人员抓拍记录进行检索</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		 <a class="content-box hide"  ui-permission="EFACE_faceVerification" href="#technical" targetframe="fullFrame">
+                      <dl class="info-box">
+                          <dt class="info-title">
+                              <span class="face-icon verification"></span>
+                          </dt>
+                          <dd class="info">
+                              <h3 class="title">身份核查</h3>
+                              <p class="detials">人脸静态检索，根据人脸检查身份</p>
+                              <span class="in-details">点击进入</span>
+                          </dd>
+                      </dl>
+                  </a>
+		      		 <a class="content-box hide"  ui-permission="EFACE_faceVerificationArchive" href="#technical" targetframe="fullFrame">
+                      <dl class="info-box">
+                          <dt class="info-title">
+                              <span class="face-icon verification"></span>
+                          </dt>
+                          <dd class="info">
+                              <h3 class="title">身份核查</h3>
+                              <p class="detials">人脸静态检索，根据人脸检查身份</p>
+                              <span class="in-details">点击进入</span>
+                          </dd>
+                      </dl>
+                  </a>
+                    <a class="content-box" ui-permission="EFACE_passengerSearch" href="#faceSearch"  targetframe="fullFrame">
+                        <dl class="info-box">
+                            <dt class="info-title">
+                                <span class="face-icon passengersFace"></span>
+                            </dt>
+                            <dd class="info">
+                                <h3 class="title">旅客人脸库检索</h3>
+                                <p class="detials">通过上传人脸照片，对旅店住宿人员抓拍记录进行检索</p>
+                                <span class="in-details">点击进入</span>
+                            </dd>
+                        </dl>
+                    </a>
+				</li>
+				<li class="clearfix face-info" id="faceControl">
+	  		  		<a class="content-box hide" ui-permission="EFACE_realAlarm" targetframe="fullFrame" href="#faceControl"  targetID="realAlarm">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon real-timeControl"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">实时布控告警</h3>
+			      				<p class="detials">实时检测布控的人员告警信息</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+	      	 		<!-- <a class="content-box" ui-permission="EFACE_faceControl" targetframe="fullFrame" href="#faceControl">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon faceControl"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人脸布控/撤控</h3>
+			      				<p class="detials">对首次进入监控区域的车辆进行分析</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a> -->
+		      	 	<a class="content-box hide" ui-permission="EFACE_faceStore" targetframe="fullFrame" href="#faceControl">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon controlLibrary"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">布控库管理</h3>
+			      				<p class="detials">对布控人员进行分库管理与布控</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		 <a class="content-box hide" ui-permission="EFACE_historyAlarm" href="#faceControl" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon  alarmRecord"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">告警记录查询</h3>
+			      				<p class="detials">对历史告警记录进行检索查询</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		<a class="content-box hide" ui-permission="EFACE_eventAlarm" href="#faceControl" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon  event-alarm"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">事件告警</h3>
+			      				<p class="detials">通过精准布控的方式对维稳人员进行预警</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+				</li>
+		      <li class="clearfix face-info" id="faceTechniques">
+		      		<a maptype="faceMap" techntype="track" targetframe="leftFrame" class="content-box hide" ui-permission="EFACE_trackAnalysis" href="#technical">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon trackAnalysis"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">轨迹分析</h3>
+			      				<p class="detials">根据人脸找出该目标的行踪，并形成可播放的轨迹</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+	      	 		<a maptype="faceMap" techntype="frequently" targetframe="leftFrame" class="content-box hide" ui-permission="EFACE_frequentAccess" href="#technical">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon frequentlyAppear"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">频繁出现</h3>
+			      				<p class="detials">根据人脸抓拍信息对有频繁过往行为的人员进行分析</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      	 	<a maptype="faceMap" techntype="region" targetframe="leftFrame" class="content-box hide" ui-permission="EFACE_faceCollision" href="#technical">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon regionalCollision"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">区域碰撞</h3>
+			      				<p class="detials">查找人员是否在不同区域与不同时间内，都有出现</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+					</a>
+					<a maptype="faceMap" techntype="library" targetframe="leftFrame" class="content-box hide" ui-permission="EFACE_libraryCollision" href="#technical">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon regionalCollision"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">库碰撞</h3>
+			      				<p class="detials">查找人员在不同库之间某一节点是否同时出现</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		<a maptype="faceMap" techntype="partner" targetframe="leftFrame" class="content-box hide" ui-permission="EFACE_personTogether" href="#technical">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon associatesAnalysis"></span>	      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">同伙分析</h3>
+			      				<p class="detials">对目标的同行人员进行查询分析</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+		      		 <a class="content-box hide" ui-permission="EFACE_faceCompare" href="#technical" targetframe="fullFrame">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon patrol"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人脸比对</h3>
+			      				<p class="detials">通过上传两张人像进行相似比对</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+	                  <a class="content-box hide" ui-permission="EFACE_faceVerification" href="#technical" targetframe="fullFrame">
+	                      <dl class="info-box">
+	                          <dt class="info-title">
+	                              <span class="face-icon verification"></span>
+	                          </dt>
+	                          <dd class="info">
+	                              <h3 class="title">身份核查</h3>
+	                              <p class="detials">人脸静态检索，根据人脸检查身份</p>
+	                              <span class="in-details">点击进入</span>
+	                          </dd>
+	                      </dl>
+	                  </a>
+	                  <a class="content-box hide" ui-permission="EFACE_faceVerificationArchive" href="#technical" targetframe="fullFrame">
+	                      <dl class="info-box">
+	                          <dt class="info-title">
+	                              <span class="face-icon verification"></span>
+	                          </dt>
+	                          <dd class="info">
+	                              <h3 class="title">身份核查</h3>
+	                              <p class="detials">人脸静态检索，根据人脸检查身份</p>
+	                              <span class="in-details">点击进入</span>
+	                          </dd>
+	                      </dl>
+	                  </a>
+	                  <a class="content-box hide" href="#technical" ui-permission="EFACE_faceCollection" targetframe="fullFrame">
+	                      <dl class="info-box">
+	                          <dt class="info-title">
+	                              <span class="face-icon people-face"></span>
+	                          </dt>
+	                          <dd class="info">
+	                              <h3 class="title">人脸集合</h3>
+	                              <p class="detials">对多张人脸检索结果进行交集、并集分析</p>
+	                              <span class="in-details">点击进入</span>
+	                          </dd>
+	                      </dl>
+	                  </a>
+				</li>
+		      	<li class="clearfix face-info" id="faceBreakRule">
+		      		<!-- <a class="content-box hide" ui-permission="EFACE_faceArchivesManager" targetframe="fullFrame" href="#library">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon  "></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">一人一档</h3>
+			      				<p class="detials">通过对人员属性进行管理并分类形成档案库</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a> -->
+		      		
+		      		<!-- <a class="content-box hide" ui-permission="EFACE_faceSpecialManager" targetframe="fullFrame" href="#library">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon personnelLibrary"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人员专题库</h3>
+			      				<p class="detials">通过人员类型对数据进行分类形成专题库</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a> -->
+
+	      	 		<!-- <a class="content-box hide" ui-permission="EFACE_mobileTerminalManager" href="#library" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon mobileFaceLibrary"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">移动终端人脸库</h3>
+			      				<p class="detials">针对移动端人员盘查，实现重点人员人脸下发</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a> -->
+	      			<a class="content-box hide" ui-permission="EFACE_faceIdentityManager" href="#library" targetframe="fullFrame">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon identityFace"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">待确认身份人脸库</h3>
+			      				<p class="detials">对重点人员布控的信息进行确认</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+                    <a class="content-box"  ui-permission="EFACE_passengerManager" href="#library" targetframe="fullFrame">
+                        <dl class="info-box">
+                            <dt class="info-title">
+                                <span class="face-icon passengFace"></span>
+                            </dt>
+                            <dd class="info">
+                                <h3 class="title">旅客人脸库</h3>
+                                <p class="detials">通过对人员属性进行管理分类形成旅客人脸档案库</p>
+                                <span class="in-details">点击进入</span>
+                            </dd>
+                        </dl>
+                    </a>
+	      			<a class="content-box hide" ui-permission="EFACE_myLibrary" href="#library" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon myCollection"></span>   					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">我的收藏</h3>
+			      				<p class="detials">实现对关注人员的信息收藏</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+                    <a class="content-box" href="#library" targetframe="fullFrame" ui-permission="EFACE_redListLibrary">
+                        <dl  class="info-box">
+                            <dt class="info-title">
+                                <span class="face-icon redListLib"></span>
+                            </dt>
+                            <dd class="info">
+                                <h3 class="title">红名单库</h3>
+                                <p class="detials">实现对红名单人脸资源的管理</p>
+                                <span class="in-details">点击进入</span>
+                            </dd>
+                        </dl>
+                    </a>
+				</li>
+		      	<li class="clearfix face-info" id="faceport">
+	      	 		<a class="content-box hide" ui-permission="EFACE_faceFlow" href="#statistics" targetframe="fullFrame">
+						<dl  class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon faceStatistics"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人脸流量统计</h3>
+			      				<p class="detials">实现对监控点位的人员流量统计</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>
+	      	 		<!--<a class="content-box hide" ui-permission="EFACE_faceResource" href="#statistics" targetframe="fullFrame">
+						<dl class="info-box">
+			      			<dt class="info-title">
+			      				<span class="face-icon faceResources"></span>		      					
+			      			</dt>
+			      			<dd class="info">
+			      				<h3 class="title">人脸资源一览图</h3>
+			      				<p class="detials">对系统内人脸大数据资源总览显示</p>
+			      				<span class="in-details">点击进入</span>
+			      			</dd>
+			      		</dl>
+		      		</a>-->
+		      	</li>	
+	     </ul>
+	   </div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="/efacecloud/js/efacecloudMenu.js"></script>
+</html>

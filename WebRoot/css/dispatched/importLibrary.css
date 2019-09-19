@@ -1,0 +1,82 @@
+@CHARSET "UTF-8";
+
+.upload-file {
+	width: 8%;
+	background: #17d0eb;
+	color: #fff;
+	text-align: center;
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	margin: 0 auto;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: -4px;
+}
+
+.file-input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	font-size: 86px;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+}
+
+.loading-panel {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.upload-progress {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	height: 100px;
+	margin: -50px 0 0 -150px;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: bolder;
+	color: #fff;
+	text-align: center;
+	z-index: 100;
+}
+
+.btn-blue {
+	background: #00C2DE;
+	color: #fff;
+	border: 1px solid #17d0eb;
+	border-radius: 5px;
+}
+
+.btn-blue:hover, .btn-blue:focus, .btn-blue:active {
+	background: #17d0eb;
+	color: #fff;
+}
+
+.btn-white {
+	background: #fff;
+	color: #808080;
+	border: 1px solid #E4E4E4;
+	border-radius: 5px;
+}
+
+.btn-white:hover, .btn-white:focus, .btn-white:active {
+	background: #fdfdfd;
+}
+.btn.btn-purple {
+    background: #5270AA;
+    color: #fff;
+}
+.btn.btn-white {
+    background: #ededed;
+    color: #5270AA;
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人像核查</title>  
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/oneToOneCheck.css" />
+</head>
+<body class="oa">
+	<div class="pager-wrap">
+		<div class="pager-content pt0">
+			<div class="page-title mb0">
+				<a class="back-btn hide" id="backBtn"><i class="icon-arrow-left10"></i><em>返回</em></a>
+				<!-- <span class="title">人脸比对</span> -->
+			</div>
+			<div class="title-view" id="tabTitle">
+				<!-- <span class="tab-btn active" tabs-control="#faceCompare">人脸比对</span> -->
+				<span class="tab-btn active" tabs-control="#oneToOne">人脸1:1</span>
+			</div>
+			<div class="tab-content">
+				<!-- <div class="tab-pane active" id="faceCompare">
+					<div class="left-image">
+						<div class="image-item"> 
+							<div class="upload-bg">
+								<b class="icon-upload icon-plus3"></b>
+								<p class="mt0">上传对比图片</p>
+								<input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn"/>
+							</div>
+							<div class="upload-img hide">
+								<img id="avatar1" foruploadimg="picBtn,uploadPicBtn">
+								<div class="upload-wrap">
+									<span class="upload-file">上传图片<input class="file-style searchImgButton" name="uploadPicBtn" type="file" id="uploadPicBtn" /></span>
+								</div>
+								<input type="hidden" foruploadform="picBtn"/>
+							</div>
+						</div>
+						
+						<div class="proportion ratio">
+							<div class="con hide">
+								<b></b>
+								<span>相似度</span>
+							</div>
+						</div>
+						
+						<div class="image-item"> 
+							<div class="upload-bg">
+								<b class="icon-upload icon-plus3"></b>
+								<p class="mt0">上传对比图片</p>
+								<input class="file-style searchImgButton" type="file" id="imgBtn" name="imgBtn" >
+							</div>
+							<div class="upload-img hide">
+								<img id="avatar2" foruploadimg="imgBtn,uploadImgBtn">
+								<div class="upload-wrap">
+									<span class="upload-file">上传图片<input class="file-style searchImgButton" name="uploadImgBtn" type="file" id="uploadImgBtn" /></span>
+								</div>
+								<input type="hidden" foruploadform="imgBtn"/>
+								
+							</div>
+						</div>
+						<div class="btn-wrap">
+							<button id="compare" class="btn btn-blue" type="button">点击比对</button>
+						</div>
+					</div>
+				</div> -->
+				<div class="tab-pane active" id="oneToOne">
+					<div class="filter-view">
+						<dl class="filter-bar">
+							<dt class="filter-arrt">算法</dt>
+							<dd class="filter-tag">
+								<div class="tagslocallist">
+
+								</div>
+							</dd>
+							<script type="text/tmpl" id="algoLocalTmpl">
+							{% for(var i = 0 ; i < o.length; i++) { %}
+								{% if(i === 0) { %}
+								<span class="tag-item tag-item-local active all">本地</span>
+								{% } %}
+								<span class="tag-item tag-item-local" val="{%= o[i].ALGORITHM_ID %}">{%= o[i].ALGORITHM_NAME %}</span>
+							{% } %}
+							</script>
+							<dd class="filter-tag">
+								<div class="tagslist">
+									
+								</div>
+							</dd>
+							<script type="text/tmpl" id="algoTmpl">
+							{% for(var i = 0 ; i < o.length; i++) { %}
+								{% if(i === 0) { %}
+								<span class="tag-item tag-item-feishi active all">飞识</span>
+								{% } %}
+								<span class="tag-item tag-item-feishi" val="{%= o[i].id %}">{%= o[i].name %}</span>
+							{% } %}
+							</script>
+						</dl>
+					</div>
+					<div class="left-image">
+						<div class="image-item"> 
+							<div class="upload-bg">
+								<b class="icon-upload icon-plus3"></b>
+								<p class="mt0">上传对比图片</p>
+								<input class="file-style searchImgButton" type="file" id="picBtn2" name="picBtn2"/>
+							</div>
+							<div class="upload-img hide">
+								<img id="avatar3" foruploadimg="picBtn2,uploadPicBtn2">
+								<div class="upload-wrap">
+									<span class="upload-file">上传图片<input class="file-style searchImgButton" name="uploadPicBtn2" type="file" id="uploadPicBtn2" /></span>
+								</div>
+								<input type="hidden" foruploadform="picBtn"/>
+							</div>
+						</div>
+						
+						<div class="oneToOneProportion ratio">
+							<div class="con">
+								
+							</div>
+							<script type="text/tmpl" id="scoreTmpl">
+							<div class="algo-item clearfix">
+								<span class="algo-name">{%= o.algorithmName %}</span>
+								{% if(o.errorCode==0){ %}
+								<span class="algo-score">{%= o.similarity %}%</span>
+								{% } else { %}
+								<span class="algo-error">错误</span>
+								{% } %}
+							</div>
+							</script>
+							<script type="text/tmpl" id="singleScoreTmpl">
+							<div class="proportion show" id="ratio">
+								<div class="con">
+									<b>{%= o[0].similarity %}%</b>
+									<span>{%= o[0].algorithmName %}</span>
+								</div>
+							</div>
+							</script>
+						</div>
+						
+						<div class="image-item"> 
+							<div class="upload-bg">
+								<b class="icon-upload icon-plus3"></b>
+								<p class="mt0">上传对比图片</p>
+								<input class="file-style searchImgButton" type="file" id="imgBtn2" name="imgBtn2" >
+							</div>
+							<div class="upload-img hide">
+								<img id="avatar4" foruploadimg="imgBtn2,uploadImgBtn2">
+								<div class="upload-wrap">
+									<span class="upload-file">上传图片<input class="file-style searchImgButton" name="uploadImgBtn2" type="file" id="uploadImgBtn2" /></span>
+								</div>
+								<input type="hidden" foruploadform="imgBtn"/>
+							</div>
+						</div>
+						<div class="btn-wrap">
+							<button id="oneToOneCompare" class="btn btn-blue" type="button">点击比对</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<!-- <script type="text/javascript" src="/efacecloud/js/faceCommon.js"></script> -->
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/oneToOneCheck.js"></script>
+</html>

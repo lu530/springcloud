@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>团伙分析</title> 
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+</head>
+<body class="full-screen bgWhite" menuId="personTechnicalStation-gangAnalysis">
+<div class="page-list-head">
+	<a id="backBtn" class="back-btn">
+		<i class="icon-arrow-left10"></i>
+		<em>返回</em>
+	</a>
+	<span>同伙分析</span>
+</div>
+<div class="form-con form-inline form-silde">
+    <dl class="sort-cell clearfix">
+	    <dd class="form-group-block ">
+	    	<ul class="upload-img-car-bar hide">
+				<li paint="rect" class="paint-btn"><span title="画框" class="icon-select003"></span></li>
+				<li paint="delete" class="paint-btn"><span title="删除" class="icon-remove22"></span></li>
+			</ul>
+			<dl class="person-face-upload sort-cell mb0">
+			    <dd class="form-group-block">
+					<div class="upload-bg-box upload-img-car" style="height:auto;">
+						<div class="photo-tools">
+						   <div class="top-pic-box" style="background:white;">
+							   <div class="img-wrap">
+							       <img id="filterImg" src="/efacecloud/images/technicalStation-upload.png" foruploadimg="uploadImg,picBtn">
+							       <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" />
+							   </div>
+						       <ul>
+						           <li class="re-upload">
+						            <i class="icon-image2"></i>
+						            <input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn">
+						           </li>
+						           <li class="del-pic" id="deleteImg"><i class="icon-trash"></i></li>
+						       </ul>
+						   </div>
+						</div>
+					</div>
+			    </dd>
+		    </dl>
+	    </dd>
+	    <!-- 
+			<dd class="form-group form-group-block clearfix hide">
+				<label class="control-label ">检测结果：</label>
+				<span class="control-label red pl0">未检测到</span>
+			</dd>
+	    
+	    -->
+		<dd class="form-group time-wrap time-style-1 mb15 pt30">
+		 	<div class="begin-time clearfix">
+		 		<label class="control-label fl tl mr0 mt5" >时间范围：</label>
+				<div class="time-box ml0">
+					<label>从</label>
+					<input class="form-control" id="beginTime" name="beginTime" type="text" ui-validate="{pattern:'required'}" ui-vtext="开始时间" readonly="readonly"/>
+				</div>
+				<span class="red">*</span>
+		 	</div>
+			<div class="end-time mt10 clearfix">
+				<label class="control-label fl tl mr0 mt5"></label>
+				<div class="time-box ml0">      
+					<label>到</label>
+					<input class="form-control" id="endTime" name="endTime" type="text" ui-validate="{pattern:'required'}" ui-vtext="结束时间" readonly="readonly"/>
+				</div> 
+				<span class="red">*</span>
+			</div>	
+		</dd>
+		
+		 <dd class="form-group form-group-block">
+			<label class="control-label">选择区域：</label>
+			<ul class="map-icon-list clearfix" layerName="L_CAMERA_FACE">
+				<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+				<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+				<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+				<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+				<!-- <li title="自定义选择"><i map="mapBtn" togglebtn="kktree" class="map-icon map-icon-area icon-list22" name="showKKTree"></i></li> -->
+				<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+			</ul>
+			<span class="red">*</span>
+			<!-- <div class="table-wrap hide">
+				<table class="table" cellspacing="0" cellpadding="0">  
+					<tbody id="bayonetList">
+					</tbody>                                                                                            
+	        	</table>
+				<input type="hidden" id="selectedBayonet" ui-validate="required" name="CAMERA_IDS" ui-vtext="选择区域">
+				<input type="hidden" id="selectedDeviceIdInt" ui-validate="required" name="CAMERA_IDS_INT" ui-vtext="选择区域">
+			</div> -->
+		</dd>
+		<dd class="form-group form-group-block">
+					<label class="control-label">感知设备：</label>
+					<div class="dropdown-list device-select">
+									<div class="dropdown-list-text">
+										<span class="list-title" id="deviceNames"></span> 
+										<input type="hidden" id="faceDetect"> 
+										<input type="hidden"id="deviceIdInt"> 
+										<a class="dropdown hide"> 
+											<i class="icon-arrow-down8"></i>
+										</a>
+									</div>
+									<div class="dropdown-menu">
+										<ul class="list-con" id="deviceNameList">
+										</ul>
+									</div>
+					</div>
+		</dd>
+		<!-- 
+		<dd class="form-group form-group-block" togglekk="kktree">
+			<label class="control-label">选择卡口：</label>
+			<div class="form-control ov p0 position-top fix-width" id="orgTree" name="orgTree" type="dropdown-tree" 
+			         ui-control="dropdowntree" ui-service="face/common/getFaceDetect" ui-options="orgTreeOpts"></div>
+		    <input type="hidden" id="orgTreeCode">
+			<span class="red">*</span>
+		</dd>
+		-->
+		<dd class="form-group form-group-block">
+			<label class="control-label">检索阈值：</label>
+			<div id="sliderThreshold" style="width:197px;display:inline-block;"></div>
+			<input class="form-control ml20 tc" style="width:30px; padding:2px" id="THRESHOLD" name="THRESHOLD" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="检索阈值" value=70><span class="red"> *</span>
+		</dd> 
+		<dd class="form-group form-group-block sliderNum">
+			<label class="control-label">检索数量：</label>
+			<div id="sliderNum" style="width:197px;display:inline-block;"></div>
+			<input class="form-control ml20 tc" style="width:30px;  padding:2px" id="SEARCHNUM" name="SEARCHNUM" maxlength=" " ui-validate="{pattern:'required,integer',max:200,min:1}" ui-vtext="检索数量" value=100>
+			<span class="red"><!-- (最多100条) -->*</span>
+		</dd> 
+		<dd class="form-group form-group-block clearfix">
+			<label class="control-label">同行分钟数：</label>
+			<input class="form-control" value="5" id="TOGETHER_MINUTE" name="TOGETHER_MINUTE" ui-validate="{pattern:'integer',max:60,min:1}" ui-vtext="同行分钟数"><span class="red">*</span>
+		</dd>
+	</dl>
+	<div class="btn-wrap ml10 mr10">
+		<button id="searchBtn" class="btn w100 ">查询</button>
+	</div>
+</div>
+
+<div class="frame-form-full l0" style="display: none;">
+	<iframe class="frame-form" name="frameFormFull" id="frameFormFull" frameborder="0"></iframe>
+</div>
+
+<script id="bayonetListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<tr deviceId="{%=o[i].DEVICE_ID%}" deviceName="{%=o[i].DEVICE_NAME%}" >
+		<td class="w5 tc"><span class="circle"></span></td>                                           
+                 <td class="w70"><span title="">{%=o[i].DEVICE_NAME%}</span></td>	                	                                                   
+		<td class="tc w15">
+			<ul class="btn-group-icons list-inline">
+			    <li class="delete"><span title="删除" class="delete-bayonet-item icon-cross2"></span></li>
+			</ul>
+		</td>
+	</tr>
+	{% } %}
+	</script>	
+	<script id="deviceNameListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<li>
+		<a>
+		<span class="deviceName">{%=o[i].DEVICE_NAME%}</span>
+		<span class="removeDeviceBtn operate-btn" deviceid="{%=o[i].DEVICE_ID%}">×</span>
+		</a>
+	</li>
+	{% } %}
+	</script>	
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/persontogethercarForm.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>人脸N:N结果</title>
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+	<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/efacecloud/css/faceCaptureN2N.css" />
+	<style>
+		#more {
+			text-align: center;
+			background: #fff;
+			color: #4a75ba;
+		}
+
+		#more span {
+			margin: 0 auto;
+			cursor: pointer;
+			height: 30px;
+			line-height: 30px;
+			width: 90px;
+			display: inline-block;
+			border-radius: 5px;
+			border: 1px solid #859dc9;
+		}
+		#more span:hover{
+			text-decoration: underline;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="page-top">
+		<div>
+			<span>
+				<a id="backBtn">返回</a>
+			</span>
+			<span>人脸频次分析结果</span>
+		</div>
+	</div>
+	<div id="dataList" class="pager-content" container="scroll" id="freqList" ui-control="listview" ui-service="NNInfo/query"
+	 ui-template="freqListTmpl" ui-parameters="queryParams" ui-options="uiOptions">
+		<div class="tilelist vertical ver-caselist capture-data">
+			<div class="filter-view">
+				<dl class="filter-bar">
+					<dt class="filter-arrt">频次分析：</dt>
+					<dd class="filter-tag w85">
+						人脸抓拍库
+					</dd>
+				</dl>
+				<dl class="filter-bar">
+					<dt class="filter-arrt">最小出现次数：</dt>
+					<dd class="filter-tag w85" id="freqNum">
+
+					</dd>
+				</dl>
+				<dl class="filter-bar">
+					<dt class="filter-arrt">检索阈值：</dt>
+					<dd class="filter-tag w85" id="threshold">
+
+					</dd>
+				</dl>
+				<dl class="filter-bar">
+					<dt class="filter-arrt">特征分数：</dt>
+					<dd class="filter-tag w85" id="faceScore">
+
+					</dd>
+				</dl>
+				<dl class="filter-bar">
+					<dt class="filter-arrt">抓拍时间：</dt>
+					<dd class="filter-tag pt3">
+						<div id="happenTime" class="tagslist">
+							<span class="tag-item">全部</span>
+							<span class="tag-item" searchtime="today">今天</span>
+							<span class="tag-item" searchtime="yesterday">昨天</span>
+							<span class="tag-item" searchtime="currentWeek">本周</span>
+							<span class="tag-item" searchtime="currentMonth">本月</span>
+							<span class="tag-item day-btn" searchtime="timePeriod">时间段</span>
+							<span class="tag-item time-btn" searchtime="userDefined">自定义</span>
+							<input class="time-control form-control" style="cursor: no-drop;" readonly="readonly" name="beginTime" id="beginTime" type="text">
+							<input class="time-control form-control" style="cursor: no-drop;" readonly="readonly" name="beginTime" id="endTime" type="text">
+						</div>
+					</dd>
+				</dl>
+				<dl class="filter-bar">
+					<dt class="filter-arrt">抓拍地点：</dt>
+					<dd class="filter-tag">
+						<div class="form-control dropdown-tree">
+							<div class="dropdown-tree-text" style="width:100%">
+								<span class="tree-title" id="orgName" title="" style="cursor: no-drop;"></span>
+							</div>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			<div class="page-info-metro full">
+				<div class="page-wrap">
+					<div class="page-info-metro square-pager">
+						<div class="page-data tc pageData hide" listview-page="">
+							<a class="page-prev fl disable" listview-prev-btn="" href="#">
+								<i class="icon-arrow-left7"></i>
+							</a>
+							<span class="page-num">共有
+								<i class="page-num" listview-counts="">0</i>条记录
+							</span>
+							<a class="current-page">
+								<i listview-current="">1</i>/
+								<i listview-total="">1</i>
+							</a>
+							<a class="page-next fr" listview-next-btn="" href="#">
+								<i class="icon-arrow-right7"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="page-con">
+				<script id="freqListTmpl" type="text/x-tmpl">
+									
+										<div class="list-node-wrap">
+											<dl class="list-node" infoId="{%= o.INFO_ID %}">
+							<dt class="node-img compare-img" >
+								<span class="compare-large">
+									<img src="{%=o.OBJ_PIC%}" attrimg="zoom" style="width:100%">
+									<em>抓拍图片</em>
+								</span>
+<!--								<span class="compare-small ml0 hide">
+									<img src="{%=o.OBJ_PIC%}" >
+									<em>抓拍图片</em>
+								</span>-->
+								{% if(o.SCORE!=""&&typeof o.SCORE!="undefined"){ %}
+									<b class="similar" key="similar">{%=o.SCORE%}%</b>
+								{% } %}
+							</dt>
+												<dd class="node-text mt10">
+													<p class="hide">
+														<label>人员ID：</label>
+														<span title="{%= o.PERSON_ID %}" class="personId">{%= o.PERSON_ID %}</span>
+													</p>
+													<p>
+														<label>频次：</label>
+														<span class="red fwb" title="{%= o.NUMS %}" id="personNums">{%= o.NUMS %}</span>
+													</p>
+													<p>
+														<label>特征分值：</label>
+														<span class="red fwb" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE %}</span>
+													</p>
+												</dd>
+					
+												<div class="faceChild">
+					
+												</div>
+											</dl>
+									</div>
+									{% if(o.length <=0 ) { %} <div class="nodata"></div>
+								{%}%}
+						</script>
+			</div>
+			<script id="testChildTmpl" type="text/x-tmpl">
+			{% for(var j=0; j<o.records.length; j++){ %}
+			<div class="data-wrap">
+				<div class="date-style dis-table-cell">
+					<div class="timeline">
+						<span class="circle-top">
+							<img src="/efacecloud/images/icon-circle.png">
+						</span>
+						<span class="line"></span>
+					</div>
+				</div>
+				<div class="dis-table-cell">
+					<p class="specific-time">{%= o.records[j].JGSK %}</p>
+					<p class="specific-time">{%= o.records[j].ADDR %}</p>
+					<div class="tilelist vertical">
+						<dl class="list-node" style="width:150px;height: 140px;">
+							<dt class="node-img compare-img" attrimg="doublezoom">
+								<span class="compare-large hide">
+									<img zoom-url="{%= o.records[j].PIC %}" src="{%= o.records[j].PIC %}"height="150px">
+									<em class="hide">原图{%=detailPagSize%}</em>
+								</span>
+								<span class="node-img person-img">
+									<img zoom-url="{%= o.records[j].OBJ_PIC %}" src="{%= o.records[j].OBJ_PIC %}" height="150px">
+									<em class="hide">抓拍图片{%=detailPagSize%}</em>
+								</span>
+							</dt>
+							<dd class="node-text mt10 hide">
+								<p><label>抓拍时间：</label><span title="{%= o.records[j].JGSK %}">{%= o.records[j].JGSK %}</span></p>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			{% } %}
+			{% if(detailPagSize < NUMS) { %}
+				<div id="more"><span>加载更多...</span></div>
+			{% } %}
+			</script>
+		</div>
+	</div>
+	<div class="frame-form-full">
+		<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+	</div>
+
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-fileupload.js "></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/DateUtil.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/StringUtil.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/perception/faceCaptureN2N_1.js"></script>
+
+</html>

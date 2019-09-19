@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="efacecloud" default="buildWAR" basedir=".">
+		<target name="buildWAR"  >
+			<jar jarfile="efacecloud.war" compress="yes">
+				<fileset dir="WebRoot" excludes="**/com/suntek/efacecloud/test/**">
+				</fileset>
+			</jar>
+		</target>
+</project>

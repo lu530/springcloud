@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>路人库检索</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap_spy.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/device/deviceMap.css" />
+
+</head>
+<body style="overflow: hidden">
+	<div class="map-select-group">
+		<ul class="map-icon-list clearfix">
+			<li class="btn-polygon"><button>
+					<i class="map-icon icon-polygon" name="polygon"></i><span>面选</span>
+				</button></li>
+			<li class="btn-extent"><button>
+					<i class="map-icon icon-extent" name="rect"></i><span>框选</span>
+				</button></li>
+			<li class="btn-circle"><button>
+					<i class="map-icon icon-circle" name="circle"></i><span>圈选</span>
+				</button></li>
+			<li class="btn-polyline"><button>
+					<i class="map-icon icon-polyline" name="polyline"></i></i><span>线选</span>
+				</button></li>
+			<li class="btn-clear"><button>
+					<i class="map-icon icon-clear" name="delete"></i><span>清空</span>
+				</button></li>
+		</ul>
+	</div>
+	<div class="table-wrap">
+		<div class="t-head">
+			<table class="table" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="w70"><span>卡口名称 </span></th>
+						<th class="tc w30"><span>操作</span></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div class="t-body">
+			<table class="table" cellspacing="0" cellpadding="0">
+				<tbody id="placeList">
+					<script id="placeListTmpl" type="text/x-tmpl">
+			 		{% for(var i=0; i<o.length; i++) { %} 
+					<tr class="" deviceId="{%=o[i].properties.ORIGINAL_DEVICE_ID%}" deviceName="{%=o[i].properties.NAME%}" >                                           
+	                    <td class="w70"><span title="">{%=o[i].properties.NAME%}</span></td>	                	                                                   
+						<td class="tc w30">
+							<ul class="btn-group-icons list-inline">
+							    <li class="delete"><span title="删除" class="delete-item icon-trash"></span></li>
+							</ul>
+						</td>
+					</tr>
+					{% } %}
+					</script>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-primary mr5" id="confirmBtn">确认</button>
+		<button class="btn btn-sm btn-gray" id="cancelBtn">取消</button>
+	</div>
+	<div class="map" id="map"></div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/gis/js/jsts.js"></script>
+<script type="text/javascript" src="/gis/js/suntekmapAPI.js"></script>
+<!--<script src="/leaflet/team/src/js/require.js"></script>
+<script>
+	requirejs.config({baseUrl:"/leaflet/team/src/js"});
+</script>-->
+<script type="text/javascript" src="/efacecloud/js/device/deviceMap.js"></script>
+
+</html>

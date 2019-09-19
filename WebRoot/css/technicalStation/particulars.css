@@ -1,0 +1,53 @@
+.node-img {
+	width: 60%;
+	padding-left: 23px;
+	padding-top: 21px;
+	position: relative;
+	float: left;
+}
+
+.node-text {
+	float: left;
+	padding-top: 28px;
+	color: #4777d0;
+	font-size: 13px;
+}
+
+.pager-wrap .list-node-wrap span.compare-divide {
+	display: inline-block;
+	width: 47%;
+}
+
+.pager-wrap .list-node-wrap span.compare-divide img {
+	width: auto;
+	max-width: 102px;
+	height: 143px;
+}
+
+.pager-wrap .list-node-wrap .similar.color-blue {
+	background: #4777d0;
+}
+
+.pager-wrap .list-node-wrap .similar {
+	color: #fff;
+	font-size: 16px;
+	position: absolute;
+	right: 50%;
+	background-color: #556CA8;
+	width: 40px;
+	height: 40px;
+	margin-right: -20px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 40px;
+	bottom: -10px;
+}
+
+.node-text .btn-confirm {
+	height: 30px;
+	background: #4777d0;
+	padding: 0 37px;
+	border-radius: 5px;
+	color: #fff;
+	margin-top: 10px;
+}

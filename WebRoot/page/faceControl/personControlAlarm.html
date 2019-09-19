@@ -1,0 +1,63 @@
+<!--* Created by 黎镇华 on ${DATE}.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>布控告警</title> 
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <style>
+        .color-red{
+            background-position:-130px -10px!important;
+        }
+        .color-yellow{
+            background-position:-170px -185px!important;
+        }
+        .color-gray{
+            background-position:-170px -129px!important;
+        }
+    </style>
+</head>
+<body>
+    <div class="full-screen">
+            <div id="dispatchedLibList">
+				<div class="frame-title">实时布控告警</div>
+                <div class="control-store-list listview tilelist vertical p10 listviewImgBox" style="top:54px;width: 100%;bottom: 0;height: auto;" id="controlStoreList">
+                    <script id="tableTemplate" type="x-tmpl">
+                            {% if(o.ALARM_LEVEL!=3){ %}
+                            <div class="item-box clearfix" alarm-id="{%=o.ALARM_ID%}" longitude="{%=o.LONGITUDE%}"  latitude="{%=o.LATITUDE%}"
+                                 time="{%=dateRender(o.ALARM_TIME,16)%}" pic_src="{%=o.ALARM_IMG%}">
+                                 <div class="left-img clearfix" attrimg="doublezoom">
+                                    <div><img src="{%=o.ALARM_IMG%}" ><br><span>抓拍图片</span></div>
+                                    <div><img src="{%=o.TEMPLET_IMG%}"><br><span>布控图片</span></div>
+                                </div>
+                                <dl class="right-text picMessage">
+                                    <dt  picMsg="姓名:{%=o.PERSON_NAME%}">{%=o.PERSON_NAME%}</dt>
+                                    <dd picMsg="设备名称:{%=o.DEVICE_NAME%}" title="{%=o.DEVICE_NAME%}">
+										<span class="Camera-icon"></span>
+										<span>{%=o.DEVICE_NAME%}</dd>
+                                    <dd picMsg="告警时间:{%=dateRender(o.ALARM_TIME,19)%}"><span class="time-icon"></span>{%=dateRender(o.ALARM_TIME,19)%}</dd>
+                                    {% if(o.DEVICE_ADDR){ %}
+                                         <dd title="{%=o.DEVICE_ADDR%}" picMsg="设备地址:{%=o.DEVICE_ADDR%}"><span class="store-icon"></span>{%=o.DEVICE_ADDR%}</dd>
+                                    {% }else{ %}
+                                         <dd picVal="暂无" picMsg="设备地址:暂无"><span class="store-icon"></span>暂无</dd>
+                                    {% } %}
+                                </dl>
+                                <div class="pic-similar {%=renderColor(o.ALARM_LEVEL)%}">{%=o.SCORE%}%</div>
+                                <div class="pic-detail" title="告警详情" alarm-level="{%=o.ALARM_LEVEL%}" alarm-id="{%=o.ALARM_ID%}" objectid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}"></div>
+                            </div>
+                            {% } %}
+					</script>
+                </div>
+            </div>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/gis/js/mapapp.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControl/personControlAlarm.js"></script>
+</html>

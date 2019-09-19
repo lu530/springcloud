@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>告警处置记录</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/alarm/realTimeAlarm/receivedList.css" />
+</head>
+<body>
+	<div class="alarm-list">
+		<div id="alarmList"></div>
+		<div class="right-title mr20">
+			<span class="reverseBtn hide fr" style="color: #0078d7;"><i class="icon icon-arrow-up4">收起</i></span>
+			<span title="查看受理者处置记录" class="emit fr">
+				<i class="icon icon-arrow-down5">受理者处置记录</i>
+			</span>		
+		</div>
+		<div style="clear: both;"></div>	
+		<div id="alarmBottomList" class="hide"></div>
+	</div>
+	<div class="alarm-line"></div>
+	<div class="alarm-bottom">
+		<button class="btn btn-small gray-btn" id="closeBtn" type="button">取消</button>
+	</div>
+	<script id="alarmTemplate" type="x-tmpl">
+		{%var flag=true; for(var i = 0;i<o.length;i++){ %}
+			{% if( o[i].OP_TYPE != 2 && o[i].OP_TYPE != 9){  %}
+			<div class="list-item">
+				<div class="item-title">{%=o[i].TIME%}</div>
+				<a class="item-name {%=o[i].USER_NAME?"":"hide"%}">操作人：{%=o[i].USER_NAME%}（{%=o[i].DEPT_NAME%}-{%=o[i].POLICE_ID%}）</a>
+				<div class="item-con"><span class="item-icon"></span>
+					{% if(o[i].CONTENT  == '{"SIGN":1}'){ %}
+						确定签收
+					{% }else{ %}
+						<div class="item-con">{%=o[i].CONTENT%}</div>
+					{% } %}
+					{% if(o[i].IS_TIMEOUT && o[i].IS_TIMEOUT == 1){ %}
+						<b class="red">【已超时】</b>
+					{% } %}
+				</div>
+			</div>
+			{% }else{ %}
+				{% if(i != o.length){var thisDataObj = JSON.parse(o[i].CONTENT); %}
+					<div class="list-item">
+					<div class="item-title">{%=o[i].TIME%}</div>
+					<a class="item-name {%=o[i].USER_NAME?"":"hide"%}">操作人：{%=o[i].USER_NAME%}（{%=o[i].DEPT_NAME%}-{%=o[i].POLICE_ID%}）</a>
+					{% if(flag){flag = false; %}
+						<div class="item-con">{%=thisDataObj.IS_ARREST==1?"已确认抓捕":"首次反馈"%}
+						{% if(o[i].IS_TIMEOUT && o[i].IS_TIMEOUT == 1){ %}
+							<b class="red">【已超时】</b>
+						{% } %}
+						</div>
+					{% } %}
+					<div class="item-con"><span class="item-icon"></span>
+
+						{% if(thisDataObj.IS_POLICE_OUT){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_POLICE_OUT==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_POLICE_OUT==1?"":"不"%}</b>出警</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_FOUND){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_FOUND==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_FOUND==1?"发现":"未发现"%}</b>可疑人员</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_CONTROL){ %}
+							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONTROL==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_CONTROL==1?"控制":"未控制"%}</b>可疑人员</div>
+						{% } %}
+						{% if(thisDataObj.IS_ERRORINFO){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_ERRORINFO==1?"isCheck":"noCheck"%}"></span>是否误报：<b>{%=thisDataObj.IS_ERRORINFO==1?"是":"否"%}</b></div>
+						{% } %}	
+						{% if(thisDataObj.IS_CONSISTENT){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONSISTENT==1?"isCheck":"noCheck"%}"></span>可疑人员身份与告警<b>{%=thisDataObj.IS_CONSISTENT==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_CANCEL_DISPATCHED){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CANCEL_DISPATCHED==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_CANCEL_DISPATCHED==1?"":"不"%}</b>撤控</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_SEX_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_SEX_MATCHING==1?"isCheck":"noCheck"%}"></span>性别<b>{%=thisDataObj.IS_SEX_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_IDENTITY_ID_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_IDENTITY_ID_MATCHING==1?"isCheck":"noCheck"%}"></span>年龄<b>{%=thisDataObj.IS_IDENTITY_ID_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.IS_APPEARANCE_MATCHING){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_APPEARANCE_MATCHING==1?"isCheck":"noCheck"%}"></span>样貌<b>{%=thisDataObj.IS_APPEARANCE_MATCHING==1?"一致":"不一致"%}</b></div>
+						{% } %}
+
+						{% if(thisDataObj.OTHER){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.OTHER==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.OTHER==1?"有":"无"%}</b>其他</div>
+						{% } %}
+
+						{% if(thisDataObj.IS_HANDOVER){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_HANDOVER==1?"isCheck":"noCheck"%}"></span>是否移交到其他部门：<b>{%=thisDataObj.IS_HANDOVER==1?"是":"否"%}</b></div>
+						{% } %}			
+								
+
+						{% if(thisDataObj.NOTE){ %}
+							<div class="item-con"><span class="itemicon noteicon"></span>{%=thisDataObj.NOTE%}</div>
+						{% } %}
+
+						{% if(thisDataObj.DEPARTMENT && thisDataObj.IS_HANDOVER==1){ %}
+							<div class="item-con"><span class="itemicon noteicon"></span>{%='移交部门：'+thisDataObj.DEPARTMENT%}</div>
+						{% } %}
+					</div>
+					</div>
+				{% } %}
+
+			{% } %}
+
+		{% } %}
+	</script>
+	<script type="text/x-tmpl" id="bottomTemplate">
+		{% for(var i = 0; i < o.RECORD.length; i++){ %}
+			<div class="list-item">
+				<div class="item-title">{%= dateRender(o.RECORD[i].UPDATE_TIME, 19) %}
+					{% if(o.RECORD[i].IS_TIMEOUT == 1) { %}
+					<span class="red">【已超时】</span>
+					{% } %}					
+				</div>
+				<a class="item-name">{%= o.RECORD[i].TITLE %}</a>
+				<!-- {% if(o.RECORD[i].IS_JUMP == '1') { %} -->
+				<!-- <span title="查看受理者处置记录" class="emit" dispatch-id="{%= o.RECORD[i].DISPATCH_ID %}" task-id="{%= o.RECORD[i].TASK_ID %}" user-code="{%= o.RECORD[i].ACCEPTER %}">
+					<i class="icon icon-arrow-down5">受理者处置记录</i>
+				</span> -->
+				<!-- {% } %} -->
+				{% if(typeof(o.RECORD[i].REMARK) === 'string') { %}
+					<div class="item-con"><span class="item-icon"></span>
+						<div class="item-con">{%= o.RECORD[i].REMARK %}</div>
+					</div>
+				{% } else { %}
+					{% var remark = o.RECORD[i].REMARK; for(var j = 0; j < remark.length; j++) { %}
+					<div class="feedback-con">
+						<div class="feedback-node">
+							<div class="feedback-info">
+								<span class="time"><i class="spot"></i>{%= remark[j].time %}</span>
+								<span class="name">{%= remark[j].name %}<span class="itemicon {% if(remark[j].value ==='是') { %}isCheck{% } else if(remark[j].value ==='否') { %}noCheck{% } %}"></span>
+								</span>
+								{% if(remark[j].note) { %}<p>备注：{%= remark[j].note %}</p>{% } %}
+							</div>
+							{% if(remark[j].file) { %}
+							<div class="img-wrap">
+								{% var file = remark[j].file.split(','); for(var k = 0; k < file.length; k++) { %}
+								<img src="{%= file[k] %}" attrimg="zoom">
+								{% } %}
+							</div>
+							{% } %}
+						</div>
+					</div>
+					{% } %}
+				{% } %}
+			</div>
+		{% } %}
+	</script>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapmapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/realTimeAlarm/receivedList.js"></script>
+</html>

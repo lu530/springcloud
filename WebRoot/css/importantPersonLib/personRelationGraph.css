@@ -1,0 +1,201 @@
+@charset 'utf-8';
+
+.item {
+	/* border: 1px solid #DEDEDE; */
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+.item .main-title {
+	background-color: #fff;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	padding: 0 20px;
+}
+
+.item .main-title h4 {
+	font-size: 22px;
+	font-weight: normal;
+	display: inline-block;
+	margin: 0;
+}
+
+.item-frame {
+	left: 0px;
+	position: absolute;
+	top: 115px;
+	right: 0;
+	height: 80%;
+}
+
+.item-title {
+	/* padding: 10px 0; */
+	height: 50px;
+	line-height: 50px;
+}
+
+.item-title span {
+	font-size: 14px;
+	color: #03c1ea;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.item-title [class^="icon"] {
+	font-size: 14px;
+	margin-right: 5px;
+}
+
+.tools-menu {
+	margin: 18px;
+	float: left;
+	border: 1px solid #03c1ea;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.tools-menu dd {
+	float: left;
+	padding: 7px 10px;
+	cursor: pointer;
+	position: relative;
+	border-left: 1px solid #03c1ea;
+}
+
+.tools-menu dd:first-child {
+	border: none;
+}
+
+.item-img-con {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.item-layout {
+	width: 78%;
+	height: 500px;
+	float: left;
+}
+
+.table-info {
+	width: 22%;
+	float: left;
+	height: 100%;
+}
+
+.table-info dl {
+	border: 1px solid #DDDDDD;
+	display: table;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.table-info dt {
+	width: 45px;
+	text-align: center;
+	border-right: 1px solid #ddd;
+	display: table-cell;
+	vertical-align: middle;
+	padding: 10px;
+}
+
+.table-info dd {
+	height: 249px;
+	display: table-cell;
+	vertical-align: middle;
+	padding: 10px;
+}
+
+.table-info dd img {
+	display: block;
+	width: auto;
+	height: 120px;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.item-img-con .case-tag-list {
+	padding: 2px 0;
+	margin: 0 0 0 5px;
+	position: static;
+	width: auto;
+	max-height: 122px;
+	overflow: auto;
+}
+
+.case-tag-list li {
+	background: #EEF6FF;
+	color: #024C98;
+	border: 1px solid #85BBF3;
+	margin: 3px 3px 3px 0;
+	display: inline-block;
+	padding: 2px 12px;
+	height: 24px;
+	cursor: pointer;
+	border-radius: 5px;
+	width: auto;
+	float: none;
+}
+
+.search-box {
+	border-radius: 6px;
+	overflow: hidden;
+	border: 1px solid #03c1ea;
+	line-height: 30px;
+	margin: 8px;
+}
+
+.item .search-box  .search-input {
+	border: none;
+	color: #222;
+}
+
+.sprit-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(/efacecloud/images/zc_icon.png) no-repeat;
+	margin-right: 5px;
+}
+
+.sprit-icon.list-icon {
+	background-position: -10px -140px;
+}
+
+.sprit-icon.relist-icon {
+	background-position: -36px -140px;
+}
+
+.sprit-icon.exp-icon {
+	background-position: -62px -140px;
+}
+
+.sprit-icon.full-icon {
+	background-position: -88px -140px;
+}
+
+.sprit-icon.ele-icon {
+	background-position: -114px -140px;
+}
+
+.sprit-icon.fullimg-icon {
+	background-position: -140px -140px;
+}
+
+.sprit-icon.sparse-icon {
+	background-position: -167px -140px;
+}
+
+.sprit-icon.look-icon {
+	background-position: -192px -140px;
+}
+
+.sprit-icon.hide-icon {
+	background-position: -219px -140px;
+}
+
+.sprit-icon.expo-icon {
+	background-position: -244px -140px;
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title></title>
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css"
+	href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<style>
+.btn-blue {
+	background: #00C2DE;
+	color: #fff;
+	border: 1px solid #17d0eb;
+	border-radius: 5px;
+}
+
+.btn-blue:hover, .btn-blue:focus, .btn-blue:active {
+	background: #17d0eb;
+	color: #fff;
+}
+
+.btn-white {
+	background: #fff;
+	color: #808080;
+	border: 1px solid #E4E4E4;
+	border-radius: 5px;
+}
+
+.btn-white:hover, .btn-white:focus, .btn-white:active {
+	background: #fdfdfd;
+}
+</style>
+</head>
+<body>
+	<div class="window-content">
+		<div class="filter-bar">
+			<div class="btn-group-link fr mr20">
+				<button class="btn btn-blue" type="button" id="export">导出</button>
+			</div>
+		</div>
+		<div class="table-wrap p20 pt0">
+			<table class="table" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="w12 tc"><span>错误序列</span></th>
+						<th class="w12"><span>姓名</span></th>
+						<th class="w20 tc"><span>身份证号</span></th>
+						<th><span>错误原因</span></th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+
+				<script id="detailTmpl" type="text/x-tmpl">
+					{% for (var i = 0; i < o.length; i++) { %}
+						<tr>
+	                   	    <td class="w12 tc"><span title="">{%=(i+1)%}</span></td>   
+	                   	    <td class="w12"><span title="{%=o[i].PERSON_NAME%}">{%=o[i].PERSON_NAME%}</span></td> 
+	                   	    <td class="w20 tc"><span title="{%=o[i].IDENTITY_ID%}">{%=o[i].IDENTITY_ID%}</span></td> 
+	                    	<td><span title="{%=o[i].DESC%}">{%=o[i].DESC%}</span></td> 
+						</tr>
+					{% } %}
+				</script>
+
+				<!-- 
+					<tr>
+	                    <td class="w12 tc"><span title="">1</span></td>   
+	                    <td class="w12"><span title="">张三</span></td> 
+	                    <td class="w20 tc"><span title="">440111122356642598</span></td> 
+	                    <td><span title="">解析失败</span></td> 
+					</tr>
+				-->
+			</table>
+		</div>
+	</div>
+	<div class="window-bottom hide">
+		<button class="btn btn-blue sureBtn" type="button">确定</button>
+		<button class="btn btn-white cancelBtn" type="button">取消</button>
+	</div>
+
+	<iframe class="face-export hide" id="personExport" frameborder="0"></iframe>
+
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript"
+	src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="/efacecloud/js/dispatched/importTemplateDetails.js"></script>
+</html>

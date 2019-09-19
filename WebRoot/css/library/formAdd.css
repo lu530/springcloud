@@ -1,0 +1,50 @@
+/*
+body{
+	overflow:auto;
+}
+.pager-wrap{
+	padding:0 10%;
+}
+.form-con{
+	position: relative;
+}
+.form-group.tag{
+	display:table;
+}
+.form-group.tag .control-label{
+	display:table-cell;
+}
+.form-group.tag .tag-list{
+	display:table-cell;
+}
+.form-group.tag .control-label{
+	vertical-align: baseline;
+}*/
+/*@lyy 增加边距*/
+.form-con {
+	width: auto;
+}
+
+.pager-content {
+	min-height: auto;
+}
+
+.form-con {
+	position: absolute;
+	top: 20px;
+	bottom: 60px;
+	/* width: 100%; */
+	left: 20px;
+	right: 20px;
+	padding-top: 30px;
+	overflow-y: auto;
+}
+
+.form-footer {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	right: 20px;
+	width: auto;
+	text-align: right;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>数据采集量统计</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+</head>
+<style>
+.table-wrap .table td .item-detail{
+    display: inline-block;
+    width: auto;
+    color: #0087C3;
+    cursor: pointer;
+}
+</style>
+<body class="oa">
+<div class="pager-wrap" container="scroll">
+	<div class="pager-content">
+		<div class="page-title">
+			<span>数据采集量统计</span>
+		</div>
+				<div class="filter-view">
+			<dl class="filter-bar">
+				<dd class="filter-bar-search">
+					<div class="fifler-group mr5">
+		  				<div class="search-box mb5">
+							<input class="search-input" id="searchText" type="text" placeholder="请输入派出所名称">
+							<span class="icon-search22" id="searchBtn"></span>
+		  				</div>
+					</div> 
+				</dd>
+			</dl>	
+		</div>
+		
+		<div id="personStructuredList">
+			<div class="page-info-metro square-pager full">
+                <div class="action-btn-group">
+                    <span class="btn btn-i-t" id="export">导出</span>
+                </div>
+	            <!-- <div class="page-data fr" listview-page="">
+	                <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+	                <span class="page-num">共有 <i class="page-num" listview-counts="">1</i>条记录</span>
+	                <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+	                <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+	            </div> -->
+            </div>
+            <div class="table-wrap tableBox">
+                <table class="table listBox" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th class="tc" style="width: 50px;"><input type="checkbox" id="checkAll" listview-checkall=""></th>
+                            <th class="tc"><span>区域名称</span></th>
+                            <th class="tc"><span>设备数</span></th>
+                            <th class="tc"><span>正常</span></th>
+                            <th class="tc"><span>异常</span></th>
+                            <th class="tc"><span>抓拍量</span></th>
+                            <!-- <th class="tc"><span>未分配</span></th>
+                            <th class="tc"><span>视频网接入</span></th>
+                            <th class="tc"><span>公安网接入</span></th>
+                            <th class="tc"><span>公安网落地</span></th>
+                            <th class="tc"><span>统计差</span></th> -->
+                        </tr>
+                    </thead>
+                    <tbody class="listviewImgBox" id="faceCapture">
+                        <script type="x-tmpl" id="faceCaptureTemplate">
+                            {% for(var i=0; i<o.length; i++) { %}
+                            <tr>
+                                <td class="tc" style="width: 50px;">
+                                    <input type="checkbox" listview-check="" listview-item="{%=i%}" class="checkbox-opacity tableCheck" >
+                                </td>
+                                <td class="tc"><span class="item-detail" id="{%=o[i].ORG_CODE%}" name="{%=o[i].ORG_NAME%}">{%=o[i].ORG_NAME%}</span></td>
+                                <td class="tc" >{%=o[i].DEVICE_COUNT%}</td>
+                                <td class="tc" >{%=o[i].DEVICE_NORMAL_NUM%}</td>
+                                <td class="tc" >{%=o[i].DEVICE_UNNORMAL_NUM%}</td>
+                                <td class="tc" >{%=o[i].DEVICE_CAPTURE_TOTAL%}</td>
+                            </tr>
+                            {% } %}
+                        </script>
+                    </tbody>                                                                                            
+                </table>
+            </div>
+		</div>
+		
+	</div>
+	<div class="frame-form-full">
+        <iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+    </div>
+	
+</div>
+</body>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/report/dataCollectReport.js"></script>
+
+</html>

@@ -1,0 +1,133 @@
+@charset 'utf-8';
+
+.btn-group {
+	
+}
+
+.btn {
+	margin-right: 15px;
+	width: 85px;
+}
+
+.form-con {
+	background-color: #fff;
+	bottom: 0;
+}
+
+.form-con .form-control {
+	border: none;
+}
+
+.person-name {
+	color: #333;
+	font-size: 26px;
+	width: 95%;
+	margin: 20px auto;
+}
+
+.form-con .form-single .form-group {
+	padding: 0 20px;
+}
+
+.form-con .control-label {
+	text-align: left;
+	width: 70px;
+}
+
+.time-line {
+	width: 90%;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 20px 0;
+}
+
+.time-line .node-content {
+	
+}
+
+.time-line .node-content .dot-text {
+	width: 75px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 50%;
+	background-color: #ccc;
+	color: #fff;
+	display: inline-block;
+}
+
+.time-line .node-content .time {
+	width: 100px;
+	padding-top: 10px;
+}
+
+.time-line .node-content.active .dot-text {
+	background-color: #00c2de;
+}
+
+.time-line .node-line {
+	padding: 4px;
+}
+
+.time-line .node-line .line-icon {
+	display: inline-block;
+	width: 50px;
+	height: 4px;
+	border-radius: 2px;
+	background-color: #ccc;
+}
+
+.time-line .node-line.active .line-icon {
+	background-color: #00c2de;
+}
+
+.form-warper {
+	position: relative;
+}
+
+.person-img {
+	position: absolute;
+	right: 50%;
+	top: 50px;
+}
+
+.person-img img {
+	width: auto;
+	height: 150px;
+}
+
+.list-view .list-node {
+	position: relative;
+	width: 250px;
+	height: auto;
+	float: left;
+	clear: none;
+	display: inline-block;
+	overflow: hidden;
+	margin: 0 10px 10px 0px;
+	padding: 10px 10px;
+	cursor: pointer;
+	border: 1px solid #DCDCDC;
+}
+
+.list-view .case-name {
+	color: #666;
+}
+
+.form-node span {
+	line-height: 30px;
+}
+
+.img-num {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	display: block;
+	height: 18px;
+	line-height: 18px;
+	padding: 0 5px;
+	color: #fff;
+	font-size: 12px;
+	background: #0C76D0;
+	text-align: center;
+	z-index: 9;
+}

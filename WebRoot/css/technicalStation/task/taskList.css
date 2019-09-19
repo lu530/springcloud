@@ -1,0 +1,42 @@
+.task .icon-file3{
+    color:rgb(254,115,52);
+}
+.task .list-box{
+    padding:10px;
+}
+/* .task p{
+    padding:0;
+    margin:0;
+    height:25px;
+} */
+.task .fl{
+    float:left;
+}
+.task .list-left{
+    width:5%;
+}
+.task .list-center{
+    width:79%;
+}
+.task .list-right{
+    width:10%;
+}
+.task .list-left,.list-center,.list-right{
+    margin:0 1%;
+}
+.task ul{
+    list-style: none;
+}
+.task li {
+    color:#777;
+    cursor:pointer;
+}
+.task li:hover{
+    background-color: #e8eef8;
+}
+.task a{
+    color:#ccc;
+}
+.task a:hover{
+    color:#4876d1;
+}

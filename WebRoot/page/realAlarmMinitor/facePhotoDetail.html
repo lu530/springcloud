@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>人脸抓拍详情</title>
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/realAlarmMinitor/facePhotoDetail.css" />
+	</head>
+	<body>
+		<div id="photoContent"></div>
+		<script id="photoTemplate" type="x-tmpl">
+			<div class="big-pic">
+				<img src="{%=renderImg(o.frameImg)%}" alt=""  />
+			</div>
+			<div class="detail clearfix">
+				<div class="detail-pic">
+					<img src="{%=renderImg(o.faceImg)%}" alt="" />
+				</div>
+				<div class="detail-info">
+				  <p class="node-title"><label>抓拍时间：</label><span title="{%=renderNullToNotKnow(o.captureTime)%}">{%=renderNullToNotKnow(o.captureTime)%}</span></p>
+	              <p class="node-title"><label>抓拍地点：</label><span title="{%=renderNullToNotKnow(o.deviceAddr)%}">{%=renderNullToNotKnow(o.deviceAddr)%}</span></p>
+	              <p class="node-title"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.deviceName)%}">{%=renderNullToNotKnow(o.deviceName)%}</span></p>
+	              <div class="btn-group node-title">
+						<a fileUrl="{%=o.objPic%}" LATITUDE="{%= o.LATITUDE %}" LONGITUDE="{%= o.LONGITUDE %}" attr-time="{%=renderNullToNotKnow(o.jgsk)%}" attr-addr="{%=renderNullToNotKnow(o.deviceAddr)%}" class="btn-i-t btn-xs locationBtn location-btn"  ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+							<i class="btn-icon location-icon"></i> 
+						</a>
+						<a class="btn-i-t btn-xs searchBtn search-btn" imgSrc="{%=o.faceImg%}"  title="搜索">
+							<i class="btn-icon search-icon"></i>
+						</a>
+						<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.objPic%}">
+							<i class="btn-icon trajectory-icon"></i>
+						</a>																												
+						<a class="btn-i-t btn-xs collectionBtn"  ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.deviceId%}&deviceName={%=o.deviceName%}&infoId={%=o.infoId%}&pic={%=o.pic%}&objPci={%=o.objPic%}&jgsj={%=o.jgsk%}" title="收藏">
+							<i class="btn-icon collection-icon"></i>
+						</a>
+						<a class="btn-i-t btn-xs searchPeoson"  imgSrc="{%=o.faceImg%}" title="以人搜人">
+							<i class="btn-icon person-icon"></i>
+						</a>	
+					</div>
+				</div>
+			</div>
+		</script>
+	</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/realAlarmMinitor/facePhotoDetail.js"></script>
+</html>

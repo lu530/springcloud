@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>轨迹分析</title>
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+</head>
+<body class="full-screen bgwhite" menuId="personTechnicalStation-FaceTrace">
+	<div class="page-list-head" style="display: none;">
+		<a id="backBtn" class="back-btn"> <i class="icon-arrow-left10"></i>
+			<em>返回</em>
+		</a> <span class="pl10" id="pageTitle"><i
+			class="title-icon icon-track"></i>轨迹分析</span>
+	</div>
+	<div class="form-con form-inline form-silde" style="top: 0;">
+		<dl class="sort-cell clearfix">
+			<dd class="form-group-block ">
+				<ul class="upload-img-car-bar hide">
+					<li paint="rect" class="paint-btn"><span title="画框" class="icon-select003"></span></li>
+					<li paint="delete" class="paint-btn"><span title="删除" class="icon-remove22"></span></li>
+				</ul>
+				<dl class="person-face-upload sort-cell mb0">
+					<dd class="form-group-block">
+						<div class="upload-bg-box upload-img-car" style="height: auto;">
+							<div class="photo-tools">
+								<div class="top-pic-box" style="background: white;">
+									<div class="img-wrap">
+										<img id="filterImg" src="/efacecloud/images/technicalStation-upload.png" foruploadimg="uploadImg,picBtn">
+                                        <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" />
+									</div>
+									<ul>
+										<li class="re-upload"><i class="icon-image2"></i>
+                                            <input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn">
+                                        </li>
+										<li class="del-pic" id="deleteImg"><i class="icon-trash"></i></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</dd>
+				</dl>
+			</dd>
+		</dl>
+
+		<!-- 
+			<dd class="form-group form-group-block clearfix hide">
+				<label class="control-label ">检测结果：</label>
+				<span class="control-label red pl0">未检测到</span>
+			</dd>
+	    
+	    -->
+		<dl>
+			<dd class="form-group time-wrap time-style-1 mb15 pt30">
+				<div class="begin-time clearfix">
+					<label class="control-label fl tl mr0 mt5">时间范围：</label>
+					<div class="time-box ml0">
+						<label>从</label> <input class="form-control" id="beginTime" name="beginTime" value="" type="text" ui-validate="{pattern:'required'}" ui-vtext="开始时间" readonly="readonly" />
+					</div>
+					<span class="red">*</span>
+				</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">
+						<label>到</label> <input class="form-control" id="endTime" name="endTime" value="" type="text" ui-validate="{pattern:'required'}" ui-vtext="结束时间" readonly="readonly" />
+					</div>
+					<span class="red">*</span>
+				</div>
+			</dd>
+
+			<dd class="form-group form-group-block">
+				<label class="control-label">选择区域：</label>
+				<ul class="map-icon-list clearfix" layerName="L_CAMERA_FACE">
+					<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+					<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+					<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+					<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+					<!-- <li><i class="map-icon map-icon-area icon-list22" id="showDevice"></i></li> -->
+					<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+				</ul>
+				<span class="red">*</span>
+			</dd>
+			<dd class="form-group form-group-block">
+				<label class="control-label">感知设备：</label>
+				<!-- 			<div class="form-control ov p0 position-top fix-width" id="faceDetectTree" name="faceDetectTree" type="dropdown-tree" 
+			         ui-control="dropdowntree" ui-service="face/common/getFaceDetect" ui-options="orgTreeOpts"></div> -->
+				<!-- <div class="form-control ov p0 position-top fix-width device-select" id="deviceNames"></div>
+				<input type="hidden" id="faceDetect" name="faceDetect"> <span class="red hide">*</span>
+				<input type="hidden" id="deviceIdInt" name="deviceIdInt"> -->
+				<div class="dropdown-list device-select">
+								<div class="dropdown-list-text">
+									<span class="list-title" id="deviceNames"></span> 
+									<input type="hidden" id="faceDetect"> 
+									<input type="hidden"id="deviceIdInt"> 
+									<a class="dropdown hide"> 
+										<i class="icon-arrow-down8"></i>
+									</a>
+								</div>
+								<div class="dropdown-menu">
+									<ul class="list-con" id="deviceNameList">
+										<!-- <li>
+										<a>
+											<span class="deviceName">广东省</span>
+											<span class="removeBtn operate-btn">×</span>
+										</a>
+									</li> -->
+									</ul>
+								</div>
+				</div>
+			</dd>
+			<dd class="form-group form-group-block">
+				<label class="control-label">检索阈值：</label>
+				<div id="sliderThreshold" style="display:inline-block;width:195px;"></div>
+				<input class="form-control ml20 tc" style="width: 30px; padding: 2px" id="THRESHOLD" name="THRESHOLD" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="检索阈值" value=70><span class="red"> *</span>
+			</dd>
+			<dd class="form-group form-group-block sliderNum">
+				<label class="control-label">检索数量：</label>
+				<div id="sliderNum" style="display:inline-block;width:195px;"></div>
+				<input class="form-control ml20 tc" style="width: 30px; padding: 2px" id="SEARCHNUM" name="SEARCHNUM" maxlength=" " ui-validate="{pattern:'required,integer',max:200,min:1}" ui-vtext="检索数量" value=100> <span class="red">
+					<!-- (最多100条) -->*
+				</span>
+			</dd>
+		</dl>
+		<div class="btn-wrap ml10 mr10">
+			<button id="searchBtn" class="btn w100">检索</button>
+		</div>
+	</div>
+
+	<div class="frame-form-full l0" style="display: none; z-index: 999;">
+		<iframe class="frame-form" name="frameFormFull" id="frameFormFull" frameborder="0"></iframe>
+	</div>
+	
+	<script id="deviceNameListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<li>
+		<a>
+		<span class="deviceName">{%=o[i].DEVICE_NAME%}</span>
+		<span class="removeDeviceBtn operate-btn" deviceid="{%=o[i].DEVICE_ID%}">×</span>
+		</a>
+	</li>
+	{% } %}
+	</script>
+
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+	<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+	<!-- <script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+
+	<script src="/ui/plugins/vectorEditor/raphael2.js" type="text/javascript"></script>
+	<script src="/ui/plugins/vectorEditor/raphael.export.js" type="text/javascript"></script>
+	<script src="/ui/plugins/vectorEditor/editor.js" type="text/javascript"></script>
+	<script src="/ui/plugins/vectorEditor/shape.js" type="text/javascript"></script>
+	<script src="/ui/plugins/vectorEditor/tracker.js" type="text/javascript"></script>
+	<script src="/ui/plugins/vectorEditor/tinyjson.js" type="text/javascript"></script>
+	<script src="/efacecloud/js/common/imageEditor.js" type="text/javascript"></script> -->
+
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/trackFaceForm.js"></script>
+</body>
+</html>

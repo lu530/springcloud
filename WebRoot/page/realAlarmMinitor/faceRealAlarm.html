@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+        <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+        <link rel="stylesheet" type="text/css" href="/efacecloud/css/realAlarmMinitor/faceRealAlarm.css" />
+    </head>
+    <body>
+        <div id="tempData" >
+        
+        </div>
+        <script id="sceneTemplate" type="x-tmpl">
+            <div class="list-node-wrap" listview-item="0">
+              <dl class="list-node">
+              <dt class="node-img  compare-img">
+                    <span>
+                      <img src="{%=renderImg(o.ALARM_IMG)%}" class="zoomFramePic" zoomPic="{%=renderImg(o.FRAME_IMG)%}" ALARM_FACE_RECT="{%=o.ALARM_FACE_RECT%}">
+                    </span>
+                    <span class="playVideo play-video" attr-time="{%= o.ALARM_TIME %}" deviceid="{%=o.DEVICE_ID%}" >
+                        <div class="bg"></div>
+                        <img src="{%=renderImg(o.FRAME_IMG)%}" class="normalPic" >
+                    </span>
+                    <span>
+                      <img src="{%=renderImg(o.TEMPLET_IMG)%}" class="normalPic" >
+                    </span>
+                </dt>
+                <dd class="node-text">
+                  <input type="checkbox" listview-check="" class="checkbox-opacity hide">
+                  <p class="node-title"><label>抓拍时间：</label><span title="{%=o.ALARM_TIME%}">{%=o.ALARM_TIME%}</span></p>
+                  <p class="node-title"><label>抓拍地点：</label><span title="{%=o.DEVICE_ADDR%}">{%=o.DEVICE_ADDR%}</span></p>
+                  <p class="node-title"><label>姓名：</label><span title="{%=o.NAME%}">{%=o.NAME%}</span></p>
+                  <p class="node-title"><label>性别：</label><span title="{%=renderSex(o.SEX)%}" class="">{%=renderSex(o.SEX)%}</span></p>
+                  <p class="node-title"><label>身份证号：</label><span title="{%=o.IDENTITY_ID%}">{%=o.IDENTITY_ID%}</span></p>
+                  <p class="node-title"><label>布控库：</label><span title="{%=o.DB_NAME%}">{%=o.DB_NAME%}</span></p>
+                  {% if(o.RECENT_COUNT){ %}
+                  <p class="node-title"><label>七天告警频次：</label><span title="{%=o.RECENT_COUNT%}">{%=o.RECENT_COUNT%}</span></p>
+                  {% } %}
+                  {% if(o.USER_NAME){ %}                  
+                  <p class="node-title"><label>布控人：</label><span title="{%=o.USER_NAME%}">{%=o.USER_NAME%}</span></p>
+                  {% } %}
+                  {% if(o.DEPT_NAME){ %}                  
+                  <p class="node-title"><label>布控单位：</label><span title="{%=o.DEPT_NAME%}">{%=o.DEPT_NAME%}</span></p>
+                  {% } %}
+                </dd>
+              </dl>
+            </div>  
+            </script>
+    </body>
+    <script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+    <script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/efacecloud/js/common.js"></script>
+    <script type="text/javascript" src="/efacecloud/js/realAlarmMinitor/faceRealAlarm.js"></script>
+</html>

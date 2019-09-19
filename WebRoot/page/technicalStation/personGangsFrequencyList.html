@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>同行分析</title>
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap3.3/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/persontogethercarQueryResult.css"/>
+</head>
+<body class="full-screen">
+<div class="page-list-head">
+	<!-- <a id="backBtn" class="left-btn icon-btn"><span class="icon-arrow-left10"></span></a> -->
+	<h2 class="pl10" id="pageTitle">同行频次列表 </h2>
+	<span id="closeBtn" class="right-btn icon-btn">×</span>
+</div>
+<div id="frequencyList" class="pager-container pt10 pl20" style="top:55px;">
+	<script id="frequencyTmpl" type="text/x-tmpl">
+	{% for (var i=0; i<o.length; i++) { %}
+	<div class="dis-table">
+		<div class="date-style dis-table-cell">
+			<div class="times-block"><b class="f22 ">{%=o[i][0].REPEATS%}次</b></div>	
+		</div>
+		<div class="dis-table-cell">
+			<div class="clearfix mt20">
+				{% 
+					for (var j = 0; j < o[i].length; j++) { 
+						var picSplit=o[i][j].PICS.split(',');
+						var timeSplit=o[i][j].TIMES.split(',');  
+						var addrSplit=o[i][j].ADDRS.split(',');
+						var xSplit=o[i][j].XS.split(',');
+						var ySplit=o[i][j].YS.split(',');  
+						var nameSplit=o[i][j].NAMES.split(',');
+  						
+  						for(var k=0; k<timeSplit.length;k++){
+				%} 
+				<dl class="list-node mt0 p0 mb5 fl" style="background:#eee;"
+					deviceId="{%=addrSplit[k]%}" pic="{%=picSplit[k]%}" time="{%=timeSplit[k]%}" x="{%=xSplit[k]%}" y="{%=ySplit[k]%}" name="{%=nameSplit[k]%}">
+					<dt class="node-img vertical w100 pr m0">
+						<span class="m0">
+							<img src="{%=picSplit[k]%}" class="rIMG test">
+						</span>
+						<i class="checkmark"></i>
+					</dt>
+				</dl>
+				{% } } %}
+			</div>
+		</div>
+	</div>
+	{% } %}
+	</script>
+</div>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/personGangsFrequencyList.js"></script>
+</body>
+</html>

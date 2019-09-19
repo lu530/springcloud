@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>查询结果</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/timeAxis.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/pageTop.css"/>
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/trackFaceRightList.css"/>
+</head>
+<body class="full-screen oa">
+<div class="pager-wrap pager-npt">
+<div class="pager-content pr">
+<div class="form-header nb ml20 mr20">
+	<a class="back-btn" id="backBtn" style="margin-top:14px;"><i class="icon-arrow-left10"></i><em>返回</em></a>
+	<h3 class="form-title">同伙分析结果</h3>
+</div>
+<!-- 页码 -->
+<div class="page-info-metro square-pager list-wrap">
+	<ul class="nav nav-tab-style1 switch m10 fr">
+	   <li class="hand active first"><a ref="#frequency"><span class="icon-graph"></span> 频次  </a></li>
+	   <li class="hand last"><a ref="#time"><span class="icon-history2"></span> 时间  </a></li>
+	</ul>
+</div>
+<!-- 页码 end -->
+<div class="pager-container" style="top:100px;">
+	<!-- <div class="clearfix list-wrap">
+		<div class="tool-bar fl ml30 mt10">
+			<ul id="" class="nav nav-tab-style1 switch mt0">
+			   <li class="hand active"><a ref="#frequency"><span class="icon-graph"></span> 频次  </a></li>
+			   <li class="hand"><a ref="#time"><span class="icon-history2"></span> 时间  </a></li>
+			</ul>
+		</div>
+		<div class="tool-bar fr mr10 mt15 hide">
+			<button id="trajectoryGeneBtn" class="btn-gray btn">查看目标轨迹</button>
+		</div>
+	</div> -->
+	<div id="frequency" class="people-list listviewImgBox">
+		<script id="resultTmpl" type="text/x-tmpl">
+		{% if(o.length>0){ %}
+		{% var _num = 1; for (var i=0; i<o.length; i++) { %}
+			<div class="dis-table">
+				<div class="date-style dis-table-cell" style="width:98px">
+					<div class="day-block" style="padding-top:12px;"><b class="f22">{%=o[i][0].REPEATS%}次</b></div>	
+				</div>
+				<div class="dis-table-cell">
+				{% 
+					for (var j = 0; j < o[i].length; j++) { 
+						var timeSplit=o[i][j].TIMES.split(',');  
+						var picSplit=o[i][j].PICS.split(',');
+						var addrSplit=o[i][j].ADDRS.split(',');
+						var bigPicSplit = o[i][j].BIG_PIC.split(',');
+				%} 
+				<div class="clearfix">
+					<p class="address-style">疑似同伙成员{%=_num++%}</p>
+					{% for(var k=0; k<timeSplit.length;k++){ %}
+					<dl class="list-node compare-pic mt0 pr p0 pb5 mr10 mb10 picMessage">
+						<dt class="node-img vertical w100 pr m0">
+							<span class="m0" attrimg="doublezoom">
+								<img src="{%= bigPicSplit[k] %}" class="rIMG test hide" >
+								<img src="{%=picSplit[k]%}" class="rIMG test">
+							</span>
+							<p class="text-overflow mb0 mt5 black text-overflow" style="width:130px" title="{%=timeSplit[k]%}" picMsg="时间:{%=timeSplit[k]%}">{%=timeSplit[k]%}</p>
+							<p class="text-overflow mb0 mt5 black text-overflow" style="width:130px" title="{%=addrSplit[k]%}" picMsg="地点:{%=addrSplit[k]%}">{%=addrSplit[k]%}</p>
+						</dt>
+						<div class="btn-group fr">
+							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=picSplit[k]%}">
+								<i class="btn-icon verification-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=picSplit[k]%}">
+								<i class="btn-icon trajectory-icon"></i>
+							</a>
+						</div>
+
+					</dl>
+					{%}%}
+				</div>
+				{%}%}
+			</div>
+			</div>
+		{% } %}
+		{% } %}
+		</script>
+	</div>
+	
+	<!-- 时间视图 -->
+	<div id="time" class="people-list hide listviewImgBox">
+		<script id="resultDateTmpl" type="text/x-tmpl">
+		{% for (var index in o) { %}
+			<div class="dis-table">
+				<div class="date-style dis-table-cell" style="width: 98px">
+					<div class="day-block"><b class="f18">{%=renderDate(o[index][0][0].time,'month')%}</b>
+						<b style="display: block;">{%=renderDate(o[index][0][0].time,'year')%}</b></div>	
+					<div class="timeline" style="bottom: -50px;">
+						<span class="circle-top">
+							<img src="/efacecloud/images/icon-circle.png">
+						</span>
+						<span class="line"></span>
+						<span class="circle-bottom">
+							<img src="/efacecloud/images/icon-circle.png">
+						</span>
+					</div>
+				</div>
+				<div class="dis-table-cell">
+					{% for (var k = 0; k < o[index].length; k++) { %}
+					<div class="clearfix">
+						<p class="address-style">{%=o[index][k][0].name%}</p>
+						{% for (var m = 0; m < o[index][k].length; m++) { %}	
+						<dl class="list-node compare-pic mt0 pr p0 pb5 mr10 mb10 picMessage" style=" width:132px;">
+							<dt class="node-img vertical w100 pr m0" picMsg="地点:{%=o[index][k][0].name%}">
+								<span class="m0" attrimg='doublezoom'>
+									<img src="{%=o[index][k][m].BIG_PIC%}" class="rIMG test hide" >
+									<img src="{%=o[index][k][m].pic%}" class="rIMG test">
+								</span>
+								<p class="text-overflow mb0 mt5 black" picMsg="时间:{%=o[index][k][m].time.split(' ')[1]%}">{%=o[index][k][m].time.split(' ')[1]%}</p>
+							</dt>
+							<div class="btn-group fr">
+								<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[index][k][m].pic%}">
+									<i class="btn-icon verification-icon"></i>
+								</a>
+								<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[index][k][m].pic%}">
+									<i class="btn-icon trajectory-icon"></i>
+								</a>
+							</div>
+						</dl>
+						{% } %}
+					</div>
+					{% } %}
+				</div>
+			</div>
+		{% } %}
+		</script>
+	</div>
+</div>
+</div>
+</div>
+<div class="frame-form-full">
+	<iframe class="full-screen" id="frameFormFull" frameborder="0" ></iframe>
+</div>
+
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/util/Map.js"></script> 
+<script type="text/javascript" src="/efacecloud/js/common/jquery.lazyload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/persontogethercarQueryResult.js"></script>
+</body>
+</html>

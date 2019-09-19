@@ -1,0 +1,69 @@
+<!--* Created by 黎镇华 on 2017-06-27.  * email：1030858753@qq.com*/-->
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>布控与撤控列表</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/faceControl/controlOrNotList.css" />
+</head>
+<body class="pager-wrap">
+<!--<body class="f6-bg">-->
+    <div class="pager-content pt0" container="scroll" id="dispatchedLibList"  ui-control="listview" ui-service="face/dispatchedTask/getData"  ui-template="vehicleListTemplate" ui-parameters="queryParams">
+        <div class="frame-title" id="rightTitle">当前设备： <span></span></div>
+        <div class="filter-view">
+            <dl class="filter-bar search-bar nb" style="margin:5px 0;">
+                <dt class="filter-arrt" style="line-height: 40px;">搜索</dt>
+                <dd class="filter-bar-search">
+                    <div class="fifler-group mr5">
+                        <div class="search-box">
+                            <input class="search-input" type="text" id="searchText" placeholder="布控库名字" maxlength="50" id="searchText">
+                            <span class="icon-search22" id="searchBtn"></span>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        <!-- 筛选 end -->
+        <!-- 页码 -->
+        <div class="page-info-metro square-pager full">
+            <div class="action-btn-group">
+                <label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall>全选</label>
+            </div>
+            <div class="bottom-btn action-btn-group clearfix">
+                <button type="button" class="btn" id="saveBtn">确定</button>
+            </div>
+            <div class="page-data tc fr" listview-page="" style="display: none">
+                <a class="page-prev fl" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+                <span class="page-num">共有<i class="page-num" listview-counts="">0</i>条记录</span>
+                <a class="current-page"><i listview-current="">0</i>/<i listview-total="">0</i></a>
+                <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+            </div>
+        </div>
+        <!-- 页码 end -->
+        <div class="page-con">
+            <div class="library-info">
+                <div class="tilelist vertical checkbox">
+                    <div class="list-node-wrap" id="vehicleListTemplate" style="display: none">
+                        <dl class="list-node" task_id="{%=o.DB_ID%}" hasCheck={%=o.CHECKED%}>
+                            <dd class="node-text">
+                                <input type="checkbox" listview-check class="checkbox-opacity hide"/>
+                                <p class="store-title"><span>{%=o.DB_NAME%}</span></p>
+                                <p class="store-type">告警等级：<span class="alarm-span lh-normal {%=color(o.ALARM_LEVEL)%}">{%=warmText(o.ALARM_LEVEL)%}</span></p>
+                                <p class="store-type">入库量数量：<span class="">{%=o.STORE_CNT%}</span></p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControl/controlOrNotList.js"></script>
+</html>

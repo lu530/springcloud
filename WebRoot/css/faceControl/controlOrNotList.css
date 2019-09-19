@@ -1,0 +1,59 @@
+/**
+ * Created by 榛庨晣鍗� on 2017-06-27.
+ * email锛�1030858753@qq.com
+ */
+.tilelist{
+    margin:0!important;
+}
+
+.tilelist.vertical .list-node{
+    border-color: #e6eaee;
+    border-radius: 5px;
+    padding: 0;
+    padding-left: 44px;
+    padding-right: 14px;
+    margin-right: 0;
+}
+
+.tilelist .list-node .node-text .store-title{
+    font-size: 18px;
+    color: #354052;
+    line-height:45px;
+    border-bottom: 1px solid #dfe2e5;
+    margin-bottom: 0;
+}
+
+.tilelist .list-node .node-text .store-title .test-true{
+    background: #3462b9;
+    padding: 4px 10px;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.tilelist.vertical .node-text{
+    padding: 0;
+    padding-bottom: 4px;
+}
+.tilelist .list-node .node-text .store-type{
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    color:#4695d9;
+    margin:0;
+}
+.tilelist .list-node:before{
+    top:18px;
+}
+
+
+.list-node{
+    cursor: pointer;!important;
+}
+
+
+
+
+
+
+
+

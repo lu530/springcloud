@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style>
+body {
+	margin: 0;
+	background-image: url('img/map.png')
+}
+
+#container {
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	margin: 2% 0;
+}
+
+.sigma-edge {
+	stroke: #14191C;
+}
+
+.sigma-node {
+	fill: green;
+	stroke: #14191C;
+	stroke-width: 2px;
+}
+
+.sigma-node:hover {
+	fill: #2196F3;
+}
+
+.muted {
+	fill-opacity: 0.1;
+	stroke-opacity: 0.1;
+}
+</style>
+
+<script src="src/sigma.core.js"></script>
+<script src="src/conrad.js"></script>
+<script src="src/utils/sigma.utils.js"></script>
+<script src="src/utils/sigma.polyfills.js"></script>
+<script src="src/sigma.settings.js"></script>
+<script src="src/classes/sigma.classes.dispatcher.js"></script>
+<script src="src/classes/sigma.classes.configurable.js"></script>
+<script src="src/classes/sigma.classes.graph.js"></script>
+<script src="src/classes/sigma.classes.camera.js"></script>
+<script src="src/classes/sigma.classes.quad.js"></script>
+<script src="src/classes/sigma.classes.edgequad.js"></script>
+<script src="src/captors/sigma.captors.mouse.js"></script>
+<script src="src/captors/sigma.captors.touch.js"></script>
+<script src="src/renderers/sigma.renderers.canvas.js"></script>
+<script src="src/renderers/sigma.renderers.webgl.js"></script>
+<script src="src/renderers/sigma.renderers.svg.js"></script>
+<script src="src/renderers/sigma.renderers.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.labels.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.hovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.nodes.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+<script
+	src="src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.utils.js"></script>
+<script src="src/renderers/svg/sigma.svg.nodes.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.curve.js"></script>
+<script src="src/renderers/svg/sigma.svg.labels.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.hovers.def.js"></script>
+<script src="src/middlewares/sigma.middlewares.rescale.js"></script>
+<script src="src/middlewares/sigma.middlewares.copy.js"></script>
+<script src="src/misc/sigma.misc.animation.js"></script>
+<script src="src/misc/sigma.misc.bindEvents.js"></script>
+<script src="src/misc/sigma.misc.bindDOMEvents.js"></script>
+<script src="src/misc/sigma.misc.drawHovers.js"></script>
+<!-- END SIGMA IMPORTS -->
+
+<script src="plugins/sigma.renderers.edgeLabels/settings.js"></script>
+<script
+	src="plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js"></script>
+<script src="plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js"></script>
+
+<script
+	src="plugins/sigma.plugins.neighborhoods/sigma.plugins.neighborhoods.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/worker.js"></script>
+
+<script src="../jquery.js"></script>
+<body>
+
+	<div id="container"></div>
+
+</body>
+
+<script>
+	
+sigma.utils.pkg('sigma.canvas.nodes');
+
+sigma.canvas.nodes.image = (function() {
+  var _cache = {},
+      _loading = {},
+      _callbacks = {};
+
+  // Return the renderer itself:
+  var renderer = function(node, context, settings) {
+    var args = arguments,
+        prefix = settings('prefix') || '',
+        size = node[prefix + 'size'],
+        color = node.color || settings('defaultNodeColor'),
+        url = node.url;
+
+    if (_cache[url]) {
+      context.save();
+
+      // Draw the clipping disc:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.closePath();
+      context.clip();
+
+      // Draw the image
+      context.drawImage(
+        _cache[url],
+        node[prefix + 'x'] - size,
+        node[prefix + 'y'] - size,
+        2 * size,
+        2 * size
+      );
+
+      // Quit the "clipping mode":
+      context.restore();
+
+      // Draw the border:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.lineWidth = size / 6;
+      context.strokeStyle = node.color || settings('defaultNodeColor');
+      context.stroke();
+      
+    } else {
+      sigma.canvas.nodes.image.cache(url);
+      sigma.canvas.nodes.def.apply(
+        sigma.canvas.nodes,
+        args
+      );
+    }
+  };
+
+  // Let's add a public method to cache images, to make it possible to
+  // preload images before the initial rendering:
+  renderer.cache = function(url, callback) {
+    if (callback)
+      _callbacks[url] = callback;
+
+    if (_loading[url])
+      return;
+
+    var img = new Image();
+
+    img.onload = function() {
+      _loading[url] = false;
+      _cache[url] = img;
+
+      if (_callbacks[url]) {
+        _callbacks[url].call(this, img);
+        delete _callbacks[url];
+      }
+    };
+
+    _loading[url] = true;
+    img.src = url;
+  };
+
+  return renderer;
+})();
+
+var urls = [
+      'img/img1.png',
+      'img/img2.png',
+      'img/img3.png'
+    ],
+    
+	g = {
+  		nodes: [],
+  		edges: []
+	},
+
+	loaded = 0,
+
+	toKeep = {};
+
+var anchorDraging = false;
+
+var anchor = {};
+      
+urls.forEach(function(url) {
+  sigma.canvas.nodes.image.cache(
+    url,
+    function() {
+    	if (++loaded === urls.length) {
+    		
+			var s = new sigma({
+				renderer: {
+			    	container: document.getElementById('container'),
+			        type: 'canvas'
+			    },
+			    settings: {
+					minNodeSize: 4,
+					maxNodeSize: 16,
+				    minEdgeSize: 1,
+				    maxEdgeSize: 2,
+				    enableEdgeHovering: true,
+				    edgeHoverSizeRatio: 2,
+					defaultNodeColor: '#FF5722',
+    				defaultEdgeColor: '#E24',
+    				enableHovering: true,
+    				nodesPowRatio: 0.1,
+    				edgesPowRatio: 0.1,
+    				zoomingRatio: 1.2,
+    				doubleClickZoomingRatio: 1.2,
+    				edgeHoverColor:  'edge',
+    				mouseWheelEnabled: false,
+    				doubleClickZoomingRatio: false,
+    				enableCamera: false,
+    				defaultLabelColor: '#EEE'
+				}
+			});
+			
+			for (var i=0; i<30; i++) {
+				var c = '#2196F3';
+				if (i%3 == 2) {
+					c = '#FF5722';
+					size = 4;
+				} else {
+					size = 4;
+				}
+				_x = Math.random() * 1.5;
+				_y = Math.random() * 1.1;
+				s.graph.addNode({
+					id: 'n' + i,
+				    //label: '嫌疑人' + i + '(' + _x + ',' + _y +')',
+				    label: '嫌疑人' + i,
+				    x:  _x,
+				    y: _y,
+				    type: 'image',
+				    url: urls[0],
+				    size: size,
+				    color: c
+				})
+			}
+			for (var i=0; i<10; i++) {
+				s.graph.addEdge({
+				    id: 'e' + i,
+				    label: '通行',
+				    source: 'n' + (Math.random() * 10 | 0),
+				    target: 'n' + (Math.random() * 10 | 0),
+				    size: 1,
+				    color: '#2196F3'
+				})
+			}
+						
+			sigma.plugins.dragNodes(s, s.renderers[0]);	
+						
+			s.bind('clickStage', function() {	
+				$('.sigma-node, .sigma-edge').each(function() {
+			    	unmute(this);
+			  	});
+			});
+			
+			s.bind("clickNode", function(e) {
+				toKeep = {};
+				toKeep[e.data.node.id] = {};
+				
+				selectId = e.data.node.id;
+								
+		        s.graph.edges().forEach(function(e) {
+		           
+		          	if (e.target == selectId) {
+		          		toKeep[e.source] = {}
+		        		e.color = '#E24';
+		          	}
+		          	else if (e.source == selectId) {
+		          	 	toKeep[e.target] = {}
+		             	e.color = '#E24';
+		          	}    
+		          	else {		          
+		          		e.color = '#444';
+		          	}
+		        });	  	
+		        
+				s.graph.nodes().forEach(function(n) {
+		          	if (toKeep[n.id]) {
+		          		if (n.url == 'img/img3.png') {
+		            		n.color = '#2196F3';
+		            	} else {
+		            		n.color = '#FF5722';
+		            	}
+		          	} else {
+		          		n.color = '#ddd';
+		          	}
+		        });
+
+		        //s.graph.dropNode(e.data.node.id)
+		        
+		        s.refresh()
+			});
+									
+			s.bind("clickEdge", function(e) {				
+				console.log(e);
+				console.log(s.graph.nodes(e.data.edge.target));
+				var eventX = sigma.utils.getX(e) + sigma.utils.getCenter(e).x;
+				var eventY = sigma.utils.getX(e) + sigma.utils.getCenter(e).y;
+				s.graph.addNode({
+					id: 'n' + e.data.edge.source + '-' + e.data.edge.target,				    
+				    x: eventX,
+				    y: eventY,
+				    type: 'image',
+				    url: urls[0],
+				    size: 2,
+				    color: '#2196F3'
+				});
+				s.graph.addEdge({
+				    id: 'e' + e.data.edge.source + '-' + e.data.edge.target,
+				    source: 'n' + e.data.edge.source + '-' + e.data.edge.target,
+				    target: e.data.edge.source,
+				    size: 1,
+				    color: '#E24'
+				})
+			});
+					
+			s.refresh();
+    	}
+        
+    }
+  )
+});
+
+function mute(node) {
+  if (!~node.getAttribute('class').search(/muted/))
+    node.setAttributeNS(null, 'class', node.getAttribute('class') + ' muted');
+}
+
+function unmute(node) {
+  node.setAttributeNS(null, 'class', node.getAttribute('class').replace(/(\s|^)muted(\s|$)/g, '$2'));
+}
+
+</script>
+</html>

@@ -1,0 +1,52 @@
+@charset "utf-8";
+body{
+	padding: 35px 40px;
+}
+.node-img {
+	display: inline-block;
+	margin-right: 25px;
+}
+.node-text{
+	vertical-align: top;
+	display: inline-block;
+	color: #333333;
+}
+.node-img  span{
+	display: inline-block;
+	width: 203px;
+	height: 267px;
+	margin-right: 15px;
+}
+.node-img  span img{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+label{
+	color: #999999;
+}
+.play-video{
+	position: relative;
+	cursor: pointer;
+}
+.play-video:before{
+	content: "";
+	position: absolute;
+	width: 38px;
+	height: 38px;
+	left: 50%;
+	top: 50%;
+	z-index: 2;
+	margin-left: -19px;
+	margin-top: -19px;
+	background: url(/efacecloud/images/real-face-icon.png) no-repeat -20px -179px;
+}
+.bg{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background:rgba(0,0,0,.5);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000,endColorstr=#7F000000);
+}

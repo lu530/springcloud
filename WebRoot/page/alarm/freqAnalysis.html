@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>频次阀值</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/freqAnalysis.css" />
+</head>
+<body class="bgwhite">
+	<div class="window-content" id="personalForm">
+		<dl class="form-con form-silde ps">
+			<dd class="form-inline" style="margin-bottom:90px;">
+				<label class="control-label w25 tr">时间：</label>
+				<div class="time-wrap mr5">
+					<div class="filter-tag">
+						<div class="time-control-item">
+							<input class="time-control" id="beginTime" readonly type="text"> <i></i>
+						</div>
+						<span>-</span>
+						<div class="time-control-item">
+							<input class="time-control" id="endTime" readonly type="text">
+							<i></i>
+						</div>
+						<button class="btn btn-i-t zdyTimeBtn hide">确定</button>
+					</div>		
+				</div>
+				<span class="red"> *</span>
+			</dd>
+			<dd class="form-inline">
+				<label class="control-label w25 tr">检索阈值：</label>
+				<div id="sliderThreshold" class="ml5" style="width:240px;display:inline-block;"></div>
+				<input class="form-control ml20 tc b5" style="width:30px; padding:2px" id="THRESHOLD" name="THRESHOLD" maxlength=" " ui-validate="{pattern:'required,integer',max:99,min:1}" ui-vtext="检索阈值" value=80><span class="red"> *</span>
+			</dd> 
+		</dl>
+	</div>
+	<div class="window-bottom">
+		<button class="btn btn-small blue-btn mr5 " id="confirmBtn">确定</button>
+		<button class="btn btn-small gray-btn" id="cancelBtn">取消</button>
+	</div>
+		
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/freqAnalysis.js"></script>
+</body>	
+</html>

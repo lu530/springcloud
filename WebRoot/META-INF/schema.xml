@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eap-mapping> 
+
+   <PERSON_SPECIAL_LIB_PIC_INFO indice="person_special_lib_pic_indice" title="人员专题库图片">
+		<column name="INFO_ID"      title="信息编号,主键ID,使用snowflake算法生成" type="long" primary-key="true" pk-generator="UUID" length="0" index="true" store="true" />
+		<column name="PERSON_ID"    title="人员编号" type="long" length="0" index="true" store="true" />
+		<column name="IDENTITY_TYPE"     title="证件类型[1:身份证 2:护照 3:驾驶证 4:港澳通行证]" type="byte" length="0" index="true" store="true" />
+		<column name="IDENTITY_ID"       title="证件号码" type="string" length="0" index="true" store="true" />
+		<column name="BIRTHDAY"          title="出生日期,格式:yyyyMMdd" type="integer" length="0" index="true" store="true" default_val="-1" />
+		<column name="PERMANENT_ADDRESS" title="户籍地址" type="string" length="0" index="true" store="true" />
+		<column name="PRESENT_ADDRESS"   title="现住地址" type="string" length="0" index="true" store="true" />
+		<column name="NAME"              title="姓名" type="string" length="0" index="true" store="true" />
+		<column name="SEX"               title="性别[0:未知 1:男 2:女]" type="byte" length="0" index="true" store="true" />
+		<column name="PIC"          title="图片路径" type="string" length="0" index="false" store="true" />
+		<column name="PIC_QUALITY"  title="图片质量" type="integer" length="0" index="false" store="true" />
+		<column name="SOURCE_DB"    title="来源专题库id" type="string" length="0" index="true" store="true" />
+		<column name="CREATOR"      title="创建人" type="string" length="0" index="true" store="true" />
+		<column name="CREATE_TIME"  title="创建时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" default_val="-1" />
+		<column name="RLTZ"         title="人脸特征" type="binary" length="0" index="false" store="false" />
+		<column name="ARCHIVE_PIC_INFO_ID"    title="档案库图片编号" type="long" length="0" index="true" store="true" />
+	</PERSON_SPECIAL_LIB_PIC_INFO>
+	  
+	<MOBILE_TERMINAL_INFO indice="mobile_terminal_indice" title="移动终端库">
+		<column name="INFO_ID"           title="信息编号,主键ID,使用snowflake算法生成" type="long" primary-key="true" pk-generator="UUID" length="0" index="true" store="true" />
+		<column name="NAME"              title="姓名" type="string" length="0" index="true" store="true" />
+		<column name="SEX"               title="性别[0:未知 1:男 2:女]" type="byte" length="0" index="true" store="true" />
+		<column name="IDENTITY_TYPE"     title="证件类型[1:身份证 2:护照 3:驾驶证 4:港澳通行证]" type="byte" length="0" index="true" store="true" />
+		<column name="IDENTITY_ID"       title="证件号码" type="string" length="0" index="true" store="true" />
+		<column name="BIRTHDAY"          title="出生日期,格式:yyyyMMdd" type="integer" length="0" index="true" store="true" default_val="-1" />
+		<column name="PERMANENT_ADDRESS" title="户籍地址" type="string" length="0" index="true" store="true" />
+		<column name="PRESENT_ADDRESS"   title="现住地址" type="string" length="0" index="true" store="true" />
+		<column name="PIC"               title="图片(主图)" type="string" length="0" index="false" store="true" />
+		<column name="PIC_QUALITY"       title="图片质量" type="integer" length="0" index="false" store="true" default_val="-1" />
+		<column name="PERSON_TAG"        title="人员标签" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="CREATOR"           title="创建人" type="string" length="0" index="true" store="true" />
+		<column name="CREATE_TIME"       title="创建时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" default_val="-1" />
+		<column name="RLTZ"         title="人脸特征" type="binary" length="0" index="false" store="false" />
+	</MOBILE_TERMINAL_INFO>
+	
+	<FACE_INFO indice="face_indice" title="人脸抓拍索引(分月存储)">
+		<column name="INFO_ID"            title="信息编号,主键ID,使用snowflake算法生成" type="long" primary-key="true" pk-generator="UUID" length="0" index="true" store="true" />
+		<column name="THIRD_ID"           title="第三方id" type="string" length="0" index="true" store="true" />
+		<column name="DEVICE_ID"          title="卡口编号" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="ORIGINAL_DEVICE_ID" title="原始设备ID" type="string" length="0" index="true" store="true" />
+		<column name="ORG_CODE"           title="行政区划代码" type="integer" length="0" index="true" store="true" />
+		<column name="VENDOR"             title="设备厂商" type="string" length="0" index="true" store="true" default_val="-" />
+		<column name="DATA_SRC"           title="数据来源[1:卡口 2:虚拟卡口 3:视频结构化]" type="string" length="0" index="true" store="true" />
+		<column name="CAPTURE_ADDRESS"    title="抓拍地点" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="JGRQ"               title="经过日期,格式:yyMMdd" type="integer" length="0" index="true" store="true" />
+		<column name="JGSJ"               title="经过时间,格式:HHmmss" type="integer" length="0" index="true" store="true" />
+		<column name="JGSK"               title="经过时刻,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+		<column name="OBJ_PIC"            title="人脸图像访问路径" type="string" length="0" index="false" store="true" />
+		<column name="PIC"                title="抓拍人脸图片" type="string" length="0" index="false" store="true" />
+		<column name="NAME"               title="姓名" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="SEX"                title="性别[0:未知 1:男 2:女]" type="byte" length="0" index="true" store="true" />
+		<column name="AGE"                title="年龄段[0:未知 1:小孩 2:青少年 3:中年人 4:老年人]" type="byte" length="0" index="true" store="true" />
+		<column name="WITH_GLASSES"       title="是否戴眼镜[0:未知 1:无 2:有]" type="byte" length="0" index="true" store="true" />
+		<column name="WITH_HAT"           title="是否戴帽子[0:未知 1:无 2:有]" type="byte" length="0" index="true" store="true" />
+		<column name="IN_OUT_TYPE"        title="进出信息[0:出 1:进]" type="byte" length="0" index="true" store="true" />
+		<column name="IDENTITY_ID"        title="身份证" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="DB_ID"              title="库ID" type="string" length="0" index="true" store="true" />
+		<column name="DB_NAME"            title="库名称" type="string" length="0" index="true" store="true" analyze="true" />
+		<column name="CJSJ"               title="采集时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+		<column name="CREATETIME"         title="创建时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+		<column name="UPDATE_TIME"        title="更新时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+		<column name="RLTZ"               title="人脸特征" type="binary" length="0" index="false" store="true" />
+		<column name="ALGORITHM_ID"       title="算法id[10001:云从2.6人脸算法 10002:云从3.1人脸算法 10003:云从3.5人脸算法(默认) 20000:依图人脸算法 30000:像素人脸算法  90003:海康人脸算法]" type="integer" length="0" index="true" store="false" default_val="10003" />
+		<column name="FACE_SCORE"         title="人脸评价分数" type="byte" length="0" index="true" store="false" default_val="100" />
+		<column name="FACE_RECT"          title="人员目标框选" type="string" length="0" index="false" store="true" />
+		<column name="RACE_CONFIRM"           title="确认外籍人" type="byte" length="0" index="true" store="true" />
+		<column name="FOREIGN_ALGO_IDS"           title="多算法" type="string" length="0" index="true" store="true" />
+	</FACE_INFO>
+
+</eap-mapping>

@@ -1,0 +1,49 @@
+/**
+ * Created by 黎镇华 on 2017-06-23.
+ * email：1030858753@qq.com
+ */
+
+.filter-tag-span{
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1;
+    color: #666;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.span-from{
+    margin-right: -4px;
+}
+.span-to{
+    border-left: none;
+    border-right: none;
+    margin:0 -4px;
+    border-radius: 0;
+}
+.filter-tag .time-control{
+    border:1px solid #ccc;
+}
+.pic-score{
+    position: absolute;
+    top:0px;
+    right:15px;
+    color:red;
+
+}
+
+@media screen and (max-width: 930px) and (min-width: 840px){
+	.tilelist.vertical .list-node-wrap {
+	    width: 33.3%;
+	}
+}
+
+
+.tilelist .list-node-wrap{
+    height: 310px;
+}

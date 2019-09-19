@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>证件检索</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/vehiclecloud/css/common.css"/>
+    <style>
+    .page-content{
+        width: 100%;
+        height: 100%;
+		padding:15px;
+    }
+    .node-img.person-img{
+        float: left;
+        width: 260px;
+    }
+    .node-text{
+        float: left;
+    }
+    .msg-wrap{
+	    padding:15px;
+	    margin-bottom: 15px;
+    }
+	.table-content{
+		padding-left: 280px;
+	}
+	.table-content p{
+		width: 50%;
+		float: left;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+    </style>
+</head>
+
+<body>
+    <div class="pager-wrap" container="scroll">
+        <div class="pager-content pr">
+            <div class="page-top-box">
+                <div class="page-title">
+                    <a id="backBtn" class="back-btn">
+                        <i class="icon-arrow-left10"></i>
+                        <em>返回</em>
+                    </a>
+                    <span>证件检索</span>
+                </div>
+                <div class="top-box">
+                    <div class="filter-view pb10">
+                        <dl class="filter-bar search-bar filter-half-bar w100 pb10">
+                            <dt class="filter-arrt">证件号码</dt>
+                            <dd class="filter-bar-search pt2">
+                                <div class="fifler-group mr5">
+                                    <div class="search-box m0">
+                                        <input class="search-input" id="searchInput" type="text" placeholder="请输入证件号码" maxlength="18">
+                                        <span class="icon-search22" id="inputSearch"></span>
+                                    </div>
+                                </div>
+                                <span class='red'>*</span>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar w50 fl" style="clear: inherit;">
+                            <dd class="form-group form-group-block pr carWrap tabBoxWrap">
+                                <label class="control-label">国籍：</label>
+                                <div class="form-control car-plate-input car-plate-item tabBoxInput" data-toggle="dropdown" id="nation">
+                                    请选择国籍<i class="inputBtn icon-btn-car icon-list3 r10"></i>
+                                </div>
+                                <span class='red pa t10 r50'>*</span>
+                                <input type="hidden" class="ppdm ppdm1">
+                                <div class="dropdown-menu car-dropdown-menu tabBox-dropdown" style="width: 800px">
+                                    <ul class="car-nav">
+                                        <li class="letterTab active"><a>ABCD</a></li>
+                                        <li class="letterTab"><a>FGHJ</a></li>
+                                        <li class="letterTab"><a>KLMN</a></li>
+                                        <li class="letterTab"><a>OPQRST</a></li>
+                                        <li class="letterTab"><a>WXYZ</a></li>
+                                    </ul>
+                                    <div class="itemList no-mulitple"></div>
+            
+                                    <button class="btn w100 btn-sure confirmBtn">确定</button>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="filter-bar w50 fl" style="clear: inherit;">
+			                <dt class="filter-arrt">证件类型：</dt>
+			                <dd class="filter-tag w50 pt2">
+			                     <select id="cardType" name="cardType" class="form-control" ui-parameters='{id:"cardType"}'
+			                     ui-control="databind" ui-options="{selectData:14}" 
+			                     ui-service="foriegn/common/getCardType">
+							</select>
+							<span class='red'>*</span>
+			                </dd>
+			            </dl>
+                        <button class="btn-confirm btn b5" id="confirmSearch">确认检索</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 筛选 end -->
+            <div class="library-info">
+                <div class="page-content">
+
+                </div>
+                <script type="text/tmpl" id="formTpl">
+                    {% for(var i=0;i<o.length;i++){ %}
+                    <div class="list-node-wrap ellipsis-wrap" personId="{%=o[i].PERSON_ID %}" identityNum="{%=o[i].IDENTITY_ID %}">
+                        <dl class="msg-wrap clearfix">
+                            <dt class="node-img person-img">
+                                <span>
+                                    <img src="{%=o[i].compressedPhoto %}" class="rIMG peoplePic w100" attrimg="zoom">
+                                </span>
+                            </dt>
+                            
+                            <dd class="table-content">
+                                <p>
+                                    <label><i class="data-source-icon"></i>入境签证种类:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].accede009 && o[i].accede009.value %}">{%= renderNullToNotKnow(o[i].accede009 && o[i].accede009.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>性别:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].gender.value %}">{%= renderNullToNotKnow(o[i].gender && o[i].gender.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>预期停留天数数字:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].intendDayNum %}">{%= renderNullToNotKnow(o[i].intendDayNum && o[i].intendDayNum) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>签发机关:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].grantCertOrg.value %}">{%= renderNullToNotKnow(o[i].grantCertOrg && o[i].grantCertOrg.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>预期停留天数:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].intendDay %}">{%= renderNullToNotKnow(o[i].intendDay) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>证件号码:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].certificateNO %}">{%= renderNullToNotKnow(o[i].certificateNO) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>有效期至:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].visaDateTo %}">{%= renderNullToNotKnow(o[i].visaDateTo) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>签证号码:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].visaNO %}">{%= renderNullToNotKnow(o[i].visaNO) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>核查用证件号码:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].certificateNOCheck %}">{%= renderNullToNotKnow(o[i].certificateNOCheck) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>人员类别:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].personType.value %}">{%= renderNullToNotKnow(o[i].personType && o[i].personType.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>入境日期:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].ioDate %}">{%= renderNullToNotKnow(o[i].ioDate) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>入境签证号码:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].accede022 %}">{%= renderNullToNotKnow(o[i].accede022) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>入境理由:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].outReason.value %}">{%= renderNullToNotKnow(o[i].outReason && o[i].outReason.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>签发日期:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].visaDate %}">{%= renderNullToNotKnow(o[i].visaDate) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>入境时间:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].ioTime %}">{%= renderNullToNotKnow(o[i].ioTime) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>出入口岸:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].ioPort.value %}">{%= renderNullToNotKnow(o[i].ioPort && o[i].ioPort.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>出生日期:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].birth %}">{%= renderNullToNotKnow(o[i].birth) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>签证种类:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].visaType.value %}">{%= renderNullToNotKnow(o[i].visaType && o[i].visaType.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>入库时间:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].inTime %}">{%= renderNullToNotKnow(o[i].inTime) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>国籍:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].nationality.value %}">{%= renderNullToNotKnow(o[i].nationality && o[i].nationality.value) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>预期有效停留日期:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].intendDayTo %}">{%= renderNullToNotKnow(o[i].intendDayTo) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>人员姓名:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].name %}">{%= renderNullToNotKnow(o[i].name) %}</span>
+                                </p>  
+                                <p>
+                                    <label><i class="data-source-icon"></i>人员种类:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].tfType %}">{%= renderNullToNotKnow(o[i].tfType) %}</span>
+                                </p>                                        
+                                <p>
+                                    <label><i class="data-source-icon"></i>有效期数据来源:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].dataSource %}">{%= renderNullToNotKnow(o[i].dataSource) %}</span>
+                                </p>   
+                                <p>
+                                    <label><i class="data-source-icon"></i>证件类型:</label>
+                                    <span class="ellipsis-list" title="{%= o[i].certificateType.value %}">{%= renderNullToNotKnow(o[i].certificateType && o[i].certificateType.value) %}</span>
+                                </p>  
+                            </dd>
+                            
+                        </dl>
+                    </div>
+                    {% } %}                
+                </script>                
+            </div>
+        </div>
+    </div>
+    <div class="frame-form-full">
+        <iframe class="full-screen" id="frameFormFull" frameborder="0"></iframe>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/nationsConstant.js"></script>
+<script type="text/javascript" src="/efacecloud/js/tabBox.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/certificateSearch.js?v=20190807"></script>
+
+</html>

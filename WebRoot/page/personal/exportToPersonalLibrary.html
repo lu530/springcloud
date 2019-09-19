@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>导入库</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/choseLibrary.css" />
+</head>
+<body class="oa">
+	<div class="page-main window-content" id="personalLibList" container="scroll">	
+		<div class="wrap-body">
+			<div class="library-list">
+			</div>
+		</div>
+	</div>
+			<script id="exportTemplate" type="text/x-tmpl">
+				{% for(var i = 0; i < o.length; i++){ %}
+				<div class="file-node">
+					<div class="fileicon vehicle">
+						<span type="checkbox" class="checkbox"></span>
+					</div>
+					<div class="file-name">
+						<span class="filename">{%=o[i].text%}</span>
+						<span class="fileid hide">{%=o[i].value%}</span>
+					</div>
+				</div>
+				{% } %}
+			</script>
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-blue mr5 uploader-upload" id="confirmBtn">导出</button>
+		<button class="btn btn-sm btn-white" id="cancelBtn">取消</button>
+	</div>
+		
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/personal/exportToPersonalLibrary.js"></script>
+</body>	
+</html>

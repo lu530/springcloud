@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>新增布控申请表单</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/library/form.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/faceControl/addFaceForm.css" />
+</head>
+<body>
+    <div class="pager-wrap">
+        <div class="container-wrap fixation-wrap">
+        <div class="pager-content pt0">
+            <div class="form-body" id="controlForm">
+                <div class="form-con form-inline">
+                    <div class="form-warper">
+                        <div class="form-head-title">
+                            <i class="icon"></i> <span>添加布控申请</span>
+                        </div>
+                        <div class="sort-cell">
+                            <div class="main-title">
+                                <h4>人员标签</h4>
+                            </div>
+							<div class="form-group fl" id="personTagsList">
+								<label class="control-label">人员标签：</label>
+								<div class="filter-tag ml5 filter-bread" id="filterBread" style="overflow: initial;width:auto;">
+									<div class="bread-selected-title" data-toggle="dropdown" id="personTab">
+										<span class="selectedArea p5">请选择 </span>
+										<span class="icon-arrow-down8 tc" style="width:25px;"></span>
+									</div>
+									<input type="hidden" name="personTab" id="personTabVal"/>
+									<div class="dropdown-menu">
+										<div class="bread-title">
+											<ul class="bread-list bread-list-subtitle">
+												<li><span>人员标签</span></li>
+											</ul>
+											<a class="fr p5 m5 breadEditBtn" title="编辑"><i class="icon-pencil3 fl mt3 mr3"></i>编辑</a>
+										</div>
+										<div class="tab-content no-data">
+											<div class="tab-pane" id="commonTab">
+												<div class="bread-con">
+													<div class="bread-right-con l0 b0">
+														<dl>
+															<dd>
+																<!-- <span class="right-item" casecode="030540">金融凭证诈骗案</span> -->
+															</dd>
+														</dl>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane active" id="caseTab">
+												<div class="bread-con">
+													<div class="bread-left-nav"></div>
+													<div class="bread-right-con bread-right-item-con"></div>
+													<div class="bread-btn">
+														<a class="btn blue-btn breadSureBtn ">确定</a>
+														<a class="btn gray-btn" id="showAllTab">清除</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                        </div>
+                        <div class="sort-cell">
+                            <div class="main-title">
+                                <h4>人像信息</h4>
+                            </div>
+                            <div class="photo-tools">
+                            	<div class="no-edit" id="picNoEdit"></div>
+                                <div class="top-pic-box" style="border:none;">
+	                                <div class="img-wrap">
+	                                    <img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+	                                    <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" />
+	                                </div>
+                                    <ul>
+                                        <li class="re-upload">
+                                            <i class="icon-image2"></i>
+                                            <input class="file-style searchImgButton" type="file" id="picBtn"  name="picBtn"/>
+                                        </li>
+                                        <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+                                    </ul>
+                                    <input type="hidden" foruploadform="uploadImg,picBtn" name="PIC"  ui-validate="required" ui-vtext="人脸图片">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sort-cell">
+                            <div class="main-title">
+                                <h4>基础信息</h4>
+                            </div>
+                            <dl class="form-single">
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">姓名：</label>
+                                    <input class="form-control ml5" name="NAME" type="text" maxlength="50" ui-validate="{pattern:'required', maxlength:50}" ui-vtext="姓名">
+                                    <span class="red">*</span>
+                                </dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">性别：</label>
+                                    <label class="radio-inline p0 ml5"><input type="radio" name="SEX" value="1" checked>男</label>
+                                    <label class="radio-inline p0"><input type="radio" name="SEX" value="2">女</label>
+                                    <label class="radio-inline p0"><input type="radio" name="SEX" value="0">未知</label>
+                                </dd>
+                                <dd class="form-group w50 fl">
+									<label class="control-label">证件类型：</label>
+									<select class="form-control ml5" id="IDENTITY_TYPE" name="IDENTITY_TYPE" ui-validate="required" ui-vtext="证件类型">
+										<option value="1">身份证</option>
+										<option value="2">护照</option>
+										<option value="3">驾驶证</option>
+										<option value="4">港澳通行证</option>
+									</select>
+									<span class="red">*</span>
+								</dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">证件号码：</label>
+                                    <input class="form-control ml5" name="IDENTITY_ID" id="IDENTITY_ID" type="text" maxlength="20" ui-validate="{pattern: 'required,idCard'}" ui-vtext="证件号码">
+                                    <span class="red">*</span>
+                                </dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">出生日期：</label>
+                                    <div class="filter-tag ml5" style="display: inline-block">
+                                        <div class="opera-group active">
+                                            <div class="time-control-item">
+                                                <input class="time-control no-time" id="BIRTHDAY" name="BIRTHDAY" ui-validate="required" ui-vtext="出生日期" readonly type="text">
+                                                <i></i>
+                                            </div>
+                                            <span class="red">*</span>
+                                        </div>
+                                    </div>
+                                </dd>
+                                <dd class="filter-bar form-group">
+                                    <label class="control-label">户籍地址：</label>
+                                    <div class="filter-tag form-control ml5" id="domicile">
+                                        <script id="childNodeListTemplate" type="x-tmpl">
+									{% for(var i = 0; i< o.length; i++){ %}
+										<label nodeid="{%= o[i].id %}"  title="{%= o[i].text %}">{%= o[i].text %}</label>
+									{% } %}
+								</script>
+                                    </div>
+                                </dd>
+                                <dd class="filter-bar form-group">
+                                    <label class="control-label">现住地址：</label>
+                                    <div class="filter-tag form-control ml5" id="nowAddress">
+                                    </div>
+                                </dd>
+
+                            </dl>
+                        </div>
+                        <div class="sort-cell" id="timeWrap">
+                            <div class="main-title">
+                                <h4>布控信息</h4>
+                            </div>
+                            <dl class="form-single">
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">立案单位：</label>
+	    							<div class="form-control ov p0 nb dropdown-tree ml5" id="orgTree" name="orgTree" type="dropdown-tree"
+										ui-control="dropdowntree" ui-service="user/dept/getTree" ui-options="orgTreeOpts" style="margin-top:-1px;"></div>
+									<input type="hidden" id="orgCode" name="FILING_UNIT">
+                                </dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">立案单位电话：</label>
+                                    <input class="form-control ml5" name="FILING_UNIT_TELPHONE" type="text" ui-validate="{pattern:'phone'}" ui-vtext="立案单位电话">
+                                </dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">案情编号：</label>
+                                    <input class="form-control ml5" name="CASE_ID" type="text" ui-pattern="/^(J)\d{24}$/|/^(A)\d{22}$/" ui-validate="pattern" ui-vtext="案情编号">
+                                </dd>
+                                <dd class="form-group w50 fl">
+                                    <label class="control-label">案情名称：</label>
+                                    <input class="form-control ml5" name="CASE_NAME" type="text" maxlength="20" ui-vtext="案情名称">
+                                </dd>
+                                <dd class="form-group w50 fl hide" id="controlLibrary">
+                                    <label class="control-label">所属布控库：</label>
+                                    <span class="red">*</span>
+                                </dd>
+                                <dd class="form-group">
+                                    <label class="control-label">布控有效期：</label>
+								    <label class="radio-inline p0 ml5"><input type="radio" name="timeType" value="0" checked>长期有效</label>
+								    <label class="radio-inline p0 ml5"><input type="radio" name="timeType" value="1">自定义</label>
+                                    <div class="filter-tag ml5 hide" id="controlTime" style="display: inline-block">
+										<div class="opera-group active">
+											<div class="time-control-item">
+												<input class="time-control no-time" id="beginTime" name="VALID_CONTROL_BEGIN" readonly type="text">
+												<i></i>
+											</div>
+											<span class="">-</span>
+											<div class="time-control-item">
+												<input class="time-control no-time" id="endTime" name="VALID_CONTROL_END" readonly type="text">
+												<i></i>
+											</div>
+                                    		<span class="red">*</span>
+										</div>
+									</div>
+                                </dd>
+                                <dd class="form-group">
+                                    <label class="control-label">简要案情：</label>
+                                    <textarea class="ml5 w70" name="BRIEF_CASE"></textarea>
+                                </dd>
+                             </dl>
+                          </div>
+                        <div class="sort-cell">
+                            <div class="main-title">
+                                <h4>配置策略</h4>
+                            </div>
+                            <dl class="form-single">
+                                <dd class="form-group">
+							        <label class="control-label">选择视频源：</label>
+							        <div class="dropdown-list videoChose">
+										<div class="dropdown-list-text">
+											<span class="list-title" id="deviceName"></span> <input
+												type="hidden" id="orgCode"> <input type="hidden"
+												id="orgCodeInt"> <a class="dropdown hide"> <i
+												class="icon-arrow-down8"></i>
+											</a>
+										</div>
+										<div class="dropdown-menu">
+											<ul class="list-con" id="deviceNameList">
+												<!-- <li>
+												<a>
+													<span class="deviceName">广东省</span>
+													<span class="removeBtn operate-btn">×</span>
+												</a>
+											</li> -->
+											</ul>
+										</div>
+									</div>
+						        </dd>
+						        <dd class="form-group">
+				                    <label class="control-label">告警等级：</label>
+				                    <label class="radio-inline p0">
+				                    	<input type="radio" name="TASK_LEVEL" value="1" checked="checked">红色告警
+				                    </label>
+				                    <label class="radio-inline p0">
+				                    	<input type="radio" name="TASK_LEVEL" value="0">黑色告警
+				                    </label>
+				                    <label class="radio-inline p0">
+				                    	<input type="radio" name="TASK_LEVEL" value="2">黄色告警
+				                    </label>
+				                    <label class="radio-inline p0">
+				                    	<input type="radio" name="TASK_LEVEL" value="3">蓝色告警
+				                    </label>
+				                </dd>
+				                <dd class="form-group">
+					                <label class="control-label">告警核查方式：</label>
+					                <label class="checkbox-inline p0">
+					                	<input type="checkbox" class="checkWay" val="1" checked="checked">从算法验证
+					                </label>
+					                <label class="checkbox-inline p0">
+					                	<input type="checkbox" class="checkWay" name="IS_FEISHI" val="2">飞识认证
+					                </label>
+					                 <label class="checkbox-inline p0">
+					                	<input type="checkbox" class="checkWay" name="IS_ARCHIVE" val="3">一人一档认证
+					                </label>
+					                <label class="checkbox-inline p0">
+					                	<input type="checkbox" class="checkWay" value="4">无
+					                </label>
+									<div class="form-group-wrap" id="examineWayWrap">
+										<div class="form-group mb0">
+											<label class="control-label">验证算法:</label>
+											<select class="form-control ml5" id="checkType" name="CHECK_ALGO_TYPE">
+											</select>
+											<script id="checkTypeTmpl" type="x-tmpl">
+											<option value="{%=o.ALGORITHM_ID%}">{%=o.ALGORITHM_NAME%}</option>
+											</script>
+										</div>
+									</div>
+				                </dd>
+				                <dd class="form-group">
+				                  	<label class="control-label fl" style="vertical-align:top;">告警阈值设置：</label>
+				                  	<div class="form-group form-group-wrap ml3 mb5 w50">
+					                  	<label class="control-label">默认阈值：</label>
+					                  	<input type="text" class="threshold form-control" name="THRESHOLD" value="75.00" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+				                  	</div>
+				                  	<div class="form-group form-group-wrap mb5">
+						                <label class="checkbox-inline p0">
+						                	<input type="checkbox" name="thresholdSetting" val="1">按摄像机设置
+						                </label>
+						                <div class="list-wrap hide" id="cameraList">
+							                <ul class="list-con">
+							                </ul>
+							                <script id="cameraListTemplate" type="x-tmpl">
+											{% for(var i=0;i<o.deviceId.length;i++){ %}
+			                				<li><a>
+			                					<span class="deviceName">{%=o.deviceName[i]%}</span>
+			                					<span class="threshold-wrap">
+													<input type="text" class="threshold form-control cameraThreshold" value="{%=o.threshold[i]%}" deviceid="{%=o.deviceId[i]%}" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数">
+												</span>
+			                				</a></li>
+											{% } %}
+											</script>
+						                </div>
+				                  	</div>
+				               	</dd>
+				               	<dd class="form-group">
+							        <label class="control-label">权限控制：</label>
+									<div class="dropdown-list powerWrap">
+										<div class="dropdown-list-text">
+											<span class="list-title" id="powerNames"></span>
+											<input type="hidden" name="PERSON_PERMISSION" id="powerCode">
+											<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+										</div>
+										<div class="dropdown-menu">
+											<ul class="list-con" id="powerNameList">
+											</ul>
+										</div>
+									</div>
+						        </dd>
+						        <dd class="form-group">
+							        <label class="control-label">告警提醒方式：</label>
+							        <label class="checkbox-inline p0"><input type="checkbox" name="IS_MSG" checked="checked">短信提醒</label>
+							        <div id="msgWrap" class="pt5" style="margin-left:158px;">
+								        <div class="dropdown-list warnWrap">
+											<div class="dropdown-list-text">
+												<span class="list-title" id="warnNames"></span>
+												<input type="hidden" name="ALARM_REMIND" id="warnCode">
+												<a class="dropdown hide"><i class="icon-arrow-down8"></i></a>
+											</div>
+											<div class="dropdown-menu">
+												<ul class="list-con" id="warnNameList">
+												</ul>
+											</div>
+										</div>
+							        </div>
+						        </dd>
+                             </dl>
+                          </div>
+                        <div class="sort-cell">
+                            <div class="main-title">
+                                <h4>附件信息</h4>
+                            </div>
+                            <dl class="form-single">
+                                <dd class="form-group">
+									<label class="control-label">附件：</label>
+									<div class="image-item ml5" id="attachInfo"> 
+										<div class="upload-bg">
+											<b class="icon-upload icon-image2"></b>
+											<p class="mt0">上传附件</p>
+											<input class="file-style searchImgButton" filetype="all" id="uploadFile" type="file" name="searchImgButton"/>
+										</div>
+									</div>
+								</dd>
+                             </dl>
+                          </div>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button class="btn btn-big blue-btn mr15" id="submitBtn" type="button">保存</button>
+                    <button class="btn btn-big gray-btn btn-close" type="button">关闭</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/Map.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/executeControl/policyCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/faceControl/addFaceForm.js"></script>
+</html>

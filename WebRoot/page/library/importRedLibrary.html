@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>批量导入红名单</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/dispatched/importLibrary.css" />
+</head>
+<body class="oa">
+	<div class="window-content" id="addPersonForm">
+		<div class="main-con mt30">
+			<div id="messageForm" class="form-con form-inline ps pt5" style="margin: 0 auto; overflow-y: initial;">
+				<div class="sort-cell">
+				  <dl class="form-single">
+						<dd class="form-group">
+							<label class="control-label">选择文件：</label>
+                            <input class="form-control" type="text" id="LIBRARY_FILE" name="MODULE_FILE" readonly="readonly" style="width: 52%">
+							<div class="upload-file">
+								浏览···
+                                <input class="file-input" type="file" name="dataFile" id="dataFile">
+							</div>
+							<span class="red">*</span>
+						</dd>
+						<dd class="form-group">
+							<label class="control-label red">[说明]：</label>
+							<div class="ml5 red" style="display: inline-block;">
+							1.下载批量导入模版(<a class="blue" href="模板.zip">模版下载</a>);<br>
+							2.请按照模版及数据格式正确填充数据;<br>
+							3.上传文件为zip压缩包,文件包含(人脸图片, 图片命名规则为: 姓名-证件号码.jpg )。</div>
+						</dd>
+					</dl>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="window-bottom">
+		<button class="btn btn-sm btn-blue mr5 " id="savePersonBtn">确定</button>
+		<button class="btn btn-sm btn-white" id="cancelBtn">取消</button>
+	</div>
+
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/main/eapui-fileupload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/library/importRedLibrary.js"></script>
+</html>

@@ -1,0 +1,406 @@
+/*.alarm-wrag *{
+	margin: 0;
+	box-sizing: border-box;
+}
+.clearFloat:after{
+	content:'.';
+	width:0;
+	height:0;
+	overflow:hidden;
+	display:block;
+	clear:both;
+}
+.alarm-wrag{
+	font-size: 0;
+	width: 770px;
+    margin: 0 auto;
+    padding-top: 15px;
+}
+.alarm-left,.alarm-right{
+	display: inline-block;
+	vertical-align: top;
+}
+.alarm-left{
+	width: 35%;
+}
+.alarm-right{
+	width: 65%;
+	padding-left: 10px;
+}
+.alarm-img{
+	position: relative;
+}
+.alarm-img-small{
+	display: inline-block;
+	width: 48%;
+}
+.alarm-img-small:last-of-type{
+	margin-left: 4%;
+}
+.alarm-img-small img{
+	width:100%;
+	height: 180px;
+}
+.alarm-location{
+	font-size: 0;
+	background-color: #3160b8;
+	color: #f1f1f1;
+	padding: 3px 5px;
+	margin-top: 20px;
+}
+.alarm-location p{
+	height:20px;
+	width:50%;
+	display:inline-block;
+	font-size: 13px;
+}
+.alarm-location span{
+	display: inline-block;
+	line-height: 20px;
+	height: 20px;
+	vertical-align: top;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 102px;
+	overflow: hidden;
+}
+.alarm-text{
+	font-size: 13px;
+	margin-top:5px;
+}
+.alarm-text p{
+	padding: 5px 10px;
+	color:#545454;
+}
+.alarm-text span{
+	margin-left: 10px;
+}
+.alarm-similar{
+	color: #fff;
+	font-size: 20px;
+	position: absolute;
+	left: 50%;
+	background: #be3432;
+	width: 55px;
+	height: 55px;
+	margin-left: -24px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 55px;
+	bottom: -15px;
+}
+.alarm-right img{
+	height: 343px;
+	width:100%;
+}*/
+.alarm-wrag * {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+.clearFloat:after {
+	content: '.';
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	display: block;
+	clear: both;
+}
+
+.alarm-wrag {
+	font-size: 0;
+	/* width: 770px; */
+	/* margin: 0 auto; */
+	padding-top: 15px;
+	padding: 15px 15px 0 15px;
+}
+
+.alarm-left, .alarm-right {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.alarm-left {
+	width: 35%;
+}
+
+.alarm-right {
+	width: 65%;
+	padding-left: 10px;
+	text-align: right;
+}
+
+.alarm-img {
+	position: relative;
+}
+
+.alarm-img-small {
+	display: inline-block;
+	width: 50%;
+	background: #f1f1f1;
+	text-align: center;
+}
+
+.mark-img-small{
+	display:none;
+}
+.alarm-img-three .alarm-img-small{
+	width:33.33%;	
+}
+.alarm-img-three .mark-img-small{
+	display:inline-block;;
+}
+
+.alarm-img-small img {
+	width: auto;
+	max-width: 100%;
+	height: 155px;
+}
+
+.alarm-location {
+	font-size: 0;
+	background-color: #3160b8;
+	color: #f1f1f1;
+	padding: 3px 5px;
+	margin-top: 8px;
+}
+
+.alarm-location div {
+	height: 25px;
+	font-size: 13px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 100%;
+	line-height: 25px;
+}
+
+.alarm-icon {
+	display: block;
+	width: 25px;
+	height: 25px;
+	float: left;
+}
+
+/*.alarm-location span{
+	display: inline-block;
+	line-height: 25px;
+	!* height: 20px; *!
+	!* vertical-align: middle; *!
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}*/
+.alarm-text {
+	font-size: 13px;
+	margin-top: 5px;
+}
+
+.alarm-text p {
+	padding: 4px 10px;
+	color: #545454;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.alarm-text span {
+	margin-left: 10px;
+}
+
+.tilelist .similar {
+	font-size: 20px;
+	width: 55px;
+	height: 55px;
+	margin-right: -24px;
+	line-height: 55px;
+	bottom: -4px;
+}
+
+.alarm-img-three .similar {
+	margin-right: 22px;
+}
+.alarm-img-three .similar-compare {
+	margin-right: 0;
+	right: 26px;
+	background: #e8ecf8;
+	color: #5d67bc;
+	width: 45px;
+	height: 45px;
+	line-height: 45px;
+	font-size: 16px;
+}
+
+.alarm-right img {
+	height: 365px;
+	width: auto;
+	max-width: 100%;
+}
+
+.node-text{
+	height:35px;
+	font-size: 13px;
+	padding: 5px 10px;
+	color: #545454;
+}
+.btn-wrap{
+    line-height: 48px;
+    border-top: 2px solid #f1f1f1;
+    background-color: #ffffff;
+    padding-bottom: 6px;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+.fly-con .alarm-img-small img{
+	height:160px;
+}
+.fly-con .alarm-right img {
+    height: 444px;
+}
+
+
+.alarm-wrag .multil-arithmetic-wrap {
+	height: 48px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.alarm-wrag .multil-arithmetic-list {
+	width: 23%;
+	height: 48px;
+	display: inline-block;
+	text-align: center;
+	background-color: #e8ecf8;
+	border-radius: 4px;
+	line-height: normal;
+	padding: 4px;
+	position: relative;
+}
+
+.alarm-wrag .multil-arithmetic-list .multil-name {
+	color: #9da5ba;
+	font-size: 12px;
+	margin-bottom: 0;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 0;
+	padding: 0;
+	position: relative;
+	z-index: 2;
+}
+.alarm-wrag .multil-arithmetic-list .multil-similar {
+	color: #5d67bc;
+	font-size: 16px;
+	margin-bottom: 0;
+	padding: 0;
+	position: relative;
+	z-index: 2;
+}
+
+.alarm-wrag .multil-arithmetic-list .multil-similar span {
+	color: #666f8e;
+	font-size: 12px;
+	margin-left: 0;
+}
+
+.alarm-wrag .arithmetic-main {
+	/* background-color: #5d67bc; */
+	background-color: rgb(62,186,248);
+}
+.alarm-wrag .arithmetic-main .multil-name {
+	color: #ddd;
+	font-size: 12px;
+}
+.alarm-wrag .arithmetic-main .multil-similar {
+	color: #fff;
+	font-size: 16px;
+	margin-bottom: 0;
+}
+.alarm-wrag .arithmetic-main .multil-similar span {
+	color: #ddd;
+	font-size: 12px;
+}
+
+
+
+.pass-failed {
+	position: absolute;
+	font-size: 42px;
+	line-height: 48px;
+	left: 50%;
+	top: 0;
+	z-index: 1;
+	margin-left: -13px;
+	color: #aaa;
+	font-weight: lighter;
+	font-style: normal;
+}
+
+.pass-failed-yes {
+	color: green;
+}
+.pass-failed-no {
+	color: #f00;
+}
+
+.alarm-text span.log-list{
+	padding: 5px;
+    border: 1px solid #3d8ce8;
+    border-radius: 5px;
+    color: #3d8ce8;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 30px;
+    margin-left: 15px;
+}
+
+.alarm-right .had-sign{
+    position: absolute;
+    width: 112px;
+    height: 112px;
+    right: 0;
+    bottom: -134px;
+    z-index: 1;
+}
+.switch-detail {
+    position: absolute;
+    top: 10px;
+    display: inline-block;
+    width: 30px;
+    cursor: pointer;
+    height: 30px;
+} 
+.switch-detail.prev-detail {
+    left: 20px;
+    background: url(/ui/plugins/bootstrap4.0/img/photoZoom/Sprev.png) no-repeat right center;
+}
+.switch-detail.prev-detail:hover {
+    background: url(/ui/plugins/bootstrap4.0/img/photoZoom/SprevActive.png) no-repeat right center;
+}
+.switch-detail.next-detail {
+    right: 20px;
+    background: url(/ui/plugins/bootstrap4.0/img/photoZoom/Snext.png) no-repeat right center;
+}
+.switch-detail.next-detail:hover {
+    background: url(/ui/plugins/bootstrap4.0/img/photoZoom/SnextActive.png) no-repeat right center;
+}
+
+.fly-bg-wjr::after {
+    width: 90px;
+    border: 2px solid #FE9E34;
+    content: '移民局比中';
+    display: block;
+    color: #FE9E34;
+    font-size: 14px;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    transform: rotate(-20deg);
+    position: absolute;
+    top: 10%;
+    left: 69%;
+    opacity: 0.7;
+    z-index: 0;
+}

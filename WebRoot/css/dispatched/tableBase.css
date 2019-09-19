@@ -1,0 +1,164 @@
+.frame-con {
+	padding: 10px 20px;
+}
+
+.frame-form-view, .frame-form-full {
+	left: 0px;
+}
+
+.policeTree .dropdown-tree-area {
+	height: 345px !important;
+}
+
+.btn-group-icons li {
+	color: #00a0e9;
+}
+
+.btn-group-icons li:hover, .table-body .btn-group-icons li:hover b,
+.table-body .btn-group-icons li:hover>i, .table .btn-group-icons li:hover b,
+.table .btn-group-icons li:hover>i {
+	color: red;
+}
+
+.mborder {
+	height: 36px;
+}
+
+.add-header .frame-side, .add-header .frame-con {
+	top: 40px;
+}
+
+.side-title {
+	border-bottom: 1px solid #E9E9E9;
+	padding-left: 20px;
+}
+
+.side-list .left-tree-wrap {
+	width: 255px;
+	top: 10px;
+}
+
+.btn-blue {
+	border-radius: 0;
+	background: #0078D7;
+	color: #fff;
+}
+
+.btn-blue:hover {
+	background-color: #0467B5;
+	color: #fff;
+}
+
+.btn-gray {
+	border-radius: 0;
+	background-color: #ccc;
+	color: #333;
+}
+
+.btn-control {
+	border-radius: 0;
+	background: #0078D7;
+	color: #fff;
+}
+
+.operation {
+	width: 200px;
+}
+
+.scene-list .table-con {
+	width: auto;
+	left: 20px;
+	right: 20px;
+	margin-left: 0px;
+}
+/* .bg-table.table-body table{
+	border:0;
+}
+.bg-table tr td{
+	border-bottom:none;
+}
+.bg-table tr:nth-child(odd) td,
+.bg-table .odd td{
+	background-color:#ffffff;
+}
+.bg-table tr:nth-child(even) td,
+.bg-table .even td{
+	background-color:#F0F0F0;
+}*/
+.selected-library {
+	background: #F1F9FF;
+	color: #135288;
+	padding: 5px 8px;
+	font-weight: normal;
+}
+
+/* .search-info{
+	position:relative;
+	border:1px solid #ccc;
+}
+.search-info input[type="text"] {
+	width: 250px;
+	height: 30px;
+	padding-top: 4px;
+	padding-right: 85px;
+	padding-bottom: 3px;
+	color: #ccc;
+	text-indent: 5px;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	outline: none;
+	border-right:0;
+} 
+.dropdown-tree .dropdown-tree-text{
+	border:none;
+	border-left:1px solid #ccc;
+}
+.search-info .search:hover {
+	background-color: #f1f1f1;
+}
+.search-info .search span{
+	font-size:16px;
+	display:inline-block;
+	vertical-align: middle;
+}
+.dropdown-tree{
+	position: static;
+	width: 300px;
+} */
+.dropdown-tree {
+	height: 32px;
+	width: 252px !important;
+}
+
+.dropdown-tree .dropdown-tree-text {
+	border: none;
+}
+
+.dropdown-tree .dropdown-tree-area {
+	left: -1px;
+	width: 252px !important;
+}
+/*弹出框的按钮颜色*/
+.btn-blue {
+	background: #00C2DE;
+	color: #fff;
+	border: 1px solid #17d0eb;
+	border-radius: 5px;
+}
+
+.btn-blue:hover, .btn-blue:focus, .btn-blue:active {
+	background: #17d0eb;
+	color: #fff;
+}
+
+.btn-white {
+	background: #fff;
+	color: #808080;
+	border: 1px solid #E4E4E4;
+	border-radius: 5px;
+}
+
+.btn-white:hover, .btn-white:focus, .btn-white:active {
+	background: #fdfdfd;
+}

@@ -1,0 +1,104 @@
+.form-con{
+	top:0;
+}
+.control-title{
+	padding-left:20px;
+}
+.control-title p{
+	font-size:16px;
+	font-weight:bold;
+}
+.title{
+	border-bottom:1px solid #CDCDCD;
+	margin-bottom:20px;
+}
+.selection {
+	border: 1px solid #ddd;
+	height:496px;
+}
+.tab-info,.selection-left{
+	overflow-y:auto;
+	height: 381px;
+}
+.selection.selection-right {
+	height:381px;
+}
+.setting-btn-box{
+	text-align:center;
+	padding-top:188px;
+	color:#006BD3;
+	font-size:20px;
+}
+.setting-btn-box span{
+	display:block;
+	margin-top:20px;
+}
+.selection-list-box {
+	background: url("/caseanalysis/images/listbg.png");
+	width: 100%;
+	overflow-y: auto;
+}
+.selection-list-box li{
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px 0 18px;
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 12px;
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.selection-type {
+	display:inline-block;
+	float: right;	
+}
+
+.selection-value {
+	display: inline-block;
+	width: 85%;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+}
+
+.selection-list-box li:hover{
+	background:#DAEAF7;
+}
+.selection-list-box li.active {
+	    background-color: #0381E4;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.sub-memu {
+	padding: 0;
+	margin: 0 5px;
+}
+.sub-memu li {
+	float: left;
+	display: block;
+	width: 50%;
+	text-align: center;
+	height:40px;
+	border-bottom: 2px solid #ddd;
+}
+.sub-memu li.active{
+	border-color:#006DD3;
+}
+.sub-memu li a {
+	padding: 0px 15px;
+	display: block;
+	font-size: 14px;
+	line-height: 35px;
+	text-decoration: none !important;
+	color: #333;
+}
+.sub-memu li.active a {
+	color:#006DD3;
+	font-weight: bold;
+}
+
+.nodata{
+	display:none;
+}

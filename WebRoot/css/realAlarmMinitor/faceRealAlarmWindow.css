@@ -1,0 +1,47 @@
+@charset "utf-8";
+body{
+	padding: 35px 40px;
+}
+.node-img {
+	display: inline-block;
+	margin-right: 25px;
+
+}
+.node-text{
+	vertical-align: top;
+    margin-top: 50px;
+	display: inline-block;
+	color: #333333;
+}
+.node-img  span{
+	display: inline-block;
+	width: 252px;
+	height: 324px;
+	margin: 0;
+}
+.node-img  span img{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+label{
+	color: #999999;
+}
+.similar {
+	color: #fff;
+	font-size: 26px;
+	position: absolute;
+	width: 95px;
+	height: 95px;
+	margin-right: -20px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 95px;
+	background: #4C72D5;
+    right: 59%;
+    bottom: 35px;
+}
+.img-bg{
+	padding: 12px;
+	background: url(/efacecloud/images/face-bg.png) no-repeat;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>频次告警</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/alarmAnalysisList.css" />
+</head>
+<body>
+<div class="pager-wrap">
+	<div class="pager-content pt0">
+		<!-- list -->
+		<div class="page-con p0" id="tabList" ui-control="listview" ui-service="face/dispatchedAlarm/getData" ui-template='listTemplate' ui-parameters="queryParamsList">
+			<div class="page-top">
+				<span><a id="backBtn">返回</a></span>
+				<span>人脸频次分析结果</span>
+			</div>
+			<div class="page-info-metro square-pager full">
+				<p class="frequent-time"><span id="beginT"></span> ~ <span id="endT"></span> 时段告警频次统计共有 <b id="frequencyNum" class="orange">0</b> 条结果：</p>
+				<div class="page-data fr" listview-page="">
+					<a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+					<span class="page-num">共有 <i class="page-num" listview-counts="">0</i>条记录,</span>
+					<a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+					<a class="page-next fr disable" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+				</div>
+			</div>
+			<div class="tilelist vertical p15 listviewImgBox">
+				<!-- repeat -->
+					<script id="listTemplate" type="x-tmpl">
+					<div class="list-node-wrap">
+						<dl class="list-node oh">
+							<dt class="node-img compare-img" attrimg="doublezoom">
+								<span class="compare-large">
+									<img src="{%=o.ALARM_IMG%}" class="face">
+									<em>抓拍图片</em>
+								</span>
+								<span class="ml0 compare-small">
+									<img src="{%=o.TEMPLET_IMG%}" class="">
+									<em>布控图片</em>
+								</span> 
+								<b class="similar {%=renderColor(o.ALARM_LEVEL)%}" key="similar">{%=o.SCORE%}%</b>
+							</dt>
+							<dd class="node-text mt10 picMessage">
+								<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+								<p class="similar-name" picMsg="姓名:{%=renderNullToNotKnow(o.PERSON_NAME)%}">
+									<label>姓名：</label>
+									<span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
+								</p>
+								<p style="width:106%;" picMsg="证件:{%=renderNullToNotKnow(o.IDENTITY_ID)%}">
+									<label>证件：</label>
+									<span title="证件号码：{%=renderNullToNotKnow(o.IDENTITY_ID)%}">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span>
+								</p>
+								<p picMsg="告警地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
+									<label>告警地点：</label>
+									<span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span>
+								</p>
+								<p picMsg="布控库:{%=renderNullToNotKnow(o.DB_NAME)%}">
+									<label>布控库：</label>
+									<span title="{%=renderNullToNotKnow(o.DB_NAME)%}">{%=renderNullToNotKnow(o.DB_NAME)%}</span>
+								</p>
+								<p picMsg="时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
+									<label>时间：</label>
+									<span title="告警时间：{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}</span>
+								</p>
+								<div class="btn-group fr">
+									
+									<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.ALARM_IMG%}">
+										<i class="btn-icon verification-icon"></i>
+									</a>
+									<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.ALARM_IMG%}">
+										<i class="btn-icon trajectory-icon"></i>
+									</a>
+									<a class="btn-i-t  btn-xs detailBtn" title="详情" ALARM_ID="{%=o.ALARM_ID%}" alarm-level="{%=o.ALARM_LEVEL%}" objid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}">
+										<i class="btn-icon more-icon"></i>
+									</a>
+								</div>
+							</dd>
+						</dl>
+					</div>
+				</script>
+			</div>
+		</div>
+		<!-- list end -->
+	</div>
+</div>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/alarmAnalysisList.js"></script>
+</body>	
+</html>
