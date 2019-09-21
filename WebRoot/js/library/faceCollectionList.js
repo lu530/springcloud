@@ -88,6 +88,7 @@ $(function () {
     //initData();
     topSpecialUploadPic();
     initWaterMark();
+   	initPage();
     if (isRedList()) {
         showRedListTask({ searchType: 1, elem: "#redListWrap" });
     }
@@ -105,7 +106,21 @@ $(function () {
         $('#confirmSearch').trigger('click');
     }
 });
-
+function initPage(){
+	var isPicSearchConfig = getConfigValue({model:"efacecloud",keys:["FACE_LIST_SEARCH"]})["FACE_LIST_SEARCH"];
+    if(isPicSearchConfig==1){
+    	UI.control.remoteCall("face/capture/getFaceUploadPicConfig",{},function(resp){
+    		if(resp&&resp.FACE_SEARCH==true){
+    			$(".picUpdata").removeClass("hide");
+    			$(".top-box").removeClass("pl0");
+    		}    		
+    	})
+    
+    }else{
+    	$(".picUpdata").removeClass("hide");
+    	$(".top-box").removeClass("pl0");
+    }
+}
 function hideModule(selector) {
     selector.addClass("hide");
 }

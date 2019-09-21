@@ -1,3 +1,16 @@
+3.1.2#20190920
+[提交人]   
+    huangruijing
+[新增/修改文件] 
+    \efacecloud\src\com\suntek\efacecloud\provider\FaceDispatchedAlarmGroupingProvider.java
+    \efacecloud\src\com\suntek\efacecloud\util\Constants.java
+[修改说明]
+          1、增加逻辑删除功能
+          2、告警查询添加IS_DELETED字段
+          3、升级此版本需要修改表字段：
+          	ALTER TABLE VIID_DISPATCHED_PERSON ADD COLUMN `IS_DELETED` TINYINT (1) DEFAULT '0' COMMENT '逻辑删除标记字段（0默认/未进行删除操作 1已经删除）';
+*******************************************************************************************
+
 3.1.2#20190830
 [提交人]   
     huangruijing

@@ -30,9 +30,7 @@ public class FaceFeatureUtil
 	{
 		
         Map<String,Object> map = new HashMap<String,Object>();
-//        int algoType = Constants.DEFAULT_ALGO_TYPE;
-        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
-        map.put("fileUrl",fileUrl);
+        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));        map.put("fileUrl",fileUrl);
         map.put("algoType", algoType);
         
         Map<String, Object> retMap  = featureExtract.getFeatureExtract(map);

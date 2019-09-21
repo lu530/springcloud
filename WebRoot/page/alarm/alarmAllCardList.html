@@ -145,8 +145,9 @@
 							<!-- repeat -->
 							<script id="personTemplate" type="x-tmpl">
 							<div class="list-node-wrap" obj_id="{%=o.OBJECT_ID%}">
-									{% if(o.OBJECT_EXTEND_INFO && JSON.parse(o.OBJECT_EXTEND_INFO) && JSON.parse(o.OBJECT_EXTEND_INFO).ESCAPEE_FLAG){  %}
-									<i class="{%= parseInt(JSON.parse(o.OBJECT_EXTEND_INFO).ESCAPEE_FLAG) == 1 ?'zt-icon-big':'hide' %}"></i>
+								{% var extendInfo = o.OBJECT_EXTEND_INFO && JSON.parse(o.OBJECT_EXTEND_INFO), flag = extendInfo && extendInfo.ESCAPEE_FLAG;  %}
+									{% if(extendInfo && flag){  %}
+									<i class="{%= parseInt(flag) == 1 ?'zt-icon-big':'hide' %}"></i>
 									{%  }  %}
 									<dl class="list-node oh picMessage">
 										<dt class="node-img compare-img" attrimg="doublezoom">
@@ -207,7 +208,7 @@
 								<div>
                                     <label>外籍判定:</label>
 									<span class="alg-tag-wrap">
-										{%= renderAlgo(o.FOREIGN_ALGO_IDS||'')%}
+										{%= renderAlgo(extendInfo.MULIT_ALGO_ALARM_RESULT||'')%}
                     				</span>
                                 </div>
 								{% } %}
@@ -255,5 +256,5 @@
 	<script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
 	<script type="text/javascript" src="/efacecloud/js/common.js?v=20180826"></script>
 	<script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
-	<script type="text/javascript" src="/efacecloud/js/alarm/alarmAllCardList.js?v=20180826"></script>
+	<script type="text/javascript" src="/efacecloud/js/alarm/alarmAllCardList.js?v=20180905"></script>
 </html>

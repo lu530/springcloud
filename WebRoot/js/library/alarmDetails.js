@@ -25,7 +25,11 @@ var pageType = UI.util.getUrlParam('pageType')||'';
 
 var facesMaintain = true;
 
-var curIsBlack = isBlack();
+var curIsBlack = (top.projectID == "foreigners");
+
+if(top.isBigScreen){
+	$('head').append('<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/alarmDetailsBigScreen.css" />')
+}
 
 $(function () {
 	UI.control.init();
@@ -94,7 +98,7 @@ function initEvent() {
 			if (resp.CODE == 0) {
 				UI.util.alert("确认签收");
 				$this.addClass('hide');
-				$(".had-sign").removeClass('hide');
+				$(".had-sign,#cancelControlBtn").removeClass('hide');
 				isReceived = true;
 				$("#feedbackBtn").removeClass("disabled");
 			} else {
@@ -286,12 +290,11 @@ function initData() {
 	if(confirmStatus) {
 		queryParams.CONFIRM_STATUS = 1;
 	}
-	var identityId = null;
 	UI.control.remoteCall('face/dispatchedAlarm/detail', queryParams, function (resp) {
 		var data = resp.DATA;
 		//var data = alarmData.DATA;
 		personId = data.PERSON_ID || '';
-		identityId = data.IDENTITY_ID || '';
+		IDENTITY_ID = data.IDENTITY_ID || '';
 		data.FS_NAME = name;
 		data.FS_IDENTITY_ID = idCard;
 		data.FS_HIT_TIME = fstime;
@@ -310,8 +313,8 @@ function initData() {
 			$("#receivedBtn").addClass("hide");
 			$(".had-sign").removeClass('hide');
 			$("#feedbackBtn").removeClass("disabled");
-			if(curIsBlack){
-				//$("#cancelControlBtn").removeClass("hide");
+			if(curIsBlack && (data.APPROVE_STATUS==4||data.APPROVE_STATUS==7||data.APPROVE_STATUS==8)){
+				$("#cancelControlBtn").removeClass("hide");
 			}
 			isReceived = true;
 		}
@@ -333,12 +336,13 @@ function initData() {
 		}
 	});
 	if(curIsBlack){
-		UI.control.remoteCall('facestore/getBorderExitAndEntryTime', {PERSON_ID:personId,IDENTITY_ID:identityId}, function (resp) {
+		UI.control.remoteCall('facestore/getBorderExitAndEntryTime', {PERSON_ID:personId,IDENTITY_ID:IDENTITY_ID}, function (resp) {
 			if(resp.CODE == 0){
 				$('#effectiveDate').html(resp.DATA.STAY_TIME_TO);
 			}
 		});
 	}
+	setBtnState();
 }
 
 /**
@@ -527,53 +531,37 @@ function initConfigFaceMaintain(){
 
 //撤控
 function prompt(){
-	var curHtml = '<div class="form-group mb5">'+
-					'<label>撤控原因：</label>'+
-					'<label class="radio-inline p0 ml5"><input type="radio" name="PROCESS_RESULT" value="0" checked="checked">已过期</label>'+
-					'<label class="radio-inline p0 ml5"><input type="radio" name="PROCESS_RESULT" value="1">已处理</label>'+
-					'<label class="radio-inline p0 ml5"><input type="radio" name="PROCESS_RESULT" value="9">其他</label>'+
-				  '</div>'+
-				  '<div class="form-group">'+
+	var curHtml = '<div class="form-group">'+
+					'<label style="vertical-align:top;">审批人：</label>'+
+					'<div class="form-control w80 withdrawalApprover" style="margin-left:13px;" type="5"></div>'+
+					'<input type="hidden" name="APPROVE_USER" ui-validate="required" ui-vtext="撤控审批人">'+
+					'<span class="red ml10">*</span>'+
+				'</div>';
+	curHtml += '<div class="form-group">'+
 					'<label class="tr" style="width:70px;vertical-align:top;display:inline-block;">备注：</label>'+
 					'<textarea class="form-control w80" style="height:70px;vertical-align:top;" name="PROCESS_REMARK" ui-validate="{pattern:&quot;required&quot;,maxlength:500}" placeholder="备注" ui-vtext="备注"></textarea>'+
 					'<span class="red ml10">*</span>'+
 					'</div>';
 	
-		curHtml += '<div class="form-group">'+
-		'<label style="vertical-align:top;">审核人：</label>'+
-		'<div class="form-control w80 withdrawalAudit" style="margin-left:13px;" type="4"></div>'+
-		'<input type="hidden" name="AUDIT_USER" ui-validate="required" ui-vtext="撤控审核人">'+
-		'<span class="red ml10">*</span>'+
-		'</div>'+
-		'<div class="form-group">'+
-			'<label style="vertical-align:top;">审批人：</label>'+
-			'<div class="form-control w80 withdrawalApprover" style="margin-left:13px;" type="5"></div>'+
-			'<input type="hidden" name="APPROVE_USER" ui-validate="required" ui-vtext="撤控审批人">'+
-			'<span class="red ml10">*</span>'+
-		'</div>';
 	var opts = {
             title :'撤控信息 ',
             renderHtml:curHtml,
             okcallback:function(data){
-            	var serviceUrl = 'face/dispatchedApprove/add';
+            	var serviceUrl = 'face/dispatchedApprove/withdrawThenAddFaceSchedulingTask';
 				var formData = {
-						'APPROVE_STATUS':5,//5撤控待审核
-						'DB_ID':dbIdArr.join(","),	
-						/*'PROCESS_ID':personId,*/
-						'PROCESS_REMARK':data.PROCESS_REMARK,	
-						'PROCESS_RESULT':data.PROCESS_RESULT,
-						'PROCESS_TYPE':3,//撤控
-						'TASK_ID':personIdArr.join(","),
-						'AUDIT_USER':data.AUDIT_USER,
-						'APPROVE_USER':data.APPROVE_USER
+						'DB_ID': $('.alarm-wrag').attr('db-id'),
+						'APPROVE_USER':data.APPROVE_USER,
+						'PERSON_ID':personId,
+						'REMARK':data.PROCESS_REMARK,
+						'IDENTITY_ID':IDENTITY_ID,
+						'ALARM_ID':queryParams.ALARM_ID
 				}
 				
 				UI.util.showLoadingPanel();
 				UI.control.remoteCall(serviceUrl, formData, function(resp){
 					if (resp.CODE == 0) {
 						UI.util.alert(resp.MESSAGE);
-						doSearch();
-						parent.UI.util.hideCommonIframe('.frame-form-full');
+						$('#cancelControlBtn').addClass('hide');
 					}else{
 						UI.util.alert(resp.MESSAGE,"warn");
 					}
@@ -691,5 +679,13 @@ function renderAlgo(algoId){
 		}
 	}
 }
-
+//根据配置项设置按钮状态
+function setBtnState(){
+	var btnStateConfig = getConfigValue({model:"efacecloud",keys:["ALARM_DETAILS_BUTTON_CONFIG"]})["ALARM_DETAILS_BUTTON_CONFIG"].split(",");
+	for(var i=0;i<btnStateConfig.length;i++){
+		if(btnStateConfig[i]==0){
+			$(".alarmBtn"+i).addClass("hide");
+		}
+	}
+}
 //var alarmData = {"MESSAGE":"查询成功","CODE":0,"DATA":{"DEPT_NAME":"组织架构","SCORE":96,"RECENT_COUNT":1,"SEX":"1","DB_NAME":"三非人员","ALGO_LIST":[{"SCORE":"96%","ALGORITHM_NAME":"华云","ALGORITHM_TYPE":"0","ALGORITHM_DESC":"华云特征提取算法","ENABLED":1,"ALGORITHM_KIND":0,"CREATE_TIME":"2019-04-10 18:42:37.0","ALGORITHM_ID":"80003","SCORE_RATE":"1.00"}],"ALARM_IMG":"http://68.32.176.14:8088/g2/M00/00012001/20190830/RCCwDl1ouMeIEc7EAADUWYrviQcAHGTEgPNyDYAANRx553.jpg","IDENTITY_ID":"15AH27107","OBJECT_ID":"416255239537656576","CASE_ID":"","FRAME_IMG":"http://68.32.176.14:8088/g2/M00/00013001/20190830/RCCwDl1ouMeID2XJAAI9qk5QKeQAHGTngAyxqMAAj3C505.jpg","OBJECT_EXTEND_INFO":"{\"FEISHI_TYPE\":\"0\",\"IS_TEMP\":0,\"MULIT_ALGO_ALARM_RESULT\":{\"80003\":\"96\",\"113001\":\"98\"},\"SEX\":\"1\",\"THRESHOLD_DB\":80,\"IS_FEISHI\":0,\"IS_ARCHIVE\":0,\"FACE_QUALITY_LIST\":[],\"DEVICE_NAME\":\"金麓山庄东1门人行道上\",\"POLICE_STATION_INFO\":{\"IS_SHOW\":\"0\"},\"INFO_ID\":\"484721166230047168\",\"ALARM_FILTER_FLAG\":\"1\",\"IS_COVER\":1,\"NAME\":\"CISSE ABDALLAH\",\"IDENTITY_ID\":\"15AH27107\",\"DEVICE_ADDRESS\":\"金麓山庄东1门人行道上\",\"CAPTURE_TIME\":\"2019-08-30 13:45:10\",\"IS_THIRDIMPL\":1}","ALARM_LEVEL":0,"DB_ID":"1d36989c16f64a97a0c2d64ef928cf11","ALGO_TYPE":"80003","POLICE_TASK_ID":[],"ORG_NAME":"越秀区分局登峰派出所","TEMPLET_IMG":"http://68.26.12.12:8088/g1/M01/0000000A/00000013/RBoMDFxvpLCAfMP5AACHpxsdiuY187.png","IS_SIGN_IN":false,"USER_NAME":"系统管理员","CHECK_ALGO_LIST":[],"DEVICE_ADDR":"金麓山庄东1门人行道上","NAME":"CISSE ABDALLAH","ALARM_TIME":"2019-08-30 13:48:58.0","PERSON_ID":"416255239537656577","ORG_CODE":"44010474","IS_CALLBACK":false,"DEVICE_ID":"44010474001320000004","CONFIRM_STATUS":""}}

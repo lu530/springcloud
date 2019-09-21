@@ -288,7 +288,7 @@ public class FaceCaptureStatisticService {
      * @return
      * @throws SearchEngineException
      */
-    private Map<Object, Long> queryStatisticsByDeviceId(List<String> deviceIdList, String beginTime,
+    public Map<Object, Long> queryStatisticsByDeviceId(List<String> deviceIdList, String beginTime,
         String endTime) throws SearchEngineException {
     
         Long sjgsk = Long.valueOf(DateUtil.convertByStyle(beginTime, DateUtil.standard_style,
@@ -297,7 +297,7 @@ public class FaceCaptureStatisticService {
             DateUtil.yyMMddHHmmss_style, "-1"));
         String[] indices = EsUtil.getIndexNameByTime(Constants.FACE_INDEX + "_", beginTime, endTime);
     
-        Query query = new Query(1, 1);
+        Query query = new Query(1, 10000);
         query.addEqualCriteria("DEVICE_ID", deviceIdList.toArray());
         query.addBetweenCriteria("JGSK", sjgsk, ejgsk);
         query.setAggregation("DEVICE_ID");

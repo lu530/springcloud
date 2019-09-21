@@ -19,7 +19,6 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.DeviceInfoUtil;
@@ -38,7 +37,6 @@ import com.suntek.sp.common.common.BaseCommandEnum;
 public class WJFaceCaptureService {
 
     private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
-    private FaceCommonDao commonDao = new FaceCommonDao();
 
     @SuppressWarnings("unchecked")
     public Map<String, Object> searchByPic(RequestContext context) throws Exception {
@@ -73,6 +71,8 @@ public class WJFaceCaptureService {
             registry.selectCommand(BaseCommandEnum.mulitAlgoFaceCaptureOneToN.getUri(), "4401", vendor).exec(cc);
             if (cc.getResponse().getCode() != 0L) {
                 ServiceLog.error("调用开放平台多算法以图搜图异常：" + cc.getResponse().getMessage());
+                context.getResponse().setError("调用开放平台多算法以图搜图异常:" + cc.getResponse().getMessage());
+                map.put("LIST", Collections.emptyList());
             } else {
                 List<Map<String, Object>> tempResultList
                     = (List<Map<String, Object>>)cc.getResponse().getData("ALGO_LIST");
@@ -89,6 +89,7 @@ public class WJFaceCaptureService {
             registry.selectCommand(BaseCommandEnum.mulitAlgoFaceCaptureOneToN.getUri(), "4401", vendor).exec(cc);
             if (cc.getResponse().getCode() != 0L) {
                 ServiceLog.error("调用开放平台多算法以图搜图异常：" + cc.getResponse().getMessage());
+                context.getResponse().setError("调用开放平台多算法以图搜图异常:" + cc.getResponse().getMessage());
             } else {
                 tempResultList = (List<Map<String, Object>>)cc.getResponse().getData("ALGO_LIST");
             }

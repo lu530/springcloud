@@ -121,10 +121,12 @@ public class FaceSchedulingDao {
     
     public Map<String, Object> getTaskDetail(String dispatchId) throws Exception {
         String sql = "select a.ID, a.DISPATCH_ID, a.TASK_TYPE, a.TASK_ID, a.SENDER, a.ACCEPTER, a.CREATE_TIME,"
-                + " a.TASK_STATUS,a.TASK_LEVEL, a.REMARK, "
-                + " b.ALARM_TIME, b.ALARM_IMG, b.OBJECT_PICTURE, b.SCORE, b.OBJECT_ID, b.DEVICE_ID, b.OBJECT_EXTEND_INFO "
-                + " from EFACE_POLICE_TASK_DISPATCH a,VPLUS_SURVEILLANCE_ALARM b "
-                + "where a.REL_ID = b.ALARM_ID and a.DISPATCH_ID = ?";
+                + " a.TASK_STATUS,a.TASK_LEVEL, a.REMARK, b.ALARM_TIME, b.ALARM_IMG, b.OBJECT_PICTURE, b.SCORE, "
+                + " b.OBJECT_ID, b.DEVICE_ID, b.OBJECT_EXTEND_INFO, d.APPROVE_STATUS "
+                + " from EFACE_POLICE_TASK_DISPATCH a join VPLUS_SURVEILLANCE_ALARM b on(a.REL_ID = b.ALARM_ID)"
+                + " join VIID_DISPATCHED_OBJECT c on (b.OBJECT_ID = c.OBJECT_ID) "
+                + " join EFACE_DISPATCHED_PERSON d on(c.PERSON_ID = d.PERSON_ID) "
+                + " where a.DISPATCH_ID = ?";
         List<Map<String, Object>> list = jdbc.queryForList(sql, dispatchId);
         if(list.size() > 0) {
             Map<String, Object> result = list.get(0);

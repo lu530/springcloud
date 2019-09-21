@@ -533,7 +533,10 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static String getAlarmConfirmStatus(String confirmStatus) {
-		String result = "";
+		String result = "--";
+		if (confirmStatus == null) {
+			return result;
+		}
 		switch (confirmStatus) {
 			case "0":
 				result = "不准确";

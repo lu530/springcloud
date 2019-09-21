@@ -1,0 +1,146 @@
+@charset 'utf-8';
+.alarm-wrag{
+    margin: 265px 414px 0 399px;
+}
+.alarm-img{
+    width:626px;
+    height:324px;
+    margin-bottom: 75px;
+}
+.alarm-img-small{
+    width:243px;
+    height:324px;
+    background: url(/datadefence/images/overallSituationBigScreen/pic-bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+.alarm-img-small:nth-child(1){
+    margin-right: 94px;
+}
+.alarm-img-small img{
+    display: block;
+    margin: 5% auto;
+    height: 90%;
+    max-width: 90%;
+}
+.tilelist .similar {
+    width: 117px;
+    height: 117px;
+    margin-right: -41px;
+    line-height: 117px;
+    bottom: 100px;
+    font-size: 48px;
+}
+.alarm-location{
+    width:626px;
+    height:431px;
+    background:linear-gradient(180deg,rgba(2,4,33,0.84) 0%,rgba(6,10,40,0.45) 100%);
+    border:2px solid rgba(1,179,255,1);
+}
+.alarm-text{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 626px;
+    font-size: 34px;
+}
+.alarm-icon{
+    width: 60px;
+    height: 60px;
+    margin-top: 48px;
+    margin-right: 48px;
+}
+.alarm-icon.position-icon{
+    background: url(/datadefence/images/overallSituationBigScreen/location-icon.png) no-repeat;
+    background-size: 100% 100%;
+    background-position: 0 0;
+}
+.alarm-icon..time-icon{
+    background: url(/datadefence/images/overallSituationBigScreen/time-icon.png) no-repeat;
+    background-size: 100% 100%;
+    background-position: 0 0;
+}
+.alarm-location div{
+    font-size: 38px;
+    line-height: 150px;
+    padding: 0;
+    height: auto;
+}
+
+.alarm-wrag .multil-arithmetic-wrap,
+.alarm-wrag .multil-arithmetic-list{
+    height: auto;
+}
+.alarm-wrag .arithmetic-main .multil-name {
+	font-size: 34px;
+}
+.alarm-wrag .arithmetic-main .multil-similar {
+    font-size: 36px;
+}
+
+.alarm-left{
+    width: 1334px;
+    position: relative;
+}
+.alarm-text p {
+    font-size: 34px;
+    border: 0.03vw solid rgba(1,179,255,1);
+    margin-bottom: 0.37vh;
+    padding: 0.66vh;
+    color: #60ACD6;
+    width: 100% !important;
+}
+
+.tilelist .list-node{
+    background: transparent;
+    display: none;
+}
+
+.alarm-right{
+    width: auto;
+    background: url(/datadefence/images/overallSituationBigScreen/pic-big-bg.png) no-repeat;
+    background-size: 100% 100%;
+    padding: 1%;
+}
+.alarm-right img{
+    width:1451px;
+    height:816px;
+}
+.btn-wrap{
+    background: transparent;
+    bottom: 227px;
+    border: none;
+}
+.btn-wrap::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -64px;
+    margin-left: -1546px;
+    width:3093px;
+    height:10px;
+    background: url(/datadefence/images/overallSituationBigScreen/btn-top-border.png) no-repeat;
+    background-size: 100%;
+}
+.btn.btn-alarm{
+    width: 586px;
+    height: 141px;
+    background: linear-gradient(180deg,rgba(2,4,33,0.84) 0%,rgba(6,10,40,0.63) 100%);
+    box-shadow: 0px 47px 125px 0px rgba(0,0,0,0.31);
+    border-radius: 21px;
+    border: 10px solid rgba(75,119,240,1);
+    color: #4B77F0 !important;
+    line-height: 98px;
+    font-size: 70px;
+    position: relative;
+}
+.btn.btn-alarm::after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -50px;
+    margin-left: -191px;
+    width:382px;
+    height:50px;
+    background: url(/datadefence/images/overallSituationBigScreen/btn-bottom-shadow.png);
+    background-size: 100%;
+}

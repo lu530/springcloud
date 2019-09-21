@@ -14,7 +14,7 @@ var todayTime = UI.util.getDateTime("today", "yyyy-MM-dd HH:mm:ss");
 var dateDesc = today;
 var algoID = '';
 var confirmStatus = UI.util.getUrlParam("confirmStatus") || '';
-var isBlack = isBlack();
+var isBlack =  (top.projectID == "foreigners");
 var childrenFrameData = {
 	pic: '',
 	personName: '',
@@ -193,7 +193,9 @@ $(function () {
 	ElectronicArchivesSwitch();
 	tabConfigSwitch();
 	showFlyKnowledge();
-	getinitdata();
+	if(needInitData){
+		getinitdata();
+	}
 	$('.flyName').text(global.flyName);
 });
 //是否按照设备查询，回填。是否父页面调用
@@ -220,6 +222,7 @@ function getinitdata() {
 		$('#timeTagList [time-control="jt"]').trigger('click');
 	}
 	if(isBlack){
+		$('#tabTitle .actives').attr('is_first',false);
 		doSearchList(true);
 	}
 }
@@ -254,6 +257,7 @@ function ElectronicArchivesSwitch() {
 	});
 };
 //所有告警,二次告警 等默认选中配置项。
+var needInitData = true;
 function tabConfigSwitch() {
 	var map = { "applicationName": "efacecloud" };
 	UI.control.remoteCall('platform/webapp/config/get', map, function (resp) {
@@ -266,15 +270,9 @@ function tabConfigSwitch() {
 		}
 		for (var i = 0; i < jsonObj.length; i++) {
 			if (jsonObj[i].key == "HISTORY_ALARM_DEFAULT_TAB" && jsonObj[i].value == "2") {
+				needInitData = false;
 				$("[ref='flyKnowledge']").hasClass("hide") ? $("[ref='flyKnowledge']").prev().trigger("click") : $("[ref='flyKnowledge']").trigger("click");
 			}
-			//后面getinitdata已经做查询了，这里不用重复了
-			/*if (jsonObj[i].key == "HISTORY_ALARM_DEFAULT_TAB" && jsonObj[i].value == "1") {
-				var items = $("[ref='tabList']").not(".hide");
-				if (items && items.length) {
-					$(items[0]).trigger("click");
-				}
-			}*/
 		}
 	});
 };
@@ -303,7 +301,19 @@ function eightBtnSwitch(){
 				var $btns = $('[config-control]');
 				var arr = jsonObj[i].value.split(",");
 				for (var a = 0; a < arr.length; a++) {
-					if (JSON.parse(arr[a])) $('[config-control="' + (a + 1) + '"]').removeClass("hide").addClass("hadRender");
+					if (JSON.parse(arr[a])){
+						var $noShowConfig = $('[config-control="' + (a + 1) + '"][no-show]');
+						if($noShowConfig.length){
+							$.each($noShowConfig,function(key,n){
+								var $n = $(n);
+								if(!$n.attr('no-show')){
+									$n.removeClass("hide").addClass("hadRender");
+								}
+							})
+						}else{
+							$('[config-control="' + (a + 1) + '"]').removeClass("hide").addClass("hadRender");
+						}
+					}
 				}
 			}
 		}
@@ -365,65 +375,63 @@ function getdatatosync() {
 	}
 }
 function initEvent() {
-	
-	//批量比中
-    $('.sureAlarmBtn').click(function(){
-    	var controlId = $('#tabTitle .active').attr('ref');
-		var checkedData = UI.control.getControlById(controlId).getListviewCheckData();
-    	if(checkedData.length<1){
-    		UI.util.alert('请至少勾选一个数据','warn');
-    		return false;
-    	}
-    	UI.util.confirm('已勾选的都确认为比中？',function(){
-    		var infoIdArr = [];
-    		for(var i=0;i<checkedData.length;i++){
-    			infoIdArr.push(checkedData[i].INFO_ID);
-    		}
-    		var opts = {
-    				isBlack:true,
-    				infoIds:infoIdArr.join(','),
-    				okCallback:function(){
-    					for(var i=0;i<checkedData.length;i++){
-    						$('#'+controlId+' .switchBtn[infoid="'+checkedData[i].INFO_ID+'"]').addClass('active');
-    		    		}
-    				}
-    		}
-    		toggleSureBlack(opts);
-    	})
-    });
 
-	//比中状态切换
-	$('body').on('click','.switchBtn',function(){
-		var $this = $(this)
-		
-		if($this.hasClass('active')){
-			var text = '确定未必中？';
-		}else{
-			var text = '确定比中？';
-		}
-		var infoIds = $this.attr('infoid');
-		UI.util.confirm(text,function(){
-			if($this.hasClass('active')){
-				var opts = {
-						isBlack:false,
-						infoIds:infoIds,
-						okCallback:function(){
-							$this.removeClass('active');
-						}
-				}
-			}else{
-				var opts = {
-						isBlack:true,
-						infoIds:infoIds,
-						okCallback:function(){
-							$this.addClass('active');
-						}
-				}
+	//告警确认
+	$('body').on('click','.alarmConfirmBtn',function(){
+		var	curHtml =	'<div class="form-group mb5">'+
+						'<label>告警是否准确：</label>'+
+						'<label class="radio-inline p0 ml5"><input type="radio" name="IS_CORRECT" value="1" checked="checked">是</label>'+
+						'<label class="radio-inline p0 ml5"><input type="radio" name="IS_CORRECT" value="0">否</label></div>';
+
+		var $this = $(this),
+			ALARM_ID = $this.attr('ALARM_ID'),
+			DB_ID = $this.attr('DB_ID'),
+			ALARM_IMG = $this.attr('ALARM_IMG'),
+			objectid = $this.attr('objectid');
+
+		var opts = {
+			title : '告警确认',
+			renderHtml: curHtml,
+			okcallback: function(data){
+				var params = {
+					ALARM_ID: ALARM_ID,
+					CONFIRM_STATUS: data.IS_CORRECT,
+					TYPE_ADD: data.TYPE_ADD,
+					PERSON_ID: objectid,
+					DB_ID: DB_ID,
+					PIC: ALARM_IMG,
+					IS_COVER: data.IS_CORRECT,
+					SOURCE_TYPE: 2
+				};
+				UI.control.remoteCall('face/dispatchedAlarm/alarmConfirm', params, function(resp){
+					if (resp.CODE == '0') {
+						UI.util.alert(resp.MESSAGE);
+						$this.addClass("hide");
+					}else{
+						UI.util.alert(resp.MESSAGE,"warn");
+					}
+				}, null, null,true);
+				return true;
 			}
-			toggleSureAlarm(opts);
-		});
-			
+		}
+		UI.util.prompt(opts);
 	});
+	
+	//下载统计准确度
+    $('.sureAlarmBtn').click(function(){
+        top.globalCache.faceCaptureParams = {
+			BEGIN_TIME:$('#beginTime').val(),
+			END_TIME:$('#endTime').val()
+		};
+		$('.arithmetic-tools.on:visible').removeClass('on').find('span').click();
+		var queryAlgoListArr = getAlgoList();
+		var curAlgoListArr = [];
+		for(var i=0;i<queryAlgoListArr.length;i++){
+			curAlgoListArr.push(queryAlgoListArr[i].ALGO_TYPE);
+		}
+		top.globalCache.faceCaptureParams.MULIT_ALGO_TYPE = curAlgoListArr.join(',');
+    	UI.util.showCommonWindow('/efacecloud/page/library/faceCaptureBlackAlgoList.html?pageType=alarm', '准确度统计', $(top.window).width()*.95, $(top.window).height()*.9, function(data) {});
+    });
 	
 	//所有告警确定按钮
 	$('#confirmAllSearch').click(function(){
@@ -610,15 +618,22 @@ function initEvent() {
 				}
 				break;
 			case 'tabList':
-				if(thirdImpl == 'true'){
-					allqueryParams.ALARM_TYPE = '2';
-					doSearchList();
-				}else if(isFirst != 'false'){
-					allqueryParams.ALARM_TYPE = '';
-					if(isBlack){
-						doSearchList(true)
+
+				if($('[thirdimpl="true"]:visible').length){
+					if(thirdImpl == 'true'){
+						allqueryParams.ALARM_TYPE = '2';
 					}else{
-						doSearchList();
+						allqueryParams.ALARM_TYPE = '';
+					}
+					doSearchList();
+				}else{
+					if(isFirst != 'false'){
+						allqueryParams.ALARM_TYPE = '';
+						if(isBlack){
+							doSearchList(true)
+						}else{
+							doSearchList();
+						}
 					}
 				}
 				break;
@@ -1063,6 +1078,20 @@ function initEvent() {
 		doSearchList();
 	});
 
+	// 是否使用【布控状态】
+	ifConfigProperty("opengw","LOGICAL_DELETE_DISPATCHE_FLAG","1", function () {
+		$("#personStatusGroup").removeClass("hidden");
+		
+		$("#personStatus .tagItem").click(function () {
+			var $this = $(this);
+			var val = $this.attr('value');
+			$this.addClass('active').siblings().removeClass('active');
+			queryParamsList.isDelete = val;
+			doSearchList();
+		});
+	});
+	
+
 	//是否已抓捕
 	$("#captureFilterAll .tagItem").click(function () {
 		var $this = $(this);
@@ -1464,6 +1493,9 @@ function doAllSearchByDb(dbIdList) {
 }
 
 function initData() {
+	if(isBlack){
+		$('.sureAlarmBtn').removeClass('hide');
+	}
 	if (titleType == 'hide') {
 		$('.page-title').addClass('hide');
 		$('.freq-view').removeClass('title-sib');
@@ -1626,28 +1658,6 @@ function doHandleMonth(month) {
 		m = "0" + month;
 	}
 	return m;
-}  
-
-//确认是否外籍人
-function toggleSureAlarm(opts){
-	var params = {
-			BEGIN_TIME:queryParams.BEGIN_TIME,
-			END_TIME:queryParams.END_TIME,
-			INFO_IDS:opts.infoIds
-	}
-	if(opts.isBlack){
-		var serviceUrl = 'race/confirm/add';
-	}else{
-		var serviceUrl = 'race/confirm/cancel';
-	}
-	UI.util.showLoadingPanel();
-	UI.control.remoteCall(serviceUrl, params, function (resp) {
-        if(resp.CODE == 0){
-        	UI.util.alert(resp.MESSAGE);
-        	opts.okCallback();
-        }
-        UI.util.hideLoadingPanel();
-    },function(){},{},true);
 }
 
 //显示使用算法和全部算法

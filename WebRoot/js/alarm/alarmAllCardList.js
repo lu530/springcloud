@@ -355,24 +355,20 @@ function renderTagColor(text){
 }
 
 //显示使用算法和全部算法
-function renderAlgo(algoStr){
+function renderAlgo(algoObj){
 	//var algoStr = '{"80003":"60","10003":"80"}';
-	if(algoStr){
-		var algoObj = JSON.parse(algoStr);
-	}else{
-		var algoObj = {};
-	}
-	
-	var	algoList = global.algoNumSnList,
+	if(algoObj){
+		var	algoList = global.algoNumSnList,
 		html = '';
-	
-	for(var i=0;i<algoList.length;i++){
-		var curAlgoId = algoList[i].ALGORITHM_ID;
-		if(algoObj[curAlgoId]){
-			html += '<span class="alg-tag-item active"><span>'+algoList[i].ALGORITHM_NAME+'</span><span class="alg-tag-score">'+algoObj[curAlgoId]+'</span></span>';
-		}else{
-			html += '<span class="alg-tag-item"><span>'+algoList[i].ALGORITHM_NAME+'</span></span>';
+		
+		for(var i=0;i<algoList.length;i++){
+			var curAlgoId = algoList[i].ALGORITHM_ID;
+			if(algoObj[curAlgoId]){
+				html += '<span class="alg-tag-item active"><span>'+algoList[i].ALGORITHM_NAME+'</span><span class="alg-tag-score">'+algoObj[curAlgoId]+'</span></span>';
+			}else{
+				html += '<span class="alg-tag-item"><span>'+algoList[i].ALGORITHM_NAME+'</span></span>';
+			}
 		}
+		return html;
 	}
-	return html;
 }

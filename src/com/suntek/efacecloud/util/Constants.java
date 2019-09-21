@@ -206,6 +206,13 @@ public class Constants {
 	/***  告警已反馈 */
 	public final static int ALARM_STATUS_HANDLED = 3;
 	
+	
+	/** 布控状态：布控 **/
+	public final static int IS_DELETED_1 = 1;
+	/** 布控状态：撤控/删除 **/
+	public final static int IS_DELETED_0 = 0;
+	
+	
 	// 图片存储方式
 	public final static String FDFS = "fdfs";
 	public final static String LOCALFS = "localfs";
@@ -324,7 +331,10 @@ public class Constants {
 	public final static String URI_OF_DICTIONARY_TREE = "/sys-dict-management/dictionary/treeByKind";
 
     /** 证件类型字典值 **/
-    public static final String FORIEGN_CARD = "903";  //证件类型
+	// 证件类型
+    public static final String FORIEGN_CARD = "903";
+    // 签证种类
+    public static final String FOREIGNER_VISA_TYPE = "206";
 
     /** 外籍人项目标识 */
     public static final String IS_BLACK = "1";

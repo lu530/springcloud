@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
@@ -20,6 +21,7 @@ import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
+import com.suntek.efacecloud.dao.SysUserDao;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
@@ -34,104 +36,120 @@ import com.suntek.sp.common.common.BaseCommandEnum;
  * @Copyright (C)2017 , Suntektech
  */
 @LocalComponent(id = "face/capture")
-public class FaceCaptureService 
-{
+public class FaceCaptureService {
 	
-	@SuppressWarnings("unchecked")
-	@BeanService(id = "freqAnalysis", description="人脸抓拍数据频繁出现", since="2.0")
-	public void freqAnalysis(RequestContext context) throws Exception 
-	{
+	SysUserDao sysUserDao = new SysUserDao();
+	
+    @SuppressWarnings("unchecked")
+    @BeanService(id = "freqAnalysis", description = "人脸抓拍数据频繁出现", since = "2.0")
+    public void freqAnalysis(RequestContext context) throws Exception {
 
-		Map<String,Object> params = context.getParameters();
-		
-		CommandContext commandContext = new CommandContext(context.getHttpRequest());
-		
-		commandContext.setServiceUri(BaseCommandEnum.faceCaptureFreqAnalysis.getUri());
-		commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-		
-		params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
-		commandContext.setBody(params);
-		
-		ServiceLog.debug(" 频繁出现  调用sdk参数:" + params);
-		
-		Registry registry = Registry.getInstance();
-		
+        Map<String, Object> params = context.getParameters();
+
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+
+        commandContext.setServiceUri(BaseCommandEnum.faceCaptureFreqAnalysis.getUri());
+        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
+
+        params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
+        commandContext.setBody(params);
+
+        ServiceLog.debug(" 频繁出现  调用sdk参数:" + params);
+
+        Registry registry = Registry.getInstance();
+
         registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
-        
+
         ServiceLog.debug(" 频繁出现 调用sdk返回结果code:" + commandContext.getResponse().getCode()
-	  		       + " message:" + commandContext.getResponse().getMessage()
-	  		       + " result:" + commandContext.getResponse().getResult());
-        
+                + " message:" + commandContext.getResponse().getMessage()
+                + " result:" + commandContext.getResponse().getResult());
+
         long code = commandContext.getResponse().getCode();
-        
-        if(0L != code) {
-        	context.getResponse().setWarn(commandContext.getResponse().getMessage());
-        	return;
+
+        if (0L != code) {
+            context.getResponse().setWarn(commandContext.getResponse().getMessage());
+            return;
         }
-        
+
         List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
-        
+
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
 
-		for (int i = 0; i < personIds.size(); i++) {
-			List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
-			resultList.add(handlePersonId(ids));
-		}
+        for (int i = 0; i < personIds.size(); i++) {
+            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
+            resultList.add(handlePersonId(ids));
+        }
 
-		// 按出现次数排序
-		Collections.sort(resultList,
-				(a, b) -> StringUtil.toString(b.get("INFO_ID")).length() - StringUtil.toString(a.get("SCORE")).length());
-		
+        // 按出现次数排序
+        Collections.sort(resultList,
+                (a, b) -> StringUtil.toString(b.get("INFO_ID")).length() - StringUtil.toString(a.get("SCORE")).length());
+
         context.getResponse().putData("DATA", resultList);
-        
+
+    }
+
+	@BeanService(id = "getFaceUploadPicConfig", description="路人检索-以图搜图权限", since="2.0")
+	public void getFaceUploadPic(RequestContext context) {
+		String userCode = context.getUserCode();
+		String faceSearch = AppHandle.getHandle(Constants.APP_NAME).getProperty("FACE_LIST_SEARCH", "0");
+		if(StringUtils.isNotBlank(faceSearch) && StringUtils.equals(faceSearch, "1")){
+			List<Map<String, Object>> userList = sysUserDao.getUserListByUserCode(userCode);
+			if(userList.size() > 0){
+				context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+				context.getResponse().putData("FACE_SEARCH", false);
+				return;
+			}
+		}
+		context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+		context.getResponse().putData("FACE_SEARCH", true);
 	}
 	
-	// 处理同一个的人员列表,一个数据
-	private Map<String, Object> handlePersonId(List<Object> ids) {
-		
-		Map<String, Object> personData = new HashMap<String, Object>();
+    // 处理同一个的人员列表,一个数据
+    private Map<String, Object> handlePersonId(List<Object> ids) {
 
-		String[] idsArr = ModuleUtil.listArrToStrArr(ids);
-		String[] indexName = new IDGenerator().getIndexNameFromIds(Constants.FACE_INDEX + "_", idsArr);
+        Map<String, Object> personData = new HashMap<String, Object>();
 
-		try {
-			PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName,Constants.FACE_TABLE, idsArr);
-			List<Map<String, Object>> resultSet = pageResult.getResultSet();
+        String[] idsArr = ModuleUtil.listArrToStrArr(ids);
+        String[] indexName = new IDGenerator().getIndexNameFromIds(Constants.FACE_INDEX + "_", idsArr);
 
-			ServiceLog.debug("人脸抓拍es查询条件主键id->" + ids + " ,查询结果-> " + resultSet);
+        try {
+            PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
+            List<Map<String, Object>> resultSet = pageResult.getResultSet();
 
-			String infoId = "";
-			String objPic = "";
-			String jgsk = "";
-			String faceScore = "";
+            ServiceLog.debug("人脸抓拍es查询条件主键id->" + ids + " ,查询结果-> " + resultSet);
 
-			if (resultSet.size() > 0) {
-				
-				Collections.sort(resultSet, new Comparator<Map<String, Object>>() {
+            String infoId = "";
+            String objPic = "";
+            String jgsk = "";
+            String faceScore = "";
 
-					@Override
-					public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-						String sk1 = StringUtil.toString(o1.get("JGSK"));
-						String sk2 = StringUtil.toString(o2.get("JGSK"));
-						return sk2.compareTo(sk1);
-					}
-				});
-				
-				objPic = ModuleUtil.renderImage(StringUtil.toString(resultSet.get(0).get("OBJ_PIC")));
-				jgsk = StringUtil.toString(resultSet.get(0).get("JGSK"));
-				infoId = StringUtil.toString(resultSet.get(0).get("INFO_ID"));
-				faceScore = StringUtil.toString(resultSet.get(0).get("FACE_SCORE"));
-			}
-			personData.put("INFO_ID", infoId);
-			personData.put("REPEATS", ids.size());
-			personData.put("PIC", objPic);
-			personData.put("FACE_SCORE", faceScore);
-			personData.put("IDS", StringUtils.join(ids,","));
-			personData.put("JGSK", DateUtil.convertByStyle(jgsk, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
+            if (resultSet.size() > 0) {
 
-		} catch (Exception e) {
-			ServiceLog.error("es查询有误:handlePersonId()", e);
-		}
-		return personData;
-	}
+                Collections.sort(resultSet, new Comparator<Map<String, Object>>() {
+
+                    @Override
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        String sk1 = StringUtil.toString(o1.get("JGSK"));
+                        String sk2 = StringUtil.toString(o2.get("JGSK"));
+                        return sk2.compareTo(sk1);
+                    }
+                });
+
+                objPic = ModuleUtil.renderImage(StringUtil.toString(resultSet.get(0).get("OBJ_PIC")));
+                jgsk = StringUtil.toString(resultSet.get(0).get("JGSK"));
+                infoId = StringUtil.toString(resultSet.get(0).get("INFO_ID"));
+                faceScore = StringUtil.toString(resultSet.get(0).get("FACE_SCORE"));
+            }
+            personData.put("INFO_ID", infoId);
+            personData.put("REPEATS", ids.size());
+            personData.put("PIC", objPic);
+            personData.put("FACE_SCORE", faceScore);
+            personData.put("IDS", StringUtils.join(ids, ","));
+            personData.put("JGSK", DateUtil.convertByStyle(jgsk, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
+
+        } catch (Exception e) {
+            ServiceLog.error("es查询有误:handlePersonId()", e);
+        }
+        return personData;
+    }
 }

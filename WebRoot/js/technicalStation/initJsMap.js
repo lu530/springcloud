@@ -120,6 +120,11 @@ function loadRoute(opts){
 	        return popupHtml;
 		}
 	});
+	UI.map.getMap().eachLayer(function(layer){
+		if(layer.options.layers=="L_CAMERA_FACE"){
+			layer.remove()
+		}
+	})
 }
 
 // 绘制气泡

@@ -33,7 +33,7 @@
                 <span class="tab-btn hide" ref="freqView">
                     <i class="icon-file-powerpoint"></i>频次分析
                 </span>
-                <span class="tab-btn actives" is_first='false' ref="tabList">
+                <span class="tab-btn actives" ref="tabList">
                     <i class="icon-file-powerpoint"></i>所有告警比中列表
                 </span>
                 <span class="tab-btn hide flyKnowledge" ref="tabList" thirdImpl="true">
@@ -224,10 +224,6 @@
                             <a class="btn btn-i-t" id="freshBtn">
                                 <i class="btn-icon fresh-icon"></i> <span>刷新</span>
                             </a>
-                            <a class="btn btn-i-t hide sureAlarmBtn hide">
-		                        <span class="btn-icon and-set-icon"></span>
-		                        <span>比中批量确认</span>
-		                    </a>
                         </div>
                         <div class="page-data fr hide" listview-page="">
                             <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
@@ -339,18 +335,10 @@
                                                 <p class="{%= o.REPEATS == 1?"":"openRepeat open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
 
 								{% if(isBlack){ %}
-								<p class='hide'>
-                                    <label>比中状态:</label>
-									<span class='switch-wrap'>
-                    					<span class='switch-btn switchBtn {%=o.RACE_CONFIRM==1?"active":""%}'>
-                    						<span class="circle"></span>
-                    					</span>
-                    				</span>
-                                </p>
 								<div>
                                     <label>外籍判定:</label>
 									<span class="alg-tag-wrap">
-										{%= renderAlgo(o.FOREIGN_ALGO_IDS||'')%}
+										{%= renderAlgo(extendInfo.MULIT_ALGO_ALARM_RESULT||'')%}
                     				</span>
                                 </div>
 								{% } %}
@@ -609,6 +597,17 @@
 	                            </div>
 	                        </dd>
 	                    </dl>
+
+                        <dl id="personStatusGroup" class="filter-bar hidden">
+                            <dt class="filter-arrt">布控状态：</dt>
+                            <dd class="filter-tag">
+                                <div class="tagslist" id="personStatus">
+                                    <span class="tag-item active tagItem" value="0">布控</span>
+                                    <span class="tag-item tagItem" value="1">撤控</span>
+                                </div>
+                            </dd>
+                        </dl>
+                        
 	                    <button class="btn-confirm btn hide" id="confirmAllSearch">确认检索</button>
                     </div>
 
@@ -628,9 +627,9 @@
                             </a>
                             <a class="btn btn-i-t" id="freshBtnAll"> <i class="btn-icon fresh-icon"></i> <span>刷新</span>
                             </a>
-                            <a class="btn btn-i-t hide sureAlarmBtn hide">
+                            <a class="btn btn-i-t hide sureAlarmBtn">
 		                        <span class="btn-icon and-set-icon"></span>
-		                        <span>比中批量确认</span>
+		                        <span>准确度统计</span>
 		                    </a>
                             <a class="btn btn-i-t hide" id="toHisBtn"> <i class="btn-icon morealarm-icon"></i>
                                 <span>更多历史告警</span>
@@ -677,6 +676,9 @@
                                     </dt>
                                     <dd class="node-text mt10 {%= (isBlack && o.THIRDIMPL_HIT == '1')?'fly-bg-wjr':(o.FS_HIT==1 ?'fly-bg' : "") %} {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'identity-confirm' : '' %}">
                                         <input type="ch(eckbox" listview-check="" class="checkbox-opacity hide">
+                                        {% if(o.IS_SIGN==1) { %}
+                                        	<img src="/efacecloud/images/had_sign.png" alt="" class="sign-bg"/>
+                                        {% } %}
                                         <p class="similar-name">
                                             <label>姓名：</label>
                                             <span title="{%=renderNullToNotKnow(o.PERSON_NAME)%}">{%=renderNullToNotKnow(o.PERSON_NAME)%}</span>
@@ -715,17 +717,8 @@
                                         <p picMsg="质量分数:{%=renderNullToNotKnow(o.FACE_SCORE)%}"><label>质量分数：</label><span title="质量分数：{%=renderNullToNotKnow(o.FACE_SCORE)%}">{%=renderNullToNotKnow(o.FACE_SCORE)%}</span></p>
 
                                         <p class="{%= o.REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
-
+										
 								{% if(isBlack){ %}
-								<p class='hide'>
-                                    <label>比中状态:</label>
-									<span class='switch-wrap'>
-                    					<span class='switch-btn switchBtn {%=o.RACE_CONFIRM==1?"active":""%}'>
-                    						<span class="circle"></span>
-                    					</span>
-                    				</span>
-                                </p>
-
 								<div>
                                     <label>外籍判定:</label>
 									<span class="alg-tag-wrap">
@@ -774,6 +767,9 @@
                                                    结构化检索
                                                 </a>
                                                 {% } %}
+                                                <a config-control="11" class="btn-i-t btn-xs alarmConfirmBtn hide" no-show='{%=o.CONFIRM_STATUS!="--"?"true":""%}' title="告警确认" ALARM_ID="{%= o.ALARM_ID %}" objectid="{%=o.OBJECT_ID%}" DB_ID='{%=o.DB_ID%}' ALARM_IMG='{%=o.ALARM_IMG%}'>
+                                                    告警确认
+                                                </a>
                                             </span>
                                         </div>
                                     </dd>
@@ -907,6 +903,6 @@
 <script type="text/javascript" src="/ui/plugins/bootstrap4.0/js/photoZoom.js"></script>
 <script type="text/javascript" src="/efacecloud/js/common.js?v=20180826"></script>
 <script type="text/javascript" src="/efacecloud/js/comDraw.js"></script>
-<script type="text/javascript" src="/efacecloud/js/alarm/personAlarmList.js?v=20190826"></script>
+<script type="text/javascript" src="/efacecloud/js/alarm/personAlarmList.js?v=20190905"></script>
 
 </html>

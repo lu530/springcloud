@@ -580,12 +580,23 @@ function parentNodeRender(treeNode){
 			isNeedSearchByImage: false,
 			iframeSrc: iframeSrc
         }
+		var projectID = top.getConfigItem('portal', 'PROJECT_ID');
+		
+		if (projectID == undefined){
+			projectID = 'base';
+		}else{
+			projectID = projectID && projectID.value;
+		}
+		
         UI.control.remoteCall('platform/webapp/config/get', {"applicationName":"datadefence"}, function(resp) {
             $.each(resp.attrList,function(i,v){
                 if(v.key=="IS_BLACK" && v.value == '0'){
                     options.isNeedSearchByImage = true
                 }
             });
+            if(projectID == 'base'){
+                options.isNeedSearchByImage = false
+            }
             top.$.photoZoom(options);
         }, function () {
             top.$.photoZoom(options);
@@ -2249,7 +2260,7 @@ function slideFn(src, argu, callback) {
     function getInputVal() {
         var algoList = [];
         
-        if( $(".arithmetic-tools.on:visible").hasClass('all') ){
+        if( $(".arithmetic-tools.on:visible").hasClass('all') || $(".arithmetic-item:visible .arithmetic-tools.on").hasClass('all') ){
         	algoList = getAllAlgorithm($(".arithmetic-item:visible .arithmetic-tools:not('.all'):not('.disabled')"));
         }else{
         	algoList = getAllAlgorithm($(".arithmetic-item:visible .arithmetic-tools.on"));
@@ -2301,7 +2312,7 @@ function openWindowPopup( type, imgUrl,time,checkName){
 			break;
 		case 'identity':
 			title = '身份核查';
-			src = matcher('/efacecloud/page/technicalStation/verification.html/' + top.projectID).url + '?imgUrl=' + imgUrl+"&checkName="+checkName||"";
+			src = matcher('/efacecloud/page/technicalStation/verification.html/' + top.projectID).url + '?imgUrl=' + imgUrl+"&checkName="+(checkName||"");
 			if(UI.control.hasPermission('EFACE_faceVerificationArchive')){
 				src =  '/efacestore/page/library/personnelFileMagList.html?imgUrL=' + imgUrl;
 			}
@@ -2858,8 +2869,8 @@ function initWaterMark(){
         texts : textsArr, //水印文字
         textColor : "#CCCCCC", //文字颜色
         textFont : '16px 宋体', //字体
-        width : 150, //水印文字的水平间距
-        height : 100,  //水印文字的高度间距（低于文字高度会被替代）
+        width : 100, //水印文字的水平间距
+        height : 80,  //水印文字的高度间距（低于文字高度会被替代）
         textRotate : -30 //-90到0， 负数值，不包含-90
     })
 }
@@ -3174,4 +3185,52 @@ function isBlack(){
 		}
 	});   
 	return isBlack;
+}
+
+/**
+* @Author linzewei
+* @version 2019-08-23
+* @description 获取模块配置
+* @param {model:模块名(string),keys:关键字[]}
+* @return {key:value,...}
+*/
+function getConfigValue(configInfo){
+	var configParam ={"applicationName":configInfo.model};
+	var result = {};
+	UI.control.remoteCall('platform/webapp/config/get', configParam, function(resp) {
+		var jsonObj = resp.attrList;
+		for(var i=0;i<jsonObj.length;i++){
+			for(var j=0;j<configInfo.keys.length;j++){
+				if(jsonObj[i].key==configInfo.keys[j]){
+					result[jsonObj[i].key] = jsonObj[i].value;
+				}
+			}
+			
+		}
+	});   
+	return result;
+}
+
+/**
+ * 判断模块是否配置{@param key}，其值为{@param value}则调用回调函数 {@param call}
+ * @param moduleName 模块名称
+ * @param key 属性名
+ * @param value 属性值
+ * @param call 回调函数
+ */
+function ifConfigProperty(moduleName, key, value, call) {
+    UI.control.remoteCall('platform/webapp/config/get', {
+            "applicationName": moduleName
+        }, function (response) {
+            if (response && response.attrList) {
+                var match = response.attrList.some(function (item) {
+                    return item.key === key && item.value == value;
+                });
+                match && call()
+            } else {
+                // 未知错误
+                console.error(response)
+            }
+        }
+    );
 }

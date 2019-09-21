@@ -9,8 +9,10 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.suntek.eap.EAP;
 import com.suntek.eap.common.log.ServiceLog;
 import com.suntek.eap.core.app.AppHandle;
+import com.suntek.eap.pico.ILocalComponent;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.DateUtil;
@@ -20,7 +22,6 @@ import com.suntek.efacecloud.dao.AlarmHandleRecordDao;
 import com.suntek.efacecloud.dao.FaceDispatchedPersonDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.HttpUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.efacecloud.util.PersonStatus;
 
@@ -37,9 +38,6 @@ public class AlarmHandleRecordService {
 
 	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
 	private FaceDispatchedPersonDao faceDispatchedPersonDao=new FaceDispatchedPersonDao();
-	private String serverIp = AppHandle.getHandle(Constants.CONSOLE).getProperty("TOMCAT_SERVER_IP", "127.0.0.1");
-	private String serverPort = AppHandle.getHandle(Constants.CONSOLE).getProperty("TOMCAT_SERVER_PORT", "9080");
-	private final String REMOVE_DISPATCHED_PERSON_URL = "http://"+serverIp+":"+serverPort+"/"+Constants.APP_EFACESURVEILLANCE+"/mx/v6/face/dispatchedApprove/add";
 
 	@BeanService(id = "add", description = "增加处置信息", isLog = "true", type = "remote")
 	public void add(RequestContext context) throws Exception {
@@ -146,7 +144,7 @@ public class AlarmHandleRecordService {
 					List<Map<String, Object>> personInfoMapList = faceDispatchedPersonDao.queryByPersonId(personId);
 					if(personInfoMapList.size() > 0){
 						Map<String, Object> personInfoMap = personInfoMapList.get(0);
-						String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId);
+						String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId, context);
 						if(StringUtils.isBlank(resultPostString)){
 							String NEED_APPROVE = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("NEED_APPROVE", "0");
 							if("1".equals(NEED_APPROVE)){
@@ -313,7 +311,7 @@ public class AlarmHandleRecordService {
 			List<Map<String, Object>> personInfoMapList = faceDispatchedPersonDao.queryByPersonId(personId);
 			if(personInfoMapList.size() > 0){
 				Map<String, Object> personInfoMap = personInfoMapList.get(0);
-				String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId);
+				String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId,context);
 				if(StringUtils.isBlank(resultPostString)){
 					resultMsg += ",且人员撤控成功";
 				}else{
@@ -333,7 +331,7 @@ public class AlarmHandleRecordService {
 	 * @param personJson
 	 * @throws Exception
 	 */
-	private String autoRemoveDispatched(String dbId ,String personId) throws Exception{
+	private String autoRemoveDispatched(String dbId ,String personId,RequestContext context) throws Exception{
 		
 		Map<String, Object> params = new HashMap<>();
 		Map<String, String> headers = new HashMap<>();
@@ -354,19 +352,29 @@ public class AlarmHandleRecordService {
 						userList += StringUtil.toString(map2.get("USER_CODE")) + ",";
 					}
 					if(StringUtils.isNotBlank(userList)){
-						params.put("AUDIT_USER", userList);//审核人
-						params.put("APPROVE_USER", userList);//审批人
-						params.put("APPROVE_STATUS", 5);
-						params.put("PROCESS_RESULT", 0);
-						params.put("PROCESS_TYPE", 3);
-						params.put("remoteUser", "admin");
-						params.put("TASK_ID", personId);
-						params.put("DB_ID", dbId);
-						params.put("PROCESS_REMARK", "确认抓捕后自动撤控");
-						params.put("elementId", "data");
-						String result = HttpUtil.post(REMOVE_DISPATCHED_PERSON_URL, params, headers);
-						ServiceLog.info(">>>>>>>>>>>>反馈已抓捕直接撤控接口返回数据:" + result);
-						return translateResult(result);
+						context.putParameter("AUDIT_USER", userList);//审核人
+						context.putParameter("APPROVE_USER", userList);//审批人
+						context.putParameter("APPROVE_STATUS", 5);
+						context.putParameter("PROCESS_RESULT", 0);
+						context.putParameter("PROCESS_TYPE", 3);
+						context.putParameter("remoteUser", "admin");
+						context.putParameter("TASK_ID", personId);
+						context.putParameter("DB_ID", dbId);
+						context.putParameter("PROCESS_REMARK", "确认抓捕后自动撤控");
+						context.putParameter("elementId", "data");
+				        if (EAP.bean.contains("face/dispatchedApprove/add")) {
+					        ((ILocalComponent)EAP.bean.get("face/dispatchedApprove/add")).invoke(new Object[] {context});
+					        ServiceLog.info("result : " + JSONObject.toJSONString(context.getResponse().getResult()));
+					        Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();
+					        if (Constants.RETURN_CODE_SUCCESS != (int)result.get("CODE")) {
+					        	return StringUtil.toString(context.getResponse().getResult());
+					        }else{
+					        	return "";
+					        }
+				        }
+//						String result = HttpUtil.post(REMOVE_DISPATCHED_PERSON_URL, params, headers);
+//						ServiceLog.info(">>>>>>>>>>>>反馈已抓捕直接撤控接口返回数据:" + result);
+						//return translateResult(result);
 					}else{
 						resultMsg = "审核人添加失败！";
 					}

@@ -43,12 +43,10 @@
 	<param key="FACEALARM_CARD_OPERATION" name="人脸告警卡片底部操作按钮配置，身份-轨迹-检索-布控-情报-详情-比对-在逃检测-档案-结构化检索" 
 	description="人脸告警列表卡片底部操作按钮配置，按照名称的顺序，0不开启，1开启" type="String">1,1,1,1,1,1,1,1,1,1</param>
 	
-	
 	<param key="MOCKYITU_JSON_URL" name="模拟依图json的url" description="如果该url不为空窜,则模拟返回依图json,而不是实际调用接口返回的" type="String"></param>
-	
 	<param key="FACE_MAINTAIN" name="多脸维护是否开启，0关闭，1开启，默认开启" description="多脸维护是否开启，0关闭，1开启，默认开启" type="String">0</param>
-	
 	<param key="CATCH_CONFIRM" name="确认抓捕自动撤控否开启，0关闭，1开启，默认关闭" description="确认抓捕自动撤控否开启，0关闭，1开启，默认关闭" type="String">0</param>
-	
-	
+	<param key="FACE_LIST_SEARCH" name="路人检索-以图搜图配置，0关闭，1开启，默认关闭" description="路人检索-以图搜图配置，0关闭，1开启，默认关闭" type="String">0</param>
+	<param key="ALARM_DETAILS_BUTTON_CONFIG" name="告警详情-底部按钮配置，告警确认-警情下发-关注-忽略-签收-反馈-处置记录-确认抓捕，0关闭，1开启" description="告警详情-底部按钮配置，告警确认-警情下发-关注-忽略-签收-反馈-处置记录-确认抓捕，0关闭，1开启" type="String">1,1,1,1,1,1,1,1</param>
+	<param key="PERSON_SEARCH_LB_ID" name="寻人系统配置的布控库ID" type="String" description="寻人系统配置的布控库ID，清远项目所加配置">89d4f8f0e4264f0283b896f0924c43f1</param>
 </config>

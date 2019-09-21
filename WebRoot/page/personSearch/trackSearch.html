@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>人员身份确认</title>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/personSearch/trackSearch.css"/>
+</head>
+<body style="overflow:hidden">
+<div class="pager-wrap" container="scroll" id="faceCollectionList">
+    <div class="pager-content">
+        <div class="page-title" id="redListWrap">
+            <a id="backBtn" class="back-btn">
+                <i class="icon-arrow-left10"></i>
+                <em>返回</em>
+            </a>
+            <span class="title">人员踪迹查找</span>
+        </div>
+        <div class="data-wrap">
+	        <div class="top-box">
+	            <div class="photo-tools">
+	                <div class="top-pic-box ">
+	                    <div class="img-wrap">
+	                        <img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
+	                        <input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg"
+	                            issearch="true" />
+	                    </div>
+	                    <ul>
+	                        <li class="re-upload">
+	                            <i class="icon-image2"></i>
+	                            <input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn" issearch="true" />
+	                        </li>
+	                        <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+	                    </ul>
+	                </div>
+	            </div>
+	            <div class="hide face">
+	                <ul class="photo-scroll">
+	                </ul>
+	            </div>
+	            <div class="white-data"></div>
+	        </div>
+	        <div class="filter-view" >
+                <dl class="filter-bar">
+                    <dt class="filter-arrt tc">搜索：</dt>
+                    <dd class="filter-bar-search">
+                        <div class="fifler-group mr5">
+                            <div class="search-box">
+                                <input class="search-input" type="text" id="searchText"  placeholder="请输入姓名、证件号码" maxlength="18">
+                                <span class="icon-search22" id="searchBtn"></span>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+	            <dl class="filter-bar">
+	                <dt class="filter-arrt">抓拍时间：</dt>
+	                <dd class="filter-tag">
+	                    <div class="tagslist timelist" id="timeTagList">
+	                        <span class="tag-item active tagsTime" time-control="jt">今天</span>
+	                        <span class="tag-item tagsTime" time-control="zt">昨天</span>
+	                        <span class="tag-item tagsTime" time-control="bz">本周</span>
+	                        <span class="tag-item tagsTime" time-control="by">本月</span>
+	                        <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+	                        <div class="opera-group">
+	                            <div class="time-control-item">
+	                                <input class="time-control" id="beginTime" readonly type="text">
+	                                <i></i>
+	                            </div>
+	                            <div class="time-control-item">
+	                                <input class="time-control" id="endTime" readonly type="text">
+	                                <i></i>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </dd>
+	            </dl>
+	            <!-- <dl class="pr mb0" style="height: 44px;">
+	                <ul class="bottom-pic-bar hide" id="thresholdValidate">
+	                    <li></i>阈值：<input type="text" value="60" id="threshold"
+                            ui-validate="{pattern:'required,integer',max:100,min:0}"
+                            ui-vtext="阈值"><span class="prompt_info">&nbsp;&nbsp;（阈值应为0-100的整数）</span></li>
+	                </ul>
+	            </dl> -->
+	            <button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+	        </div>
+	    </div>
+        <div class="page-info-metro">
+            <div class="page-wrap fl">
+                <!-- <div class="action-btn-group">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="checkAll" listview-checkall="">全选
+                    </label>
+                    <a class='btn btn-i-t trackSearch'>轨迹查看</a>
+                </div> -->
+                <!-- <div class="page-info-metro square-pager">
+                    <div class="page-data tc" listview-page>
+                        <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+                                class="icon-arrow-left7"></i></a>
+                        <span class="page-num">共有<i class="page-num" listview-counts="">0</i>条记录</span>
+                        <a class="current-page"><i listview-current="">1</i>/<i listview-total="">5</i></a>
+                        <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <script id="monitorBtn" type="text/x-tmpl">
+            <a class="btn btn-i-t monitorBtn" title="一键布控" PERSON_ID="" PIC="">
+                一键布控
+            </a>
+        </script>
+        <div class="page-con pb20">
+            <!-- <div class='lib-info'>
+                <script id="" type="text/x-tmpl">
+                    <a class="btn btn-i-t monitorBtn" title="一键布控" PERSON_ID="" PIC="">
+                        一键布控
+                    </a>
+                </script>
+            </div> -->
+            <div class="library-info">
+                <!-- 飞识 -->
+                <div class="tilelist vertical ver-caselist two-pictrues-small mb10" id="faceSearch">
+                    <div class='pb10'>飞识身份核实（0）</div>
+                    <div class='nodata'></div>
+                </div>
+                <!-- 布控 -->
+                <div class="tilelist vertical ver-caselist two-pictrues-small checkbox mb10" id="monitor">
+                    <div class='pb10'>布控库（0）</div>
+                    <div class='nodata'></div>
+                </div>
+                <div class="page-info-metro track-search-nav">
+                    <div class="page-wrap fl">
+                        <div class="action-btn-group">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="checkAll" listview-checkall="">全选
+                            </label>
+                            <a class='btn btn-i-t trackSearch'>轨迹查看</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 路人库抓拍以图搜图 -->
+                <div class="tilelist vertical ver-caselist two-pictrues-small checkbox pt10" id="faceCapture">
+                    <div class='pb10'>路人抓拍信息（0）</div>
+                    <div class='nodata'></div>     
+                </div>
+
+                <div class="tilelist vertical ver-caselist two-pictrues-small checkbox hide">
+
+                    <script id="faceTemplate" type="text/x-tmpl">
+
+						<div class="list-node-wrap" device_id="{%=o.DEVICE_ID%}" device_name="{%=o.DEVICE_NAME%}" obj_pic="{%=o.OBJ_PIC%}" pic="{%=o.PIC%}" x="{%=o.LONGITUDE%}" y="{%=o.LATITUDE%}" jgsk="{%=o.JGSK%}">
+				 		<dl class="list-node">
+							<dt class="node-img compare-img" attrimg="doublezoom">
+								<span class="compare-large">
+									<img src="{%=o.PIC%}" zoom-url="{%=o.PIC%}" style="width:100%">
+									<em>原图</em>
+								</span>
+								<span class="compare-small ml0">
+									<img src="{%=o.OBJ_PIC%}" zoom-url="{%=o.OBJ_PIC%}">
+									<em>抓拍图片</em>
+								</span>
+								{% if(o.SCORE!=""&&typeof o.SCORE!="undefined"){ %}
+									<b class="similar color-blue" key="similar">{%=renderScore(o.SCORE)%}</b>
+								{% } %}
+							</dt>
+					  		<dd class="node-text mt10">
+								<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+					   			<!--<p class="similar-name"><label>地点：</label><span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span></p>-->
+					   			<p><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</span></p>
+					   			<p><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
+								<!--<p><label>行政区域：</label><span title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</span></p>-->
+					   			<!--<p><label>注册状态：</label><span title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</span></p>-->
+								<div class="btn-group fr" style="height:28px">
+									{% if(o.RLTZ != '') { %}
+									<a fileUrl="{%=o.OBJ_PIC%}" rltz="{%=o.RLTZ%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+											<i class="btn-icon search-icon"></i>
+										</a>
+                                        <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.OBJ_PIC%}">
+                                            <i class="btn-icon verification-icon"></i>
+                                        </a>
+										<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.OBJ_PIC%}">
+											<i class="btn-icon trajectory-icon"></i>
+										</a>
+
+									{% } %}
+									<!--<a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">-->
+										<!--<i class="btn-icon collection-icon"></i>-->
+									<!--</a>-->
+								</div>
+					  		</dd>
+						</dl>
+						</div>
+                    </script>
+
+                </div>
+            </div>
+        </div>
+        <div class="frame-form-full">
+            <iframe class="full-screen" id="frameFormView" name="frameFormView" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- 身份核查飞识 -->
+    <script id="faceSearchTmpl" type="x-tmpl">
+        <div class='container-unit'>
+            <div class='pb10'>飞识身份核实（{%= o.length %}）</div>
+            {% for(var i=0; i<o.length; i++){ %}
+            <div class="list-node-wrap faceSearchItem {%= i == 0 ? 'active' : '' %}" PERSON_ID="{%= o[i].PERSON_ID %}">
+                <!-- <p class="serial"><span class="num">{%= i+1 %}</span>第三方结果推荐</p> -->
+                <dl class="list-node">
+                    <dt class="node-img person-img">
+                        <span>
+                            <img src="{%=o[i].IMG_URL%}" attrimg="zoom" class="mb0">
+                        </span>
+                    </dt>
+                    <dd class="node-text">
+                        <p style="width:106%;" title="{%=o[i].REPOSITORY_NAME%}"><label>地区：</label>{%=o[i].REPOSITORY_NAME%}</p>
+                        <p class="" title="" style="width:106%;" title="{%=o[i].NAME%}"><label>姓名：</label>{%=o[i].NAME%}</p>
+                        <p class="" title="{%=o[i].PERSON_ID%}" style="width:106%;" title="{%=o[i].PERSON_ID%}"><label>证件号码：</label>{%=o[i].PERSON_ID%}</p>
+                    </dd>
+                    <!--<button class="btn-confirm btn" infoname="{%=o[i].NAME%}" infoId="{%=o[i].PERSON_ID%}" infoImg="{%=o[i].IMG_URL%}" id="toArchive">存至档案库</button>-->
+                </dl>
+            </div>
+        {%  }  %}
+        </div>
+    </script>
+    <!-- 布控信息 -->
+    <script id="monitorTmpl" type="x-tmpl">
+        <div class='container-unit'>
+            <div class='pb10'>布控库（{%= o.count %}）</div>
+            {% if(o.count > 0) { %}
+                {% for(var i = 0; i<o.records.length; i++){ %}
+                <div class="list-node-wrap">
+                    <dl class="list-node">
+                        <dt class="node-img person-img">
+                            <span>
+                                <img src="{%=o.records[i].PIC%}" attrimg="zoom" class="mb0">
+                            </span>
+                        </dt>
+                        <dd class="node-text">
+                            <!-- <p style="width:106%;" title="{%=o.records[i].REPOSITORY_NAME%}"><label>地区：</label>{%=o.records[i].REPOSITORY_NAME%}</p> -->
+                            <p class="" title="{%=o.records[i].NAME%}"><label>姓名：</label>{%=o.records[i].NAME%}</p>
+                            <p class="" title="{%=o.records[i].IDENTITY_ID%}"><label>证件号码：</label>{%=o.records[i].IDENTITY_ID%}</p>
+                            <p class="" title="{%=o.records[i].CREATOR%}"><label>布控人：</label>{%=o.records[i].CREATOR%}</p>
+                            <p class="" title="{%=o.records[i].CREATE_TIME%}"><label>布控时间：</label>{%=o.records[i].CREATE_TIME%}</p>
+                            <p class="" title="{%=o.records[i].DEPT_NAME%}"><label>布控单位：</label>{%=o.records[i].DEPT_NAME%}</p>
+                        </dd>
+                        <!--<button class="btn-confirm btn" infoname="{%=o.records[i].NAME%}" infoId="{%=o.records[i].PERSON_ID%}" infoImg="{%=o.records[i].IMG_URL%}" id="toArchive">存至档案库</button>-->
+                    </dl>
+                </div>
+                {%  }  %}
+            {% } else if($('#faceSearch').find('.faceSearchItem.active').length > 0) { %}
+                <div class='pr' style="height: 300px;">
+                    <a class="btn btn-i-t monitorBtn monitor-btn" title="一键布控" PERSON_ID="{%= o.PERSON_ID %}" PIC="{%= o.PIC %}">
+                        该人员暂未做布控，可点此一键布控
+                    </a>
+                </div>
+            {% } else { %}
+                <div class="nodata"></div>
+            {% } %}
+        </div>
+    </script>
+    <!-- 路人库以图搜图 -->
+    <script id="faceCaptureTmpl" type="text/x-tmpl">
+        <div>
+            <div class='pb10'>路人抓拍以图搜图信息（{%= o.length %}）</div>
+            {% if(o.length > 0) { %}
+                {% for ( var i = 0; i < o.length; i++) { %}
+                <div class="list-node-wrap list-node-wrap-face" index="{%=i%}" device_id="{%=o[i].DEVICE_ID%}" device_name="{%=o[i].DEVICE_NAME%}" obj_pic="{%=o[i].OBJ_PIC%}" pic="{%=o[i].PIC%}" x="{%=o[i].LONGITUDE%}" y="{%=o[i].LATITUDE%}" jgsk="{%=o[i].JGSK%}">
+                    <dl class="list-node list-node-face">
+                        <dt class="node-img compare-img" attrimg="doublezoom">
+                            <span class="compare-large">
+                                <img src="{%=o[i].PIC%}" zoom-url="{%=o[i].PIC%}" style="width:100%">
+                                <em>原图</em>
+                            </span>
+                            <span class="compare-small ml0">
+                                <img src="{%=o[i].OBJ_PIC%}" zoom-url="{%=o[i].OBJ_PIC%}">
+                                <em>抓拍图片</em>
+                            </span>
+                                <b class="similar color-blue" key="similar">{%=renderScore(o[i].SCORE)%}</b>
+                        </dt>
+                        <dd class="node-text mt10">
+                            <input type="checkbox" class="checkbox-opacity hide" listview-check="">
+                            <p><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</span></p>
+                            <p><label>设备名称：</label><span title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</span></p>
+                            <div class="btn-group fr hide" style="height:28px">
+                                {% if(o[i].RLTZ != "") { %}
+                                    <a fileUrl="{%=o[i].OBJ_PIC%}" rltz="{%=o[i].RLTZ%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                        <i class="btn-icon search-icon"></i>
+                                    </a>
+                                    <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
+                                        <i class="btn-icon verification-icon"></i>
+                                    </a>
+                                    <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
+                                        <i class="btn-icon trajectory-icon"></i>
+                                    </a>
+                                {% } %}
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+                {% } %}
+            {% } else { %}
+                <div class='nodata'></div>
+            {% } %}
+        </div>
+    </script>
+</div>
+<div class="frame-form-full">
+    <iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/Map.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/efacecloud/js/specialUpload.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/personSearch/trackSearch.js"></script>
+<!-- <script type="text/javascript" src="/efacecloud/js/technicalStation/faceCollection1.js"></script> -->
+</html>

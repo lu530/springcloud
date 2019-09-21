@@ -1,13 +1,5 @@
 package com.suntek.efacecloud.provider;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
@@ -28,18 +20,19 @@ import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.util.calendar.DateUtil;
 import com.suntek.eap.web.RequestContext;
+import com.suntek.efacecloud.dao.AlarmHandleRecordDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
-import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
-import com.suntek.efacecloud.util.CommonUtil;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.ESUtil;
-import com.suntek.efacecloud.util.ExcelFileUtil;
-import com.suntek.efacecloud.util.FileDowloader;
-import com.suntek.efacecloud.util.MaskIdentityAndNameUtil;
-import com.suntek.efacecloud.util.ModuleUtil;
-
+import com.suntek.efacecloud.util.*;
 import net.sf.json.JSONArray;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人脸布控库告警查询（去重）
@@ -56,13 +49,14 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 			.getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
 
+	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
+	
 	/**
 	 * 
 	 */
 	@Override
 	protected String buildCountSQL() {
 		String sql = "select count(1) from " + this.getOptionalStatement();
-
 		return sql;
 	}
 
@@ -90,6 +84,7 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 
 	private void prepareBaseLine(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
+		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -108,8 +103,20 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		this.addOptionalStatement(" group by OBJECT_ID " + ")  "
 				+ "AS t ON t.OBJECT_ID = vfa.OBJECT_ID AND t.ALARM_TIME_NEW = vfa.ALARM_TIME " + "where 1 = 1 ");
 		addSql(context);
-		this.addOptionalStatement(" GROUP BY vfa.OBJECT_ID" + ") b ON vfa.ALARM_ID = b.ALARM_ID " + "left join "
-				+ "VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
+		this.addOptionalStatement(" GROUP BY vfa.OBJECT_ID" + ") b ON vfa.ALARM_ID = b.ALARM_ID "
+				+ " left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
+		this.addOptionalStatement(" LEFT JOIN VIID_DISPATCHED_PERSON vdp ON vfa.OBJECT_ID = vdp.FACE_ID ");
+		this.addOptionalStatement(" where 1=1 ");
+		
+		// 布控状态
+		if (isDelete) {
+			this.addOptionalStatement(" and vdp.IS_DELETED = ? ");
+			this.addParameter(Constants.IS_DELETED_1);
+		} else {
+			this.addOptionalStatement(" and vdp.IS_DELETED <> ? or vdp.IS_DELETED IS NULL ");
+			this.addParameter(Constants.IS_DELETED_1);
+		}
+		
 		// 排序
 		String repeats = StringUtil.toString(context.getParameter("REPEATS"));
 		if (!StringUtil.isNull(repeats)) {
@@ -127,6 +134,7 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	 */
 	private void prepareElaboration(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
+		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -200,6 +208,16 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
 		}
+		
+		// 布控状态
+		if (isDelete) {
+			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
+			this.addParameter(Constants.IS_DELETED_1);
+		} else {
+			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
+			this.addParameter(Constants.IS_DELETED_0);
+		}
+		
 		// 排序
 		String repeats = StringUtil.toString(context.getParameter("REPEATS"));
 		if (!StringUtil.isNull(repeats)) {
@@ -565,7 +583,7 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 						map.put("IS_COVER", CommonUtil.getMutilFaceAlarmType(isCover));
 					} else {
 						map.remove("IS_COVER");
-						map.remove("CONFIRM_STATUS");
+						//map.remove("CONFIRM_STATUS");
 					}
 					map.put("PERSON_NAME", personName);
 					map.put("IDENTITY_ID", identityId);
@@ -620,6 +638,9 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 					}
 					// 更新OBJECT_EXTEND_INFO字段信息，加入相关派出所信息
 					map.put("OBJECT_EXTEND_INFO", JSON.toJSONString(json));
+					
+					map.put("IS_SIGN", alarmHandleRecordDao.isAlarmSignIn(StringUtil.toString(map.get("ALARM_ID")))==true?"1":"0");
+					
 					long endTime = System.currentTimeMillis();
 					float excTime = (float) (endTime - startTime) / 1000;
 					ServiceLog.debug("获取当前派出所方法的执行时间:" + excTime);
@@ -723,64 +744,9 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		}
 	}
 
-	private boolean isAlarmTablesExist() {
-		if (dao.isTableExist("EFACE_POLICE_TASK_DISPATCH") && dao.isTableExist("EFACE_POLICE_TASK_RECORD")
-				&& dao.isTableExist("EFACE_POLICE_TASK_REMARK")) {
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * 告警确认查询
-	 */
-	private void alarmConfirmQuery(String confirmStatus, String beginTime, String endTime){
-		boolean isTableExist = isAlarmTablesExist();
-		// 是否告警确认 0:否 1：是 2:未处理 3：已处理
-		if (!StringUtil.isNull(confirmStatus)) {
-			if (isTableExist) {
-				if (confirmStatus.equals(Constants.CONFIRM_STATUS_UNTREATED)) {
-					// confirmStatus=2，未处理
-					// this.addOptionalStatement(" where vfa.ALARM_ID not in (select d.REL_ID relId from EFACE_POLICE_TASK_DISPATCH d "
-					// + " LEFT JOIN EFACE_POLICE_TASK_RECORD r on d.DISPATCH_ID = r.DISPATCH_ID "
-					// + " LEFT JOIN EFACE_POLICE_TASK_REMARK rem on r.REMARK_ID = rem.REMARK_ID "
-					// + " where rem.REMARK_KEY is not null GROUP BY d.REL_ID)");
-				} else {
-					// 已处理
-					this.addOptionalStatement(" inner join (select d.REL_ID relId,d.DISPATCH_ID dispatchId, " 
-							+ " rem.REMARK_KEY remarkKey, rem.REMARK_VALUE remarkValue "
-							+ " from EFACE_POLICE_TASK_DISPATCH d "
-							+ " LEFT JOIN EFACE_POLICE_TASK_RECORD r on d.DISPATCH_ID = r.DISPATCH_ID "
-							+ " LEFT JOIN EFACE_POLICE_TASK_REMARK rem on r.DISPATCH_ID = rem.DISPATCH_ID "
-							+ " where rem.REMARK_KEY = '" + Constants.ALARM_CONFIRM_KEY + "'");
-					if (confirmStatus.equals(Constants.CONFIRM_STATUS_NOCONFIRM)) {
-						// confirmStatus=0 ，不准确
-						this.addOptionalStatement(" and rem.REMARK_VALUE = '" + Constants.ALARM_CONFIRM_VALUE_NO + "'");
-					} else if (confirmStatus.equals(Constants.CONFIRM_STATUS_CORRECT)) {
-						// confirmStatus=1，准确
-						this.addOptionalStatement(
-								" and rem.REMARK_VALUE = '" + Constants.ALARM_CONFIRM_VALUE_YES + "'");
-					} else if (confirmStatus.equals(Constants.CONFIRM_STATUS_TREATED)) {
-						// confirmStatus=3，已处理
-						this.addOptionalStatement(" and rem.REMARK_VALUE is not null");
-					}
-					if (!StringUtil.isNull(beginTime) && !StringUtil.isNull(endTime)) {
-						this.addOptionalStatement(" and rem.CREATE_TIME between ? and ?");
-						this.addParameter(beginTime);
-						this.addParameter(endTime);
-					} else if (!StringUtil.isNull(beginTime)) {
-						this.addOptionalStatement(" and rem.CREATE_TIME > ?");
-						this.addParameter(beginTime);
-					} else if (!StringUtil.isNull(endTime)) {
-						this.addOptionalStatement(" and rem.CREATE_TIME < ?");
-						this.addParameter(endTime);
-					}
-					this.addOptionalStatement(" GROUP BY d.REL_ID) ala on ala.relId = vfa.ALARM_ID ");
-				}
-
-			} else {
-				Log.faceSearchLog.info("告警查询-表不存在。。。请检查EFACE_POLICE_TASK_DISPATCH，"
-						+ "EFACE_POLICE_TASK_RECORD，EFACE_POLICE_TASK_REMARK表是否存在");
-			}
-		}
+	private boolean isBlackProject() {
+		String isblack = AppHandle.getHandle(Constants.DATA_DEFENCE).getProperty("IS_BLACK");
+		return Constants.IS_BLACK.equals(isblack);
 	}
 }
+

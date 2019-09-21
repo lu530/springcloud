@@ -47,22 +47,17 @@ function backFill(){
 		var code = resp["CODE"];
 		if(code == "0"){
 			var result = JSON.parse(resp["DATA"]["HANDLE_RESULT"]);
-			var isErrorInfo = result["IS_ERRORINFO"];
-			var isFound = result["IS_FOUND"];
-			var isConsistent = result["IS_CONSISTENT"];
 			var note = result["NOTE"];
-			if(isErrorInfo){
-				$("[name=IS_ERRORINFO][value="+isErrorInfo+"]").click();
-			}
-			if(isFound){
-				$("[name=IS_FOUND][value="+isFound+"]").click();
-			}
-			if(isConsistent){
-				$("[name=IS_CONSISTENT][value="+isConsistent+"]").click();
-			}
-			if(note){
-				notePublic = note;
-				$("[name=NOTE").val(note);
+
+			for(var i in result){
+				if(result.hasOwnProperty(i)){
+					if(i=='NOTE'){
+						notePublic = note;
+						$("[name=NOTE").val(note);
+					}else{
+						$("[name='"+i+"'][value="+result[i]+"]").click();
+					}
+				}
 			}
 		}
 		

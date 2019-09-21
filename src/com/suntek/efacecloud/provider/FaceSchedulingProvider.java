@@ -28,13 +28,16 @@ import net.sf.json.JSONArray;
 
 /**
  * 警情调度查询
- * 
+ *
  * @author wangsh
- * @since 3.1.2
  * @version 2018-09-13
+ * @since 3.1.2
  */
 @LocalComponent(id = "face/faceScheduling")
 public class FaceSchedulingProvider extends ExportGridDataProvider {
+
+   
+
 
     private final static Map<Integer, String> STATUS_MAP = new HashMap<>();
 
@@ -57,7 +60,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
     @Override
     protected String buildCountSQL() {
         String sql = "select count(1)" + " from EFACE_POLICE_TASK_DISPATCH a,VPLUS_SURVEILLANCE_ALARM b "
-            + "where a.REL_ID = b.ALARM_ID " + this.getOptionalStatement();
+                + "where a.REL_ID = b.ALARM_ID " + this.getOptionalStatement();
         return sql;
     }
 
@@ -66,7 +69,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         String sql = "select a.ID, a.DISPATCH_ID, a.REL_ID, a.TASK_TYPE, a.TASK_ID, a.SENDER, a.ACCEPTER, a.CREATE_TIME, "
                 + "a.TASK_STATUS,a.TASK_LEVEL, a.REMARK, "
                 + "b.ALARM_TIME, b.ALARM_IMG, b.OBJECT_PICTURE, b.SCORE, b.OBJECT_ID, "
-                + "b.DEVICE_ID, b.OBJECT_EXTEND_INFO,b.ALARM_ID,o.PERSON_ID "
+                + "b.DEVICE_ID, b.OBJECT_EXTEND_INFO, b.ALARM_ID, b.DB_ID, o.PERSON_ID "
                 + "from EFACE_POLICE_TASK_DISPATCH a "
                 + "left join VPLUS_SURVEILLANCE_ALARM b on a.REL_ID = b.ALARM_ID "
                 + "left join VIID_DISPATCHED_OBJECT o on b.OBJECT_ID = o.OBJECT_ID where 1=1"
@@ -88,7 +91,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
     }
 
     @SuppressWarnings({"unchecked", "serial"})
-    @BeanService(id = "export", description = "导出", since="6.0", type = "remote")
+    @BeanService(id = "export", description = "导出", since = "6.0", type = "remote")
     public void exportData(RequestContext context) throws Exception {
         String excelData = StringUtil.toString(context.getParameter("EXPORT_DATA"));
         List<Map<String, Object>> excelDataList = new ArrayList<>();
@@ -117,8 +120,8 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         }
 
         boolean returnCodeEnum = ExcelFileUtil.exportExcelFile2Req(
-            "导出结果" + com.suntek.eap.util.calendar.DateUtil.formatDate(DateUtil.getDateTime(), "yyyyMMddHHmmss"),
-            headers, dataKey, excelDataList, imgList, context);
+                "导出结果" + com.suntek.eap.util.calendar.DateUtil.formatDate(DateUtil.getDateTime(), "yyyyMMddHHmmss"),
+                headers, dataKey, excelDataList, imgList, context);
 
         if (!returnCodeEnum) {
             context.getResponse().setError("导出失败！");
@@ -134,13 +137,13 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         try {
             for (Map<String, Object> result : resultSet) {
                 JSONObject objectExtendInfo = JSONObject.parseObject(
-                    StringUtil.toString(result.get("OBJECT_EXTEND_INFO")));
+                        StringUtil.toString(result.get("OBJECT_EXTEND_INFO")));
                 result.put("IDENTITY_ID", objectExtendInfo.getString("IDENTITY_ID"));
                 result.put("NAME", objectExtendInfo.getString("NAME"));
                 result.put("SEX", objectExtendInfo.getString("SEX"));
                 String deviceId = StringUtil.toString(result.get("DEVICE_ID"));
-                DeviceEntity device = (DeviceEntity)EAP.metadata.getDictModel(
-                    DictType.D_FACE, deviceId, DeviceEntity.class);
+                DeviceEntity device = (DeviceEntity) EAP.metadata.getDictModel(
+                        DictType.D_FACE, deviceId, DeviceEntity.class);
                 result.put("DEVICE_ADDR", device.getDeviceAddr());
                 result.put("ALARM_IMG", ModuleUtil.renderImage(StringUtil.toString(result.get("ALARM_IMG"))));
                 result.put("OBJECT_PICTURE", ModuleUtil.renderImage(StringUtil.toString(result.get("OBJECT_PICTURE"))));
@@ -167,7 +170,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         this.addParameter(context.getUserCode());
 
         // 排序
-        String sort = (String)context.getParameter("SORT");
+        String sort = (String) context.getParameter("SORT");
         if (!StringUtil.isEmpty(sort)) {
             context.putParameter("sort", sort);
         } else {

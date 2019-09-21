@@ -17,16 +17,16 @@
 	<div class="tilelist" id="alarmDetailsList"></div>
 	<div class="btn-wrap">
         <span class="switch-detail prev-detail hide"></span>
-        <button class="btn btn-alarm mr10 hide" id="alarmConfirmBtn">告警确认</button>
-		<button class="btn btn-alarm mr10 hide" id="filterBtn">添加过滤名单</button>
-	    <button class="btn btn-alarm mr10" id="issuedBtn">警情下发</button>
-	    <button class="btn btn-alarm mr10" id="playAttention" disabled="disabled">关注</button>
-	    <button class="btn btn-alarm mr10" id="ignore" disabled="disabled">忽略</button>
-	    <button class="btn btn-alarm mr10" id="receivedBtn">签收</button>
-	    <button class="btn btn-alarm mr10 hide disabled" id="feedbackBtn">反馈</button>
-	    <button class="btn btn-alarm mr10 hide" id="cancelControlBtn">撤销</button>
-	    <button class="btn btn-alarm mr10" id="recordBtn">处置记录</button>
-	    <button class="btn btn-alarm mr10 catch-btn hide" id="hasCatchBtn">确认抓捕</button>
+        <button class="btn btn-alarm mr10 hide alarmBtn0" id="alarmConfirmBtn">告警确认</button>
+		<button class="btn btn-alarm mr10 hide " id="filterBtn">添加过滤名单</button>
+	    <button class="btn btn-alarm mr10 alarmBtn1" id="issuedBtn">警情下发</button>
+	    <button class="btn btn-alarm mr10 alarmBtn2" id="playAttention" disabled="disabled">关注</button>
+	    <button class="btn btn-alarm mr10 alarmBtn3" id="ignore" disabled="disabled">忽略</button>
+	    <button class="btn btn-alarm mr10 alarmBtn4" id="receivedBtn">签收</button>
+	    <button class="btn btn-alarm mr10 hide disabled alarmBtn5" id="feedbackBtn">反馈</button>
+	    <button class="btn btn-alarm mr10 hide " id="cancelControlBtn">撤销</button>
+	    <button class="btn btn-alarm mr10 alarmBtn6" id="recordBtn">处置记录</button>
+	    <button class="btn btn-alarm mr10 catch-btn hide alarmBtn7" id="hasCatchBtn">确认抓捕</button>
         <span class="switch-detail next-detail hide"></span>
 	</div>
 	<!-- <script id="alarmDetailsTemplate" type="x-tmpl">
@@ -186,6 +186,10 @@
                         <p class="{%=renderItemToggle()%}">相关派出所:
                             <span title="{% for(var i = 0; i < rel.length; i++) { %}{%= rel[i] %}&nbsp;{% } %}">{% for(var i = 0; i < rel.length; i++) { %}{%= rel[i] %}&nbsp;{% } %}</span>
                         </p>
+                       
+                        {% } %}
+                        {% if(extraInfo.RECEIVE_TIME){ %}
+                       	 	<p class="">接收时间:<span >{%=extraInfo.RECEIVE_TIME%}</span></p>
                         {% } %}
                     {% } catch(error) { UI.util.debug(error); } %}
 					<p class="{%=renderItemToggle()%}">布控单位:<span>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
@@ -198,7 +202,7 @@
 					<p class="{%=o.isFly==1?"":"hide"%}">比中证件:<span title="{%=renderFields(o.FS_IDENTITY_ID)%}">{%=renderFields(o.FS_IDENTITY_ID)%}</span></p>
 					<p class="{%=o.isFly==1?"":"hide"%}"><span title="{%=renderFields(o.FS_HIT_TIME)%}">{%=renderFields(o.FS_HIT_TIME)%}</span></p>
                     <p class='{%=o.CONFIRM_STATUS?"":"hide"%}' id='confirm_status_line'>确认状态:<span id='confirm_status_label'>{%=renderConfirmStatus(o.CONFIRM_STATUS)%}</span></p>
-                    {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
+                    
 					<p class="list-node pl10 pt0">
 						操作:
 						<span class="btn-group">
@@ -217,15 +221,17 @@
 							<a class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
 								<i class="btn-icon intelligence-icon"></i>
 							</a>					
+							{% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
 							<a class="btn-i-t btn-xs structuredSearch pt0 hide" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
 								<i class="btn-icon structured-icon"></i>
 							</a>
+							{% } %}
 							{%  if(top.ACTIVITY_TIME&&top.ACTIVITY_NAME&&top.ACTIVITY_PLACE&&top.PURCHASER_SEAT_NO){  %}
 							<span class="icon-link2 detailinfo" title="活动信息"></span>
 							{%  }  %}
 						</span>
 					</p>
-					{% } %}
+					
 				</dd>
 			</dl>
 		</div>
@@ -334,5 +340,5 @@
 	src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/efacecloud/js/common.js"></script>
 <script type="text/javascript"
-	src="/efacecloud/js/library/alarmDetails.js?v=20190830"></script>
+	src="/efacecloud/js/library/alarmDetails.js?v=20190902"></script>
 </html>

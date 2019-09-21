@@ -85,6 +85,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             String pic = ModuleUtil.renderImage(StringUtil.toString(map.get("PIC")));
             String startTime = StringUtil.toString(map.get("STARTTIME"));
             String deviceId = StringUtil.toString(map.get("DEVICE_ID"));
+            String viidObjectId = StringUtil.toString(map.get("VIID_OBJECT_ID"));
             String personId = StringUtil.toString(map.get("PERSON_ID"));
             String infoId = StringUtil.toString(map.get("INFO_ID"));
 
@@ -99,6 +100,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             	ServiceLog.error("不存在activity_info表: " + e);
             }
             map.put("DEVICE_ID", deviceId);
+            map.put("VIID_OBJECT_ID", viidObjectId);
             map.put("JGSK", jgsk);
             map.put("OBJ_PIC", objPic);
             map.put("PIC", pic);
@@ -157,7 +159,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         this.setTableName(Constants.FACE_TABLE);
 
         // 避免 某个分片检索时间超出了超时时间，导致会出现每次结果不一样的情况
-        query.setTimeout(10000L);
+        query.setTimeout(30000L);
 
         if (!StringUtil.isEmpty(treeNodeId)) {
 

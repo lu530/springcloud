@@ -1,5 +1,13 @@
 package com.suntek.efacecloud.provider;
 
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
@@ -23,16 +31,15 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
-import com.suntek.efacecloud.util.*;
-import net.sf.json.JSONArray;
+import com.suntek.efacecloud.util.CommonUtil;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.ESUtil;
+import com.suntek.efacecloud.util.ExcelFileUtil;
+import com.suntek.efacecloud.util.FileDowloader;
+import com.suntek.efacecloud.util.MaskIdentityAndNameUtil;
+import com.suntek.efacecloud.util.ModuleUtil;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sf.json.JSONArray;
 
 /**
  * 人脸布控库告警查询 efacecloud/rest/v6/face/dispatchedAlarm
@@ -46,12 +53,12 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
     private Dialect dialect = DialectFactory.getDialect(Constants.APP_NAME, "");
     private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
     private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
-    
+
     /**
      * 是否查询告警反馈状态1:是；0或空：否
      */
     private String serchAlarmRel = "1";
-    
+
     /**
      *
      */
@@ -60,7 +67,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         String sql = "select count(1) from " + this.getOptionalStatement();
         return sql;
     }
-    
+
     /**
      *
      */
@@ -74,7 +81,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 + this.getOptionalStatement();
         return sql;
     }
-    
+
     /**
      *
      */
@@ -86,10 +93,10 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         if ("1".equals(isHistory)) {
             fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
         }
-        
+
         this.addOptionalStatement(fromTable + " vfa "
                 + "left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
-        
+
         if (!context.getUser().isAdministrator()) {
             // 精细化控制，通过权限管理配置可见信息
             if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
@@ -122,7 +129,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter(context.getUser().getDept().getCivilCode());
                 this.addParameter(context.getUserCode());
                 this.addParameter(context.getUserCode());
-                
+
                 this.addParameter(context.getUserCode());
                 this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
                 this.addParameter(context.getUser().getDept().getCivilCode() + "%");
@@ -149,11 +156,11 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         } else {
             this.addOptionalStatement(" where 1=1 ");
         }
-        
+
         this.addOptionalStatement(" and vfa.TASK_TYPE = ? ");
         int taskType = StringUtil.toInteger(context.getParameter("TASK_TYPE"), Constants.TASK_FACE_ALARM);
         this.addParameter(taskType);
-        
+
         String searchType = StringUtil.toString(context
                 .getParameter("SEARCH_TYPE"));
         if (!StringUtil.isNull(searchType)) {
@@ -161,7 +168,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             this.addParameter(Constants.DEAL_STATUS_CONFIRM);
             this.addParameter(Constants.DEAL_STATUS_DELETE);
         }
-        
+
         String dbIds = StringUtil.toString(context.getParameter("DB_ID"));
         if (!StringUtil.isNull(dbIds)) {
             String sqlSta = SqlUtil.getSqlInParams(dbIds);
@@ -174,6 +181,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter(dbIds);
             }
         }
+
         String beginTime = StringUtil.toString(context.getParameter("BEGIN_TIME"));
         String endTime = StringUtil.toString(context.getParameter("END_TIME"));
         if (!StringUtil.isNull(beginTime) && !StringUtil.isNull(endTime)) {
@@ -187,13 +195,13 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             this.addOptionalStatement(" and vfa.ALARM_TIME < ?");
             this.addParameter(endTime);
         }
-        
+
         String keywords = StringUtil.toString(context.getParameter("KEYWORDS"));
         if (!StringUtil.isNull(keywords)) {
             this.addOptionalStatement(" and vfa.OBJECT_EXTEND_INFO like ? ");
             this.addParameter("%" + keywords + "%");
         }
-        
+
         // 设备ID
         String deviceIds = StringUtil.toString(context
                 .getParameter("DEVICE_IDS"));
@@ -208,14 +216,14 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter(deviceIds);
             }
         }
-        
+
         // 场景ID
         String sceneId = StringUtil.toString(context.getParameter("SCENE_ID"));
         if (!StringUtil.isEmpty(sceneId)) {
             this.addOptionalStatement(" and vfa.SCENE_ID = ? ");
             this.addParameter(sceneId);
         }
-        
+
         // OBJECT_ID,用于做一个人的告警频次分析
         String objectId = StringUtil
                 .toString(context.getParameter("OBJECT_ID"));
@@ -223,7 +231,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             this.addOptionalStatement(" and vfa.OBJECT_ID = ? ");
             this.addParameter(objectId);
         }
-        
+
         // 告警等级
         String alarmLevel = StringUtil.toString(context
                 .getParameter("ALARM_LEVEL"));
@@ -234,7 +242,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 addParameter(alarmLevel.split(",")[i]);
             }
         }
-        
+
         // 告警反馈 前端值： 0:未签收 1：已签收 2：未反馈 3：已反馈
         // 数据库:0:未签收 1：已签收 2：已反馈 9：已抓获
         String alarmHandle = StringUtil.toString(context
@@ -257,7 +265,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             // 蓝色告警不需签收反馈，过滤。
             this.addParameter(Constants.ALARM_LEVEL_BLUE);
         }
-        
+
         // 是否已抓获 0:否 1：是
         String isCatch = StringUtil.toString(context.getParameter("IS_CATCH"));
         if (!StringUtil.isNull(isCatch)) {
@@ -269,23 +277,23 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter(Constants.ALARM_CATCHED);
             }
         }
-        
+
         // 是否告警确认 0:否， 1：是，2：未确认，3：已确认
         String confirmStatus = StringUtil.toString(context.getParameter("CONFIRM_STATUS"));
         if (!StringUtil.isNull(confirmStatus)) {
-        	if(Constants.CONFIRM_STATUS_TREATED.equals(confirmStatus)){
-        		//已确认3
-        		this.addOptionalStatement(" and vfa.CONFIRM_STATUS is not null ");
-        	}else if(Constants.CONFIRM_STATUS_UNTREATED.equals(confirmStatus)){
-				//未确认2
-        		this.addOptionalStatement(" and vfa.CONFIRM_STATUS is null ");
-			}else if(Constants.CONFIRM_STATUS_NOCONFIRM.equals(confirmStatus) || Constants.CONFIRM_STATUS_CORRECT.equals(confirmStatus)){
-				//准确1、不准确0
-				 this.addOptionalStatement(" and vfa.CONFIRM_STATUS = ? ");
-		            this.addParameter(confirmStatus);
-			}
+            if (Constants.CONFIRM_STATUS_TREATED.equals(confirmStatus)) {
+                //已确认3
+                this.addOptionalStatement(" and vfa.CONFIRM_STATUS is not null ");
+            } else if (Constants.CONFIRM_STATUS_UNTREATED.equals(confirmStatus)) {
+                //未确认2
+                this.addOptionalStatement(" and vfa.CONFIRM_STATUS is null ");
+            } else if (Constants.CONFIRM_STATUS_NOCONFIRM.equals(confirmStatus) || Constants.CONFIRM_STATUS_CORRECT.equals(confirmStatus)) {
+                //准确1、不准确0
+                this.addOptionalStatement(" and vfa.CONFIRM_STATUS = ? ");
+                this.addParameter(confirmStatus);
+            }
         }
-        
+
         // 相似度
         String threshold = (String) context.getParameter("THRESHOLD");
         if (!StringUtil.isNull(threshold)) {
@@ -293,7 +301,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             this.addOptionalStatement(" and vfa.SCORE >= ?");
             this.addParameter(score);
         }
-        
+
         // 算法id
         String algorithmId = (String) context.getParameter("AlGORITHM_ID");
         if (!StringUtil.isNull(algorithmId)) {
@@ -302,7 +310,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter("%飞识比中%");
             }
         }
-        
+
         String alarmType = StringUtil.toString(
                 context.getParameter("ALARM_TYPE"), "");
         if ("1".equals(alarmType)) {
@@ -315,14 +323,14 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             this.addOptionalStatement(" and OBJECT_EXTEND_INFO like ? ");
             this.addParameter("%三方接口比中%");
         }
-        
+
         String isEscapeHit = StringUtil.toString(context.getParameter("IS_ESCAPE_HIT"), "");
         if ("1".equals(isEscapeHit)) {
             this.addOptionalStatement(" and vfa.OBJECT_EXTEND_INFO like  '%\"ESCAPEE_FLAG\":1%' ");
         } else if ("0".equals(isEscapeHit)) {
             this.addOptionalStatement(" and vfa.OBJECT_EXTEND_INFO not like  '%\"ESCAPEE_FLAG\":1%' ");
         }
-        
+
         // 排序
         String sort = (String) context.getParameter("SORT");
         if ("1".equals(sort)) {
@@ -330,10 +338,24 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         } else {
             context.putParameter("sort", "ALARM_TIME desc");
         }
-        
+
+        // 外籍人多算法
+        String mulitAlgoType = StringUtil.toString(context.getParameter("MULIT_ALGO_TYPE"));
+        if (!StringUtil.isNull(mulitAlgoType)) {
+            String[] mulitAlgoTypes = mulitAlgoType.split(",");
+            this.addOptionalStatement(" and vfa.OBJECT_EXTEND_INFO  REGEXP '");
+            for (int i = 0; i < mulitAlgoTypes.length; i++) {
+                if (i == mulitAlgoTypes.length - 1) {
+                    this.addOptionalStatement(mulitAlgoTypes[i] + "'");
+                } else {
+                    this.addOptionalStatement(mulitAlgoTypes[i] + "|");
+                }
+            }
+        }
+
         this.addFieldRender(new AlarmFiledRender(), new String[]{"ALARM_IMG", "TEMPLET_IMG", "SCORE", "SEX", "FRAME_IMG", "CONFIRM_STATUS"});
     }
-    
+
     /**
      *
      */
@@ -341,7 +363,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
     @BeanService(id = "getData", type = "remote", description = "人脸告警记录查询", paasService = "true")
     public PageQueryResult getData(RequestContext context) {
         PageQueryResult result = super.getData(context);
-        
+
         try {
             List<Map<String, Object>> resultSet = result.getResultSet();
             // 告警反馈
@@ -356,7 +378,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
              * relList.stream
              * ().collect(Collectors.groupingBy(o->o.get("ALARM_ID"))); }
              */
-            
+
             for (Map<String, Object> map : resultSet) {
                 String deviceId = StringUtil.toString(map
                         .get("ORIGINAL_DEVICE_ID"));
@@ -367,10 +389,10 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 map.put("DEVICE_ADDR", faceDevice.getDeviceAddr());
                 map.put("LONGITUDE", faceDevice.getDeviceX());
                 map.put("LATITUDE", faceDevice.getDeviceY());
-                
+
                 String extendInfo = StringUtil.toString(map
                         .get("OBJECT_EXTEND_INFO"));
-                
+
                 if (!StringUtil.isEmpty(extendInfo)) {
                     JSONObject json = JSONObject.parseObject(extendInfo);
                     String sexCode = "";
@@ -415,7 +437,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                     } catch (Exception e) {
                         ServiceLog.error("转换extendInfo异常", e);
                     }
-                    
+
                     if ("1".equals(sexCode)) {
                         sexCode = "男";
                     } else if ("2".equals(sexCode)) {
@@ -423,7 +445,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                     } else {
                         sexCode = "未知";
                     }
-                    
+
                     String isFacemore = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("IS_FACEMORE", "0");
                     if (!"0".equalsIgnoreCase(isFacemore)) {
                         map.put("IS_COVER", CommonUtil.getMutilFaceAlarmType(isCover));
@@ -431,7 +453,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                         map.remove("IS_COVER");
                         map.remove("CONFIRM_STATUS");
                     }
-                    
+
                     map.put("PERSON_NAME", personName);
                     map.put("IDENTITY_ID", identityId);
                     map.put("SEX", sexCode);
@@ -440,7 +462,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                     map.put("FS_IDENTITY_ID", fsIdentityId);
                     map.put("FS_HIT_TIME", fsHitTime);
                     map.put("FACE_SCORE", getFaceScore(infoId, context));
-                    
+
                     map.put("FS_WJR", fsWjr);//外籍人比中
                     if (!StringUtil.isEmpty(fsPic)) { // 是否飞识比中
                         map.put("FS_HIT", "1");
@@ -455,43 +477,43 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                             map.put("PERSON_NAME", personName.substring(0, 1) + "**");
                         }
                     }
-                    
+
                     long startTime = System.currentTimeMillis();
-                    
+
                     //获取人脸告警详情查询最近某个人告警列表的派出所信息的时间间隔，单位（天）0禁用
                     String timeInterval = AppHandle.getHandle(Constants.APP_NAME).getProperty("RELATIVE_POLICESTATION_INFO_INTERVAL", "0");
-                    
+
                     //扩展字段json加入police_station_info的json信息
                     JSONObject policeStationJson = new JSONObject();
                     json.put("POLICE_STATION_INFO", policeStationJson);
-                    
+
                     //时间间隔为0，就不显示（IS_SHOW为0）；相反则为1
                     if (timeInterval.equals("0")) {
                         policeStationJson.put("IS_SHOW", "0");
                     } else {
                         policeStationJson.put("IS_SHOW", "1");
-                        
+
                         //获取告警设备关联派出所信息
                         List<Map<String, Object>> policeStationList = dao.getRelativePoliceStaion1Info(deviceId);
                         if (policeStationList == null || policeStationList.isEmpty()) {
                             policeStationList = dao.getRelativePoliceStaion2Info(deviceId);
                         }
-                        
+
                         if (policeStationList != null && !policeStationList.isEmpty()) {
                             Map<String, Object> tempMap = policeStationList.get(0);
                             //组装派出所信息json
                             policeStationJson.put("DEPT_NAME", StringUtil.toString(tempMap.get("DEPT_NAME")));
                         }
                     }
-                    
+
                     //更新OBJECT_EXTEND_INFO字段信息，加入相关派出所信息
                     map.put("OBJECT_EXTEND_INFO", JSON.toJSONString(json));
-                    
+
                     long endTime = System.currentTimeMillis();
                     float excTime = (float) (endTime - startTime) / 1000;
                     ServiceLog.debug("获取当前派出所方法的执行时间:" + excTime);
                 }
-                
+
                 // 告警反馈
                 if ("1".equals(serchAlarmRel)) {
                     List<Map<String, Object>> list = relMap.get(map.get("ALARM_ID"));
@@ -516,19 +538,19 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                             map.put("STATUS", Constants.ALARM_STATUS_UNSEND);
                             map.put("STATUS_TXT", "");
                         }
-                        
-                        
+
+
                     }
                 }
-                
+
             }
         } catch (Exception e) {
             ServiceLog.error("获取告警设备信息异常", e);
         }
-        
+
         return result;
     }
-    
+
     private String getFaceScore(String infoId, RequestContext context) {
         if (StringUtil.isEmpty(infoId)) {
             return "";
@@ -545,11 +567,11 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 faceScore = StringUtil.toString(pageResult.getResultSet().get(0).get("FACE_SCORE"));
             }
         } catch (Exception e) {
-            
+
         }
         return faceScore;
     }
-    
+
     /**
      * @param context
      * @throws Exception
@@ -561,7 +583,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         List<Map<String, byte[]>> imgList = new ArrayList<>();
         String[] headers = {"抓拍图片", "布控图片", "全景图片", "相似度", "告警地点", "告警时间", "姓名", "性别", "证件号码", "布控库"};
         String[] dataKey = {"alarmImgUrl", "templetImgUrl", "frameImgUrl", "SCORE", "DEVICE_ADDR", "ALARM_TIME", "PERSON_NAME", "SEX", "IDENTITY_ID", "DB_NAME"};
-        
+
         String exportData = StringUtil.toString(context
                 .getParameter("EXPORT_DATA"));
         if (!StringUtil.isNull(exportData)) {
@@ -573,7 +595,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             PageQueryResult result = this.getData(context);
             excelDataList = result.getResultSet();
         }
-        
+
         try {
             for (Map<String, Object> map : excelDataList) {
                 byte[] alarmImgUrl = FileDowloader.getImageFromUrl(StringUtil.toString(map.get("ALARM_IMG")));
@@ -594,7 +616,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             ServiceLog.error("导出异常：", e);
             throw e;
         }
-        
+
         boolean isExport = ExcelFileUtil.exportExcelFile2Req(
                 "告警记录导出"
                         + DateUtil.formatDate(DateUtil.getDateTime(), "yyyyMMddHHmmss"), headers, dataKey,
@@ -608,7 +630,8 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             context.getResponse().putData("MESSAGE", "导出失败！");
         }
     }
-    
+
+
     /**
      * @author
      * @version 2018年12月12日 Copyright (C)2018 , pcitech
@@ -619,7 +642,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         public Object render(String fieldName, ResultSet resultSet)
                 throws SQLException {
             try {
-                
+
                 if ("ALARM_IMG".equals(fieldName) || "TEMPLET_IMG".equals(fieldName) || "FRAME_IMG".equals(fieldName)) {
                     String alarmImg = resultSet.getString(fieldName);
                     return ModuleUtil.renderImage(alarmImg);

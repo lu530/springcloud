@@ -16,6 +16,7 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.SurveilProcessType;
 import com.suntek.elastic.rdd.util.StringUtil;
+
 import org.springframework.util.StringUtils;
 
 /**
@@ -133,5 +134,14 @@ public class AlarmHandleRecordDao {
 		String sql = "select user.USER_CODE,user.USER_NAME,user.DEPT_CODE,user.DEPT_NAME "
 				+ "from SYS_USER user where user.DEPT_CODE = ?";
 		return jdbc.queryForList(sql,deptCode);
+	} 
+    
+    public List<Map<String, Object>> queryAlarmInfoByAlarmId(String alarmId) {
+		String sql = "select alarm.ALARM_ID,person.PERSON_ID,alarm.ALARM_TIME,task.TASK_LEVEL from VPLUS_SURVEILLANCE_ALARM alarm "
+			+"inner join VIID_DISPATCHED_TASK_DB db on db.DB_ID = alarm.DB_ID "
+			+"inner join VIID_DISPATCHED_TASK task on db.TASK_ID = task.TASK_ID "
+			+"inner join VIID_DISPATCHED_PERSON person on person.FACE_ID = alarm.OBJECT_ID "
+			+"where alarm.ALARM_ID = ?";
+		return jdbc.queryForList(sql,alarmId);
 	} 
 }
