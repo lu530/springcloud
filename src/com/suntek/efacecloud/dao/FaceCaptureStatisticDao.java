@@ -28,9 +28,14 @@ public class FaceCaptureStatisticDao {
     public List<Map<String, Object>> getDeviceNumByOrgCode(String orgName) {
 
         String sql = "select t.NAME ORG_NAME, t1.* from SYS_STRUCTURE_INFO t  join ("
-            + " where SPECIAL_PURPOSE = 1 and ORG_CODE is not null"
-        if(!StringUtil.isEmpty(orgName)) {
-			 sql += " and NAME like ?";
+                + " select ORG_CODE, COUNT(ORG_CODE) DEVICE_COUNT from VPLUS_VIDEO_CAMERA "
+                + " where ORG_CODE is not null"
+                + " group by ORG_CODE)t1"
+                + " on t.ORG_CODE = t1.ORG_CODE"
+                + " where t.ORG_CODE != ''";
+
+        if (!StringUtil.isEmpty(orgName)) {
+            sql += " and NAME like ?";
             return jdbc.queryForList(sql, "%" + orgName + "%");
         }
 
