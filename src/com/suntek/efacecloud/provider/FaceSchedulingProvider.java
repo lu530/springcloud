@@ -36,6 +36,24 @@ import net.sf.json.JSONArray;
 @LocalComponent(id = "face/faceScheduling")
 public class FaceSchedulingProvider extends ExportGridDataProvider {
 
+    private final static Map<Integer, String> STATUS_MAP = new HashMap<>();
+
+    private final static Map<Integer, String> TASK_LEVEL_MAP = new HashMap<>();
+
+    static {
+        STATUS_MAP.put(0, "未签收");
+        STATUS_MAP.put(1, "已签收");
+        STATUS_MAP.put(2, "已下发");
+        STATUS_MAP.put(3, "已反馈");
+
+        TASK_LEVEL_MAP.put(-1, "撤控");
+        TASK_LEVEL_MAP.put(0, "红色告警(在逃)");
+        TASK_LEVEL_MAP.put(1, "橙色告警(抓捕)");
+        TASK_LEVEL_MAP.put(2, "黄色告警(管控)");
+        TASK_LEVEL_MAP.put(4, "蓝色告警(关注)");
+
+    }
+
     @Override
     protected String buildCountSQL() {
         String sql = "select count(1)" + " from EFACE_POLICE_TASK_DISPATCH a,VPLUS_SURVEILLANCE_ALARM b "
@@ -56,6 +74,19 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         return sql;
     }
 
+    /**
+     * 把代码转成名称
+     * @param list
+     */
+    private void changeCode2Name(List<Map<String, Object>> list) {
+        final String taskStatus = "TASK_STATUS";
+        final String taskLevel = "TASK_LEVEL";
+        list.forEach(row -> {
+            row.put(taskStatus, STATUS_MAP.get(row.get(taskStatus)));
+            row.put(taskLevel, TASK_LEVEL_MAP.get(row.get(taskLevel)));
+        });
+    }
+
     @SuppressWarnings({"unchecked", "serial"})
     @BeanService(id = "export", description = "导出", since="6.0", type = "remote")
     public void exportData(RequestContext context) throws Exception {
@@ -64,9 +95,10 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         if (!StringUtil.isNull(excelData)) {
             excelDataList = JSONArray.fromObject(excelData);
         }
-      
+        this.changeCode2Name(excelDataList);
         String[] headers = {"图片", "姓名", "身份证号", "受理人", "下发时间", "任务描述", "状态", "任务类型"};
-        String[] dataKey = {"OBJECT_PICTURE", "NAME", "IDENTITY_ID", "ACCEPTER", "CREATE_TIME", "REMARK", "TASK_STATUS"};
+        String[] dataKey = {"OBJECT_PICTURE", "NAME", "IDENTITY_ID",
+            "ACCEPTER", "CREATE_TIME", "REMARK", "TASK_STATUS", "TASK_LEVEL"};
 
         List<Map<String, byte[]>> imgList = new ArrayList<>();
 

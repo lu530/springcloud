@@ -104,12 +104,12 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 
 		List<Map<String, Object>> tempList = new ArrayList<Map<String, Object>>();
 
-		boolean isAdd = !StringUtil.isEmpty(sourceType);
-        Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
-        if(isAdd) {
-			Set<String> set = resultSet.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
-			idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
-		}
+//		boolean isAdd = !StringUtil.isEmpty(sourceType);
+//        Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
+//        if(isAdd) {
+//			Set<String> set = resultSet.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
+//			idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
+//		}
 		
 		for (Map<String, Object> map : resultSet) {
 			Map<String, Object> tempMap = new HashMap<String, Object>();
@@ -150,11 +150,11 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			}
 			
 			//是否添加来源类型
-			if(isAdd) {
-				Map<String, Object> devideGroup = idGriupMap.get(deviceId);
-				map.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
-				map.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
-			}
+//			if(isAdd) {
+//				Map<String, Object> devideGroup = idGriupMap.get(deviceId);
+//				map.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
+//				map.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
+//			}
 			
 			tempList.add(tempMap);
 		}

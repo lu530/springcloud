@@ -1,5 +1,13 @@
 package com.suntek.efacecloud.provider;
 
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
@@ -23,26 +31,25 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
-import com.suntek.efacecloud.util.*;
+import com.suntek.efacecloud.util.CommonUtil;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.ESUtil;
+import com.suntek.efacecloud.util.ExcelFileUtil;
+import com.suntek.efacecloud.util.FileDowloader;
+import com.suntek.efacecloud.util.MaskIdentityAndNameUtil;
+import com.suntek.efacecloud.util.ModuleUtil;
+
 import net.sf.json.JSONArray;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
- * 人脸布控库告警查询 efacecloud/rest/v6/face/dispatchedAlarm
+ * 已处理告警查询 efacecloud/rest/v6/face/handlerAlarm
  *
  * @author lx
  * @version 2017-06-29 Copyright (C)2017 , Suntektech
  * @since 1.0.0
  */
-@LocalComponent(id = "face/dispatchedAlarm")
-public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
+@LocalComponent(id = "face/handlerAlarm")
+public class HandlerAlarmProvider extends ExportGridDataProvider {
     private Dialect dialect = DialectFactory.getDialect(Constants.APP_NAME, "");
     private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
     private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
@@ -89,6 +96,54 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
         
         this.addOptionalStatement(fromTable + " vfa "
                 + "left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
+        
+        String confirmStatus = StringUtil.toString(context.getParameter("CONFIRM_STATUS"));
+        String beginTime = StringUtil.toString(context.getParameter("BEGIN_TIME"));
+        String endTime = StringUtil.toString(context.getParameter("END_TIME"));
+        
+        /******告警确认 查询   lijunbo ******/
+        // 是否告警确认 0:否 1：是 2:未处理 3：已处理
+        if (!StringUtil.isNull(confirmStatus)) {
+           
+            if (confirmStatus.equals(Constants.CONFIRM_STATUS_UNTREATED)) {
+                //confirmStatus=2，未处理
+//    			this.addOptionalStatement(" where vfa.ALARM_ID not in (select d.REL_ID relId  from EFACE_POLICE_TASK_DISPATCH d "
+//        				+ " LEFT JOIN EFACE_POLICE_TASK_RECORD r on d.DISPATCH_ID = r.DISPATCH_ID "
+//        				+ " LEFT JOIN EFACE_POLICE_TASK_REMARK rem on r.REMARK_ID = rem.REMARK_ID "
+//        				+ " where rem.REMARK_KEY is not null GROUP BY d.REL_ID )" );
+            } else {
+                Log.faceSearchLog.info("告警查询-生效-confirmStatus：" + confirmStatus);
+                //已处理
+                this.addOptionalStatement(" inner join (select d.REL_ID relId,d.DISPATCH_ID dispatchId, "
+                        + " r.REMARK remark, rem.REMARK_KEY remarkKey, rem.REMARK_VALUE remarkValue "
+                        + " from EFACE_POLICE_TASK_DISPATCH d "
+                        + " LEFT JOIN EFACE_POLICE_TASK_RECORD r on d.DISPATCH_ID = r.DISPATCH_ID "
+                        + " LEFT JOIN EFACE_POLICE_TASK_REMARK rem on r.DISPATCH_ID = rem.DISPATCH_ID "
+                        + " where rem.REMARK_KEY = '" + Constants.ALARM_CONFIRM_KEY + "'");
+                if (confirmStatus.equals(Constants.CONFIRM_STATUS_NOCONFIRM)) {
+                    //confirmStatus=0 ，不准确
+                    this.addOptionalStatement(" and rem.REMARK_VALUE = '" + Constants.ALARM_CONFIRM_VALUE_NO + "'");
+                } else if (confirmStatus.equals(Constants.CONFIRM_STATUS_CORRECT)) {
+                    //confirmStatus=1，准确
+                    this.addOptionalStatement(" and rem.REMARK_VALUE = '" + Constants.ALARM_CONFIRM_VALUE_YES + "'");
+                } else if (confirmStatus.equals(Constants.CONFIRM_STATUS_TREATED)) {
+                    //confirmStatus=3，已处理
+                    this.addOptionalStatement(" and rem.REMARK_VALUE is not null");
+                }
+                if (!StringUtil.isNull(beginTime) && !StringUtil.isNull(endTime)) {
+                    this.addOptionalStatement(" and rem.CREATE_TIME between ? and ?");
+                    this.addParameter(beginTime);
+                    this.addParameter(endTime);
+                } else if (!StringUtil.isNull(beginTime)) {
+                    this.addOptionalStatement(" and rem.CREATE_TIME > ?");
+                    this.addParameter(beginTime);
+                } else if (!StringUtil.isNull(endTime)) {
+                    this.addOptionalStatement(" and rem.CREATE_TIME < ?");
+                    this.addParameter(endTime);
+                }
+                this.addOptionalStatement(" GROUP BY d.REL_ID) ala on ala.relId = vfa.ALARM_ID ");
+            }
+        }
         
         if (!context.getUser().isAdministrator()) {
             // 精细化控制，通过权限管理配置可见信息
@@ -174,18 +229,18 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 this.addParameter(dbIds);
             }
         }
-        String beginTime = StringUtil.toString(context.getParameter("BEGIN_TIME"));
-        String endTime = StringUtil.toString(context.getParameter("END_TIME"));
-        if (!StringUtil.isNull(beginTime) && !StringUtil.isNull(endTime)) {
-            this.addOptionalStatement(" and vfa.ALARM_TIME between ? and ?");
-            this.addParameter(beginTime);
-            this.addParameter(endTime);
-        } else if (!StringUtil.isNull(beginTime)) {
-            this.addOptionalStatement(" and vfa.ALARM_TIME > ?");
-            this.addParameter(beginTime);
-        } else if (!StringUtil.isNull(endTime)) {
-            this.addOptionalStatement(" and vfa.ALARM_TIME < ?");
-            this.addParameter(endTime);
+        if (StringUtil.isEmpty(confirmStatus)) {
+            if (!StringUtil.isNull(beginTime) && !StringUtil.isNull(endTime)) {
+                this.addOptionalStatement(" and vfa.ALARM_TIME between ? and ?");
+                this.addParameter(beginTime);
+                this.addParameter(endTime);
+            } else if (!StringUtil.isNull(beginTime)) {
+                this.addOptionalStatement(" and vfa.ALARM_TIME > ?");
+                this.addParameter(beginTime);
+            } else if (!StringUtil.isNull(endTime)) {
+                this.addOptionalStatement(" and vfa.ALARM_TIME < ?");
+                this.addParameter(endTime);
+            }
         }
         
         String keywords = StringUtil.toString(context.getParameter("KEYWORDS"));
@@ -270,21 +325,13 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             }
         }
         
-        // 是否告警确认 0:否， 1：是，2：未确认，3：已确认
-        String confirmStatus = StringUtil.toString(context.getParameter("CONFIRM_STATUS"));
-        if (!StringUtil.isNull(confirmStatus)) {
-        	if(Constants.CONFIRM_STATUS_TREATED.equals(confirmStatus)){
-        		//已确认3
-        		this.addOptionalStatement(" and vfa.CONFIRM_STATUS is not null ");
-        	}else if(Constants.CONFIRM_STATUS_UNTREATED.equals(confirmStatus)){
-				//未确认2
-        		this.addOptionalStatement(" and vfa.CONFIRM_STATUS is null ");
-			}else if(Constants.CONFIRM_STATUS_NOCONFIRM.equals(confirmStatus) || Constants.CONFIRM_STATUS_CORRECT.equals(confirmStatus)){
-				//准确1、不准确0
-				 this.addOptionalStatement(" and vfa.CONFIRM_STATUS = ? ");
-		            this.addParameter(confirmStatus);
-			}
-        }
+        // 是否告警确认 0:否 1：是
+//        String confirmStatus = StringUtil.toString(context.getParameter("CONFIRM_STATUS"));
+//        if (!StringUtil.isNull(confirmStatus)) {
+//            this.addOptionalStatement(" and vfa.CONFIRM_STATUS = ? ");
+//            this.addParameter(confirmStatus);
+//        }
+      
         
         // 相似度
         String threshold = (String) context.getParameter("THRESHOLD");
@@ -331,14 +378,28 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             context.putParameter("sort", "ALARM_TIME desc");
         }
         
+        // 外籍人多算法
+        String mulitAlgoType = StringUtil.toString(context.getParameter("MULIT_ALGO_TYPE"));
+        if (!StringUtil.isNull(mulitAlgoType)) {
+            String[] mulitAlgoTypes = mulitAlgoType.split(",");
+            this.addOptionalStatement(" and vfa.OBJECT_EXTEND_INFO  REGEXP '");
+            for (int i = 0; i < mulitAlgoTypes.length; i++) {
+                if (i == mulitAlgoTypes.length - 1) {
+                    this.addOptionalStatement(mulitAlgoTypes[i] + "'");
+                } else {
+                    this.addOptionalStatement(mulitAlgoTypes[i] + "|");
+                }
+            }
+        }
+
         this.addFieldRender(new AlarmFiledRender(), new String[]{"ALARM_IMG", "TEMPLET_IMG", "SCORE", "SEX", "FRAME_IMG", "CONFIRM_STATUS"});
     }
     
     /**
-     *
+     *关联警情下发反馈记录表
      */
     @Override
-    @BeanService(id = "getData", type = "remote", description = "人脸告警记录查询", paasService = "true")
+    @BeanService(id = "getHandlerAlarmData", type = "remote", description = "已处理告警记录查询", paasService = "true")
     public PageQueryResult getData(RequestContext context) {
         PageQueryResult result = super.getData(context);
         
@@ -516,8 +577,6 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                             map.put("STATUS", Constants.ALARM_STATUS_UNSEND);
                             map.put("STATUS_TXT", "");
                         }
-                        
-                        
                     }
                 }
                 
@@ -608,6 +667,7 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
             context.getResponse().putData("MESSAGE", "导出失败！");
         }
     }
+    
     
     /**
      * @author
