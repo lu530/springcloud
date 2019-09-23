@@ -266,6 +266,22 @@ function initEvent(){
 	$(".closePageBtn").click(function(){
 		parent.closeFaceSearch();
 	});
+
+	$('#editImgBtn').on('click',function(){
+		var imgUrl = $('#filterImg').attr('src');
+		if (imgUrl.slice(-12) != "noPhoto2.png") {  // 已上传图片
+			UI.util.showCommonWindow("/efacecloud/page/scan/scan.html?imgUrl="+imgUrl, "编辑图片", 1200, 700,function(data){
+				if(data.faceImg !=''){
+					if(!data.isCancel){
+						$('#filterImg').attr('src',data.scanPic);
+					}
+					top.screenshotDatas = data;
+				}
+			},null,null,null,null,null,'false');
+		}else{  // 未上传图片
+			UI.util.alert("请先上传图片,再编辑", "warn");
+		}
+	})
 }
 
 function scrolllFun(opts){
