@@ -23,10 +23,10 @@
     max-width: 90%;
 }
 .tilelist .similar {
-    width: 117px;
-    height: 117px;
-    margin-right: -41px;
-    line-height: 117px;
+    width: 150px;
+    height: 150px;
+    margin-right: -55px;
+    line-height: 150px;
     bottom: 100px;
     font-size: 48px;
 }
@@ -143,4 +143,25 @@
     height:50px;
     background: url(/datadefence/images/overallSituationBigScreen/btn-bottom-shadow.png);
     background-size: 100%;
+}
+
+.tilelist .similar.color-red{
+    background: url(/datadefence/images/overallSituationBigScreen/alarm-red.png);
+    background-size: 100%;
+    color: #15222E;
+}
+.tilelist .similar.color-orange{
+    background: url(/datadefence/images/overallSituationBigScreen/alarm-orange.png);
+    background-size: 100%;
+    color: #15222E;
+}
+.tilelist .similar.color-yellow{
+    background: url(/datadefence/images/overallSituationBigScreen/alarm-yellow.png);
+    background-size: 100%;
+    color: #15222E;
+}
+.tilelist .similar.color-blue{
+    background: url(/datadefence/images/overallSituationBigScreen/alarm-blue.png);
+    background-size: 100% 100%;
+    color: #15222E;
 }
