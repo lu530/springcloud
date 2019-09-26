@@ -109,6 +109,7 @@
     background: transparent;
     bottom: 227px;
     border: none;
+    display: none;
 }
 .btn-wrap::before{
     content: '';
