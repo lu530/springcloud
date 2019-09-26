@@ -128,7 +128,7 @@
 					</div>
 					<div title="{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
 						<span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
-						<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=JSON.parse(o.OBJECT_EXTEND_INFO).CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo" title="查看视频" style="color:#777;font-size:20px;"></span>
+						<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=JSON.parse(o.OBJECT_EXTEND_INFO).CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo {%=top.isBigScreen?'hide':''%}" title="查看视频" style="color:#777;font-size:20px;"></span>
 					</div>
 				</dd>
 				<dd class="alarm-text">
@@ -174,13 +174,13 @@
 					<p class="fl w50">姓名:<span>{%=renderNullToNotKnow(o.NAME)%}</span></p>
 					<p class="fl w50">性别:<span>{%=renderNullToNotKnow(renderPersonSex(o.SEX))%}</span></p>
 					<p class="">证件号码:<span id="identityID">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
-					<p class="{%=renderItemToggle()%}">案件编码:<span>{%=renderNullToNotKnow(o.CASE_ID)%}</span></p>
-					<p class="{%=renderItemToggle()%}">布控库:<span>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">案件编码:<span title='{%=renderNullToNotKnow(o.CASE_ID)%}{%=renderNullToNotKnow(o.CASE_ID)%}'>{%=renderNullToNotKnow(o.CASE_ID)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控库:<span title='{%=renderNullToNotKnow(o.DB_NAME)%}'>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
 
-					<p class="{%=renderItemToggle()%}">布控人:<span>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控人:<span title='{%=renderNullToNotKnow(o.USER_NAME)%}'>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
                     {% try { var extraInfo = JSON.parse(o.OBJECT_EXTEND_INFO); %}
                         {% if(extraInfo.POLICE_STATION_INFO && extraInfo.POLICE_STATION_INFO.IS_SHOW == '1') { %}
-                        <p class="{%=renderItemToggle()%}">当前派出所: <span>{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span></p>
+                        <p class="{%=renderItemToggle()%}">当前派出所: <span title='{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}'>{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span></p>
                         {% } %}
                         {% var rel = extraInfo.RELATIVE_POLICE_STATION_INFO; if(rel && rel.length) { %}
                         <p class="{%=renderItemToggle()%}">相关派出所:
@@ -192,7 +192,7 @@
                        	 	<p class="">接收时间:<span >{%=extraInfo.RECEIVE_TIME%}</span></p>
                         {% } %}
                     {% } catch(error) { UI.util.debug(error); } %}
-					<p class="{%=renderItemToggle()%}">布控单位:<span>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控单位:<span title='{%=renderNullToNotKnow(o.DEPT_NAME)%}'>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
 	
 					<p class="{%=renderItemToggle()%}">七天告警频次:<a id="frequentlyAlarm"><span>{%=o.RECENT_COUNT%}次</span></a></p>
 					<p class="">有效停留期:<span id='effectiveDate'></span></p>
