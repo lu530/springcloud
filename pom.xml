@@ -46,7 +46,8 @@
 		<dependency>
 		  <groupId>com.suntek</groupId>
 		  <artifactId>common-service-proxy</artifactId>
-		  <version>0.0.1-SNAPSHOT</version>		  <scope>provided</scope>
+		  <version>0.0.3</version>
+		  <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
