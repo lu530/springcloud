@@ -594,7 +594,7 @@ function parentNodeRender(treeNode){
                     options.isNeedSearchByImage = true
                 }
             });
-            if(projectID == 'base'){
+            if(projectID == 'base' || projectID == 'longli'){
                 options.isNeedSearchByImage = false
             }
             top.$.photoZoom(options);
