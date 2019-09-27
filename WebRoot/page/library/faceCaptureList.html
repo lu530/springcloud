@@ -22,9 +22,9 @@
 
 
             <!-- 顶部区域 -->
-            <div class="top-box">
+            <div class="top-box pl0">
                 <!-- 上传图片区域 -->
-                <div class="photo-tools">
+                <div class="photo-tools picUpdata hide">
                     <div class="top-pic-box">
                         <div class="img-wrap">
                             <img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="uploadImg,picBtn">
@@ -181,11 +181,11 @@
                                     <i class="time-asc-icon px-icon arcIcon hide" title="时间正序"></i>
                                     <i class="time-desc-icon px-icon descIcon" title="时间降序"></i>
                                 </span>
-                                <span class="tag-item px-item barItem disabled" type="scoreSort" attr-type="similar"
+                                <span class="tag-item px-item barItem disabled picUpdata hide" type="scoreSort" attr-type="similar"
                                     isFirst="true">
                                     相似度<i class="simialr-icon px-icon"></i>
                                 </span>
-                                <span class="tag-item px-item barItem disabled" type="calcuSort" attr-type="calculate"
+                                <span class="tag-item px-item barItem disabled picUpdata hide" type="calcuSort" attr-type="calculate"
                                     isFirst="true">
                                     多算法<i class="simialr-icon px-icon"></i>
                                 </span>
@@ -221,10 +221,14 @@
                         <span class="btn-icon import-icon"></span>
                         <span>频次分析</span>
                     </a> -->
+                    <script id="frequentTemplate" type="text/x-tmpl">
+                    {% if(UI.control.hasPermission('EFACE_frequentAccess')) { %}
                     <a class="btn btn-i-t" id="freqAnalysisBtn_1">
                         <span class="btn-icon import-icon"></span>
                         <span>频次分析</span>
                     </a>
+                    {% } %}
+                    </script>
                     <a class="btn btn-i-t" id="exportPersonalBtn" title="最大支持导出1000条数据"> <span
                             class="btn-icon export-icon"></span>
                         <span>导出</span>

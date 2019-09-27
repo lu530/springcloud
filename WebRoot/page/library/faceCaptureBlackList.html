@@ -771,8 +771,8 @@
                                             <img src="{%=o[i].OBJ_PIC%}">
                                         </td>  -->
                                         <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</td>
-                                        <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
-                                        <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                        <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o[i].JGSK)%}" title="{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</td>
+                                        <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o[i].CREATETIME)%}" title="{%=renderNullToNotKnow(o[i].CREATETIME)%}">{%=renderNullToNotKnow(o[i].CREATETIME)%}</td>
                                         <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</td>
                                         <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}" title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</td>
                                         <td class="tc" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</td>
