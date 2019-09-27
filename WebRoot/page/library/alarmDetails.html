@@ -123,6 +123,32 @@
 					<b class="similar {%=renderMark(extendInfo,'similar')%}">{%=renderScore(extendInfo.THIRDIMPL_SCORE)%}</b>
 				</dt>
 				<dd class="alarm-location clearFloat">
+						{% if(top.isBigScreen){ %}
+						<div class="multil-arithmetic-wrap {%=extendInfo.MULIT_ALGO_ALARM_RESULT?'':'hide'%}" {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %}>
+							{% for(var j = 0; j < o.CHECK_ALGO_LIST.length; j++) { %}
+								<div class="multil-arithmetic-list" >
+									<p class="multil-name">{%=o.CHECK_ALGO_LIST[j].ALGORITHM_NAME && o.CHECK_ALGO_LIST[j].ALGORITHM_NAME.split("").splice(0,2).join("")%}</p>
+									<p class="multil-similar">{%=o.CHECK_ALGO_LIST[j].SCORE%}</p>
+									{% if(o.CHECK_ALGO_LIST[j].STATUS == 0) { %}
+										<i class="pass-failed pass-failed-yes">√</i>
+									{% }else{ %}
+										<i class="pass-failed pass-failed-no">×</i>
+									{% } %}
+								</div>
+							{% } %}
+							{% if(top.projectID == "foreigners"){ for(var key in extendInfo.MULIT_ALGO_ALARM_RESULT) { %}
+								<div class="multil-arithmetic-list arithmetic-main" >
+									<p class="multil-name">{%=renderAlgo(key)%}</p>
+									<p class="multil-similar">{%=extendInfo.MULIT_ALGO_ALARM_RESULT[key]%}<span> %</span></p>
+								</div>
+							{% }} %}
+							<div class="multil-arithmetic-list arithmetic-main {%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME?'':' hide' %}">
+							<p class="multil-name">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME %}</p>
+							<p class="multil-similar">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_SCORE %}<span> %</span></p>
+						</div>
+						</div>
+						{% } %}
+						<div class='node-text-con'>
 					<div title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
 						<span class="btn-icon alarm-icon position-icon" title="地点"></span>{%=renderNullToNotKnow(o.DEVICE_ADDR)%}
 					</div>
@@ -130,8 +156,10 @@
 						<span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
 						<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=JSON.parse(o.OBJECT_EXTEND_INFO).CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo {%=top.isBigScreen?'hide':''%}" title="查看视频" style="color:#777;font-size:20px;"></span>
 					</div>
+				</div>
 				</dd>
 				<dd class="alarm-text">
+						{% if(!top.isBigScreen){ %}
 					<div class="multil-arithmetic-wrap" {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %}>
 						{% if(top.projectID != "foreigners"){ %}
 						<div class="multil-arithmetic-list arithmetic-main">
@@ -160,7 +188,8 @@
                         <p class="multil-name">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME %}</p>
                         <p class="multil-similar">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_SCORE %}<span> %</span></p>
 					</div>
-                    </div>
+					</div>
+					{% } %}
                     {% if(o.FS_ALGO_LIST.length > 0){ %}
                         <div class="multil-arithmetic-face-wrap">
                             {% for(var j = 0; j < o.FS_ALGO_LIST.length; j++) { %}
