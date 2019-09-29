@@ -35,7 +35,7 @@ import com.suntek.eap.jdbc.IFieldRender;
 @LocalComponent(id = "alarm/dispatchedAlarm")
 public class AlarmDispartchProvider  extends ExportGridDataProvider{
 	  private Dialect dialect = DialectFactory.getDialect(Constants.APP_NAME, "");
-	    private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
+	  private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
 
 
 
@@ -372,7 +372,8 @@ public class AlarmDispartchProvider  extends ExportGridDataProvider{
 	     	                map.put("PERSON_NAME", json.getString("NAME"));
 	     	                map.put("CAPTURE_TIME", json.getString("CAPTURE_TIME"));
 	     	                break;
-	     	                case("3"):	     	                	
+	     	                case("3"):
+	     	                map.put("REASON",json.getString("REASON"));
 	     	                map.put("PLATE_NUMBER", json.getString("HPHM"));
 	     	                map.put("ALARM_TIME", json.getString("PASS_TIME"));
 	     	                break;
