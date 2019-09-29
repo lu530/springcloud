@@ -105,6 +105,45 @@ function initEvent () {
 
         getMonitorData();
     })
+    
+    //  身份确认反馈
+    $('#faceSearch').on('click', '.confirmPerson', function () {
+
+        var params = {
+
+            IDENTITY: $(this).attr('PERSON_ID'),
+            LAST_ADDR: '',
+            LAST_TIME: '',
+            NAME: $(this).attr('NAME'),
+            PIC: $(this).attr('PIC'),
+            STATE: '1'
+        }
+
+        UI.util.confirm('确认身份了吗？', function () {
+
+            sendConfirmPersonRequest(params);
+        });
+
+        return false;
+    });
+}
+
+function sendConfirmPersonRequest (params) {
+
+	UI.control.remoteCall('', '', function (resp) {
+
+		if( resp.CODE === 0 ) {
+			UI.util.alert(resp.MESSAGE);
+		}else{
+            UI.util.alert(resp.MESSAGE, 'warn');
+        }
+
+	}, function (error) {}, {
+
+		url: '/efacecloud/mx/v6/lostPerson/confirm',
+		data: params
+
+	}, true);
 }
 
 function sFList() {

@@ -176,6 +176,44 @@ function initEvent () {
         var pageUrl = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=trackResult&getDataType=trackResult';
             UI.util.showCommonIframe('.frame-form-full', pageUrl);
     });
+    
+    //  踪迹查找反馈
+    $('#faceSearch').on('click', '.findPerson', function () {
+
+        var params = {
+
+            IDENTITY: $(this).attr('PERSON_ID'),
+            LAST_ADDR: '',
+            LAST_TIME: '',
+            NAME: $(this).attr('NAME'),
+            PIC: $(this).attr('PIC'),
+            STATE: '2'
+        }
+
+        UI.util.confirm('该失踪人员找到了么？', function () {
+            
+            sendFindPersonRequest(params);
+        });
+        return false;
+    })
+}
+
+function sendFindPersonRequest (params) {
+
+	UI.control.remoteCall('', '', function (resp) {
+
+		if( resp.CODE === 0 ) {
+			UI.util.alert(resp.MESSAGE);
+		}else{
+            UI.util.alert(resp.MESSAGE, 'warn');
+        }
+
+	}, function (error) {}, {
+
+		url: '/efacecloud/mx/v6/lostPerson/confirm',
+		data: params
+
+	}, true);
 }
 
 function sFList() {
