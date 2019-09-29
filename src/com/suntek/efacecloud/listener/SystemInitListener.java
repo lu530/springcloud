@@ -1,24 +1,5 @@
 package com.suntek.efacecloud.listener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.quartz.SchedulerException;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.LogFactory;
@@ -35,6 +16,19 @@ import com.suntek.face.compare.sdk.model.CollisionResult;
 import com.suntek.feature.client.AlgorithmType;
 import com.suntek.feature.client.DSSClient;
 import com.suntek.tactics.api.dss.service.DssService;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.quartz.SchedulerException;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 模块初始化监听类
