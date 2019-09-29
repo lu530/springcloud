@@ -307,7 +307,11 @@
                                 </p>
                                 <!-- 190225 -->
                                 <p>
-                                    <label picMsg="时间:{%=renderNullToNotKnow(o.JGSK)%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.JGSK%}' class='portal-icon icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>">抓拍时间：</label>
+                                    {% if(top&&top.projectID&&top.projectID=="longli"){ %}
+                                        <label picMsg="时间:{%=renderNullToNotKnow(o.JGSK)%} ">抓拍时间：</label>                                   
+                                    {% }else{ %}
+                                        <label picMsg="时间:{%=renderNullToNotKnow(o.JGSK)%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.JGSK%}' class='portal-icon icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>">抓拍时间：</label>                                  
+                                    {% } %}
                                     <span title="抓拍时间：{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</span>
                                 </p>
                                 <p>
