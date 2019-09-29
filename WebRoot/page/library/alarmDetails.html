@@ -114,13 +114,17 @@
 					<span class="alarm-img-small pl3">
 						<img src="{%=o.TEMPLET_IMG%}" zoom-url="{%=o.TEMPLET_IMG%}"/>
 					</span>
+					{% if(!top.isBigScreen){ %}
 					<span class="alarm-img-small mark-img-small pl3 {%= renderMark(extendInfo,'mark')%}">
 						<img src="{%=extendInfo.THIRDIMPL_HIT_PIC%}" zoom-url="{%=extendInfo.THIRDIMPL_HIT_PIC%}"/>
 					</span>
+					{% } %}
 					{% if(top.projectID != "foreigners"){ %}
 					<b class="similar {%=renderColor(o.LEVEL)%}"  {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %} >{%=renderScore(o.SCORE)%}</b>
 					{% } %}
+					{% if(!top.isBigScreen){ %}
 					<b class="similar {%=renderMark(extendInfo,'similar')%}">{%=renderScore(extendInfo.THIRDIMPL_SCORE)%}</b>
+					{% } %}
 				</dt>
 				<dd class="alarm-location clearFloat">
 						{% if(top.isBigScreen){ %}
