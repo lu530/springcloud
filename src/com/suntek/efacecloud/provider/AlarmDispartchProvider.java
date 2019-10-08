@@ -379,7 +379,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	     	                //map.put("ALARM_TIME", json.getString("LAST_COLLECTTIME"));
 	     	                break;
 	     	                case("10"):
-	     	                map.put("IMEI", json.getString("IMEI"));
+	     	                map.put("IMSI", json.getString("IMSI"));
 	     	                break;
 	     	                default:
 	     	                	break;
