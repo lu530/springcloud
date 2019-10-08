@@ -372,11 +372,11 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	     	                case("3"):
 	     	                map.put("REASON",json.getString("REASON"));
 	     	                map.put("PLATE_NUMBER", json.getString("HPHM"));
-	     	                map.put("ALARM_TIME", json.getString("PASS_TIME"));
+	     	                //map.put("ALARM_TIME", json.getString("PASS_TIME"));
 	     	                break;
 	     	                case("5"):     	                
 	     	                map.put("OBJECT_FEATURE", json.getString("MAC"));
-	     	                map.put("ALARM_TIME", json.getString("LAST_COLLECTTIME"));
+	     	                //map.put("ALARM_TIME", json.getString("LAST_COLLECTTIME"));
 	     	                break;
 	     	                case("10"):
 	     	                map.put("IMEI", json.getString("IMEI"));
