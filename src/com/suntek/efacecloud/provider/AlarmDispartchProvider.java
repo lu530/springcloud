@@ -1,15 +1,11 @@
-package com.suntek.efacecloud.provider.longli;
+package com.suntek.efacecloud.provider;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONArray;
-
+import com.suntek.eap.tag.grid.GridDataProvider;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
@@ -22,7 +18,6 @@ import com.suntek.eap.org.UserModel;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.smp.Permission;
-import com.suntek.eap.tag.grid.ExportGridDataProvider;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
@@ -31,9 +26,11 @@ import com.suntek.efacecloud.util.CommonUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.eap.jdbc.IFieldRender;
-
+/**
+ * 根据告警类型返回告警数据
+ * */
 @LocalComponent(id = "alarm/dispatchedAlarm")
-public class AlarmDispartchProvider  extends ExportGridDataProvider{
+public class AlarmDispartchProvider  extends GridDataProvider {
 	  private Dialect dialect = DialectFactory.getDialect(Constants.APP_NAME, "");
 	  private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
 
