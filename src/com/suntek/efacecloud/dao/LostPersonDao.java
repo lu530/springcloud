@@ -15,8 +15,8 @@ public class LostPersonDao {
     private JdbcTemplate jdbc = EAP.jdbc.getTemplate(Constants.APP_NAME);
 
     public void confirm(Map<String, Object> map){
-        String sql = "insert into eface_lost_person_confirm(`identity`, `name`, pic, last_addr, " +
-                "last_time, creator, confirm_time, state) values(?,?,?,?,?,?,?,?)";
+        String sql = "insert into EFACE_LOST_PERSON_CONFIRM(`IDENTITY`, `NAME`, PIC, LAST_ADDR, " +
+                "LAST_TIME, CREATOR, CONFIRM_TIME, STATE) values(?,?,?,?,?,?,?,?)";
 
         Object[] args = new Object[]{map.get("IDENTITY"), map.get("NAME"),map.get("PIC"),map.get("LAST_ADDR"),
                 map.get("LAST_TIME"),map.get("CREATOR"),map.get("CONFIRM_TIME"),map.get("STATE")};
@@ -32,7 +32,7 @@ public class LostPersonDao {
     }
 
     public List<Map<String, Object>> getConfirmPerson(){
-        String sql = "SELECT COUNT(1) COUNT, STATE FROM eface_lost_person_confirm group by STATE ";
+        String sql = "SELECT COUNT(1) `COUNT`, STATE FROM EFACE_LOST_PERSON_CONFIRM group by STATE ";
         return jdbc.queryForList(sql);
     }
 }
