@@ -183,6 +183,11 @@
                         <p style="width:106%;" title="{%=o[i].REPOSITORY_NAME%}"><label>地区：</label>{%=o[i].REPOSITORY_NAME%}</p>
                         <p class="" title="" style="width:106%;" title="{%=o[i].NAME%}"><label>姓名：</label>{%=o[i].NAME%}</p>
                         <p class="" title="{%=o[i].PERSON_ID%}" style="width:106%;" title="{%=o[i].PERSON_ID%}"><label>证件号码：</label>{%=o[i].PERSON_ID%}</p>
+                        <div class="btn-group fr" style="height:28px; font-size: 16px;">
+                            <a PIC="{%=o[i].IMG_URL%}" PERSON_ID="{%=o[i].PERSON_ID%}" NAME="{%=o[i].NAME%}" class="btn-i-t confirmPerson" title="身份确认反馈">
+                                <i class="icon-address-book2"></i>
+                            </a>
+                        </div>
                     </dd>
                     <!--<button class="btn-confirm btn" infoname="{%=o[i].NAME%}" infoId="{%=o[i].PERSON_ID%}" infoImg="{%=o[i].IMG_URL%}" id="toArchive">存至档案库</button>-->
                 </dl>
