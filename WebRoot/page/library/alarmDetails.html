@@ -114,24 +114,56 @@
 					<span class="alarm-img-small pl3">
 						<img src="{%=o.TEMPLET_IMG%}" zoom-url="{%=o.TEMPLET_IMG%}"/>
 					</span>
+					{% if(!top.isBigScreen){ %}
 					<span class="alarm-img-small mark-img-small pl3 {%= renderMark(extendInfo,'mark')%}">
 						<img src="{%=extendInfo.THIRDIMPL_HIT_PIC%}" zoom-url="{%=extendInfo.THIRDIMPL_HIT_PIC%}"/>
 					</span>
+					{% } %}
 					{% if(top.projectID != "foreigners"){ %}
 					<b class="similar {%=renderColor(o.LEVEL)%}"  {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %} >{%=renderScore(o.SCORE)%}</b>
 					{% } %}
+					{% if(!top.isBigScreen){ %}
 					<b class="similar {%=renderMark(extendInfo,'similar')%}">{%=renderScore(extendInfo.THIRDIMPL_SCORE)%}</b>
+					{% } %}
 				</dt>
 				<dd class="alarm-location clearFloat">
+						{% if(top.isBigScreen){ %}
+						<div class="multil-arithmetic-wrap {%=extendInfo.MULIT_ALGO_ALARM_RESULT?'':'hide'%}" {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %}>
+							{% for(var j = 0; j < o.CHECK_ALGO_LIST.length; j++) { %}
+								<div class="multil-arithmetic-list" >
+									<p class="multil-name">{%=o.CHECK_ALGO_LIST[j].ALGORITHM_NAME && o.CHECK_ALGO_LIST[j].ALGORITHM_NAME.split("").splice(0,2).join("")%}</p>
+									<p class="multil-similar">{%=o.CHECK_ALGO_LIST[j].SCORE%}</p>
+									{% if(o.CHECK_ALGO_LIST[j].STATUS == 0) { %}
+										<i class="pass-failed pass-failed-yes">√</i>
+									{% }else{ %}
+										<i class="pass-failed pass-failed-no">×</i>
+									{% } %}
+								</div>
+							{% } %}
+							{% if(top.projectID == "foreigners"){ for(var key in extendInfo.MULIT_ALGO_ALARM_RESULT) { %}
+								<div class="multil-arithmetic-list arithmetic-main" >
+									<p class="multil-name">{%=renderAlgo(key)%}</p>
+									<p class="multil-similar">{%=extendInfo.MULIT_ALGO_ALARM_RESULT[key]%}<span> %</span></p>
+								</div>
+							{% }} %}
+							<div class="multil-arithmetic-list arithmetic-main {%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME?'':' hide' %}">
+							<p class="multil-name">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME %}</p>
+							<p class="multil-similar">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_SCORE %}<span> %</span></p>
+						</div>
+						</div>
+						{% } %}
+						<div class='node-text-con'>
 					<div title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">
 						<span class="btn-icon alarm-icon position-icon" title="地点"></span>{%=renderNullToNotKnow(o.DEVICE_ADDR)%}
 					</div>
 					<div title="{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">
 						<span class="btn-icon alarm-icon time-icon" title="时间"></span>{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}
-						<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=JSON.parse(o.OBJECT_EXTEND_INFO).CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo" title="查看视频" style="color:#777;font-size:20px;"></span>
+						<span deviceid="{%=o.DEVICE_ID%}" attr-time="{%=JSON.parse(o.OBJECT_EXTEND_INFO).CAPTURE_TIME%}" class="icon icon-camera5 fr historyVideo {%=top.isBigScreen?'hide':''%}" title="查看视频" style="color:#777;font-size:20px;"></span>
 					</div>
+				</div>
 				</dd>
 				<dd class="alarm-text">
+						{% if(!top.isBigScreen){ %}
 					<div class="multil-arithmetic-wrap" {%= (extendInfo && extendInfo.CHECK_IDENTITY_MSG) ? 'style="display:none"' : '' %}>
 						{% if(top.projectID != "foreigners"){ %}
 						<div class="multil-arithmetic-list arithmetic-main">
@@ -160,7 +192,8 @@
                         <p class="multil-name">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_NAME %}</p>
                         <p class="multil-similar">{%= JSON.parse(o.OBJECT_EXTEND_INFO).THIRDIMPL_SCORE %}<span> %</span></p>
 					</div>
-                    </div>
+					</div>
+					{% } %}
                     {% if(o.FS_ALGO_LIST.length > 0){ %}
                         <div class="multil-arithmetic-face-wrap">
                             {% for(var j = 0; j < o.FS_ALGO_LIST.length; j++) { %}
@@ -174,13 +207,13 @@
 					<p class="fl w50">姓名:<span>{%=renderNullToNotKnow(o.NAME)%}</span></p>
 					<p class="fl w50">性别:<span>{%=renderNullToNotKnow(renderPersonSex(o.SEX))%}</span></p>
 					<p class="">证件号码:<span id="identityID">{%=renderNullToNotKnow(o.IDENTITY_ID)%}</span></p>
-					<p class="{%=renderItemToggle()%}">案件编码:<span>{%=renderNullToNotKnow(o.CASE_ID)%}</span></p>
-					<p class="{%=renderItemToggle()%}">布控库:<span>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">案件编码:<span title='{%=renderNullToNotKnow(o.CASE_ID)%}{%=renderNullToNotKnow(o.CASE_ID)%}'>{%=renderNullToNotKnow(o.CASE_ID)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控库:<span title='{%=renderNullToNotKnow(o.DB_NAME)%}'>{%=renderNullToNotKnow(o.DB_NAME)%}</span></p>
 
-					<p class="{%=renderItemToggle()%}">布控人:<span>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控人:<span title='{%=renderNullToNotKnow(o.USER_NAME)%}'>{%=renderNullToNotKnow(o.USER_NAME)%}</span></p>
                     {% try { var extraInfo = JSON.parse(o.OBJECT_EXTEND_INFO); %}
                         {% if(extraInfo.POLICE_STATION_INFO && extraInfo.POLICE_STATION_INFO.IS_SHOW == '1') { %}
-                        <p class="{%=renderItemToggle()%}">当前派出所: <span>{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span></p>
+                        <p class="{%=renderItemToggle()%}">当前派出所: <span title='{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}'>{%= extraInfo.POLICE_STATION_INFO.DEPT_NAME %}</span></p>
                         {% } %}
                         {% var rel = extraInfo.RELATIVE_POLICE_STATION_INFO; if(rel && rel.length) { %}
                         <p class="{%=renderItemToggle()%}">相关派出所:
@@ -192,7 +225,7 @@
                        	 	<p class="">接收时间:<span >{%=extraInfo.RECEIVE_TIME%}</span></p>
                         {% } %}
                     {% } catch(error) { UI.util.debug(error); } %}
-					<p class="{%=renderItemToggle()%}">布控单位:<span>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
+					<p class="{%=renderItemToggle()%}">布控单位:<span title='{%=renderNullToNotKnow(o.DEPT_NAME)%}'>{%=renderNullToNotKnow(o.DEPT_NAME)%}</span></p>
 	
 					<p class="{%=renderItemToggle()%}">七天告警频次:<a id="frequentlyAlarm"><span>{%=o.RECENT_COUNT%}次</span></a></p>
 					<p class="">有效停留期:<span id='effectiveDate'></span></p>
