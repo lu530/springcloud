@@ -70,72 +70,87 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	        if ("1".equals(isHistory)) {
 	            fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
 	        }
-
+			int taskType = StringUtil.toInteger(context.getParameter("TASK_TYPE"), Constants.TASK_FACE_ALARM);
 	        this.addOptionalStatement(fromTable + " vfa "
-	                + "left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
+	                + " join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
+	        if(taskType==1) {
+				if (!context.getUser().isAdministrator()) {
+					// 精细化控制，通过权限管理配置可见信息
+					if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
+						this.addOptionalStatement(" join VIID_DISPATCHED_PERSON vdp on vfa.OBJECT_ID = vdp.FACE_ID "
+								+ "join SYS_USER u on vdp.CREATOR = u.USER_CODE ");
+						this.addOptionalStatement(" where  1=1 ");
+						this.addOptionalStatement("AND ("
+								+ "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
+								// 查看本级及下级所有任务
+								+ "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?) "
+								// 设备所属辖区内民警帐号
+								+ "    OR (EXISTS (SELECT 1 FROM V_VPLUS_DEVICE_INFO vdi WHERE vdi.DEVICE_ID=vfa.DEVICE_ID AND vdi.ORG_CODE=?)) "
+								// 布控创建人
+								+ "    OR vdp.CREATOR=? "
+								// 查看告警权限设置
+								+ "    OR EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?)"
+								+ "))"
+								+ "OR (d.TAG_CODE='03' AND ("
+								// 查看本级及下级所有任务
+								+ "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?)"
+								// 布控创建人
+								+ "    OR vdp.CREATOR=? "
+								// 查看告警权限设置
+								+ "    OR (EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?))"
+								+ "))"
+								+ ")");
+						this.addParameter(context.getUserCode());
+						this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
+						this.addParameter(context.getUser().getDept().getCivilCode() + "%");
+						this.addParameter(context.getUser().getDept().getCivilCode());
+						this.addParameter(context.getUserCode());
+						this.addParameter(context.getUserCode());
 
-	        if (!context.getUser().isAdministrator()) {
-	            // 精细化控制，通过权限管理配置可见信息
-	            if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
-	                this.addOptionalStatement("left join VIID_DISPATCHED_PERSON vdp on vfa.OBJECT_ID = vdp.FACE_ID "
-	                        + "join SYS_USER u on vdp.CREATOR = u.USER_CODE ");
-	                this.addOptionalStatement(" where  1=1 ");
-	                this.addOptionalStatement("AND ("
-	                        + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
-	                        // 查看本级及下级所有任务
-	                        + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?) "
-	                        // 设备所属辖区内民警帐号
-	                        + "    OR (EXISTS (SELECT 1 FROM V_VPLUS_DEVICE_INFO vdi WHERE vdi.DEVICE_ID=vfa.DEVICE_ID AND vdi.ORG_CODE=?)) "
-	                        // 布控创建人
-	                        + "    OR vdp.CREATOR=? "
-	                        // 查看告警权限设置
-	                        + "    OR EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?)"
-	                        + "))"
-	                        + "OR (d.TAG_CODE='03' AND ("
-	                        // 查看本级及下级所有任务
-	                        + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?)"
-	                        // 布控创建人
-	                        + "    OR vdp.CREATOR=? "
-	                        // 查看告警权限设置
-	                        + "    OR (EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?))"
-	                        + "))"
-	                        + ")");
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
-	                this.addParameter(context.getUser().getDept().getCivilCode() + "%");
-	                this.addParameter(context.getUser().getDept().getCivilCode());
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(context.getUserCode());
-
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
-	                this.addParameter(context.getUser().getDept().getCivilCode() + "%");
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(context.getUserCode());
-	            } else {
-	                this.addOptionalStatement(" where  1=1 ");
-	                UserModel userModel = context.getUser();
-	                this.addOptionalStatement(" and (("
-	                        + Permission.getCurNodeAlarmPrivSql(userModel.getCode(),
-	                        null, "vfa.ORG_CODE"));
-	                this.addOptionalStatement(" and vfa.TASK_LEVEL in "
-	                        + "(select ALARM_LEVEL from SYS_USERALARMLEVEL where USER_CODE = ? )");
-	                this.addOptionalStatement(" and vfa.DB_ID in "
-	                        + "(select d.DB_ID from VIID_DISPATCHED_DB d left join "
-	                        + "EFACE_DISPATCHED_PERSON_PERMISSION_REL rel on d.DB_ID = rel.DB_ID "
-	                        + "where d.IS_PUBLIC = 1 or  rel.USER_CODE = ? ))");
-	                this.addOptionalStatement(" or vfa.DB_ID in "
-	                        + "(select d.DB_ID from VIID_DISPATCHED_DB d where d.CREATOR = ? ))");
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(context.getUserCode());
-	                this.addParameter(context.getUserCode());
-	            }
-	        } else {
-	            this.addOptionalStatement(" where 1=1 ");
-	        }
+						this.addParameter(context.getUserCode());
+						this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
+						this.addParameter(context.getUser().getDept().getCivilCode() + "%");
+						this.addParameter(context.getUserCode());
+						this.addParameter(context.getUserCode());
+					}else{
+						this.addOptionalStatement(" where  1=1 ");
+						UserModel userModel = context.getUser();
+						this.addOptionalStatement(" and (("
+								+ Permission.getCurNodeAlarmPrivSql(userModel.getCode(),
+								null, "vfa.ORG_CODE"));
+						this.addOptionalStatement(" and vfa.TASK_LEVEL in "
+								+ "(select ALARM_LEVEL from SYS_USERALARMLEVEL where USER_CODE = ? )");
+						this.addOptionalStatement(" and vfa.DB_ID in "
+								+ "(select d.DB_ID from VIID_DISPATCHED_DB d left join "
+								+ "EFACE_DISPATCHED_PERSON_PERMISSION_REL rel on d.DB_ID = rel.DB_ID "
+								+ "where d.IS_PUBLIC = 1 or  rel.USER_CODE = ? ))");
+						this.addOptionalStatement(" or vfa.DB_ID in "
+								+ "(select d.DB_ID from VIID_DISPATCHED_DB d where d.CREATOR = ? ))");
+						this.addParameter(context.getUserCode());
+						this.addParameter(context.getUserCode());
+						this.addParameter(context.getUserCode());
+					}
+				} else {
+					this.addOptionalStatement(" where 1=1 ");
+				}
+			}else {
+				this.addOptionalStatement(" where  1=1 ");
+				UserModel userModel = context.getUser();
+				this.addOptionalStatement(" and (("
+						+ Permission.getCurNodeAlarmPrivSql("admin",
+						null, "vfa.ORG_CODE"));
+				this.addOptionalStatement(" and vfa.TASK_LEVEL in "
+						+ "(select ALARM_LEVEL from SYS_USERALARMLEVEL  )");
+				this.addOptionalStatement(" and vfa.DB_ID in "
+						+ "(select d.DB_ID from VIID_DISPATCHED_DB d left join "
+						+ "EFACE_DISPATCHED_PERSON_PERMISSION_REL rel on d.DB_ID = rel.DB_ID "
+						+ "where d.IS_PUBLIC = 1  ))");
+				this.addOptionalStatement(" or vfa.DB_ID in "
+						+ "(select d.DB_ID from VIID_DISPATCHED_DB d  ))");
+			}
 
 	        this.addOptionalStatement(" and vfa.TASK_TYPE = ? ");
-	        int taskType = StringUtil.toInteger(context.getParameter("TASK_TYPE"), Constants.TASK_FACE_ALARM);
+
 	        this.addParameter(taskType);
 
 	        String searchType = StringUtil.toString(context
