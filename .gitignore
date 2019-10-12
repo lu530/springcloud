@@ -17,7 +17,9 @@ HELP.md
 **.iml
 **.ipr
 /**.war
-
+/target/
+/**/classes/
+/**/test-classes/
 
 ### NetBeans ###
 **/nbproject/private/
