@@ -1393,8 +1393,9 @@ function initEvent() {
 
 	UI.control.getControlById("tabList").bind("load", function () {
 		ElectronicArchivesSwitch();
-		
-		if (UI.control.getDataById('tabList').TOTAL && !$('[config-control]').hasClass("hadRender")) {
+
+		//UI.control.getDataById('tabList').TOTAL &&
+		if (!$('[config-control]').hasClass("hadRender")) {
 			$("#alarmTotalAll").html(UI.control.getDataById('tabList').TOTAL);
 			eightBtnSwitch();
 		}
