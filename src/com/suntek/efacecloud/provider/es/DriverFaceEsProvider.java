@@ -96,8 +96,8 @@ public class DriverFaceEsProvider extends IndexSearchProvider {
 
 		Map<String, Object> params = context.getParameters();
 
-		String beginTime = StringUtil.toString(params.get("BEGIN_TIME"));
-		String endTime = StringUtil.toString(params.get("END_TIME"));
+		String beginTime = StringUtil.toString(params.get("beginTime"));
+		String endTime = StringUtil.toString(params.get("endTime"));
 		String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"),
 				"desc");
 		String keyword = StringUtil.toString(params.get("KEYWORDS"));
@@ -106,11 +106,11 @@ public class DriverFaceEsProvider extends IndexSearchProvider {
 		String needDevice = StringUtil.toString(params.get("NEED_DEVICE"));
 
 		this.setIndexNames(EsUtil.getIndexNameByTime(
-				Constants.FACE_INDEX + "_", beginTime, endTime));
-		this.setTableName(Constants.FACE_TABLE);
+				Constants.DRIVER_FACE_INDICE + "_", beginTime, endTime));
+		this.setTableName(Constants.DRIVER_FACE_INFO);
 
 		// 避免 某个分片检索时间超出了超时时间，导致会出现每次结果不一样的情况
-		query.setTimeout(10000l);
+		query.setTimeout(10000L);
 
 		if (!StringUtil.isEmpty(treeNodeId)) {
 

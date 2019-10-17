@@ -89,8 +89,7 @@ $(function () {
     defaultSelectAllDevice();
     //调用页面回填
     fatherSearchDevice();
-    initFilterBar(); //先加载人脸来源再加载数据
-    //initData();
+    initData();
     topSpecialUploadPic();
     initWaterMark();
     if (isRedList()) {
@@ -114,25 +113,6 @@ $(function () {
 function hideModule(selector) {
     selector.addClass("hide");
 }
-
-function initFilterBar() {
-    UI.util.showLoadingPanel();
-    UI.control.remoteCall('/connectplus/mx/v6/cp/device/getSourceList', {}, function (resp) {
-        if(resp.data.length > 0) {
-            $("#faceRource").html(tmpl('faceRourceTemplate', resp.data));
-            isFaceSource = true;
-            $("#faceRource").closest(".filter-bar").removeClass("hide");
-            deviceType = resp.data[0].orgCode;
-        }else {
-            $("#sortList [type='sourceSort']").addClass('hide');
-        }
-        initData();
-    }, function () {
-        $("#sortList [type='sourceSort']").addClass('hide');
-        initData();
-    }, {url: '/connectplus/mx/v6/cp/device/getSourceList?DEVICE_TYPE=194', type: 'GET'}, true);
-}
-
 
 function initData() {
     if (imgSrc != "") {
