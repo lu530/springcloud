@@ -70,6 +70,10 @@ function initEvent(){
 
 //技战法返回菜单
 function showMenu(){
+	if(top.projectID === 'longli' && top.$('.header-nav dd.longliMenu>a[href=#facehome]').length > 0) {
+		top.$('.header-nav dd.longliMenu>a[href=#facehome]').trigger('click');
+		return;
+	}
 	parent.showMenu();
 }
 
@@ -79,7 +83,7 @@ function initPage(){
 		initLeftForm(pageUrl);
 	}else{
 		initLeftForm(pageUrlObj[pageType]);
-	}		
+	}
 }
 
 function initPage_Black(params) {
