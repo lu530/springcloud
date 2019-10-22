@@ -37,6 +37,9 @@ public class Constants {
 	
 	/** 查看本级及下级所有任务菜单权限ID **/
     public final static String DISPATCHED_PERSON_PERMISSION_MENUID = "EFACE_faceDispatchedViewAllTask";
+    
+	/** 告警查询-人脸告警权限ID **/
+    public final static String DEFENCE_FACEALARM = "DEFENCE_faceAlarm";
 	
 	/** 人脸红名单库ID **/
 	public final static String STATIC_LIB_ID_RED_LIST = "RED_LIST_DB";
