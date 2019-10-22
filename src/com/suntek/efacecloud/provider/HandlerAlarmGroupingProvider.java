@@ -131,7 +131,7 @@ public class HandlerAlarmGroupingProvider extends ExportGridDataProvider {
 	}
 
 	/**
-	 * 精细化控制，通过权限管理配置可见信息
+	 * 精细化控制
 	 * 
 	 * @param context
 	 */
@@ -162,11 +162,14 @@ public class HandlerAlarmGroupingProvider extends ExportGridDataProvider {
 		this.addOptionalStatement(" where 1=1 ");
 		if (!context.getUser().isAdministrator()) {
 			/*
-			 * 通过权限管理配置可见信息
+			 * 通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
 			 * 全国在逃类（公共库）/需抓捕类：创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收 + 设备所属辖区内民警帐号
 			 * 管控/关注类，				  创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收
 			 */
             this.addOptionalStatement("AND ("
+					// 用户具有告警查询-人脸告警权限
+					+ "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+					+ "AND ("
                     + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
                     // 查看本级及下级所有任务
                     + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?) "
@@ -185,7 +188,10 @@ public class HandlerAlarmGroupingProvider extends ExportGridDataProvider {
                     // 查看告警权限设置
                     + "    OR (EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?))"
                     + "))"
+					+ ")"
                     + ")");
+			this.addParameter(context.getUserCode());
+			this.addParameter(Constants.DEFENCE_FACEALARM);
 			this.addParameter(context.getUserCode());
 			this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
 			this.addParameter(context.getUser().getDept().getCivilCode() + "%");

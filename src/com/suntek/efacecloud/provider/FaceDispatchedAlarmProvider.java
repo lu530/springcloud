@@ -98,12 +98,15 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                 + "left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ");
 
         if (!context.getUser().isAdministrator()) {
-            // 精细化控制，通过权限管理配置可见信息
+            // 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
             if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
                 this.addOptionalStatement("left join VIID_DISPATCHED_PERSON vdp on vfa.OBJECT_ID = vdp.FACE_ID "
                         + "join SYS_USER u on vdp.CREATOR = u.USER_CODE ");
                 this.addOptionalStatement(" where  1=1 ");
                 this.addOptionalStatement("AND ("
+                        // 用户具有告警查询-人脸告警权限
+                        + "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+                        + "AND ("
                         + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
                         // 查看本级及下级所有任务
                         + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?) "
@@ -122,7 +125,10 @@ public class FaceDispatchedAlarmProvider extends ExportGridDataProvider {
                         // 查看告警权限设置
                         + "    OR (EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?))"
                         + "))"
+                        + ")"
                         + ")");
+                this.addParameter(context.getUserCode());
+                this.addParameter(Constants.DEFENCE_FACEALARM);
                 this.addParameter(context.getUserCode());
                 this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
                 this.addParameter(context.getUser().getDept().getCivilCode() + "%");
