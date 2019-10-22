@@ -51,9 +51,14 @@ public class AlarmHandleRecordService {
 
 		JSONObject handleResultJ = JSONObject.parseObject(handleResult);
 		
-		// 是否误报，湛江用到
+		// 确认是否本人，仅湛江使用
 		String isErrorInfo = StringUtil.toString(handleResultJ.get("IS_ERRORINFO"));
-		
+		// 确认抓捕可疑人员，仅湛江使用
+		String isArrestSuspicious = StringUtil.toString(handleResultJ.get("IS_ARREST_SUSPICIOUS"));
+		// 确认可疑人员身份是否与告警一致，仅湛江使用
+		String isSuspiciousPersons = StringUtil.toString(handleResultJ.get("IS_SUSPICIOUS_PERSONS"));
+
+
 		String isFound = StringUtil.toString(handleResultJ.get("IS_FOUND"));
 		String isControl = StringUtil.toString(handleResultJ.get("IS_CONTROL"));
 		String isConsistent = StringUtil.toString(handleResultJ.get("IS_CONSISTENT"));
@@ -124,15 +129,16 @@ public class AlarmHandleRecordService {
 			
 			//湛江需求
 			if(NEED_DISPATCHED_PERSON_STATUS.equals("1")){
+
 				int status = PersonStatus.FEDBACK.getType();
 				//是否确认本人
-				if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isFound))) {
+				if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isArrestSuspicious))) {
 					status = PersonStatus.ALARM_NOT_CAPTURE.getType();
 				//确认非嫌疑人
-				}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "0".equals(isConsistent)){
+				}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "0".equals(isSuspiciousPersons)){
 					status = PersonStatus.CONFIRM_NONSUSPECT.getType();
 				//抓捕成功
-				}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "1".equals(isConsistent)){
+				}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "1".equals(isSuspiciousPersons)){
 					status = PersonStatus.ALARM_SUCC_CAPTURE.getType();
 				}
 				
@@ -164,7 +170,7 @@ public class AlarmHandleRecordService {
 		
 		//湛江新增
 		if(NEED_DISPATCHED_PERSON_STATUS.equals("1")){
-			if ("1".equals(isErrorInfo) && "1".equals(isFound) && "1".equals(isConsistent)) {
+			if ("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "1".equals(isSuspiciousPersons)) {
 				map.put("OP_TYPE", 9); // 已抓获
 			}
 		}else{
@@ -251,7 +257,7 @@ public class AlarmHandleRecordService {
 			map.put("USER_NAME", StringUtil.toString(info.get("USER_NAME")));
 			map.put("DEPT_NAME", StringUtil.toString(info.get("DEPT_NAME")));
 			map.put("OP_TYPE", StringUtil.toString(info.get("OP_TYPE")));
-			map.put("POLICE_ID", StringUtil.toString(info.get(""),"无警号"));
+			map.put("POLICE_ID", StringUtil.toString(info.get("POLICE_ID"),"无警号"));
 			map.put("ID", info.get("ID"));
 			result.add(map);
 		}

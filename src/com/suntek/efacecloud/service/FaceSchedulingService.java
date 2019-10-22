@@ -291,7 +291,14 @@ public class FaceSchedulingService {
 			String isFound = "0";
 			String isControl = "0";
 			String isConsistent = "0";
+
+			// 确认是否本人，仅湛江使用
 			String isErrorInfo = "0";
+			// 确认抓捕可疑人员，仅湛江使用
+			String isArrestSuspicious = "0";
+			// 确认可疑人员身份是否与告警一致，仅湛江使用
+			String isSuspiciousPersons = "0";
+
 			// 取出反馈信息
 			for (int i = 0; i < remarkJsonList.size(); i++) {
 				JSONObject remarkObj = remarkJsonList.getJSONObject(i);
@@ -352,20 +359,36 @@ public class FaceSchedulingService {
 						isErrorInfo = "1";
 					}
 				}
-				
+
+				if ("isArrestSuspicious".equals(key)) {
+					String value = remarkObj.getString("value");
+					if (value.equals("是")) {
+						isArrestSuspicious = "1";
+					}
+				}
+
+				if ("isSuspiciousPersons".equals(key)) {
+					String value = remarkObj.getString("value");
+					if (value.equals("是")) {
+						isSuspiciousPersons = "1";
+					}
+				}
+
+
+
 			}
-			// 未告警0告警未反馈 1未出警确认误报2 未出警已撤控3 出警确认误报4 出警未抓捕5 出警已抓捕6 已反馈7
             int status = PersonStatus.FEDBACK.getType();
 			//是否确认本人
-			if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isFound))) {
+			if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isArrestSuspicious))) {
 				status = PersonStatus.ALARM_NOT_CAPTURE.getType();
-			//确认非嫌疑人
-			}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "0".equals(isConsistent)){
+				//确认非嫌疑人
+			}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "0".equals(isSuspiciousPersons)){
 				status = PersonStatus.CONFIRM_NONSUSPECT.getType();
-			//抓捕成功
-			}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "1".equals(isConsistent)){
+				//抓捕成功
+			}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "1".equals(isSuspiciousPersons)){
 				status = PersonStatus.ALARM_SUCC_CAPTURE.getType();
 			}
+
 			// 更新人员状态
 			String personId = StringUtil.toString(params.get("PERSON_ID"));
 			ServiceLog.debug("状态：" + status + "人员ID:" + personId);
