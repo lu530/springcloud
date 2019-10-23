@@ -84,7 +84,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 
 	private void prepareBaseLine(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
-		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -108,15 +107,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		this.addOptionalStatement(" LEFT JOIN VIID_DISPATCHED_PERSON vdp ON vfa.OBJECT_ID = vdp.FACE_ID ");
 		this.addOptionalStatement(" where 1=1 ");
 		
-		// 布控状态
-		if (isDelete) {
-			this.addOptionalStatement(" and vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_1);
-		} else {
-			this.addOptionalStatement(" and vdp.IS_DELETED <> ? or vdp.IS_DELETED IS NULL ");
-			this.addParameter(Constants.IS_DELETED_1);
-		}
-		
 		// 排序
 		String repeats = StringUtil.toString(context.getParameter("REPEATS"));
 		if (!StringUtil.isNull(repeats)) {
@@ -134,7 +124,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	 */
 	private void prepareElaboration(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
-		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -213,15 +202,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
-		}
-		
-		// 布控状态
-		if (isDelete) {
-			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_1);
-		} else {
-			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_0);
 		}
 		
 		// 排序
