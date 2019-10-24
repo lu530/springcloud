@@ -45,8 +45,9 @@ var deviceID = UI.util.getUrlParam('deviceID') || '';
 var captureTime = UI.util.getUrlParam('captureTime') || '';
 var identityId = UI.util.getUrlParam('identityId') || '';
 var algoList = UI.util.getUrlParam('algoList') || '';
-var ALGO_LIST = [];
+var ALGO_LIST = [{"ALGO_TYPE":getFaceAndForeignAlgoType(),"THRESHOLD":"60"}];
 if (algoList) {
+    ALGO_LIST = [];
     algoList = algoList.replace(/-/g, '"');
     try {
         algoList = JSON.parse(algoList);
@@ -629,7 +630,7 @@ function imgDoSearch(isInit) {
     }
     searchingFlag = true; //页面正在检索
     if (hasLocalSearch && !isBlack) {
-        lacalSearch();//本地一人一档检索
+        lacalSearch(searchImgList);//本地一人一档检索
     }
     if (isBlack) {
         initTmpl(JSON.stringify(searchImgList)); //本地搜索渲染模板
@@ -691,8 +692,6 @@ function initTmpl(searchImgUrl) {
                 $('#resultTab li[attrId="' + attrId + '"]').find('.load-icon').addClass('hide');
                 $('#resultTab li[attrId="' + attrId + '"]').removeClass('disabled');
             });
-
-            searchingFlag = false;
             
             // 默认展示第一个tag
             if (isFirstLoading) { //第一次检索
@@ -704,14 +703,23 @@ function initTmpl(searchImgUrl) {
         if (resp.SEARCHTIMES) {
             $('.searchNum').text(resp.SEARCHTIMES).parents('.action-btn-group').removeClass('hide');
         }
+        addID();
+        searchingFlag = false;
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, function() {
+        searchingFlag = false;
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, null, true);
 }
 
 // 本地一人一档检索
-function lacalSearch() {
+function lacalSearch(imgList) {
+    var _imgList = [];
+    if (imgList.length < 1) {
+        return;
+    } else {
+        _imgList  = imgList.splice(0, 1); //取一项查询
+    }
     var queryParams = {
         ALGO_LIST: JSON.stringify(ALGO_LIST),
         KEYWORDS: '',
@@ -719,7 +727,7 @@ function lacalSearch() {
         SEX: '',
         pageNo: 1,
         pageSize: 30,
-        IMG: imgUrl, //线上改回来
+        IMG: _imgList[0], //线上改回来
         // IMG: "http://172.25.20.48:8088/g1/M00/00000014/00000014/rBkUMFx_U7aAC6tBAAAk1J9DCB4904.jpg",
         THRESHOLD: '',
         ARCHIVE_STATUS: 1,
@@ -740,21 +748,28 @@ function lacalSearch() {
                 }
             }
             $('#tmplContent').prepend(tmpl('personListTml_local', resp.data.LIST));
-            $('#resultTab li').find('.load-icon').addClass('hide');
-            $('#resultTab li').removeClass('disabled');
         }
         localresultFlag = true;
         if (outresultFlag) {
+            searchingFlag = false;
             UI.util.hideLoadingPanel('currentPage');
         }
+        $('#resultTab li').find('.load-icon').addClass('hide');
+        $('#resultTab li').removeClass('disabled');
     }, function (XMLHttpRequest, textStatus) {
         if (textStatus === 'timeout') {
             UI.util.alert('已有档案检索超时', 'warn');
         }
         UI.util.hideLoadingPanel('currentPage');
+        $('#resultTab li').find('.load-icon').addClass('hide');
+        $('#resultTab li').removeClass('disabled');
     }, {
         timeout: 20000
     }, true);
+
+    if (imgList.length > 0) { //递归查询
+        lacalSearch(imgList);
+    }
 }
 
 // 外籍人模板渲染
@@ -1198,4 +1213,26 @@ function clearData() {
 function isBase64(src) {
     var validSrcRegex = /^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*?)\s*$/i;
     return validSrcRegex.test(src);
+}
+
+//获取当前算法或者黑人算法
+function getFaceAndForeignAlgoType(){
+	var algoType;
+	if(isBlack){
+		var params = {
+				'MENUID': 'EFACE_faceVerification',
+				'RACE': 3
+			};
+		var serviceUrl = 'face/common/getAlgorithmByRace';
+		
+	}else{
+		var params = {
+				'MENUID':'EFACE_faceVerification'
+			};
+		var serviceUrl = 'face/common/getFaceAlgoType';
+	}
+	UI.control.remoteCall(serviceUrl, params, function (resp) {
+		algoType = resp.data[0].ALGORITHM_ID;
+	});
+	return algoType;
 }
