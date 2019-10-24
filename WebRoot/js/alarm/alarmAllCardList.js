@@ -120,11 +120,13 @@ function initEvent(){
 		 	deviceID = $this.attr('device-id'),
 		 	captureTime = $this.attr('capture-time'),
 		 	identityId = $this.attr('identity-id'),
+			checkName = $this.attr('checkName') || "",
 		 	algoList = '[{-ALGO_TYPE-:-' + $this.attr('algo-id') + '-,-THRESHOLD-:-60-}]',
 			imgUrl = $this.attr('url');
 		var title = '身份核查',
 			src = matcher('/efacecloud/page/technicalStation/verification.html/' + top.projectID).url,
-			query = '?imgUrl=' + imgUrl + '&faceID=' + faceID + '&deviceID=' + deviceID + '&captureTime=' + captureTime + '&identityId=' + identityId + '&algoList=' + algoList
+			query = '?imgUrl=' + imgUrl + '&faceID=' + faceID + '&deviceID=' + deviceID + '&captureTime=' 
+				+ captureTime + '&identityId=' + identityId + '&algoList=' + algoList +"&checkName="+checkName;
 		
 		if(UI.control.hasPermission('EFACE_faceVerificationArchive')){
 			src =  '/efacestore/page/library/personnelFileMagList.html';
