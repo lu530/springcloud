@@ -1,15 +1,7 @@
 package com.suntek.efacecloud.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.PageQueryResult;
@@ -21,19 +13,24 @@ import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 人员区域碰撞
- * 
- * @version 2017年07月18日
- * @author yana
  *
+ * @author yana
+ * @version 2017年07月18日
  */
 @LocalComponent(id = "technicalTactics/regionCollsion")
 public class RegionCollsionService {
@@ -60,12 +57,12 @@ public class RegionCollsionService {
                 return;
 
             } else if (Integer
-                .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_OVERSTEP) {
+                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_OVERSTEP) {
                 context.getResponse().putData("DATA", Collections.EMPTY_LIST);
                 return;
 
             } else if (Integer
-                .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_SUCCESS) {
+                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_SUCCESS) {
                 bT_arr[i] = StringUtil.toString(esSearchTime.get("beginTime"));
                 eT_arr[i] = StringUtil.toString(esSearchTime.get("endTime"));
             }
@@ -101,7 +98,7 @@ public class RegionCollsionService {
         registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
         ServiceLog.debug("区域碰撞 调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
-            + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
+                + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
         long code = commandContext.getResponse().getCode();
 
@@ -110,7 +107,7 @@ public class RegionCollsionService {
             return;
         }
 
-        List<List<Object>> personIds = (List<List<Object>>)commandContext.getResponse().getData("DATA");
+        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
         // 返回结果的集合
         List<List<Map<String, Object>>> resultList = new ArrayList<List<Map<String, Object>>>();
 
@@ -129,7 +126,7 @@ public class RegionCollsionService {
 
     /**
      * 根据id反查得到返回需要的数据信息,一个人的所有数据 抓拍时间、卡口、次数、图片
-     * 
+     *
      * @param aPersonIds
      * @return
      * @throws Exception
@@ -144,19 +141,9 @@ public class RegionCollsionService {
 
         try {
 
-            List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
+            PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
+            List<Map<String, Object>> resultSet = pageResult.getResultSet();
 
-            // 获取大数据检索方式，0：ES，1：MPPDB
-            String serachFun = AppHandle.getHandle(Constants.CONSOLE).getProperty("BIGDATA_SEARCH_FUN", "0");
-            if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
-
-                PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
-                resultSet = pageResult.getResultSet();
-            } else {
-
-                MppQueryDao dao = new MppQueryDao();
-                resultSet = dao.queryByIds(idsArr);
-            }
 
             Log.fanchaLog.debug("1 区域碰撞 反查  查询条件主键id->" + aPersonIds);
             Log.fanchaLog.debug("2 区域碰撞 反查  查询结果-> " + resultSet + "\n");
@@ -168,14 +155,8 @@ public class RegionCollsionService {
                 // 图片
                 personData.put("OBJ_PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("OBJ_PIC"))));
                 // 时间
-                if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
-
-                    personData.put("TIME", DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
+                personData.put("TIME", DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
                         DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
-                } else {
-                    personData.put("TIME", DateUtil
-                        .dateToString(DateUtil.toDate(StringUtil.toString(map.get("JGSK")), "yyyy-MM-dd HH:mm:ss")));
-                }
 
                 // 区域
                 personData.put("ORIGINAL_DEVICE_ID", StringUtil.toString(map.get("DEVICE_ID")));
@@ -184,7 +165,7 @@ public class RegionCollsionService {
                 personData.put("FACE_SCORE", StringUtil.toString(map.get("FACE_SCORE")));
 
                 Map<Object, Object> device
-                    = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
+                        = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
 
                 if (null != device) {
                     personData.put("DEVICE_NAME", device.get("DEVICE_NAME"));
