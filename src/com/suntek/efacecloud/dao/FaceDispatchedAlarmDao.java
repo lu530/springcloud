@@ -291,9 +291,10 @@ public class FaceDispatchedAlarmDao {
                 }
 
                 // 布控分局
-                if (!StringUtil.isNull(deptCode)) {
+                String orgCode = StringUtil.toString(parameters.get("ORG_CODE"));
+                if (!StringUtil.isNull(orgCode)) {
                     sb.append(" and u.DEPT_CODE like ?");
-                    list.add(deptCode + "%");
+                    list.add(orgCode + "%");
                 }
 
                 // 布控时间
