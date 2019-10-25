@@ -358,8 +358,8 @@
 
 .alarm-right .had-sign{
     position: absolute;
-    width: 112px;
-    height: 112px;
+    width: 112px !important;;
+    height: 112px !important;
     right: 0;
     bottom: -134px;
     z-index: 1;
