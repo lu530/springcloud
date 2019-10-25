@@ -84,7 +84,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 
 	private void prepareBaseLine(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
-		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -108,15 +107,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		this.addOptionalStatement(" LEFT JOIN VIID_DISPATCHED_PERSON vdp ON vfa.OBJECT_ID = vdp.FACE_ID ");
 		this.addOptionalStatement(" where 1=1 ");
 		
-		// 布控状态
-		if (isDelete) {
-			this.addOptionalStatement(" and vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_1);
-		} else {
-			this.addOptionalStatement(" and vdp.IS_DELETED <> ? or vdp.IS_DELETED IS NULL ");
-			this.addParameter(Constants.IS_DELETED_1);
-		}
-		
 		// 排序
 		String repeats = StringUtil.toString(context.getParameter("REPEATS"));
 		if (!StringUtil.isNull(repeats)) {
@@ -128,13 +118,12 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	}
 
 	/**
-	 * 精细化控制，通过权限管理配置可见信息
+	 * 精细化控制
 	 * 
 	 * @param context
 	 */
 	private void prepareElaboration(RequestContext context) {
 		String isHistory = StringUtil.toString(context.getParameter("isHistory"));
-		boolean isDelete = StringUtil.toString(context.getParameter("isDelete"), "0").equals("1");
 		String fromTable = "VPLUS_SURVEILLANCE_ALARM";
 		if ("1".equals(isHistory)) {
 			fromTable = "VPLUS_SURVEILLANCE_ALARM_HIS";
@@ -160,11 +149,14 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		this.addOptionalStatement(" where 1=1 ");
 		if (!context.getUser().isAdministrator()) {
 			/*
-			 * 通过权限管理配置可见信息
+			 * 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
 			 * 全国在逃类（公共库）/需抓捕类：创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收 + 设备所属辖区内民警帐号
 			 * 管控/关注类，				  创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收
 			 */
             this.addOptionalStatement("AND ("
+					// 用户具有告警查询-人脸告警权限
+					+ "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+					+ "AND ("
                     + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
                     // 查看本级及下级所有任务
                     + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=? AND vfa.ORG_CODE LIKE ?) "
@@ -183,7 +175,10 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
                     // 查看告警权限设置
                     + "    OR (EXISTS (SELECT 1 FROM EFACE_DISPATCHED_PERSON_AUTHORITY au WHERE au.PERSON_ID=vdp.PERSON_ID AND au.USER_CODE=?))"
                     + "))"
+                    + ")"
                     + ")");
+            this.addParameter(context.getUserCode());
+            this.addParameter(Constants.DEFENCE_FACEALARM);
 			this.addParameter(context.getUserCode());
 			this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
 			this.addParameter(context.getUser().getDept().getCivilCode() + "%");
@@ -207,15 +202,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
-		}
-		
-		// 布控状态
-		if (isDelete) {
-			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_1);
-		} else {
-			this.addOptionalStatement(" AND vdp.IS_DELETED = ? ");
-			this.addParameter(Constants.IS_DELETED_0);
 		}
 		
 		// 排序

@@ -57,7 +57,7 @@ function initEvent(){
 	//收藏
 	$("body").on("click",".collectionBtn",function(){
 		var ref = $(this).attr("ref");
-		UI.util.showCommonWindow(ref, "收藏文件夹", 
+		UI.util.showCommonWindow(ref, "收藏文件夹",
 				600, 450, function(obj){
 		});
 	});
@@ -66,10 +66,15 @@ function initEvent(){
 	// if(pageType === "library"){
 	// 	showTask();
 	// }
+	frameStretch();
 }
 
 //技战法返回菜单
 function showMenu(){
+	if(top.projectID === 'longli' && top.$('.header-nav dd.longliMenu>a[href=#facehome]').length > 0) {
+		top.$('.header-nav dd.longliMenu>a[href=#facehome]').trigger('click');
+		return;
+	}
 	parent.showMenu();
 }
 
@@ -79,7 +84,7 @@ function initPage(){
 		initLeftForm(pageUrl);
 	}else{
 		initLeftForm(pageUrlObj[pageType]);
-	}		
+	}
 }
 
 function initPage_Black(params) {
@@ -243,4 +248,37 @@ function showCollisionListClick () {
 	$("#completeList").off("click").on("click", "li a", function () {
 		leftFrameCon.window.showCollisionList($(this).attr("task-id"),$(this).attr("task-name"));
 	})
+}
+
+
+function frameStretch () {
+
+	// 左侧伸缩按钮
+	$('body').on('click', '.frameStretch', function () {
+        if($(this).hasClass('on')){
+            $(this).removeClass('on').animate({left: '0'});
+            $('#leftMainDiv').animate({left: '-410px'});
+            $('#rightMainDiv').animate({left: '0'});
+            $('.map-con').animate({left: '0'});
+        }
+        else{
+			$(this).addClass('on').animate({left: '410px'});
+            $('#leftMainDiv').animate({left: '0'});
+            $('#rightMainDiv').animate({left: '410px'});
+            $('.map-con').animate({left: '410px'});
+        }
+	});
+	
+	$('body').on('click', '.routeControlSwitch', function () {
+
+		if($(this).hasClass('on')) {
+			$('.leaflet-control-route').addClass('hide');
+			$(this).find('.icon-plus3').removeClass('hide').siblings('.icon').addClass('hide');
+			$(this).removeClass('on');
+		}else{
+			$('.leaflet-control-route').removeClass('hide');
+			$(this).find('.icon-cross3').removeClass('hide').siblings('.icon').addClass('hide');
+			$(this).addClass('on');
+		}
+	});
 }
