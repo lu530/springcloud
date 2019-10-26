@@ -54,7 +54,7 @@ import com.suntek.sp.common.common.BaseCommandEnum;
 @LocalComponent(id = "face/technicalTactics")
 public class FaceTechnicalTacticsService {
 	private ViidCalltimeDao viidCalltimeDao = new ViidCalltimeDao();
-	
+
 	// liangzhen 20190605
 	@BeanService(id = "IntegrationFaceSearch", description = "整合版新飞识与外籍人1:n比对", type="remote")
 	public void integrationFaceSearch(RequestContext context) throws Exception{
@@ -62,11 +62,11 @@ public class FaceTechnicalTacticsService {
 		String topNumber = StringUtil.toString(context.getParameter("TOP_NUMBER"));
 		//String pic = StringUtil.toString(context.getParameter("PIC"));
 		String picList = StringUtil.toString(context.getParameter("IMG_URL_LIST"));
-		
+
 		Log.faceSearchLog.debug("IntegrationFaceSearch");
-		
+
 		String feishiType = AppHandle.getHandle(Constants.OPENGW).getProperty("FEISHI_TYPE","2");
-		
+
 		//如果该url不为"",那么就会按照设置的url请求返回模拟的依图json,否则调用实际接口返回json(供公司模拟环境使用)
 		String yituJson_url =  AppHandle.getHandle(Constants.APP_NAME).getProperty("MOCKYITU_JSON_URL","");
 		if (!("".equals(yituJson_url))) {
@@ -76,32 +76,32 @@ public class FaceTechnicalTacticsService {
 			Log.importDataLog.debug("模拟依图json,yituJson_url : "+yituJson_url);
 			Log.importDataLog.debug("json : "+JSON.toJSONString(json));
 			int dateTimes = 10000;
-			int searchtimes 
-				= viidCalltimeDao.getTodayTimesByServiceName("外籍人脸1:N比对",BaseCommandEnum.wj_One2nCompare.getUri());			
+			int searchtimes
+				= viidCalltimeDao.getTodayTimesByServiceName("外籍人脸1:N比对",BaseCommandEnum.wj_One2nCompare.getUri());
 			long CODE = StatusCode.SUCC.getCode();
 			String message = "查询成功";
-			
-			List<Map<String, Object>> responseData = (List<Map<String, Object>>) json.get("DATA");			
+
+			List<Map<String, Object>> responseData = (List<Map<String, Object>>) json.get("DATA");
 			Map<String,List<Map<String,Object>>> resultData = new HashMap<String,List<Map<String,Object>>>();
 			resultData.put("111", responseData);
 			List<Map<String,Object>> recommendResult = getRecommendResult(resultData);
-			
+
 			Map<String, Object> dataMap = new HashMap<>();
 			List<Object> dataList = new ArrayList<>();
 			if(null != recommendResult) {
 				dataMap.put("RECOMMEND_RESULT", recommendResult);
-			}			
-			dataMap.put("LIST", resultData);			
+			}
+			dataMap.put("LIST", resultData);
 			dataList.add(dataMap);
-			
+
 			context.getResponse().putData("SEARCHTIMES", dateTimes-searchtimes);
 			context.getResponse().putData("CODE", CODE);
 			context.getResponse().putData("MESSAGE", message);
 			context.getResponse().putData("DATA", dataList);
 			Log.importDataLog.debug("99 dataList : "+JSON.toJSONString(dataList));
 			return;
-		}		
-		
+		}
+
 		if(feishiType.equals("2")) {
 			String ALGORITHM_ID = StringUtil.toString(context.getParameter("ALGORITHM_ID"));
 			if(StringUtil.isEmpty(ALGORITHM_ID)) {
@@ -117,7 +117,7 @@ public class FaceTechnicalTacticsService {
 				}
 				context.putParameter("ALGORITHM_ID",StringUtils.join(algoList.toArray(),","));
 			}
-			
+
 			String REPOSITORY_ID = StringUtil.toString(context.getParameter("REPOSITORY_ID"));
 			if(StringUtil.isEmpty(REPOSITORY_ID)) {
 				//人脸库列表
@@ -139,24 +139,24 @@ public class FaceTechnicalTacticsService {
 			context.putParameter("THRESHOLD", thresHold);
 			context.putParameter("TOP_NUMBER", topNumber);
 			context.putParameter("PRIORITY", "1");
-			
+
 			((ILocalComponent) EAP.bean.get("face/technicalTactics/batchFaceSearch")).invoke(new Object[] { context });
 			Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();
-			
+
 			// 给新飞识数据添加IDENTITY_TYPE和GJ属性
 			List<Map<String,Object>> dataList = (List<Map<String, Object>>) result.get("DATA");
 			for(Object obj:dataList) {
-				 
+
 				Map<String,Object> picResult = (Map<String,Object>)obj;
 				// 修改LIST部分
-				Map<String,List<Map<String,Object>>> responseData 
+				Map<String,List<Map<String,Object>>> responseData
 					= (Map<String, List<Map<String, Object>>>) picResult.get("LIST");
 				for(int i = 110;i <= 118;i++){
 					if(responseData.get(StringUtil.toString(i)) != null){
 						addIdentityTypeAndGJ(responseData.get(StringUtil.toString(i)));
 					}
 				}
-				
+
 				// 修改RECOMMEND_RESULT部分
 				if(picResult.get("RECOMMEND_RESULT") != null){
 					List<Map<String,Object>> resultData = (List<Map<String, Object>>) picResult.get("RECOMMEND_RESULT");
@@ -166,24 +166,24 @@ public class FaceTechnicalTacticsService {
 			context.getResponse().putData("CODE",result.get("CODE"));
 			context.getResponse().putData("MESSAGE",result.get("MESSAGE"));
 			context.getResponse().putData("DATA",dataList);
-			
+
 		} else if(feishiType.equals("3")) {
-			
+
 			long CODE = StatusCode.SUCC.getCode();
 			String message = "查询成功";
-			
+
 			//context.putParameter("IMG_URL",pic);
 			context.putParameter("IMG_URL_LIST",picList);
 			context.putParameter("THRESHOLD", thresHold);
 			context.putParameter("TOP_NUMBER", topNumber);
-			
+
 			Log.faceSearchLog.debug("IntegrationFaceSearch2");
-			
+
 			/*((ILocalComponent) EAP.bean.get("face/technicalTactics/wjFaceSearch")).invoke(new Object[] { context });
-			Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();*/ 
-			
+			Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();*/
+
 			String IMG_URL_LIST = StringUtil.toString(context.getParameter("IMG_URL_LIST"));
-			
+
 			if(StringUtil.isNull(IMG_URL_LIST)) {
 				context.getResponse().putData("CODE", CODE);
 				message = "参数[IMG_URL_LIST]为空";
@@ -192,23 +192,23 @@ public class FaceTechnicalTacticsService {
 			}
 			Log.faceSearchLog.debug("IMG_URL_LIST:" + IMG_URL_LIST);
 			JSONArray urlList = JSONObject.parseArray(IMG_URL_LIST);
-			
+
 			List<Object> dataList = new ArrayList<>(urlList.size());
 			String url = null;
 			int dateTimes = 10000;
 			int searchTimes = 0;
 			for (int i = 0; i < urlList.size(); i++) {
 				Log.faceSearchLog.debug("urlList.size()" + urlList.size());
-				url = StringUtil.toString(urlList.get(i)); 
+				url = StringUtil.toString(urlList.get(i));
 				context.getParameters().put("start", "0");
 				context.getParameters().put("limit", StringUtil.toString(context.getParameter("TOP_NUMBER"), "20"));
 				context.getParameters().put("threshold", StringUtil.toString(context.getParameter("THRESHOLD"), "60"));
-				context.getParameters().put("picture_image_content_base64", 
+				context.getParameters().put("picture_image_content_base64",
 						Base64.GetUrlImageToBase64(url).replace("\n", "").replace("\r", ""));
 				CommandContext commandContext = new CommandContext(context.getHttpRequest());
 				commandContext.setServiceUri(BaseCommandEnum.wj_One2nCompare.getUri());
 				commandContext.setBody(context.getParameters());
-				
+
 				Registry.getInstance().selectCommand(commandContext.getServiceUri()).exec(commandContext);
 				List<Map<String,Object>> responseData = (List<Map<String,Object>>)commandContext.getResponse().getData("DATA");
 				// 依图接口调用次数
@@ -218,7 +218,7 @@ public class FaceTechnicalTacticsService {
 					message = commandContext.getResponse().getMessage();
 					break;
 				}
-				
+
 				/*for(int j = 0; j < responseData.size(); j++){
 					Iterator<String> iterator = responseData.get(j).keySet().iterator();
 					while(iterator.hasNext()){
@@ -229,11 +229,11 @@ public class FaceTechnicalTacticsService {
 						}
 					}
 				}*/
-				
+
 				Map<String,List<Map<String,Object>>> resultData = new HashMap<String,List<Map<String,Object>>>();
 				resultData.put("111", responseData);
 				List<Map<String,Object>> recommendResult = getRecommendResult(resultData);
-				
+
 				Map<String, Object> dataMap = new HashMap<>();
 				if(null != recommendResult) {
 					dataMap.put("RECOMMEND_RESULT", recommendResult);
@@ -246,16 +246,16 @@ public class FaceTechnicalTacticsService {
 			context.getResponse().putData("CODE", CODE);
 			context.getResponse().putData("MESSAGE", message);
 			context.getResponse().putData("DATA", dataList);
-			
+
 		} else{
 			context.getResponse().putData("CODE","1");
 			context.getResponse().putData("MESSAGE","参数异常,feishiType : "+feishiType);
 		}
 	}
-	
+
 	// 新增对中国人属性的处理函数，添加IDENTITY_TYPE和GJ属性   //  liangzhen 20190609
 	private void addIdentityTypeAndGJ(List<Map<String, Object>> list) {
-		
+
 		for(Object obj:list){
 			Map<String,Object> map = (Map<String, Object>) obj;
 			map.put("IDENTITY_TYPE","");
@@ -269,54 +269,54 @@ public class FaceTechnicalTacticsService {
 		String mainPic = ModuleUtil.renderImage(StringUtil.toString(context.getParameter("URL_FROM")));
 		String comparePic = ModuleUtil.renderImage(StringUtil.toString(context.getParameter("URL_TO")));
 		String algoType = ConfigUtil.getAlgoType();
-		
+
 		context.getParameters().put("URL_FROM", mainPic);
 		context.getParameters().put("URL_TO", comparePic);
 		context.getParameters().put("ALGO_TYPE", algoType);
-		
+
 		CommandContext commandContext = new CommandContext(context.getHttpRequest());
-		
+
 		commandContext.setBody(context.getParameters());
 		commandContext.setServiceUri(BaseCommandEnum.faceOne2One.getUri());
-		
+
 		commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-		
+
 		ServiceLog.debug("调用sdk参数:" + context.getParameters());
-		
+
 		Registry registry = Registry.getInstance();
-		
+
 //		registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
-		
+
 		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
 		registry.selectCommand(BaseCommandEnum.faceOne2One.getUri(), "4401", vendor).exec(commandContext);
-		
-		
+
+
 		ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode()
 	  		       + " message:" + commandContext.getResponse().getMessage()
 	  		       + " result:" + commandContext.getResponse().getResult());
-		
+
 		context.getResponse().putData("CODE", commandContext.getResponse().getCode());
 		context.getResponse().putData("MESSAGE", commandContext.getResponse().getMessage());
 		context.getResponse().putData("DATA", commandContext.getResponse().getData("DATA"));
 	}
-	
+
 	@BeanService(id = "batchFaceSearch", description = "飞识批量1:N多算法比对",type = "remote")
 	public void batchFaceSearch(RequestContext context) throws Exception{
 		long CODE = StatusCode.SUCC.getCode();
 		String message = "查询成功";
-		
+
 		String ALGORITHM_ID = StringUtil.toString(context.getParameter("ALGORITHM_ID"));
 		if(StringUtil.isEmpty(ALGORITHM_ID)) {
 			context.putParameter("ALGORITHM_ID", StringUtils.join(ModuleUtil.getAllAlgorithmId().toArray(),","));
 		}
-		
+
 		String REPOSITORY_ID = StringUtil.toString(context.getParameter("REPOSITORY_ID"));
 		if(StringUtil.isEmpty(REPOSITORY_ID)) {
 			context.putParameter("REPOSITORY_ID", StringUtils.join(ModuleUtil.getAllRepositorieId().toArray(),","));
 		}
-		
+
 		String orgCode = context.getUser().getDepartment().getCivilCode();
-		
+
 		String IMG_URL_LIST = StringUtil.toString(context.getParameter("IMG_URL_LIST"));
 		if(StringUtil.isNull(IMG_URL_LIST)) {
 			context.getResponse().putData("CODE", CODE);
@@ -324,9 +324,9 @@ public class FaceTechnicalTacticsService {
 			context.getResponse().putData("MESSAGE", message);
 			return;
 		}
-		
+
 		JSONArray urlList = JSONObject.parseArray(IMG_URL_LIST);
-		
+
 		ExecutorService pool = Executors.newFixedThreadPool(urlList.size());
 		List<Future<CommandContext>> futureList = new ArrayList<>();
 		for (int i = 0; i < urlList.size(); i++) {
@@ -336,20 +336,20 @@ public class FaceTechnicalTacticsService {
 			commandContext.setBody(params);
 			commandContext.setServiceUri(BaseCommandEnum.faceCompare.getUri());
 			commandContext.setOrgCode(orgCode);
-			//执行任务并获取Future对象 
-	        Future<CommandContext> future 
-	        		= pool.submit(new FaceCompareCallable(commandContext)); 
+			//执行任务并获取Future对象
+	        Future<CommandContext> future
+	        		= pool.submit(new FaceCompareCallable(commandContext));
 	        futureList.add(future);
 		}
-		
+
 		List<Object> dataList = new ArrayList<>(urlList.size());
 		for (int i = 0; i < futureList.size(); i++) {
 			Map<String, Object> dataMap = new HashMap<>();
 			CommandContext commandContext = futureList.get(i).get();
-			Map<String,List<Map<String,Object>>> responseData 
+			Map<String,List<Map<String,Object>>> responseData
 				= (Map<String,List<Map<String,Object>>>)commandContext.getResponse().getData("DATA");
 			List<Map<String,Object>> recommendResult = getRecommendResult(responseData);
-			
+
 			ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode()
 		  		       + " message:" + commandContext.getResponse().getMessage()
 		  		       + " result:" + commandContext.getResponse().getResult());
@@ -372,44 +372,44 @@ public class FaceTechnicalTacticsService {
 		context.getResponse().putData("CODE", CODE);
 		context.getResponse().putData("MESSAGE", message);
 		context.getResponse().putData("DATA", dataList);
-		
+
 	}
-	
+
 	@BeanService(id = "faceSearch", description = "飞识1:N多算法比对",type = "remote")
 	public void faceSearch(RequestContext context) throws Exception{
 		String ALGORITHM_ID = StringUtil.toString(context.getParameter("ALGORITHM_ID"));
-		
+
 		if(StringUtil.isEmpty(ALGORITHM_ID)) {
 			context.putParameter("ALGORITHM_ID", StringUtils.join(ModuleUtil.getAllAlgorithmId().toArray(),","));
 		}
-		
+
 		String REPOSITORY_ID = StringUtil.toString(context.getParameter("REPOSITORY_ID"));
-		
+
 		if(StringUtil.isEmpty(REPOSITORY_ID)) {
 			context.putParameter("REPOSITORY_ID", StringUtils.join(ModuleUtil.getAllRepositorieId().toArray(),","));
 		}
-		
+
 		CommandContext commandContext = new CommandContext(context.getHttpRequest());
-		
+
 		commandContext.setBody(context.getParameters());
 		commandContext.setServiceUri(BaseCommandEnum.faceCompare.getUri());
 		commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-		
+
 		ServiceLog.debug("调用sdk参数:" + context.getParameters());
-		
+
 		Registry registry = Registry.getInstance();
-		
+
 		registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
-		
-		Map<String,List<Map<String,Object>>> responseData 
+
+		Map<String,List<Map<String,Object>>> responseData
 				= (Map<String,List<Map<String,Object>>>)commandContext.getResponse().getData("DATA");
-		
+
 		List<Map<String,Object>> recommendResult = getRecommendResult(responseData);
-		
+
 		ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode()
 	  		       + " message:" + commandContext.getResponse().getMessage()
 	  		       + " result:" + commandContext.getResponse().getResult());
-		
+
 		context.getResponse().putData("CODE", commandContext.getResponse().getCode());
 		context.getResponse().putData("MESSAGE", commandContext.getResponse().getMessage());
 		context.getResponse().putData("DATA", responseData);
@@ -418,19 +418,19 @@ public class FaceTechnicalTacticsService {
 			ServiceLog.debug("推荐结果:");
 			ServiceLog.debug(recommendResult);
 		}
-		
+
 	}
-	
+
 	@BeanService(id = "wjFaceSearch", description = "外籍人脸1:N比对",type = "remote")
 	public void wjFaceSearch(RequestContext context) throws Exception {
 		int dayTimes = 10000;
-		String url = StringUtil.toString(context.getParameter("IMG_URL"));  
+		String url = StringUtil.toString(context.getParameter("IMG_URL"));
 		context.getParameters().put("start", "0");
 		context.getParameters().put("limit", StringUtil.toString(context.getParameter("TOP_NUMBER"), "20"));
 		context.getParameters().put("threshold", StringUtil.toString(context.getParameter("THRESHOLD"), "60"));
 		String imgBase = Base64.GetUrlImageToBase64(url);
 		Log.faceOneToOneLog.debug("imgBase >>>>>>>" + imgBase);
-		context.getParameters().put("picture_image_content_base64", 
+		context.getParameters().put("picture_image_content_base64",
 				Base64.GetUrlImageToBase64(url).replace("\n", "").replace("\r", ""));
 		
 		CommandContext commandContext = new CommandContext(context.getHttpRequest());
