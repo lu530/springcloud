@@ -527,6 +527,8 @@ public class FaceTechnicalTacticsService {
 					jsonObject.put("algorithmName","云从3.5人脸算法");
 				}else if("80003".equals(algo)){
 					jsonObject.put("algorithmName","华云算法");
+				} else if ("90003".equals(algo)) {
+					jsonObject.put("algorithmName", "海康人脸算法");
 				}
 				Map<String, Object> param = new HashMap<>();
 
