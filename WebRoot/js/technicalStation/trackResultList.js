@@ -399,10 +399,9 @@ function initEvents(){
 		$(".query-checkbox").prop("checked",false);
 		$(".library-info .list-node").removeClass("active");
 		$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
-		
-		
 	})
-	$('#time').click();
+
+	tranPanel ();
 	
 	$('#place').click(function(){
 		$('.library-info').hide();
@@ -660,4 +659,17 @@ function getWifiList(){
     	wifiListArr.push(obj);
 	}
 	return JSON.stringify(wifiListArr);
+}
+
+// 切换面板
+function tranPanel () {
+
+	var whiteList = {
+		'longli': 'similar'
+	}
+	if('undefined' !== typeof whiteList[top.projectID]) {
+		$('#' + whiteList[top.projectID]).click();
+	}else{
+		$('#time').click();
+	}
 }

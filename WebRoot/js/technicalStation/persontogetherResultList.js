@@ -142,6 +142,7 @@ function showTrackData(trackArr){
 			routePopup:routePopup,
 			iconType:"person"
 		};
+		showRouteControl && showRouteControl();
 		parent.loadRoute(playOpts);
 		parent.rightMainFrameOut('hide');
 	}
@@ -150,3 +151,11 @@ function showTrackData(trackArr){
 	}
 }
 
+function showRouteControl () {
+
+	parent.$('.routeControlSwitch').addClass('active');
+
+	if(parent.$('.routeControlSwitch').hasClass('on')) return;
+
+	parent.$('.routeControlSwitch').trigger('click');
+}

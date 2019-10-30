@@ -31,8 +31,8 @@
 
 		<dependency>
 			<groupId>com.suntek</groupId>
-			<artifactId>suntek-datacollision-api</artifactId>
-			<version>1.0.0</version>
+			<artifactId>datacollision-api</artifactId>
+			<version>1.2.5</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -94,13 +94,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
-			<version>0.10.2.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>com.suntek</groupId>
 			<artifactId>eap-metadata</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -151,16 +144,23 @@
 		</dependency>
 
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.47</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.suntek</groupId>
 			<artifactId>face-dll-service</artifactId>
-			<version>1.2.0</version>
+			<version>1.3.2</version>
 			<scope>provided</scope>
 		</dependency>
 
