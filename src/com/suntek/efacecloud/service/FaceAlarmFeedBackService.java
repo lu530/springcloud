@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.log.ServiceLog;
 import com.suntek.eap.pico.ILocalComponent;
@@ -71,7 +72,7 @@ public class FaceAlarmFeedBackService {
 						signMap.put("HANDLE_USER", resultJson.getString("HANDLE_USER"));
 						signMap.put("IS_TIMEOUT", alarmSignTimeOut(Integer.parseInt(StringUtil.toString(map.get("TASK_LEVEL"))), 
 								resultJson.getString("HANDLE_TIME"), StringUtil.toString(map.get("ALARM_TIME"))));
-						signMap.put("HANDLE_RESULT", signJson);
+						signMap.put("HANDLE_RESULT", signJson.toString());
 						signMap.put("HANDLE_TIME", resultJson.getString("HANDLE_TIME"));
 						signMap.put("OP_TYPE", 1);//签收
 						alarmHandleRecordDao.insertAlarmHandleRecord(signMap);
@@ -84,13 +85,15 @@ public class FaceAlarmFeedBackService {
 					record.put("HANDLE_USER", resultJson.getString("HANDLE_USER"));
 					record.put("IS_TIMEOUT", alarmFeedBackTimeOut(resultJson.getString("HANDLE_TIME"), 
 							StringUtil.toString(map.get("ALARM_TIME"))));
-					record.put("HANDLE_RESULT", handleResult);
+					record.put("HANDLE_RESULT", handleResult.toString());
 					record.put("HANDLE_TIME", resultJson.getString("HANDLE_TIME"));
 					record.put("OP_TYPE", optype);	
 					
 					alarmHandleRecordDao.insertAlarmHandleRecord(record);
 
-					String resultMsg = "提交成功";
+                    Log.requestPingGaoLog.info(">>>>>>>>>>>>>接收品高告警反馈信息插入成功!");
+
+                    String resultMsg = "提交成功";
 
 					//确认抓捕
 					if(optype == PersonStatus.ALARM_SUCC_CAPTURE.getType()){
@@ -131,31 +134,36 @@ public class FaceAlarmFeedBackService {
 	
 	private String jsonDataValidate(JSONObject json){
 		if(StringUtils.isBlank(json.getString("ALARM_ID"))){
-			return "请求失败，ALARM_ID为空！";
+			return "提交失败，ALARM_ID为空！";
 		}
 		
 		if(StringUtils.isBlank(json.getString("HANDLE_USER"))){
-			return "请求失败，HANDLE_USER为空！";
+			return "提交失败，HANDLE_USER为空！";
 		}
 		
 		if(StringUtils.isBlank(json.getString("HANDLE_TIME"))){
-			return "请求失败，HANDLE_TIME为空！";
+			return "提交失败，HANDLE_TIME为空！";
 		}
 		
 		if(StringUtils.isBlank(json.getString("IS_ERRORINFO"))){
-			return "请求失败，IS_ERRORINFO为空！";
+			return "提交失败，IS_ERRORINFO为空！";
 		}
 		
 		if(StringUtils.isBlank(json.getString("IS_FOUND"))){
-			return "请求失败，IS_FOUND为空！";
+			return "提交失败，IS_FOUND为空！";
 		}
 		
 		if(StringUtils.isBlank(json.getString("IS_CONSISTENT"))){
-			return "请求失败，IS_CONSISTENT为空！";
+			return "提交失败，IS_CONSISTENT为空！";
 		}
 		if(StringUtils.isBlank(json.getString("IMGLIST"))){
-			return "请求失败，IMGLIST为空！";
-		}
+			return "提交失败，IMGLIST为空！";
+		}else{
+            JSONArray array = JSONArray.parseArray(json.getString("IMGLIST"));
+            if(array.size() == 0 || array.size() > 3){
+                return "提交失败，IMGLIST为0或超出上传上限，上限为3张图片！";
+            }
+        }
 		return "";
 	}
 	
@@ -196,7 +204,6 @@ public class FaceAlarmFeedBackService {
 
 	/**
 	 * 撤控接口
-	 * @param personJson
 	 * @throws Exception
 	 */
 	private String autoRemoveDispatched(String dbId ,String personId,RequestContext context) throws Exception{
@@ -240,9 +247,6 @@ public class FaceAlarmFeedBackService {
 								return "";
 							}
 						}
-//						String result = HttpUtil.post(REMOVE_DISPATCHED_PERSON_URL, params, headers);
-//						ServiceLog.info(">>>>>>>>>>>>反馈已抓捕直接撤控接口返回数据:" + result);
-						//return translateResult(result);
 					}else{
 						resultMsg = "审核人添加失败！";
 					}
