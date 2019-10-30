@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.eap.EAP;
+import com.suntek.eap.common.log.ServiceLog;
+import com.suntek.eap.pico.ILocalComponent;
+import com.suntek.efacecloud.dao.FaceDispatchedPersonDao;
+import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.util.PersonStatus;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -23,7 +29,8 @@ public class FaceAlarmFeedBackService {
 
 	private RequestBody req = new RequestBody();
 	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
-	
+	private FaceDispatchedPersonDao faceDispatchedPersonDao=new FaceDispatchedPersonDao();
+
 	@BeanService(id = "accessFeedBackInfo", description = "接收品高APP告警反馈信息", isLog = "true", type = "remote")
 	public void add(RequestContext context) throws Exception {
 		String result = StringUtil.toString(req.getRequestBodyParam(context),"");
@@ -33,16 +40,27 @@ public class FaceAlarmFeedBackService {
 			if(StringUtils.isBlank(ret)){
 				JSONObject handleResult = new JSONObject();
 				String alarmId = resultJson.getString("ALARM_ID");
-				
-				handleResult.put("IS_ERRORINFO", resultJson.getString("IS_ERRORINFO"));
-				handleResult.put("IS_FOUND", resultJson.getString("IS_FOUND"));
-				handleResult.put("IS_CONSISTENT", resultJson.getString("IS_CONSISTENT"));
+				String imgList = resultJson.getString("IMGLIST");
+
+				String is_errorinfo = resultJson.getString("IS_ERRORINFO");
+				String is_found = resultJson.getString("IS_FOUND");
+				String is_consistent = resultJson.getString("IS_CONSISTENT");
+
+				Log.requestPingGaoLog.info(">>>>>>>>>>>>>接收品高告警反馈ALARM_ID：" + alarmId);
+
+				handleResult.put("IS_ERRORINFO", is_errorinfo);
+				handleResult.put("IS_ARREST_SUSPICIOUS", is_found);
+				handleResult.put("IS_SUSPICIOUS_PERSONS", is_consistent);
 				handleResult.put("NOTE", resultJson.getString("NOTE"));
-				
+				handleResult.put("IMGLIST", imgList);
+
 				List<Map<String, Object>> mapList = alarmHandleRecordDao.queryAlarmInfoByAlarmId(alarmId);
 				if(mapList.size() > 0){
 					Map<String, Object> map = mapList.get(0);
-					
+					String personId = com.suntek.eap.util.StringUtil.toString(map.get("PERSON_ID"));
+
+					Log.requestPingGaoLog.info(">>>>>>>>>>>>>PERSON_ID：" + alarmId);
+
 					//检查是否需要补签
 					if (alarmHandleRecordDao.isAlarmSignIn(resultJson.getString("ALARM_ID")) == false) {
 						Map<String, Object> signMap = new HashMap<String, Object>();
@@ -71,7 +89,30 @@ public class FaceAlarmFeedBackService {
 					record.put("OP_TYPE", optype);	
 					
 					alarmHandleRecordDao.insertAlarmHandleRecord(record);
-					
+
+					String resultMsg = "提交成功";
+
+					//确认抓捕
+					if(optype == PersonStatus.ALARM_SUCC_CAPTURE.getType()){
+						List<Map<String, Object>> personInfoMapList = faceDispatchedPersonDao.queryByPersonId(personId);
+						if(personInfoMapList.size() > 0){
+							Map<String, Object> personInfoMap = personInfoMapList.get(0);
+							String resultPostString = autoRemoveDispatched(com.suntek.eap.util.StringUtil.toString(personInfoMap.get("DB_ID")), personId, context);
+							if(StringUtils.isBlank(resultPostString)){
+								String NEED_APPROVE = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("NEED_APPROVE", "0");
+								if("1".equals(NEED_APPROVE)){
+									resultMsg += ",且已成功撤控,人员撤控已开启撤控审批,请到人员布控——撤控管理中审核";
+								}else{
+									resultMsg += ",且已成功撤控";
+								}
+							}else{
+								resultMsg += ",但人员撤控失败,失败原因:" + resultPostString;
+							}
+						}else{
+							resultMsg += ",但人员撤控失败,失败原因:布控库查无该人员信息";
+						}
+					}
+
 					context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
 					context.getResponse().putData("MESSAGE", "请求成功");
 				}else{
@@ -112,6 +153,9 @@ public class FaceAlarmFeedBackService {
 		if(StringUtils.isBlank(json.getString("IS_CONSISTENT"))){
 			return "请求失败，IS_CONSISTENT为空！";
 		}
+		if(StringUtils.isBlank(json.getString("IMGLIST"))){
+			return "请求失败，IMGLIST为空！";
+		}
 		return "";
 	}
 	
@@ -148,5 +192,69 @@ public class FaceAlarmFeedBackService {
 		String OP_TYPE_FEEDBACK_TIMEOUT = AppHandle.getHandle(Constants.APP_NAME).getProperty("OP_TYPE_FEEDBACK_TIMEOUT", "60,60,1440");
 		long diff = DateUtil.diff(Calendar.SECOND, DateUtil.toDate(handleTime), DateUtil.toDate(alarmTime));
 		return diff > Integer.parseInt(OP_TYPE_FEEDBACK_TIMEOUT.split(",")[0]) * 60 ? 1 : 0;
+	}
+
+	/**
+	 * 撤控接口
+	 * @param personJson
+	 * @throws Exception
+	 */
+	private String autoRemoveDispatched(String dbId ,String personId,RequestContext context) throws Exception{
+
+		Map<String, Object> params = new HashMap<>();
+		Map<String, String> headers = new HashMap<>();
+
+		String userList= "";
+		String resultMsg = "自动撤控异常！";
+		List<Map<String, Object>> sysUserList = alarmHandleRecordDao.querySysUserInfo(personId);
+		if(sysUserList.size() > 0){
+			Map<String, Object> map = sysUserList.get(0);
+			String deptCode = com.suntek.eap.util.StringUtil.toString(map.get("DEPT_CODE"),"");
+			if(StringUtils.isNotBlank(deptCode)){
+				if(deptCode.length() > 4){
+					deptCode = deptCode.substring(0, deptCode.length()-2);
+				}
+				List<Map<String, Object>> sysUserListMap = alarmHandleRecordDao.querySysUserList(deptCode);
+				if(sysUserListMap.size() >0){
+					for (Map<String, Object> map2 : sysUserListMap) {
+						userList += com.suntek.eap.util.StringUtil.toString(map2.get("USER_CODE")) + ",";
+					}
+					if(StringUtils.isNotBlank(userList)){
+						context.putParameter("AUDIT_USER", userList);//审核人
+						context.putParameter("APPROVE_USER", userList);//审批人
+						context.putParameter("APPROVE_STATUS", 5);
+						context.putParameter("PROCESS_RESULT", 0);
+						context.putParameter("PROCESS_TYPE", 3);
+						context.putParameter("remoteUser", "admin");
+						context.putParameter("TASK_ID", personId);
+						context.putParameter("DB_ID", dbId);
+						context.putParameter("PROCESS_REMARK", "确认抓捕后自动撤控");
+						context.putParameter("elementId", "data");
+						if (EAP.bean.contains("face/dispatchedApprove/add")) {
+							((ILocalComponent)EAP.bean.get("face/dispatchedApprove/add")).invoke(new Object[] {context});
+							ServiceLog.info("result : " + JSONObject.toJSONString(context.getResponse().getResult()));
+							Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();
+							if (Constants.RETURN_CODE_SUCCESS != (int)result.get("CODE")) {
+								return com.suntek.eap.util.StringUtil.toString(context.getResponse().getResult());
+							}else{
+								return "";
+							}
+						}
+//						String result = HttpUtil.post(REMOVE_DISPATCHED_PERSON_URL, params, headers);
+//						ServiceLog.info(">>>>>>>>>>>>反馈已抓捕直接撤控接口返回数据:" + result);
+						//return translateResult(result);
+					}else{
+						resultMsg = "审核人添加失败！";
+					}
+				}else{
+					resultMsg = "布控单位上级单位查询失败！";
+				}
+			}else{
+				resultMsg = "部门编码获取失败！";
+			}
+		}else{
+			resultMsg = "查询部门信息失败！";
+		}
+		return resultMsg;
 	}
 }
