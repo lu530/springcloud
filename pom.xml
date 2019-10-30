@@ -17,6 +17,27 @@
 
 		<dependency>
 			<groupId>com.suntek</groupId>
+			<artifactId>suntek-eap_util</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>suntek-servlet-api</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>datacollision-api</artifactId>
+			<version>1.2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
 			<artifactId>eapframework</artifactId>
 			<version>1.0.0</version>
 			<scope>provided</scope>
@@ -37,10 +58,52 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>sms-service-proxy</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>elasticsearch-bigdata</artifactId>
+			<version>1.0.8</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>5.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.1.7</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>eap-metadata</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>surveil-task-manage-sdk</artifactId>
+			<version>2.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -55,6 +118,13 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20140107</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>vplus-ds</artifactId>
+			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -74,9 +144,37 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>com.suntek</groupId>
 			<artifactId>face-dll-service</artifactId>
 			<version>1.3.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>face-compare-sdk</artifactId>
+			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
