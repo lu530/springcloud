@@ -1403,7 +1403,7 @@ function initEvent() {
 	
 	
 	UI.control.getControlById("flyKnowledge").bind("load", function () {
-		if (UI.control.getDataById('flyKnowledge').TOTAL) {
+		if(UI.control.getDataById('flyKnowledge').TOTAL != undefined) {
 			$("#alarmTotal").html(UI.control.getDataById('flyKnowledge').TOTAL);
 		}
 	})

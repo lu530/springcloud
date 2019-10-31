@@ -106,6 +106,16 @@
 							<div class="item-con"><span class="itemicon noteicon"></span>{%='移交部门：'+thisDataObj.DEPARTMENT%}</div>
 						{% } %}
 					</div>
+					<div >
+						{% if(thisDataObj.IMGLIST){ %}
+							{% for(var i=0;i<thisDataObj.IMGLIST.length;i++){ %}
+								<span class="recode-img-small">
+									<img id="detail_alarm_img" src="{%=renderImg(thisDataObj.IMGLIST[i])%}" attrimg="zoom">
+								</span>
+							{% } %}
+						{% } %}
+						
+					</div>
 					</div>
 				{% } %}
 
