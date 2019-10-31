@@ -67,8 +67,14 @@
 							<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONTROL==1?"isCheck":"noCheck"%}"></span><b>{%=thisDataObj.IS_CONTROL==1?"控制":"未控制"%}</b>可疑人员</div>
 						{% } %}
 						{% if(thisDataObj.IS_ERRORINFO){ %}
-						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_ERRORINFO==1?"isCheck":"noCheck"%}"></span>是否误报：<b>{%=thisDataObj.IS_ERRORINFO==1?"是":"否"%}</b></div>
-						{% } %}	
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_ERRORINFO==1?"isCheck":"noCheck"%}"></span>是否确认本人：<b>{%=thisDataObj.IS_ERRORINFO==1?"是":"否"%}</b></div>
+						{% } %}
+						{% if(thisDataObj.IS_ARREST_SUSPICIOUS){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_ARREST_SUSPICIOUS==1?"isCheck":"noCheck"%}"></span>是否抓捕可疑人员：<b>{%=thisDataObj.IS_ARREST_SUSPICIOUS==1?"是":"否"%}</b></div>
+						{% } %}
+						{% if(thisDataObj.IS_SUSPICIOUS_PERSONS){ %}
+						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_SUSPICIOUS_PERSONS==1?"isCheck":"noCheck"%}"></span>可疑人员身份是否与告警一致：<b>{%=thisDataObj.IS_SUSPICIOUS_PERSONS==1?"是":"否"%}</b></div>
+						{% } %}
 						{% if(thisDataObj.IS_CONSISTENT){ %}
 						<div class="item-con"><span class="itemicon {%=thisDataObj.IS_CONSISTENT==1?"isCheck":"noCheck"%}"></span>可疑人员身份与告警<b>{%=thisDataObj.IS_CONSISTENT==1?"一致":"不一致"%}</b></div>
 						{% } %}
@@ -108,9 +114,9 @@
 					</div>
 					<div >
 						{% if(thisDataObj.IMGLIST){ %}
-							{% for(var i=0;i<thisDataObj.IMGLIST.length;i++){ %}
+							{% for(var j=0;j<thisDataObj.IMGLIST.length;j++){ %}
 								<span class="recode-img-small">
-									<img id="detail_alarm_img" src="{%=renderImg(thisDataObj.IMGLIST[i])%}" attrimg="zoom">
+									<img id="detail_alarm_img" src="{%=renderImg(thisDataObj.IMGLIST[j])%}" attrimg="zoom">
 								</span>
 							{% } %}
 						{% } %}
@@ -169,4 +175,5 @@
 <script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
 <script type="text/javascript" src="/ui/plugins/eapui/eapmapui.js"></script>
 <script type="text/javascript" src="/efacecloud/js/alarm/realTimeAlarm/receivedList.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
 </html>

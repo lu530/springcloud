@@ -16,8 +16,6 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceFunAlgoDao;
 
-import scala.collection.mutable.HashSet;
-
 /**
  * 人脸算法与菜单关联表
  * @author liuxiang
