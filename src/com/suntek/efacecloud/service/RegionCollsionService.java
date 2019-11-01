@@ -112,13 +112,45 @@ public class RegionCollsionService {
         List<List<Map<String, Object>>> resultList = new ArrayList<List<Map<String, Object>>>();
 
         for (int i = 0; i < personIds.size(); i++) {
-            // 一个人所有id集合
-            List<Object> aPersonIds = personIds.get(i);
-            List<Map<String, Object>> result = handlePersonId(aPersonIds);
+            List<Object> ids;
+            if (personIds.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) personIds.get(i);
 
-            if (result.size() > 0) { // 过滤反查不到的结果列表
-                resultList.add(result);
+                String idStr = (String) map.get("IDS");
+
+                commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
+                commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
+
+                Map<String, Object> queryParams = new HashMap<String, Object>();
+                queryParams.put("IDS", idStr);
+                commandContext.setBody(queryParams);
+                ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
+                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
+                        + commandContext.getResponse().getMessage() + " result:"
+                        + commandContext.getResponse().getResult());
+
+                code = commandContext.getResponse().getCode();
+                if (0L != code) {
+                    context.getResponse().setWarn(commandContext.getResponse().getMessage());
+                    return;
+                }
+                List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
+                list.stream().forEach(o->{
+                    o.put("REPEATS",map.get("REPEATS"));
+                    o.put("ORIGINAL_DEVICE_ID",map.get("DEVICE_ID"));
+                    o.put("FACE_SCORE","0");
+                });
+                resultList.add(list);
+            } else {
+                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                List<Map<String, Object>> result = handlePersonId(ids);
+
+                if (result.size() > 0) { // 过滤反查不到的结果列表
+                    resultList.add(result);
+                }
             }
+
         }
 
         context.getResponse().putData("DATA", resultList);
