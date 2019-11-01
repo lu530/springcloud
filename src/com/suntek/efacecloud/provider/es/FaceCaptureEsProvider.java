@@ -190,6 +190,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         }
 
         query.addBetweenCriteria("JGSK", sjgsk, ejgsk);
+
         if (!StringUtil.isEmpty(StringUtil.toString(params.get("ALGO_LIST")))) {
             // 算法ID过滤
             try {
@@ -209,7 +210,8 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
                 		boolQuery.should(QueryBuilders.termsQuery("ALGORITHM_ID", algoList));
                 		query.addQueryBuilder(boolQuery);
                 	} else {
-                		query.addEqualCriteria("ALGORITHM_ID", algoList.toArray());
+                	    //wudapei 19-11-01 普通检索不做算法过滤
+//                		query.addEqualCriteria("ALGORITHM_ID", algoList.toArray());
                 	}
                 }
             } catch (Exception e) {
