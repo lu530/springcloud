@@ -73,8 +73,17 @@ public class FrequentAccessTacticsService {
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
         for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
-            resultList.add(handlePersonId(ids));
+            List<Object> ids;
+            if (personIds.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) personIds.get(i);
+
+                map.put("PIC",map.get("OBJ_PIC"));
+                map.put("FACE_SCORE","0");
+                resultList.add(map);
+            } else {
+                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                resultList.add(handlePersonId(ids));
+            }
         }
 
         context.getResponse().putData("DATA", resultList);
