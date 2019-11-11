@@ -334,9 +334,11 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	        // 排序
 	        String sort = (String) context.getParameter("SORT");
 	        if ("1".equals(sort)) {
-	            context.putParameter("sort", "SCORE desc");
+				this.addOptionalStatement(" ORDER BY SCORE desc ");
+	            //context.putParameter("sort", "SCORE desc");
 	        } else {
-	            context.putParameter("sort", "ALARM_TIME desc");
+				this.addOptionalStatement("ORDER BY ALARM_TIME desc ");
+	           // context.putParameter("sort", "ALARM_TIME desc");
 	        }
 
 	        // 外籍人多算法
