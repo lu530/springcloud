@@ -26,6 +26,8 @@ import com.suntek.efacecloud.util.CommonUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.eap.jdbc.IFieldRender;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 /**
  * 根据告警类型返回告警数据
  * */
@@ -350,6 +352,13 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	                }
 	            }
 	        }
+			int pageNo= Integer.valueOf(StringUtil.toString(context.getParameter("pageNo")));
+
+			int pageSize= Integer.valueOf(StringUtil.toString(context.getParameter("pageSize")));
+
+			int from =(pageNo-1)*pageSize;
+
+			this.addOptionalStatement(" limit " + pageSize+" offset " +from);
 
 	        this.addFieldRender(new AlarmFiledRender(), new String[]{"ALARM_IMG", "TEMPLET_IMG", "SCORE", "SEX", "FRAME_IMG", "CONFIRM_STATUS"});
 	    }
@@ -360,11 +369,17 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	    @Override
 	    @BeanService(id = "getData", type = "remote", description = "人脸告警记录查询", paasService = "true")
 	    public PageQueryResult getData(RequestContext context) {
-	        PageQueryResult result = super.getData(context);
+	    	this.prepare(context);
+	    	JdbcTemplate jdbc = EAP.jdbc.getTemplate(Constants.APP_NAME);
+	    	String sql = this.buildQuerySQL();
+			//Map<String, IFieldRender> filedRender=getFieldRenders();
+
+			List<Map<String,Object>>resultSet=jdbc.queryForList(sql,this.parameters.toArray(new Object[this.parameters.size()]));
+	        //PageQueryResult result = super.getData(context);
 
 	        try {
 	        	String taskType=StringUtil.toString(context.getParameter("TASK_TYPE"));
-	            List<Map<String, Object>> resultSet = result.getResultSet();
+
 	            /*
 	             * if("1".equals(serchAlarmRel)) { List<String> alarmIdList =
 	             * resultSet.stream().map(f->
@@ -443,7 +458,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	        } catch (Exception e) {
 	            ServiceLog.error("获取告警设备信息异常", e);
 	        }
-
+			PageQueryResult result =new PageQueryResult(0,0,resultSet);
 	        return result;
 	    }
    
