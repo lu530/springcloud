@@ -456,6 +456,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	                map.put("LONGITUDE", device.getDeviceX());
 	                map.put("LATITUDE", device.getDeviceY());
 					map.put("TEMPLET_IMG",ModuleUtil.renderImage(StringUtil.toString(map.get("TEMPLET_IMG"))));
+					map.put("ALARM_IMG",ModuleUtil.renderImage(StringUtil.toString(map.get("ALARM_IMG"))));
 	            }
 	        } catch (Exception e) {
 	            ServiceLog.error("获取告警设备信息异常", e);
