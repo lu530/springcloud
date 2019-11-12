@@ -784,7 +784,7 @@ function initEvent() {
 			alarmImg = $this.attr('alarm-img');
 		UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html?OBJECT_ID=' + objectId + '&curTime=' + curTime + '&isFly=1&ALARM_ID=' + ALARM_ID + '&level=' + level
 			+ '&name=' + name + '&idCard=' + idCard + '&time=' + time + '&alarmTime=' + alarmTime + '&alarmImg=' + alarmImg, "告警详情",
-			1080, (isBlack?690:670), function (obj) { });
+			1080, (isBlack?690:730), function (obj) { });
 	});
 
 	//布控详情
@@ -1326,7 +1326,7 @@ function initEvent() {
 		// debugger
 
 		if (isfs == '1') {
-			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 700, function (obj) { });
+			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 730, function (obj) { });
 		} else {
 			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 880, 670, function (obj) { });
 		}

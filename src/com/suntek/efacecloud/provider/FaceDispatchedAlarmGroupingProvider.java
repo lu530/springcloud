@@ -149,13 +149,16 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 		this.addOptionalStatement(" where 1=1 ");
 		if (!context.getUser().isAdministrator()) {
 			/*
-			 * 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
+			 * 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限，并且具有告警选择）
 			 * 全国在逃类（公共库）/需抓捕类：创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收 + 设备所属辖区内民警帐号
 			 * 管控/关注类，				  创建布控人+查看和告警权限设置 +（设备所属辖区）对应上级分局管理员市局管理员也可以接收
 			 */
             this.addOptionalStatement("AND ("
-					// 用户具有告警查询-人脸告警权限
-					+ "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+					// 用户具有告警查询-人脸告警权限，并且具有告警选择
+					+ "("
+					+ "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?) "
+					+ "    AND vfa.ORG_CODE IN ( SELECT ORG_CODE FROM SYS_USERALARM su WHERE su.IS_HALF = 0 AND su.USER_CODE =? ) "
+					+ ")"
 					+ "AND ("
                     + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
                     // 查看本级及下级所有任务
@@ -179,6 +182,7 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
                     + ")");
             this.addParameter(context.getUserCode());
             this.addParameter(Constants.DEFENCE_FACEALARM);
+			this.addParameter(context.getUserCode());
 			this.addParameter(context.getUserCode());
 			this.addParameter(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
 			this.addParameter(context.getUser().getDept().getCivilCode() + "%");
