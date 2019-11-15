@@ -181,6 +181,7 @@ if (selTime == 1) {
 $(function () {
 	getAlgoID();
 	UI.control.init();
+	getDeviceModule();  //定义在common中
 	compatibleIndexOf();
 	initEvent();
 	initWaterMark();
@@ -701,7 +702,7 @@ function initEvent() {
 			orgCode: $("#deviceNames_" + index).attr("orgcode")
 		});
 
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
 			$('#deviceNames_' + index).html(resp.deviceName);
 			$('#deviceNames_' + index).attr('title', resp.deviceName);
 			$('#deviceNames_' + index).attr('orgcode', resp.orgCode);
@@ -733,7 +734,7 @@ function initEvent() {
 	//点击进入卡口选择地图
 	$('[id^=locate_]').click(function () {
 		var index = $(this).attr("id").split("_")[1];
-		UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
 			$('#deviceNames_' + index).html(resp.deviceName);
 			$('#deviceNames_' + index).attr('title', resp.deviceName);
 			$('#deviceNames_' + index).attr('orgcode', resp.orgCode);

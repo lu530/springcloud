@@ -61,6 +61,7 @@ regionDeviceList = {
 $(document).ready(function(){
 //	UI.control.init(["userInfo"]);
 	UI.control.init();
+	getDeviceModule();  //定义在common中
 	/*judgePermission();*/
 	compatibleIndexOf();
 	initEvents();
@@ -258,7 +259,7 @@ function initEvents(){
 		parent.showLayer(parent.UI.map.layerNameMap[layerName]);
 		parent.UI.map.getMap().drawHandler.disable();
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
 			var mapObj = parent.UI.map.getMap(), wms = null;
 			for(var p in mapObj._layers){
 				if("wmsParams" in mapObj._layers[p]){

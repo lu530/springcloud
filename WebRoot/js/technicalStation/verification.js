@@ -638,7 +638,7 @@ function imgDoSearch(isInit) {
     if (hasLocalSearch && !isBlack) {
         lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
     }else {
-        initTmpl(searchImgList);
+        initTmpl(JSON.stringify(searchImgList));
     }
     if (($(".resultTab li").length) * 130 > $(".page-info-metro").width() - 50) {
         $(".resultTab li").width(($(".page-info-metro").width() - 50) / ($(".resultTab li").length) - 5 - 30)
