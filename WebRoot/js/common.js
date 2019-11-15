@@ -59,6 +59,20 @@ var orgTreeOpts = {
 		}
 };
 
+var deviceModule = '/portal';  // 感知设备默认加载portal模块的
+function getDeviceModule() {
+    $.ajax({
+        url: '/portal/page/device/deviceList.html',
+        async: false,
+        success: function(data){
+            deviceModule = '/portal'
+        },
+        error: function(error) {
+            deviceModule = '/connectplus'
+        }
+    })
+}
+
 
 //常用数据字典
 var CONSTANTS = {

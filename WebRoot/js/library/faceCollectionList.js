@@ -85,6 +85,7 @@ $(function () {
     //调用页面回填
     fatherSearchDevice();
     initFilterBar(); //先加载人脸来源再加载数据
+    getDeviceModule();  //定义在common中
     //initData();
     topSpecialUploadPic();
     initWaterMark();
@@ -127,12 +128,13 @@ function hideModule(selector) {
 
 function initFilterBar() {
     UI.util.showLoadingPanel();
-    UI.control.remoteCall('/connectplus/mx/v6/cp/device/getSourceList', {}, function (resp) {
-        if(resp.data.length > 0) {
-            $("#faceRource").html(tmpl('faceRourceTemplate', resp.data));
+    UI.control.remoteCall('', {}, function (resp) {
+        let data = resp.data.Data;
+        if(data && data.length > 0) {
+            $("#faceRource").html(tmpl('faceRourceTemplate', data));
             isFaceSource = true;
             $("#faceRource").closest(".filter-bar").removeClass("hide");
-            deviceType = resp.data[0].orgCode;
+            deviceType = data[0].OrgCode;
         }else {
             $("#sortList [type='sourceSort']").addClass('hide');
         }
@@ -140,9 +142,8 @@ function initFilterBar() {
     }, function () {
         $("#sortList [type='sourceSort']").addClass('hide');
         initData();
-    }, {url: '/connectplus/mx/v6/cp/device/getSourceList?DEVICE_TYPE=194', type: 'GET'}, true);
+    }, {url: '/portal/mx/v6/cp/device/getSourceList?DEVICE_TYPE=194', type: 'GET'}, true);
 }
-
 
 function initData() {
     if (imgSrc != "") {
@@ -497,8 +498,7 @@ function initEvent() {
             deviceIdInt: $('#orgCodeInt').val(),
             orgCode: $("#deviceNames").attr("orgcode")
         });
-
-        UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=' + deviceType, '设备选择', 1000, 600, function (resp) {
+        UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=' + deviceType, '设备选择', 1000, 600, function (resp) {
             $('#deviceNames').html(resp.deviceName);
             $('#deviceNames').attr('title', resp.deviceName);
             $('#deviceNames').attr('orgcode', resp.orgCode);
@@ -547,7 +547,7 @@ function initEvent() {
 
     //点击进入卡口选择地图
     $('#locate').click(function () {
-        UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=' + deviceType, '感知设备', 1000, 600, function (resp) {
+        UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=' + deviceType, '感知设备', 1000, 600, function (resp) {
             $('#deviceNames').html(resp.deviceName);
             $('#deviceNames').attr('title', resp.deviceName);
             $('#deviceNames').attr('orgcode', resp.orgCode);
