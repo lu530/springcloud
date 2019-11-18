@@ -608,7 +608,7 @@ function parentNodeRender(treeNode){
                     options.isNeedSearchByImage = true
                 }
             });
-            if(projectID == 'base' || projectID == 'longli'){
+            if(projectID == 'base' || projectID == 'longli' || projectID == 'zhanjiang'){
                 options.isNeedSearchByImage = false
             }
             top.$.photoZoom(options);
