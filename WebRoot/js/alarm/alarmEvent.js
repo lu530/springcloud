@@ -32,6 +32,7 @@ var queryParamsList = { //初始化告警列表请求参数
 };
 $(function() {
 	UI.control.init();
+	getDeviceModule();  //定义在common中
 	initEvent();
 	initDateTimeControl(timeOption);
 })
@@ -47,7 +48,7 @@ function initEvent() {
 			orgCode:$("#deviceNames_1").attr("orgcode")
 		});
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function(resp) {
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function(resp) {
 			$('#deviceNames_1').html(resp.deviceName);
 			$('#deviceNames_1').attr('title', resp.deviceName);
 			$('#deviceNames_1').attr('orgcode',resp.orgCode);
@@ -108,7 +109,7 @@ function initEvent() {
 	});
 	//点击进入卡口选择地图--告警列表页面
 		$('#locate_1').click(function() {
-			UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function(resp) {
+			UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function(resp) {
 				$('#deviceNames_1').html(resp.deviceName);
 				$('#deviceNames_1').attr('title', resp.deviceName);
 				$('#deviceNames_1').attr('orgcode',resp.orgCode);

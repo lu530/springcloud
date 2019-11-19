@@ -29,7 +29,7 @@ var hasLocalSearch = false;
 UI.control.remoteCall('platform/webapp/config/get', { "applicationName": "efacestore" }, function (resp) {
     var jsonObj = resp.attrList;
     for (var i = 0; i < jsonObj.length; i++) {
-        if (jsonObj[i].key == 'IS_LOCAL_SEARCH_OPEN' && jsonObj[i].value == "1") { //
+        if (jsonObj[i].key == 'IS_LOCAL_SEARCH_OPEN' && jsonObj[i].value == "1") {
             hasLocalSearch = true;
         }
     }
@@ -60,6 +60,8 @@ if (algoList) {
     } catch (error) {
         UI.util.debug(error);
     }
+}else {
+    algoList = ALGO_LIST;
 }
 
 var NAME = '',
@@ -329,7 +331,7 @@ function initEvent() {
                         isFirstLoading = true;
                     }
                     $.each(imgArr, function (index, item) {
-                        var html = '<li title="检索结果" class="disabled"><span class="load-icon"></span><img src=' + item + ' alt="">&nbsp;&nbsp;&nbsp;检索结果</li>';
+                        var html = '<li title="检索结果" attrid='+ cacheIDs[index] +' class="disabled"><span class="load-icon"></span><img src=' + item + ' alt="">&nbsp;&nbsp;&nbsp;检索结果</li>';
                         $("#resultTab").append(html); // tab标签
                     });
                     imgDoSearch();
@@ -624,27 +626,88 @@ function imgDoSearch(isInit) {
     if (imgArr.length < 1) {
         return;
     }
+    if (isInit) {
+        cacheIDs.push(UI.util.guid());
+        $('#resultTab li').attr('attrid', cacheIDs[0]);
+    }
 
     if (isFirstLoading) { //第一次检索
         UI.util.showLoadingPanel(null, 'currentPage'); //显示加载进度条
     }
     searchingFlag = true; //页面正在检索
     if (hasLocalSearch && !isBlack) {
-        lacalSearch(searchImgList);//本地一人一档检索
-    }
-    if (isBlack) {
-        initTmpl(JSON.stringify(searchImgList)); //本地搜索渲染模板
-        $('.faceLibrary').hide();
-    } else {
+        lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
+    }else {
         initTmpl(JSON.stringify(searchImgList));
     }
     if (($(".resultTab li").length) * 130 > $(".page-info-metro").width() - 50) {
         $(".resultTab li").width(($(".page-info-metro").width() - 50) / ($(".resultTab li").length) - 5 - 30)
     }
-    // 检索主体方法
-    //params(isInit): 页面一进来就要马上查询，则传isInit=true,否则不用传
-    if (isInit) {
-        cacheIDs.push(UI.util.guid());
+}
+
+// 本地一人一档检索
+function lacalSearch(imgList) {
+    var _imgList = [];
+    if (imgList.length < 1) {
+        return;
+    } else {
+        _imgList  = imgList.splice(0, 1); //取一项查询
+    }
+    var queryParams = {
+        ALGO_LIST: JSON.stringify(ALGO_LIST),
+        KEYWORDS: '',
+        PERSON_TAG: '',
+        SEX: '',
+        pageNo: 1,
+        pageSize: 30,
+        IMG: _imgList[0],
+        THRESHOLD: '',
+        ARCHIVE_STATUS: 1,
+        SORT_FIELD: 'SCORE'
+    };
+    UI.util.showLoadingPanel(null, 'currentPage');
+    UI.control.remoteCall("facestore/archivesPerson/getData", queryParams, function (resp) {
+        if (resp.data && resp.data.LIST) {
+            for (i = 0; i++; i < resp.data.LIST.length) {
+                var data = resp.data && resp.data.LIST && resp.data.LIST[i];
+                var list = data && data.ALGORITHM_LIST;
+                if (list && list.length) {
+                    for (var i = list.length - 1; i >= 0; i--) {
+                        if (list[i].IDENTITY_ID == identityId) {
+                            list.splice(i, 1); // 删除证件号与本人相同的项
+                        }
+                    }
+                }
+            }
+            var $_html = $(tmpl('personListTml_local', resp.data.LIST));
+            var attrId = $("#resultTab").find("img[src='"+ _imgList[0] +"']").closest('li').attr('attrid');
+            $_html.attr('attrid', attrId);
+            $('#tmplContent').prepend($_html);
+        }
+        // localresultFlag = true;
+        // if (outresultFlag) {
+        //     searchingFlag = false;
+        //     UI.util.hideLoadingPanel('currentPage');
+        // }
+        // $('#resultTab li').find('.load-icon').addClass('hide');
+        // $('#resultTab li').removeClass('disabled');
+        if(imgList.length == 0) {
+            initTmpl(JSON.stringify(imgArr)); //第三方搜索
+            if (isBlack) $('.faceLibrary').hide();
+        }
+    }, function (XMLHttpRequest, textStatus) {
+        if (textStatus === 'timeout') {
+            UI.util.alert('已有档案检索超时', 'warn');
+        }
+        UI.util.hideLoadingPanel('currentPage');
+        $('#resultTab li').find('.load-icon').addClass('hide');
+        $('#resultTab li').removeClass('disabled');
+    }, {
+        timeout: 20000
+    }, true);
+
+    if (imgList.length > 0) { //递归查询
+        lacalSearch(imgList);
     }
 }
 
@@ -680,96 +743,36 @@ function initTmpl(searchImgUrl) {
                         arrOuter.push({ name: sfListArrOuter[i], data: obj.LIST[sfListArrOuter[i]], length: obj.LIST[sfListArrOuter[i]].length });
                     }
                     $('#tmplContent').append(tmpl("personListTml_3rd", arrOuter));
-                    // $('#resultTab li').find('.load-icon').addClass('hide');
                 }
-            });
-            // 给图片列表和下面的图片，增加一个关联ID
-            addID();
-            var $personList = $('body').find('.personList');
-            $personList.each(function(i, ele) {
-                var attrId = $(ele).attr('attrId');
-                // 隐藏resultTab
-                $('#resultTab li[attrId="' + attrId + '"]').find('.load-icon').addClass('hide');
-                $('#resultTab li[attrId="' + attrId + '"]').removeClass('disabled');
-            });
-            
-            // 默认展示第一个tag
-            if (isFirstLoading) { //第一次检索
-                // 根据ID展示图片检索结果
-                showResult(cacheIDs[0]);
-                isFirstLoading = false;
-            }      
+            });      
         }
         if (resp.SEARCHTIMES) {
             $('.searchNum').text(resp.SEARCHTIMES).parents('.action-btn-group').removeClass('hide');
         }
+        // 给图片列表和下面的图片，增加一个关联ID
         addID();
+        var $personList = $('body').find('.personList');
+        $personList.each(function(i, ele) {
+            var attrId = $(ele).attr('attrId');
+            // 隐藏resultTab
+            $('#resultTab li[attrId="' + attrId + '"]').find('.load-icon').addClass('hide');
+            $('#resultTab li[attrId="' + attrId + '"]').removeClass('disabled');
+        });
+        
+        // 默认展示第一个tag
+        if (isFirstLoading) { //第一次检索
+            // 根据ID展示图片检索结果
+            showResult(cacheIDs[0]);
+            isFirstLoading = false;
+        }
         searchingFlag = false;
+        // $('#resultTab li').find('.load-icon').addClass('hide');
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, function() {
         searchingFlag = false;
+        $('#resultTab li').find('.load-icon').addClass('hide');
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, null, true);
-}
-
-// 本地一人一档检索
-function lacalSearch(imgList) {
-    var _imgList = [];
-    if (imgList.length < 1) {
-        return;
-    } else {
-        _imgList  = imgList.splice(0, 1); //取一项查询
-    }
-    var queryParams = {
-        ALGO_LIST: JSON.stringify(ALGO_LIST),
-        KEYWORDS: '',
-        PERSON_TAG: '',
-        SEX: '',
-        pageNo: 1,
-        pageSize: 30,
-        IMG: _imgList[0], //线上改回来
-        // IMG: "http://172.25.20.48:8088/g1/M00/00000014/00000014/rBkUMFx_U7aAC6tBAAAk1J9DCB4904.jpg",
-        THRESHOLD: '',
-        ARCHIVE_STATUS: 1,
-        SORT_FIELD: 'SCORE'
-    };
-    UI.util.showLoadingPanel(null, 'currentPage');
-    UI.control.remoteCall("facestore/archivesPerson/getData", queryParams, function (resp) {
-        if (resp.data && resp.data.LIST) {
-            for (i = 0; i++; i < resp.data.LIST.length) {
-                var data = resp.data && resp.data.LIST && resp.data.LIST[i];
-                var list = data && data.ALGORITHM_LIST;
-                if (list && list.length) {
-                    for (var i = list.length - 1; i >= 0; i--) {
-                        if (list[i].IDENTITY_ID == identityId) {
-                            list.splice(i, 1); // 删除证件号与本人相同的项
-                        }
-                    }
-                }
-            }
-            $('#tmplContent').prepend(tmpl('personListTml_local', resp.data.LIST));
-        }
-        localresultFlag = true;
-        if (outresultFlag) {
-            searchingFlag = false;
-            UI.util.hideLoadingPanel('currentPage');
-        }
-        $('#resultTab li').find('.load-icon').addClass('hide');
-        $('#resultTab li').removeClass('disabled');
-    }, function (XMLHttpRequest, textStatus) {
-        if (textStatus === 'timeout') {
-            UI.util.alert('已有档案检索超时', 'warn');
-        }
-        UI.util.hideLoadingPanel('currentPage');
-        $('#resultTab li').find('.load-icon').addClass('hide');
-        $('#resultTab li').removeClass('disabled');
-    }, {
-        timeout: 20000
-    }, true);
-
-    if (imgList.length > 0) { //递归查询
-        lacalSearch(imgList);
-    }
 }
 
 // 外籍人模板渲染
@@ -1132,7 +1135,7 @@ function addID() {
     for (var i = 0; i < cacheIDs.length; i++) {
         $('#imgBox li').eq(i).attr('attrId', cacheIDs[i]);
         $('#resultTab li').eq(i).attr('attrId', cacheIDs[i]);
-        $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
+        // $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
         $('body').find('.recommendList').eq(i).attr('attrId', cacheIDs[i]);
     }
 }
@@ -1232,7 +1235,7 @@ function getFaceAndForeignAlgoType(){
 		var serviceUrl = 'face/common/getFaceAlgoType';
 	}
 	UI.control.remoteCall(serviceUrl, params, function (resp) {
-		algoType = resp.data[0].ALGORITHM_ID;
+		algoType = resp && resp.data && resp.data.length > 0 ? resp.data[0].ALGORITHM_ID : '10003';
 	});
 	return algoType;
 }

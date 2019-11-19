@@ -26,4 +26,8 @@ public class Log{
 			Constants.APP_NAME + "_faceSearch_0605");  // liangzhen 20190605
 	public static Logger faceOneToOneLog = LogFactory.getServiceLog(Constants.APP_NAME + "_faceOneToOne");
 	public static Logger importDataLog = LogFactory.getServiceLog(Constants.APP_NAME + "_importData");  //导入数据记录日志 importDataLog
+
+	public static Logger requestPingGaoLog = LogFactory.getServiceLog(Constants.APP_NAME + "_requestPingGao");  //导入数据记录日志 importDataLog
+
 }
+

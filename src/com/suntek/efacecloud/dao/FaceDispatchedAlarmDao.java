@@ -232,7 +232,7 @@ public class FaceDispatchedAlarmDao {
 
         String userCode = StringUtil.toString(parameters.get("USER_CODE"));
         if (!"admin".equals(userCode)) {
-            // 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
+            // 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限，并且具有告警选择）
             if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
                 sb.append("left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ")
                         .append("join VIID_DISPATCHED_PERSON vdp on vfa.OBJECT_ID = vdp.FACE_ID ")
@@ -240,8 +240,11 @@ public class FaceDispatchedAlarmDao {
 
                 String deptCode = StringUtil.toString(parameters.get("DEPT_CODE"));
                 sb.append("AND ("
-                        // 用户具有告警查询-人脸告警权限
-                        + "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+                        // 用户具有告警查询-人脸告警权限，并且具有告警选择
+                        + "("
+                        + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?) "
+                        + "    AND vfa.ORG_CODE IN ( SELECT ORG_CODE FROM SYS_USERALARM su WHERE su.IS_HALF = 0 AND su.USER_CODE =? ) "
+                        + ")"
                         + "AND ("
                         + "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
                         // 查看本级及下级所有任务
@@ -268,6 +271,7 @@ public class FaceDispatchedAlarmDao {
                 list.add(userCode);
                 list.add(Constants.DEFENCE_FACEALARM);
                 list.add(userCode);
+                list.add(userCode);
                 list.add(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
                 list.add(civilCode + "%");
                 list.add(civilCode);
@@ -291,9 +295,10 @@ public class FaceDispatchedAlarmDao {
                 }
 
                 // 布控分局
-                if (!StringUtil.isNull(deptCode)) {
+                String orgCode = StringUtil.toString(parameters.get("ORG_CODE"));
+                if (!StringUtil.isNull(orgCode)) {
                     sb.append(" and u.DEPT_CODE like ?");
-                    list.add(deptCode + "%");
+                    list.add(orgCode + "%");
                 }
 
                 // 布控时间
@@ -813,7 +818,7 @@ public class FaceDispatchedAlarmDao {
 
 		String userCode = StringUtil.toString(parameters.get("USER_CODE"));
 		if (!"admin".equals(userCode)) {
-			// 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限）
+			// 精细化控制，通过权限管理配置可见信息（前提：用户具有告警查询-人脸告警权限，并且具有告警选择）
 			if ("1".equals(IS_PERSONEL_CONTROL_ELABORATION)) {
 				sb.append("left join VIID_DISPATCHED_DB d on d.DB_ID = vfa.DB_ID ")
 						.append("join VIID_DISPATCHED_PERSON vdp on vfa.OBJECT_ID = vdp.FACE_ID ")
@@ -821,8 +826,11 @@ public class FaceDispatchedAlarmDao {
 
 				String deptCode = StringUtil.toString(parameters.get("DEPT_CODE"));
 				sb.append("AND ("
-                        // 用户具有告警查询-人脸告警权限
-                        + "(EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?))"
+                        // 用户具有告警查询-人脸告警权限，并且具有告警选择
+                        + "("
+                        + "    EXISTS (SELECT 1 FROM SYS_USERFUNC uf,SYS_FUNLIST f WHERE uf.USER_CODE=? AND uf.ORG_CODE=f.FUNID AND f.MENUID=?) "
+                        + "    AND vfa.ORG_CODE IN ( SELECT ORG_CODE FROM SYS_USERALARM su WHERE su.IS_HALF = 0 AND su.USER_CODE =? ) "
+                        + ")"
                         + "AND ("
 						+ "((d.TAG_CODE='01' OR d.TAG_CODE='02') AND ("
 						// 查看本级及下级所有任务
@@ -848,6 +856,7 @@ public class FaceDispatchedAlarmDao {
 				String civilCode = StringUtil.toString(parameters.get("CIVIL_CODE"));
                 list.add(userCode);
                 list.add(Constants.DEFENCE_FACEALARM);
+                list.add(userCode);
 				list.add(userCode);
 				list.add(Constants.DISPATCHED_PERSON_PERMISSION_MENUID);
 				list.add(civilCode + "%");

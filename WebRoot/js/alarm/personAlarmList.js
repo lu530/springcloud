@@ -181,6 +181,7 @@ if (selTime == 1) {
 $(function () {
 	getAlgoID();
 	UI.control.init();
+	getDeviceModule();  //定义在common中
 	compatibleIndexOf();
 	initEvent();
 	initWaterMark();
@@ -701,7 +702,7 @@ function initEvent() {
 			orgCode: $("#deviceNames_" + index).attr("orgcode")
 		});
 
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
 			$('#deviceNames_' + index).html(resp.deviceName);
 			$('#deviceNames_' + index).attr('title', resp.deviceName);
 			$('#deviceNames_' + index).attr('orgcode', resp.orgCode);
@@ -733,7 +734,7 @@ function initEvent() {
 	//点击进入卡口选择地图
 	$('[id^=locate_]').click(function () {
 		var index = $(this).attr("id").split("_")[1];
-		UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600, function (resp) {
 			$('#deviceNames_' + index).html(resp.deviceName);
 			$('#deviceNames_' + index).attr('title', resp.deviceName);
 			$('#deviceNames_' + index).attr('orgcode', resp.orgCode);
@@ -784,7 +785,7 @@ function initEvent() {
 			alarmImg = $this.attr('alarm-img');
 		UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html?OBJECT_ID=' + objectId + '&curTime=' + curTime + '&isFly=1&ALARM_ID=' + ALARM_ID + '&level=' + level
 			+ '&name=' + name + '&idCard=' + idCard + '&time=' + time + '&alarmTime=' + alarmTime + '&alarmImg=' + alarmImg, "告警详情",
-			1080, (isBlack?690:670), function (obj) { });
+			1080, (isBlack?690:730), function (obj) { });
 	});
 
 	//布控详情
@@ -1326,7 +1327,7 @@ function initEvent() {
 		// debugger
 
 		if (isfs == '1') {
-			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 670, function (obj) { });
+			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 730, function (obj) { });
 		} else {
 			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 880, 670, function (obj) { });
 		}
@@ -1403,7 +1404,7 @@ function initEvent() {
 	
 	
 	UI.control.getControlById("flyKnowledge").bind("load", function () {
-		if (UI.control.getDataById('flyKnowledge').TOTAL) {
+		if(UI.control.getDataById('flyKnowledge').TOTAL != undefined) {
 			$("#alarmTotal").html(UI.control.getDataById('flyKnowledge').TOTAL);
 		}
 	})

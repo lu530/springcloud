@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.efacecloud.util.SurveilApproveStatus;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -51,9 +52,14 @@ public class AlarmHandleRecordService {
 
 		JSONObject handleResultJ = JSONObject.parseObject(handleResult);
 		
-		// 是否误报，湛江用到
+		// 确认是否本人，仅湛江使用
 		String isErrorInfo = StringUtil.toString(handleResultJ.get("IS_ERRORINFO"));
-		
+		// 确认抓捕可疑人员，仅湛江使用
+		String isArrestSuspicious = StringUtil.toString(handleResultJ.get("IS_ARREST_SUSPICIOUS"));
+		// 确认可疑人员身份是否与告警一致，仅湛江使用
+		String isSuspiciousPersons = StringUtil.toString(handleResultJ.get("IS_SUSPICIOUS_PERSONS"));
+
+
 		String isFound = StringUtil.toString(handleResultJ.get("IS_FOUND"));
 		String isControl = StringUtil.toString(handleResultJ.get("IS_CONTROL"));
 		String isConsistent = StringUtil.toString(handleResultJ.get("IS_CONSISTENT"));
@@ -124,15 +130,16 @@ public class AlarmHandleRecordService {
 			
 			//湛江需求
 			if(NEED_DISPATCHED_PERSON_STATUS.equals("1")){
+
 				int status = PersonStatus.FEDBACK.getType();
 				//是否确认本人
-				if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isFound))) {
+				if ("0".equals(isErrorInfo) || ("1".equals(isErrorInfo) && "0".equals(isArrestSuspicious))) {
 					status = PersonStatus.ALARM_NOT_CAPTURE.getType();
 				//确认非嫌疑人
-				}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "0".equals(isConsistent)){
+				}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "0".equals(isSuspiciousPersons)){
 					status = PersonStatus.CONFIRM_NONSUSPECT.getType();
 				//抓捕成功
-				}else if("1".equals(isErrorInfo) && "1".equals(isFound) && "1".equals(isConsistent)){
+				}else if("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "1".equals(isSuspiciousPersons)){
 					status = PersonStatus.ALARM_SUCC_CAPTURE.getType();
 				}
 				
@@ -140,21 +147,30 @@ public class AlarmHandleRecordService {
 				
 				//确认抓捕后的直接撤控
 				if(status == PersonStatus.ALARM_SUCC_CAPTURE.getType()){
-					
+				    //查询DBid
 					List<Map<String, Object>> personInfoMapList = faceDispatchedPersonDao.queryByPersonId(personId);
-					if(personInfoMapList.size() > 0){
-						Map<String, Object> personInfoMap = personInfoMapList.get(0);
-						String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId, context);
-						if(StringUtils.isBlank(resultPostString)){
-							String NEED_APPROVE = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("NEED_APPROVE", "0");
-							if("1".equals(NEED_APPROVE)){
-								resultMsg += ",且已成功撤控,人员撤控已开启撤控审批,请到人员布控——撤控管理中审核";
-							}else{
-								resultMsg += ",且已成功撤控";
-							}
-						}else{
-							resultMsg += ",但人员撤控失败,失败原因:" + resultPostString;
-						}
+                    List<Map<String, Object>> personStausList = faceDispatchedPersonDao.queryPersonByPersonId(personId);
+                    if(personInfoMapList.size() > 0 && personStausList.size() > 0){
+                        Map<String, Object> personInfoMap = personInfoMapList.get(0);
+                        //判断当前布控人员的状态是否符合自动撤控的条件
+                        Map<String, Object> personStausMap = personStausList.get(0);
+                        if(StringUtil.toString(SurveilApproveStatus.SURVEILED.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))
+                               ||StringUtil.toString(SurveilApproveStatus.WITHDROW_AUDIT_NOPASS.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))
+                                ||StringUtil.toString(SurveilApproveStatus.WITHDROW_APPROVE_NOPASS.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))){
+                            String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId, context);
+                            if(StringUtils.isBlank(resultPostString)){
+                                String NEED_APPROVE = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("NEED_APPROVE", "0");
+                                if("1".equals(NEED_APPROVE)){
+                                    resultMsg += ",且已成功撤控,人员撤控已开启撤控审批,请到操作人员到人员布控中的撤控管理中审核";
+                                }else{
+                                    resultMsg += ",且已成功撤控";
+                                }
+                            }else{
+                                resultMsg += ",但人员撤控失败,失败原因:" + resultPostString;
+                            }
+                        }else{
+                            resultMsg += ",但人员撤控失败,失败原因:当前布控状态不满足撤控条件";
+                        }
 					}else{
 						resultMsg += ",但人员撤控失败,失败原因:布控库查无该人员信息";
 					}
@@ -164,7 +180,7 @@ public class AlarmHandleRecordService {
 		
 		//湛江新增
 		if(NEED_DISPATCHED_PERSON_STATUS.equals("1")){
-			if ("1".equals(isErrorInfo) && "1".equals(isFound) && "1".equals(isConsistent)) {
+			if ("1".equals(isErrorInfo) && "1".equals(isArrestSuspicious) && "1".equals(isSuspiciousPersons)) {
 				map.put("OP_TYPE", 9); // 已抓获
 			}
 		}else{
@@ -251,7 +267,7 @@ public class AlarmHandleRecordService {
 			map.put("USER_NAME", StringUtil.toString(info.get("USER_NAME")));
 			map.put("DEPT_NAME", StringUtil.toString(info.get("DEPT_NAME")));
 			map.put("OP_TYPE", StringUtil.toString(info.get("OP_TYPE")));
-			map.put("POLICE_ID", StringUtil.toString(info.get(""),"无警号"));
+			map.put("POLICE_ID", StringUtil.toString(info.get("POLICE_ID"),"无警号"));
 			map.put("ID", info.get("ID"));
 			result.add(map);
 		}
@@ -309,14 +325,27 @@ public class AlarmHandleRecordService {
 		if(StringUtils.equals(NEED_DISPATCHED_PERSON_STATUS, "1")){
 			
 			List<Map<String, Object>> personInfoMapList = faceDispatchedPersonDao.queryByPersonId(personId);
-			if(personInfoMapList.size() > 0){
+			List<Map<String, Object>> personStausList = faceDispatchedPersonDao.queryPersonByPersonId(personId);
+			if(personInfoMapList.size() > 0 && personStausList.size() > 0){
 				Map<String, Object> personInfoMap = personInfoMapList.get(0);
-				String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId,context);
-				if(StringUtils.isBlank(resultPostString)){
-					resultMsg += ",且人员撤控成功";
+				//判断当前布控人员的状态是否符合自动撤控的条件
+				Map<String, Object> personStausMap = personStausList.get(0);
+				if(StringUtil.toString(SurveilApproveStatus.SURVEILED.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))
+						||StringUtil.toString(SurveilApproveStatus.WITHDROW_AUDIT_NOPASS.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))
+						||StringUtil.toString(SurveilApproveStatus.WITHDROW_APPROVE_NOPASS.getType()).equals(StringUtil.toString(personStausMap.get("APPROVE_STATUS")))){
+					String resultPostString = autoRemoveDispatched(StringUtil.toString(personInfoMap.get("DB_ID")), personId, context);
+					if(StringUtils.isBlank(resultPostString)){
+						String NEED_APPROVE = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("NEED_APPROVE", "0");
+						if("1".equals(NEED_APPROVE)){
+							resultMsg += ",且已成功撤控,人员撤控已开启撤控审批,请到操作人员到人员布控中的撤控管理中审核";
+						}else{
+							resultMsg += ",且已成功撤控";
+						}
+					}else{
+						resultMsg += ",但人员撤控失败,失败原因:" + resultPostString;
+					}
 				}else{
-					resultMsg += ",但人员撤控失败,失败原因:" + resultPostString;
-					ServiceLog.info(">>>>>>>>>【确认抓捕】撤控失败，失败原因：" + resultPostString);
+					resultMsg += ",但人员撤控失败,失败原因:当前布控状态不满足撤控条件";
 				}
 			}else{
 				resultMsg += ",但人员撤控失败,失败原因:布控库查无该人员信息";

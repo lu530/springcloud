@@ -139,3 +139,11 @@
 	cursor: pointer;
 	color: #0078d7;
 }
+.recode-img-small{
+	display:inline-block;
+	width: 27%;
+}
+.recode-img-small img{
+	display:block;
+	width:100%;
+}
