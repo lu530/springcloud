@@ -21,6 +21,7 @@ import com.suntek.eap.smp.Permission;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
+import com.suntek.efacecloud.dao.SurveilTaskDao;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.util.CommonUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -36,7 +37,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	  private Dialect dialect = DialectFactory.getDialect(Constants.APP_NAME, "");
 	  private String IS_PERSONEL_CONTROL_ELABORATION = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_PERSONEL_CONTROL_ELABORATION", "0");
 
-
+	  private SurveilTaskDao dao = new SurveilTaskDao();
 
 	    /**
 	     *
@@ -410,10 +411,27 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	     	                case("1"):	     	                
 	     	                map.put("PERSON_NAME", json.getString("NAME"));
 	     	                map.put("CAPTURE_TIME", json.getString("CAPTURE_TIME"));
+	     	                map.put("IDENTITY_ID", json.getString("IDENTITY_ID"));
 	     	                break;
 	     	                case("3"):
-	     	                map.put("REASON",json.getString("REASON"));
 	     	                map.put("PLATE_NUMBER", json.getString("HPHM"));
+	     	                //从JSON中取出布控原因,如果不存在则需要从布控库取出布控原因
+	     	                String plateNumber=json.getString("HPHM");
+								String esReason="";
+								if(json.containsKey("SURVEIL_EXTEND_INFO")) {
+									JSONObject jsons= JSONObject.parseObject(json.getString("SURVEIL_EXTEND_INFO"));
+									if (jsons.containsKey("REASON")) {
+										esReason = StringUtil.toString(jsons.getString("REASON"));
+									}
+								}
+
+								if(StringUtil.isNull(esReason)) {
+									List<Map<String, Object>> list = dao.getSurveilInfoByVehiclePlates(plateNumber);
+									if(list.size()>0&&list!=null) {
+										esReason = StringUtil.toString(list.get(0).get("REASON"));
+									}
+								}
+							map.put("REASON",esReason);
 	     	                //map.put("ALARM_TIME", json.getString("PASS_TIME"));
 	     	                break;
 	     	                case("5"):     	                
