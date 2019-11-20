@@ -405,14 +405,14 @@
 				</executions>
 				<configuration>
 					<verbose>true</verbose>
-					<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+					<dateFormat>yyyyMMddHHmmss</dateFormat>
 					<!--git版本，默认7个字符-->
 					<abbrevLength>8</abbrevLength>
 					<generateGitPropertiesFile>true</generateGitPropertiesFile>
 					<generateGitPropertiesFilename>${project.build.outputDirectory}/version.txt</generateGitPropertiesFilename>
 					<format>txt</format>
 					<injectAllReactorProjects>true</injectAllReactorProjects>
-					<includeOnlyProperties>git.commit.id.abbrev,git.build.version</includeOnlyProperties>
+					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time</includeOnlyProperties>
 				</configuration>
 			</plugin>
 

@@ -1,10 +1,6 @@
 package com.suntek.efacecloud.provider.es;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -155,7 +151,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
 
-        this.setIndexNames(EsUtil.getIndexNameByTime(Constants.FACE_INDEX + "_", beginTime, endTime));
+        //如果传入时间为空,默认只查当月的
+        if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
+            this.setIndexNames(EsUtil.getIndexNameByTime(Constants.FACE_INDEX + "_", beginTime, endTime));
+        }else{
+            String []indexNames=new String[]{Constants.FACE_INDEX + "_"+DateUtil.toString(new Date(),DateUtil.yyMM_style)};
+            this.setIndexNames(indexNames);
+        }
         this.setTableName(Constants.FACE_TABLE);
 
         // 避免 某个分片检索时间超出了超时时间，导致会出现每次结果不一样的情况
