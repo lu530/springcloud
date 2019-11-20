@@ -431,6 +431,12 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 										esReason = StringUtil.toString(list.get(0).get("REASON"));
 									}
 								}
+							//车身颜色
+							map.put("CSYS", StringUtil.toString(EAP.metadata.getDictValue(DictType.V_VEHICLE_COLOR,
+												json.getString("CSYS"))));
+							//车辆类型
+							map.put("CLLX", StringUtil.toString(EAP.metadata.getDictValue(DictType.V_VEHICLE_TYPE,
+												json.getString("CLLX"))));
 							map.put("REASON",esReason);
 	     	                //map.put("ALARM_TIME", json.getString("PASS_TIME"));
 	     	                break;
