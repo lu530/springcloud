@@ -26,6 +26,7 @@
 	<param key="RED_LIST_OPEN" type="String" name="是否开启涉红名单检索过滤" description="0不开启，1开启">0</param>
    	<param key="RED_SIMILARITY" type="String" name="红名单检索阈值(0-100，建议80分以上)" description="红名单检索阈值(0-100，建议80分以上)">80</param>
    	<param key="RED_APPROVAL_SEND_PHONE" type="String" name="红名单审批发送手机号码,逗号分隔" description="红名单审批发送手机号码,逗号分隔"></param>
+   	<param key="HIK_RED_LIST_DB" type="String" name="海康红名单库ID" description="海康红名单库ID">HIK_RED_LIST_DB</param>
    	<param key="SEARCH_CAUSE_OPEN" type="String" name="是否开启操作事由" description="0不开启，1开启">0</param>
    	<param key="FACE_TYPE_ALGO_TYPES" type="String" name="人脸分类算法" description="人脸分类算法"></param>
    	<param key="POLICE_TASK_TIMEOUT" type="String" name="警情处置超时设置" description="警情处置超时设置。单位：分钟 ">3</param>

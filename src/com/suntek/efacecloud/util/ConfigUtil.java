@@ -187,4 +187,16 @@ public class ConfigUtil {
     public static boolean isBlack() {
         return Constants.IS_BLACK.equals(AppHandle.getHandle(Constants.DATA_DEFENCE).getProperty("IS_BLACK", "0"));
     }
+    /**
+     * 获取红名单库
+     * @return
+     */
+    public static String getRedListDbId() {
+        String redListDbId = "RED_LIST_DB";
+        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+        if(vendor.equals(Constants.HIK_VENDOR)){
+            redListDbId = AppHandle.getHandle(Constants.APP_NAME).getProperty("HIK_RED_LIST_DB", "");
+        }
+        return redListDbId;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.efacecloud.util.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
@@ -21,13 +22,7 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceRedListDao;
 import com.suntek.efacecloud.dao.FaceRedTaskDao;
-import com.suntek.efacecloud.util.ConfigUtil;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.FaceFeatureUtil;
 import com.suntek.efacecloud.util.FaceFeatureUtil.FeatureResp;
-import com.suntek.efacecloud.util.FileMd5Util;
-import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.efacecloud.util.SdkStaticLibUtil;
 import com.suntek.face.compare.sdk.model.CollisionResult;
 import com.suntek.sp.sms.util.SmsUtil;
 
@@ -46,75 +41,8 @@ public class FaceRedListService
 	private FaceRedTaskDao taskDao = new FaceRedTaskDao();
 	
 	@BeanService(id="add", description="新增或编辑红名单库人脸")
-	public void edit(RequestContext context) throws Exception
-	{
-		Map<String, Object> params = context.getParameters();	
-		String infoId = StringUtil.toString(params.get("INFO_ID"));
-		String pic = StringUtil.toString(params.get("PIC"));
-		
-		FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(pic);
-		if (!featureResp.isValid()) {
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			context.getResponse().putData("MESSAGE", "人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-			return;
-		}
-		
-		Dao dao = new DaoProxy(Constants.APP_NAME);
-		if (!StringUtil.isEmpty(infoId)) {
-			
-			CollisionResult deleteFaceResult = SdkStaticLibUtil.deleteFace(
-					Constants.STATIC_LIB_ID_RED_LIST, infoId, Constants.DEFAULT_ALGO_TYPE);
-			if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
-				context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-				context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
-				return;
-			}
-			
-			dao.addSQL("delete from EFACE_RED_LIST where INFO_ID = ?", infoId);
-			dao.addSQL("update EFACE_SEARCH_TASK set IS_APPROVE = 1 where TASK_ID in ("
-					+ "select TASK_ID from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ? )", infoId);
-			dao.addSQL("delete from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ?", infoId);
-		}
-		
-		try {
-			String createTime = DateUtil.getDateTime();
-			long newPersonId = EAP.keyTool.getIDGenerator();
-			params.put("INFO_ID", newPersonId);
-			params.put("CREATE_TIME", createTime);
-			params.put("CREATOR", context.getUserCode()); //创建人
-			params.put("PIC_QUALITY", featureResp.getScore()); //图片质量
-			
-			String rltz = featureResp.getRltz();
-			params.put("RLTZ", rltz); //人脸特征
-			
-			Map<Long, String> features = new HashMap<Long, String>();
-			features.put(newPersonId, rltz);
-			
-			CollisionResult saveFaceResult = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST,
-					newPersonId, rltz,
-					Constants.DEFAULT_ALGO_TYPE);
-			if (saveFaceResult == null || saveFaceResult.getCode() !=0) {
-				context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-				context.getResponse().putData("MESSAGE", "注册人脸到静态小库失败！");
-				return;
-			}
-			
-			String sql = "insert into EFACE_RED_LIST(INFO_ID, NAME, SEX, PIC, IDENTITY_TYPE, IDENTITY_ID, BIRTHDAY, "
-					+ "PERMANENT_ADDRESS, PRESENT_ADDRESS, PIC_QUALITY, CREATOR, CREATE_TIME, RLTZ ) values (:INFO_ID, :NAME, :SEX, "
-					+ ":PIC, :IDENTITY_TYPE, :IDENTITY_ID, :BIRTHDAY, :PERMANENT_ADDRESS, :PRESENT_ADDRESS, :PIC_QUALITY, "
-					+ ":CREATOR, :CREATE_TIME, :RLTZ)";
-			
-			dao.addNamedSQL(sql, params);
-			
-			dao.commit();
-			
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-			context.getResponse().putData("MESSAGE", "保存成功");
-		} catch (Exception e) {
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			context.getResponse().putData("MESSAGE", "保存失败" + e);
-			ServiceLog.error("保存人脸到红名单库失败", e);
-		}
+	public void edit(RequestContext context) throws Exception {
+		FaceDetectUtil.getFaceRedListUtilInstance().addOrEdit(context);
 	}
 	
 	@BeanService(id="open", description="是否开启红名单", type="remote")
@@ -188,7 +116,13 @@ public class FaceRedListService
 		try {
 			Map<String, Object> params = context.getParameters();	
 			String personId = StringUtil.toString(params.get("INFO_ID"));
-			CollisionResult deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
+			CollisionResult deleteFaceResult = null;
+			String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+			if (vendor.equals(Constants.HIK_VENDOR)){
+				deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
+			}else{
+				deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
+			}
 			if (deleteFaceResult == null || deleteFaceResult.getCode() !=0) {
 				context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
 				context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
@@ -249,9 +183,7 @@ public class FaceRedListService
 		params.put("CASE_ID", StringUtil.toString(params.get("CASE_ID")));
 		params.put("CASE_NAME", StringUtil.toString(params.get("CASE_NAME")));
 		
-		//因没用到查询参数，故暂时不存查询参数
-		//params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
-		params.put("SAERCH_PARAM", "");
+		params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
 		
 		params.put("SEARCH_CAUSE", StringUtil.toString(params.get("SEARCH_CAUSE")));
 		params.put("SEARCH_PIC", StringUtil.toString(params.get("SEARCH_PIC")));
@@ -323,12 +255,21 @@ public class FaceRedListService
 					context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
 					return;
 				}
-				int THRESHOLD = Integer.valueOf(AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87"));
+				int threshold = Integer.valueOf(AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87"));
 				//int actureScore =  Integer.parseInt(String.valueOf(ModuleUtil.renderActualScore(THRESHOLD))); ;
-				CollisionResult result = SdkStaticLibUtil.faceOne2NSearch(
-						Constants.STATIC_LIB_ID_RED_LIST, THRESHOLD, 
-						featureResp.getRltz(), 20, Constants.DEFAULT_ALGO_TYPE);
-				
+				String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+				CollisionResult result = null;
+				if (vendor.equals(Constants.HIK_VENDOR)){
+					Map<String, Object> searchParam = new HashMap<>();
+					searchParam.put("TOP_N", 20);
+					searchParam.put("PIC", pic);
+					searchParam.put("THRESHOLD", threshold / 100);
+					result = HikSdkRedLibUtil.faceOne2NSearch(Constants.STATIC_LIB_ID_RED_LIST, searchParam);
+				}else{
+					result = SdkStaticLibUtil.faceOne2NSearch(
+							Constants.STATIC_LIB_ID_RED_LIST, threshold,
+							featureResp.getRltz(), 20, Constants.DEFAULT_ALGO_TYPE);
+				}
 				//红名单中比中
 				if (result != null && result.getCode() == 0) {			
 					List<Map<String, Object>> collisionList = result.getList();
