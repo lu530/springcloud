@@ -417,7 +417,7 @@
 					<generateGitPropertiesFilename>${project.build.outputDirectory}/version.txt</generateGitPropertiesFilename>
 					<format>txt</format>
 					<injectAllReactorProjects>true</injectAllReactorProjects>
-					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time</includeOnlyProperties>
+					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time,git.branch</includeOnlyProperties>
 				</configuration>
 			</plugin>
 
