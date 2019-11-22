@@ -399,6 +399,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	             */
 
 	            for (Map<String, Object> map : resultSet) {
+	            	map.put("TASK_TYPE",taskType);
 	                String deviceId = StringUtil.toString(map
 	                        .get("ORIGINAL_DEVICE_ID"));
 	                DeviceEntity device=new DeviceEntity();
@@ -412,6 +413,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 	     	                map.put("PERSON_NAME", json.getString("NAME"));
 	     	                map.put("CAPTURE_TIME", json.getString("CAPTURE_TIME"));
 	     	                map.put("IDENTITY_ID", json.getString("IDENTITY_ID"));
+	     	                map.put("OBJECT_PICTURE",ModuleUtil.renderImage(StringUtil.toString(map.get("TEMPLET_IMG"))));
 	     	                break;
 	     	                case("3"):
 	     	                map.put("PLATE_NUMBER", json.getString("HPHM"));
@@ -438,6 +440,7 @@ public class AlarmDispartchProvider  extends GridDataProvider {
 							map.put("CLLX", StringUtil.toString(EAP.metadata.getDictValue(DictType.V_VEHICLE_TYPE,
 												json.getString("CLLX"))));
 							map.put("REASON",esReason);
+
 	     	                //map.put("ALARM_TIME", json.getString("PASS_TIME"));
 	     	                break;
 	     	                case("5"):     	                
