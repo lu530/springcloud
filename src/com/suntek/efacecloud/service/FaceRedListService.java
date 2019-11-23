@@ -249,13 +249,7 @@ public class FaceRedListService
 					}
 				}
 
-				FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
-				if (!featureResp.isValid()) {
-					ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-					context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-					return;
-				}
-				int threshold = Integer.valueOf(AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87"));
+				String threshold = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87");
 				//int actureScore =  Integer.parseInt(String.valueOf(ModuleUtil.renderActualScore(THRESHOLD))); ;
 				String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
 				CollisionResult result = null;
@@ -263,11 +257,17 @@ public class FaceRedListService
 					Map<String, Object> searchParam = new HashMap<>();
 					searchParam.put("TOP_N", 20);
 					searchParam.put("PIC", pic);
-					searchParam.put("THRESHOLD", threshold / 100);
+					searchParam.put("THRESHOLD", threshold);
 					result = HikSdkRedLibUtil.faceOne2NSearch(Constants.STATIC_LIB_ID_RED_LIST, searchParam);
 				}else{
+					FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
+					if (!featureResp.isValid()) {
+						ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+						context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+						return;
+					}
 					result = SdkStaticLibUtil.faceOne2NSearch(
-							Constants.STATIC_LIB_ID_RED_LIST, threshold,
+							Constants.STATIC_LIB_ID_RED_LIST, Integer.valueOf(threshold),
 							featureResp.getRltz(), 20, Constants.DEFAULT_ALGO_TYPE);
 				}
 				//红名单中比中

@@ -115,7 +115,7 @@ public class HikSdkRedLibUtil {
             collisionResult.setMessage("调用海康接口异常："+HikStatusCode.getName(Long.valueOf(status)).name());
         }
         
-        logger.debug("判断静态小库是否存在返回结果："+ JSONObject.toJSONString(collisionResult));
+        //logger.debug("判断静态小库是否存在返回结果："+ JSONObject.toJSONString(collisionResult));
         
         return collisionResult;
     }
@@ -155,7 +155,7 @@ public class HikSdkRedLibUtil {
             collisionResult.setMessage("调用海康接口异常："+HikStatusCode.getName(Long.valueOf(status)).name());
         }
         
-        logger.debug("删除静态小库返回结果："+ JSONObject.toJSONString(collisionResult));
+        //logger.debug("删除静态小库返回结果："+ JSONObject.toJSONString(collisionResult));
         
         return collisionResult;
     }
@@ -231,7 +231,7 @@ public class HikSdkRedLibUtil {
             collisionResult.setMessage("调用海康接口异常："+HikStatusCode.getName(Long.valueOf(status)).name());
         }
         
-        logger.debug("传参方式注册人脸到静态小库返回结果："+ JSONObject.toJSONString(collisionResult));
+        //logger.debug("传参方式注册人脸到静态小库返回结果："+ JSONObject.toJSONString(collisionResult));
         
         return collisionResult;
     }
@@ -310,7 +310,7 @@ public class HikSdkRedLibUtil {
             collisionResult.setMessage("调用海康接口异常："+HikStatusCode.getName(Long.valueOf(status)).name());
         }
         
-        logger.debug("修改红名单人脸返回结果："+ JSONObject.toJSONString(collisionResult));
+        //logger.debug("修改红名单人脸返回结果："+ JSONObject.toJSONString(collisionResult));
         
         return collisionResult;
     }
@@ -422,7 +422,7 @@ public class HikSdkRedLibUtil {
             collisionResult.setMessage("调用海康接口异常："+HikStatusCode.getName(Long.valueOf(status)).name());
         }
         
-        logger.debug("静态库1：N返回结果："+ JSONObject.toJSONString(collisionResult));
+        //logger.debug("静态库1：N返回结果："+ JSONObject.toJSONString(collisionResult));
         
         return collisionResult;
     }
