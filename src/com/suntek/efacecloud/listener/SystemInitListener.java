@@ -4,6 +4,7 @@ import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.LogFactory;
 import com.suntek.eap.metadata.Table;
+import com.suntek.eap.util.StringUtil;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.job.FaceCompareJob;
@@ -82,6 +83,7 @@ public class SystemInitListener implements ServletContextListener {
 		} catch (Exception e) {
 			log.debug("链接zoo异常", e);
 		}
+
 		initStaticLib();
 		
 		try {

@@ -1,17 +1,5 @@
 package com.suntek.efacecloud.provider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.ObjectUtils;
-
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.core.app.AppHandle;
@@ -26,7 +14,6 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
-import com.suntek.efacecloud.provider.mppdb.FaceCaptureMpProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -36,8 +23,18 @@ import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
-
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.ObjectUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 人脸抓拍库查询 efacecloud/rest/v6/face/capture
@@ -58,8 +55,6 @@ public class FaceCaptureProvider {
 		//算法列表：默认前端传入，当开启人脸检测时，由通过人种选择配置的算法列表 
 		Map<String, Object> params = context.getParameters();
 		// 大数据检索方式
-		String BIGDATA_SEARCH_FUN = AppHandle.getHandle(Constants.CONSOLE)
-				.getProperty("BIGDATA_SEARCH_FUN", "0");
 		String isSearchFace = StringUtil.toString(params.get("PIC"));
 		String needDevice = StringUtil.toString(params.get("NEED_DEVICE"));
 		String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
@@ -88,14 +83,7 @@ public class FaceCaptureProvider {
 		if (!StringUtil.isNull(isSearchFace)) {
 			return searchByPic(context);
 		} else {
-			switch (BIGDATA_SEARCH_FUN) {
-				case Constants.BIGDATA_SEARCH_MPPDB:
-					return new FaceCaptureMpProvider().query(context);
-				case Constants.BIGDATA_SEARCH_ES:
-					return new FaceCaptureEsProvider().query(context);
-				default:
-					return new FaceCaptureEsProvider().query(context);
-			}
+			return new FaceCaptureEsProvider().query(context);
 		}
 	}
 

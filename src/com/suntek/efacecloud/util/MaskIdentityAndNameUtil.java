@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.suntek.eap.common.app.AppHandle;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.DESCrypt;
 import com.suntek.eap.util.StringUtil;
