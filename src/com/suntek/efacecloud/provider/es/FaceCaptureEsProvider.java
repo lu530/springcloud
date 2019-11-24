@@ -192,6 +192,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         }
 
         query.addBetweenCriteria("JGSK", sjgsk, ejgsk);
+
         if (!StringUtil.isEmpty(StringUtil.toString(params.get("ALGO_LIST")))) {
             // 算法ID过滤
             try {
