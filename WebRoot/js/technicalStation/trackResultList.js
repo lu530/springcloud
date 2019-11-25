@@ -37,7 +37,7 @@ $(document).ready(function(){
 	initData();
 	initWaterMark();
 	//  顺德项目不显示wifi碰撞
-	if(top.projectID !== 'shunde') {
+	if(top.projectID !== 'shunde5000') {
 		$('#wifiCollisionBtn').removeClass('hide');
 	}
 });

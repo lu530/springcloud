@@ -635,11 +635,13 @@ function imgDoSearch(isInit) {
         UI.util.showLoadingPanel(null, 'currentPage'); //显示加载进度条
     }
     searchingFlag = true; //页面正在检索
-    if (hasLocalSearch && !isBlack) {
-        lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
-    }else {
-        initTmpl(JSON.stringify(searchImgList));
-    }
+    // 屏蔽本地检索
+    // if (hasLocalSearch && !isBlack) {
+    //     lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
+    // }else {
+    //     initTmpl(JSON.stringify(searchImgList));
+    // }
+    initTmpl(JSON.stringify(searchImgList));
     if (($(".resultTab li").length) * 130 > $(".page-info-metro").width() - 50) {
         $(".resultTab li").width(($(".page-info-metro").width() - 50) / ($(".resultTab li").length) - 5 - 30)
     }
@@ -766,7 +768,7 @@ function initTmpl(searchImgUrl) {
             isFirstLoading = false;
         }
         searchingFlag = false;
-        // $('#resultTab li').find('.load-icon').addClass('hide');
+        $('#resultTab li').find('.load-icon').addClass('hide');
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, function() {
         searchingFlag = false;
@@ -1135,7 +1137,7 @@ function addID() {
     for (var i = 0; i < cacheIDs.length; i++) {
         $('#imgBox li').eq(i).attr('attrId', cacheIDs[i]);
         $('#resultTab li').eq(i).attr('attrId', cacheIDs[i]);
-        // $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
+        $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
         $('body').find('.recommendList').eq(i).attr('attrId', cacheIDs[i]);
     }
 }

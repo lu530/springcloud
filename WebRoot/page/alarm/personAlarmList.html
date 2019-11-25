@@ -355,7 +355,7 @@
                                                     <a class="btn-i-t  btn-xs controlDetailBtn" title="布控详情" objectid="{%=o.OBJECT_ID%}">
                                                         <i class="btn-icon library-icon"></i>
                                                     </a>
-                                                    {% if(top.projectID != "shunde") { %}
+                                                    {% if(top.projectID != "shunde5000") { %}
                                                     <a class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
                                                         <i class="btn-icon intelligence-icon"></i>
                                                     </a>
@@ -368,7 +368,7 @@
                                                     <a class="btn-i-t  btn-xs compareBtn" title="比对">
                                                         比对
                                                     </a>
-                                                    {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde") { %}
+                                                    {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde5000") { %}
                                                     <a class="btn-i-t  btn-xs refreshBtn" title="在逃检测" ALARM_ID="{%= o.ALARM_ID %}" IDENTITY_ID="{%= o.IDENTITY_ID %}">
                                                         在逃检测
                                                     </a>
@@ -697,7 +697,7 @@
                                         <p picMsg="多脸告警:{%=o.IS_COVER%}"><label>多脸告警：</label><span title="多脸告警：{%=o.IS_COVER%}">{%=o.IS_COVER%}</span></p>
                                         {%  }  %}
 
-                                        {%  if(o.CONFIRM_STATUS && top.projectID != "shunde"){  %}
+                                        {%  if(o.CONFIRM_STATUS && top.projectID != "shunde5000"){  %}
                                         <p picMsg="确认状态:{%=o.CONFIRM_STATUS%}"><label>确认状态：</label><span title="确认状态：{%=o.CONFIRM_STATUS%}">{%=o.CONFIRM_STATUS%}</span></p>
                                         {%  }  %}
 
@@ -705,7 +705,7 @@
                                         <p picMsg="告警时间:{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}"><label>告警时间：</label><span title="告警时间：{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.ALARM_TIME,19))%}</span></p>
 
                                         <p picMsg="抓拍时间:{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.CAPTURE_TIME%}' class='icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>"><label>抓拍时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}</span></p>
-                                        {% if(top.projectID != "shunde") { %}
+                                        {% if(top.projectID != "shunde5000") { %}
                                         <p picMsg="质量分数:{%=renderNullToNotKnow(o.FACE_SCORE)%}"><label>质量分数：</label><span title="质量分数：{%=renderNullToNotKnow(o.FACE_SCORE)%}">{%=renderNullToNotKnow(o.FACE_SCORE)%}</span></p>
                                         {% } %}
                                         <p class="{%= o.REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
@@ -735,7 +735,7 @@
                                                 <a config-control="4" class="btn-i-t  btn-xs controlDetailBtn hide" title="布控详情" objectid="{%=o.OBJECT_ID%}">
                                                     布控
                                                 </a>
-                                                {% if(top.projectID != "shunde") { %}
+                                                {% if(top.projectID != "shunde5000") { %}
                                                 <a config-control="5" class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
                                                     情报
                                                 </a>
@@ -748,7 +748,7 @@
                                                 <a config-control="7" class="btn-i-t  btn-xs compareBtn hide" title="比对">
                                                     比对
                                                 </a>
-                                                {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde") { %}
+                                                {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde5000") { %}
                                                 <a config-control="8" class="btn-i-t  btn-xs refreshBtn hide" title="在逃检测" ALARM_ID="{%= o.ALARM_ID %}" IDENTITY_ID="{%= o.IDENTITY_ID %}">
                                                     在逃检测
                                                 </a>
