@@ -3604,4 +3604,18 @@ a {
 .alg-tag-wrap .alg-tag-item.active .alg-tag-score{
 	color: #fff;
 }
-/***********************************/
+/****************  *******************/
+
+/**
+ * @author 			dorsey
+ * @description 	由于存在着不同的地区项目需要定制化显示不同的页面按钮或DOM结构，这里统一在这里配置
+ * @version 		2019-11-25
+ * @class配置规则	 __project-custom-  + projectID，如shunde5000，则为：__project-custom-shunde5000
+ * @html配置规则	 将该类名添加到对应的DOM结构上
+ * @others			该部分类名的放置，建议放置在各模块common.css文件底部。
+ */
+
+.__project-custom-shunde5000,	/* shunde5000 */
+.__project-custom-test{
+	display: none !important;
+}

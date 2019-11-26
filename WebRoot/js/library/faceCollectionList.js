@@ -121,6 +121,8 @@ function initPage(){
     	$(".picUpdata").removeClass("hide");
     	$(".top-box").removeClass("pl0");
     }
+
+    domPermission();
 }
 function hideModule(selector) {
     selector.addClass("hide");
