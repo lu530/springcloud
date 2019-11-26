@@ -1,13 +1,5 @@
 package com.suntek.efacecloud.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.core.app.AppHandle;
@@ -21,7 +13,6 @@ import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -29,9 +20,12 @@ import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * 人员技战法-团伙分析
- * 
+ *
  * @author swq
  * @version 2017年07月15日
  */
@@ -40,7 +34,7 @@ import com.suntek.sp.common.common.BaseCommandEnum;
 public class FollowPersonService {
 
     @BeanService(id = "togetherAnalysis", description = "同行人员分析", since = "1.0.0", type = "remote",
-        paasService = "true")
+            paasService = "true")
     public void together(RequestContext context) throws Exception {
         String recordId = StringUtil.toString(context.getParameter("RECORD_IDS"));
         String togetherMinute = StringUtil.toString(context.getParameter("TOGETHER_MINUTE"));
@@ -67,7 +61,7 @@ public class FollowPersonService {
         registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
         ServiceLog.debug("团伙分析  调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
-            + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
+                + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
         long code = commandContext.getResponse().getCode();
 
@@ -77,15 +71,74 @@ public class FollowPersonService {
         }
 
         @SuppressWarnings("unchecked")
-        List<List<Object>> personIds = (List<List<Object>>)commandContext.getResponse().getData("DATA");
+        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
 
         for (int i = 0; i < personIds.size(); i++) {
+            List<Object> ids;
+            if (personIds.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) personIds.get(i);
+                String idStr = (String) map.get("IDS");
 
-            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
+                commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
-            resultList.add(handlePersonId(ids));
+                Map<String, Object> queryParams = new HashMap<String, Object>();
+                queryParams.put("IDS", idStr);
+                commandContext.setBody(queryParams);
+                ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
+                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
+                        + commandContext.getResponse().getMessage() + " result:"
+                        + commandContext.getResponse().getResult());
+
+                code = commandContext.getResponse().getCode();
+                if (0L != code) {
+                    context.getResponse().setWarn(commandContext.getResponse().getMessage());
+                    return;
+                }
+
+                List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
+                Map<String, Object> personData = new HashMap<String, Object>();
+                List infoIds = new ArrayList<>();
+                List pics = new ArrayList();
+                List originalPics = new ArrayList();
+                List faceScores = new ArrayList();
+                List devids = new ArrayList();
+                List times = new ArrayList();
+                List addrs = new ArrayList();
+                List xf = new ArrayList();
+                List yf = new ArrayList();
+                list.stream().forEach(o -> {
+                    infoIds.add(o.get("INFO_ID"));
+                    pics.add(o.get("OBJ_PIC"));
+                    originalPics.add(o.get("PIC"));
+                    faceScores.add("0");
+                    devids.add(o.get("DEVICE_ID"));
+                    times.add(o.get("JGSK"));
+                    addrs.add(o.get("ADDR"));
+                    xf.add(StringUtil.toString(o.get("X")));
+                    yf.add(StringUtil.toString(o.get("Y")));
+                });
+                personData.put("INFO_IDS", String.join(",", infoIds));
+                personData.put("PICS", String.join(",", pics));
+                personData.put("BIG_PIC", String.join(",", originalPics));
+                personData.put("DEVIDS", String.join(",", devids));
+                personData.put("TIMES", String.join(",", times));
+                personData.put("ADDRS", String.join(",", addrs));
+                personData.put("REPEATS", map.get("REPEATS"));
+                personData.put("XS", String.join(",", xf));
+                personData.put("YS", String.join(",", yf));
+                personData.put("NAMES", String.join(",", addrs));
+                personData.put("FACE_SCORES", String.join(",", faceScores));
+                resultList.add(personData);
+            } else {
+                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                resultList.add(handlePersonId(ids));
+            }
+
+
         }
 
         context.getResponse().putData("DATA", resultList);
@@ -120,7 +173,7 @@ public class FollowPersonService {
         registry.selectCommand(BaseCommandEnum.faceCollisionQuery.getUri(), "4401", vendor).exec(commandContext);
 
         ServiceLog.debug("调用1:N接口返回结果code:" + commandContext.getResponse().getCode() + " message:"
-            + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
+                + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
         long code = commandContext.getResponse().getCode();
 
@@ -130,7 +183,7 @@ public class FollowPersonService {
         }
 
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> resultList = (List<Map<String, Object>>)commandContext.getResponse().getData("DATA");
+        List<Map<String, Object>> resultList = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
 
         context.getResponse().putData("DATA", dateGrouping(resultList));
         context.getResponse().putData("PALCE", placeGrouping(resultList));
@@ -138,7 +191,7 @@ public class FollowPersonService {
 
     /**
      * 反查人员信息
-     * 
+     *
      * @param ids
      * @return
      */
@@ -161,19 +214,8 @@ public class FollowPersonService {
 
         try {
 
-            List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
-
-            // 获取大数据检索方式，0：ES，1：MPPDB
-            String serachFun = AppHandle.getHandle(Constants.CONSOLE).getProperty("BIGDATA_SEARCH_FUN", "0");
-            if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
-
-                PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
-                resultSet = pageResult.getResultSet();
-            } else {
-
-                MppQueryDao dao = new MppQueryDao();
-                resultSet = dao.queryByIds(idsArr);
-            }
+            PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
+            List<Map<String, Object>> resultSet = pageResult.getResultSet();
 
             Log.fanchaLog.debug("1 同伙分析 反查 条件主键id->" + ids);
             Log.fanchaLog.debug("2 同伙分析 反查 查询结果-> " + resultSet + "\n");
@@ -194,17 +236,12 @@ public class FollowPersonService {
                 originalPics.append(ModuleUtil.renderImage(StringUtil.toString(map.get("PIC"))) + ",");
                 devids.append(StringUtil.toString(map.get("DEVICE_ID")) + ",");
 
-                if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
 
-                    times.append(DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
+                times.append(DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
                         DateUtil.yyMMddHHmmss_style, DateUtil.standard_style) + ",");
-                } else {
-                    times.append(DateUtil.dateToString(
-                        DateUtil.toDate(StringUtil.toString(map.get("JGSK")), "yyyy-MM-dd HH:mm:ss")) + ",");
-                }
 
                 Map<Object, Object> device
-                    = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
+                        = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
 
                 addrs.append(device.get("DEVICE_ADDR") + ",");
                 xf.append(device.get("LONGITUDE") + ",");
@@ -242,7 +279,7 @@ public class FollowPersonService {
 
     /**
      * 对结果集分类
-     * 
+     *
      * @param resultList
      * @return
      * @throws Exception
@@ -257,14 +294,14 @@ public class FollowPersonService {
         List<Map<String, Object>> dateList = new ArrayList<Map<String, Object>>();
 
         Map<String, List<Map<String, Object>>> dataSortByDate
-            = resultList.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("JGSK")).split(" ")[0])); // 按日期分类
+                = resultList.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("JGSK")).split(" ")[0])); // 按日期分类
 
         for (String keyDate : dataSortByDate.keySet()) {
 
             List<Map<String, Object>> listInDate = dataSortByDate.get(keyDate); // 在keyDate日期下出现的人脸记录
 
             Map<String, List<Map<String, Object>>> dataSortByPlace
-                = listInDate.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("DEVICE_ID")))); // 按地点分类
+                    = listInDate.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("DEVICE_ID")))); // 按地点分类
 
             Map<String, Object> map = new HashMap<String, Object>();
 
@@ -299,7 +336,7 @@ public class FollowPersonService {
         List<Map<String, Object>> placeList = new ArrayList<Map<String, Object>>();
 
         Map<String, List<Map<String, Object>>> dataSortByPlace
-            = resultList.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("DEVICE_ID")))); // 按日期分类
+                = resultList.stream().collect(Collectors.groupingBy(o -> StringUtil.toString(o.get("DEVICE_ID")))); // 按日期分类
 
         for (String place : dataSortByPlace.keySet()) {
 
@@ -320,7 +357,7 @@ public class FollowPersonService {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 return Integer.valueOf(StringUtil.toString(o2.get("SIZE")))
-                    - Integer.valueOf(StringUtil.toString(o1.get("SIZE")));
+                        - Integer.valueOf(StringUtil.toString(o1.get("SIZE")));
             }
 
         });
@@ -345,12 +382,12 @@ public class FollowPersonService {
             returnParams.put("TIME", map.get("JGSK"));
 
             returnParams.put("X",
-                DeviceInfoUtil.getDeviceCoordinate(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")), 1));
+                    DeviceInfoUtil.getDeviceCoordinate(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")), 1));
             returnParams.put("Y",
-                DeviceInfoUtil.getDeviceCoordinate(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")), 2));
+                    DeviceInfoUtil.getDeviceCoordinate(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")), 2));
             returnParams.put("ORIGINAL_DEVICE_ID", StringUtil.toString(map.get("DEVICE_ID")));
             returnParams.put("DEVICE_NAME",
-                DeviceInfoUtil.getDeviceName(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID"))));
+                    DeviceInfoUtil.getDeviceName(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID"))));
             returnParams.put("OBJ_PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("OBJ_PIC"))));
             returnParams.put("BIG_PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("PIC"))));
 

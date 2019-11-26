@@ -16,11 +16,14 @@ var trackData = [];
 var isShowTrack=1;
 //记录选中的索引
 var checkedIndexArr = [];
+//
+var algoTypeArrStr='';
 //查询参数
 var queryParams={
-	ALGO_LIST:'[{"ALGO_TYPE":"10003","THRESHOLD":"60"}]',
+	//ALGO_LIST:'[{"ALGO_TYPE":"10003","THRESHOLD":"60"}]',
+	ALGO_LIST:getAlgoType(),
 	pageSize:20,
-    pageNo:1,
+	pageNo:1,
 	THRESHOLD:60,
 	DEVICE_IDS:"",
 	KEYWORDS:"",
@@ -30,10 +33,10 @@ var queryParams={
 };
 //时间控件初始化
 var timeOption = {
-		'elem':$('#timeTagList'),
-		'beginTime' :$('#beginTime'),
-		'endTime' :$('#endTime'),
-		'callback':getSearchTime
+	'elem':$('#timeTagList'),
+	'beginTime' :$('#beginTime'),
+	'endTime' :$('#endTime'),
+	'callback':getSearchTime
 };
 $(function() {
 	UI.control.init();
@@ -49,12 +52,34 @@ $(function() {
 	}
 });
 
+//获取算法
+function getAlgoType(){
+	var params = {
+		'MENUID':'EFACE_faceCapture'
+	};
+	UI.control.remoteCall('face/common/getFaceAlgoType', params, function (resp) {
+		if(resp){
+			var algoTypeArr = [];
+			$.each(resp.data,function(index, item){
+				algoTypeArr.push({
+					'ALGO_TYPE': item.ALGORITHM_ID,
+					'THRESHOLD': item.DEFAULT_SCORE
+				});
+			});
+			algoTypeArrStr = JSON.stringify(algoTypeArr);
+			console.log("algoTypeArrStr--->" + algoTypeArrStr);
+		}
+	});
+
+	return algoTypeArrStr;
+}
+
 function initEvent(){
 	//返回菜单
-    $('body').on('click','#backBtn',function(){
-        parent.showMenu();
-    });
-    
+	$('body').on('click','#backBtn',function(){
+		parent.showMenu();
+	});
+
 	//通过卡口树加载设备
 	$('#deviceNames').click(function(e){
 		//回填数据

@@ -142,7 +142,12 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/WebRoot/WEB-INF/lib/eap-ui-1.0.2.jar</systemPath>
 		</dependency>
-
+		<dependency>
+			<groupId>com.hikvision</groupId>
+			<artifactId>artemis-http-client</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -412,7 +417,7 @@
 					<generateGitPropertiesFilename>${project.build.outputDirectory}/version.txt</generateGitPropertiesFilename>
 					<format>txt</format>
 					<injectAllReactorProjects>true</injectAllReactorProjects>
-					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time</includeOnlyProperties>
+					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time,git.branch</includeOnlyProperties>
 				</configuration>
 			</plugin>
 

@@ -1,9 +1,5 @@
 package com.suntek.efacecloud.service;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.log.ServiceLog;
 import com.suntek.eap.core.app.AppHandle;
@@ -20,6 +16,14 @@ import com.suntek.efacecloud.dao.FaceAlgorithmTypeDao;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.sp.common.common.BaseCommandEnum;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 人脸公共服务
@@ -114,7 +118,7 @@ public class FaceCommonService {
 //			context.getResponse().putData("DATA", CommonUtil.getAllRepositorieId());//旧飞识
 			context.getResponse().putData("CODE", 0);
 			context.getResponse().putData("MESSAGE", "成功");
-			context.getResponse().putData("DATA", null);
+			context.getResponse().putData("DATA", new ArrayList<>());
 		}
 	}
 

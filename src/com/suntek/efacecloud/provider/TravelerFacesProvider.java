@@ -1,14 +1,5 @@
 package com.suntek.efacecloud.provider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.util.DateUtil;
@@ -22,15 +13,22 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.provider.es.TravelerCaptureEsProvider;
-import com.suntek.efacecloud.provider.mppdb.TravelerCaptureMpProvider;
 import com.suntek.efacecloud.util.CommonUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
-
 import net.sf.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -47,26 +45,15 @@ public class TravelerFacesProvider {
 	
 	@QueryService(id = "query",  description = "旅客人脸查询",since = "2.0", type = "remote", paasService = "true")
 	public Map<String, Object> query(RequestContext context) throws Exception {
-
-		// 大数据检索方式
-		String BIGDATA_SEARCH_FUN = AppHandle.getHandle(Constants.CONSOLE).getProperty("BIGDATA_SEARCH_FUN", "0");
 		boolean isSearchFace = !StringUtil.isNull(StringUtil.toString(context.getParameter("PIC")));
 		String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
 		if (StringUtil.isEmpty(deviceIds)) {
 			context.putParameter("DEVICE_IDS", AppHandle.getHandle(Constants.APP_NAME).getProperty("TRAVELER_FACE_DEVICE_ID", ""));
 		}
-
 		if (isSearchFace) {
 			return searchByPic(context);
 		} else {
-			switch (BIGDATA_SEARCH_FUN) {
-				case Constants.BIGDATA_SEARCH_MPPDB:
-					return new TravelerCaptureMpProvider().query(context);
-				case Constants.BIGDATA_SEARCH_ES:
-					return new TravelerCaptureEsProvider().query(context);
-				default:
-					return new TravelerCaptureEsProvider().query(context);
-			}
+			return new TravelerCaptureEsProvider().query(context);
 		}
 	}
 

@@ -4,6 +4,7 @@ import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.LogFactory;
 import com.suntek.eap.metadata.Table;
+import com.suntek.eap.util.StringUtil;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.job.FaceCompareJob;
@@ -82,24 +83,30 @@ public class SystemInitListener implements ServletContextListener {
 		} catch (Exception e) {
 			log.debug("链接zoo异常", e);
 		}
+
 		initStaticLib();
 		
 		try {
 			/** 初始化   1:N/N:N DSS集群 **/
 			String zkAddr = ConfigUtil.getOne2NConfig();
-	    	String n2nAddr = ConfigUtil.getN2NConfig();//人脸N:N服务集群
-	    	
-	    	log.debug("初始化   1:N/N:N DSS集群 begin...>>> zkAddr = " + zkAddr + "，n2nAddr = " + n2nAddr);
-            //log.debug("初始化  先关闭DSS客户端链接!");
-            //DSSClient.close();
-			DSSClient.addClient(zkAddr, AlgorithmType.FACE_ALGORITHM, ConfigUtil.getAlgoTypes());
-	        DssService.init(n2nAddr);
-	        
+	    	String n2nAddr = ConfigUtil.getN2NConfig();
+
+	    	log.debug("初始化   1:N/N:N DSS集群 begin...>>>" +
+					" zkAddr = " + zkAddr + "，n2nAddr = " + n2nAddr);
+
+	    	if(!StringUtil.isNull(zkAddr)){
+				DSSClient.addClient(zkAddr, AlgorithmType.FACE_ALGORITHM, ConfigUtil.getAlgoTypes());
+				log.debug("人脸 DSS客户端 初始化成功！！！");
+			}
+
+	    	if(!StringUtil.isNull(n2nAddr)){
+
+				DssService.init(n2nAddr);
+				log.debug("人脸 N:N服务 初始化成功！！！");
+			}
+
 	    	log.debug("初始化   1:N/N:N DSS集群success!");
-	    	
-//	    	log.debug("初始化   1:N/N:N 检索集群RPC连接 begin...");
-//			FaceDllService.init(zkAddr, n2nAddr);
-//			log.debug("初始化   1:N/N:N 检索集群RPC连接 success!");
+
 			
 		} catch (Exception e) {
 			log.error("人脸索引集群客户端初始化异常", e);

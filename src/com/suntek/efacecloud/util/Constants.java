@@ -23,6 +23,8 @@ public class Constants {
 	
 	public final static String MPPDB_NAME = "MPPDB_RES";
 	
+	public final static String HIK_VENDOR = "Hikvision";
+	
 	//红名单比对阈值
 	public final static String RED_SIMILARITY = "RED_SIMILARITY";
 	
@@ -42,8 +44,10 @@ public class Constants {
     public final static String DEFENCE_FACEALARM = "DEFENCE_faceAlarm";
 	
 	/** 人脸红名单库ID **/
-	public final static String STATIC_LIB_ID_RED_LIST = "RED_LIST_DB";
+	//public final static String STATIC_LIB_ID_RED_LIST = "RED_LIST_DB";
+	public final static String STATIC_LIB_ID_RED_LIST = ConfigUtil.getRedListDbId();
 	
+			
 	public static final int SEND_MESSAGE_IMMEDIATELY = 0; /**立即发送**/
 	public static final int SEND_MESSAGE_TIMER= 1; /**定时发送**/
 	
@@ -298,7 +302,7 @@ public class Constants {
 	
 	public final static String ALGO_TYPE_FEISHI = "00001";
 	
-
+	public static final int HIK_SIMILARITY_MAX = 1;
 	/*** 警情未签收 */
 	public final static int TASK_STATUS_UNACCEPT = 0;
 	/***  警情已签收 */

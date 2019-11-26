@@ -593,28 +593,31 @@ function parentNodeRender(treeNode){
 			//	加入人脸识别框 —— 传false或不传则仍为原功能
 			isNeedSearchByImage: false,
 			iframeSrc: iframeSrc
-        }
-		var projectID = top.getConfigItem('portal', 'PROJECT_ID');
-		
-		if (projectID == undefined){
-			projectID = 'base';
-		}else{
-			projectID = projectID && projectID.value;
 		}
+		//	isNeedSearchByImage默认都选择为不开启。
+		top.$.photoZoom(options);
+
+		// var projectID = top.getConfigItem('portal', 'PROJECT_ID');
 		
-        UI.control.remoteCall('platform/webapp/config/get', {"applicationName":"datadefence"}, function(resp) {
-            $.each(resp.attrList,function(i,v){
-                if(v.key=="IS_BLACK" && v.value == '0'){
-                    options.isNeedSearchByImage = true
-                }
-            });
-            if(projectID == 'base' || projectID == 'longli' || projectID == 'zhanjiang'){
-                options.isNeedSearchByImage = false
-            }
-            top.$.photoZoom(options);
-        }, function () {
-            top.$.photoZoom(options);
-        });
+		// if (projectID == undefined){
+		// 	projectID = 'base';
+		// }else{
+		// 	projectID = projectID && projectID.value;
+		// }
+		
+        // UI.control.remoteCall('platform/webapp/config/get', {"applicationName":"datadefence"}, function(resp) {
+        //     $.each(resp.attrList,function(i,v){
+        //         if(v.key=="IS_BLACK" && v.value == '0'){
+        //             options.isNeedSearchByImage = true
+        //         }
+        //     });
+        //     if(projectID == 'base' || projectID == 'longli' || projectID == 'zhanjiang'){
+        //         options.isNeedSearchByImage = false
+        //     }
+        //     top.$.photoZoom(options);
+        // }, function () {
+        //     top.$.photoZoom(options);
+        // });
 	});
 
 	//三图图片放大

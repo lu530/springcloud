@@ -12,7 +12,7 @@ import javax.imageio.stream.ImageOutputStream;
 import com.suntek.eap.EAP;
 import com.suntek.eap.blob.Blob;
 import com.suntek.eap.blob.BlobStore;
-import com.suntek.eap.common.app.AppHandle;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;

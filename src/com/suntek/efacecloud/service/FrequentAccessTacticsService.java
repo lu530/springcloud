@@ -1,19 +1,9 @@
 package com.suntek.efacecloud.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.util.DateUtil;
 import com.suntek.eap.common.util.IDGenerator;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
@@ -21,16 +11,23 @@ import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人员技战法-频繁出入
- * 
+ *
  * @author swq
  * @version 2017年07月17日
  */
@@ -63,7 +60,7 @@ public class FrequentAccessTacticsService {
         registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
         ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
-            + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
+                + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
         long code = commandContext.getResponse().getCode();
 
@@ -72,12 +69,21 @@ public class FrequentAccessTacticsService {
             return;
         }
 
-        List<List<Object>> personIds = (List<List<Object>>)commandContext.getResponse().getData("DATA");
+        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
         for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
-            resultList.add(handlePersonId(ids));
+            List<Object> ids;
+            if (personIds.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) personIds.get(i);
+
+                map.put("PIC",map.get("OBJ_PIC"));
+                map.put("FACE_SCORE","0");
+                resultList.add(map);
+            } else {
+                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                resultList.add(handlePersonId(ids));
+            }
         }
 
         context.getResponse().putData("DATA", resultList);
@@ -104,7 +110,7 @@ public class FrequentAccessTacticsService {
         registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
         ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
-            + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
+                + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
         long code = commandContext.getResponse().getCode();
 
@@ -126,19 +132,9 @@ public class FrequentAccessTacticsService {
         String[] indexName = new IDGenerator().getIndexNameFromIds(Constants.FACE_INDEX + "_", idsArr);
 
         try {
-            List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 
-            // 获取大数据检索方式，0：ES，1：MPPDB
-            String serachFun = AppHandle.getHandle(Constants.CONSOLE).getProperty("BIGDATA_SEARCH_FUN", "0");
-            if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
-
-                PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
-                resultSet = pageResult.getResultSet();
-            } else {
-
-                MppQueryDao dao = new MppQueryDao();
-                resultSet = dao.queryByIds(idsArr);
-            }
+            PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
+            List<Map<String, Object>> resultSet = pageResult.getResultSet();
 
             Log.fanchaLog.debug("1 频繁出入 反查 条件主键id->" + ids);
             Log.fanchaLog.debug("2 频繁出入 反查 查询结果-> " + resultSet + "\n");
@@ -174,13 +170,8 @@ public class FrequentAccessTacticsService {
             // DateUtil.standard_style));
 
             if (!StringUtil.isNull(jgsk)) {
-                if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
-
-                    personData.put("JGSK",
+                personData.put("JGSK",
                         DateUtil.convertByStyle(jgsk, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
-                } else {
-                    personData.put("JGSK", DateUtil.dateToString(DateUtil.toDate(jgsk, "yyyy-MM-dd HH:mm:ss")));
-                }
             } else {
                 personData.put("JGSK", "");
             }

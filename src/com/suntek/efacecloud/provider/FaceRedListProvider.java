@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.eap.core.app.AppHandle;
+import com.suntek.efacecloud.util.*;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.collections.MapUtils;
@@ -23,12 +25,6 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.ExcelFileUtil;
-import com.suntek.efacecloud.util.FaceFeatureUtil;
-import com.suntek.efacecloud.util.FileDowloader;
-import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.efacecloud.util.SdkStaticLibUtil;
 import com.suntek.efacecloud.util.FaceFeatureUtil.FeatureResp;
 import com.suntek.face.compare.sdk.model.CollisionResult;
 
@@ -114,24 +110,34 @@ public class FaceRedListProvider extends ExportGridDataProvider
 	 * @return true 需要继续查询流程； false :直接退出查询流程
 	 */
 	public boolean prepareForSearch(RequestContext context){
-		String threshold = (String) context.getParameter("THRESHOLD"); //阈值
+		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+		String threshold = StringUtil.toString(context.getParameter("THRESHOLD")); //阈值
 		String elementId = StringUtil.toString(context.getParameter("elementId"));
-		FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
-		if(!featureResp.isValid()){
-			ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-			context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-			return false;
-		}
-		
-		Map<String, Object> picSearchParam = new HashMap<String, Object>();
-		picSearchParam.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
-		picSearchParam.put("similarity", Integer.parseInt(threshold));
-		picSearchParam.put("feature", featureResp.getRltz());
-		picSearchParam.put("topN", 10000000);
-		picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
-	
 		List<Long> idList = new ArrayList<Long>();
-		CollisionResult collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
+		CollisionResult collisionResult = null;
+		if(vendor.equals(Constants.HIK_VENDOR)){
+			Map<String, Object> params = new HashMap<>();
+			params.put("TOP_N", 30);
+			params.put("PIC", pic);
+			params.put("THRESHOLD", "0."+threshold);
+			collisionResult = HikSdkRedLibUtil.faceOne2NSearch(Constants.STATIC_LIB_ID_RED_LIST, params);
+		}else{
+			FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
+			if(!featureResp.isValid()){
+				ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+				context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+				return false;
+			}
+			Map<String, Object> picSearchParam = new HashMap<String, Object>();
+			picSearchParam.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
+			picSearchParam.put("similarity", Integer.parseInt(threshold));
+			picSearchParam.put("feature", featureResp.getRltz());
+			picSearchParam.put("topN", 10000000);
+			picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+			
+			collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
+			
+		}
 		if (collisionResult != null && collisionResult.getCode() == 0) {
 			List<Map<String, Object>> collisionList = collisionResult.getList();
 			for (Map<String, Object> map : collisionList) {
@@ -144,7 +150,6 @@ public class FaceRedListProvider extends ExportGridDataProvider
 			context.getResponse().setError("检索失败，原因：" + collisionResult.getMessage());
 			return false;
 		}
-		
 		if (idList.size() > 0) {
 			addOptionalStatement(" and INFO_ID in " + SqlUtil.getSqlInParams(idList.toArray()));
 			for (int i = 0; i < idList.size(); i++) {
