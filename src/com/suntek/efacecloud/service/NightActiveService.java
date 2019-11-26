@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.core.app.AppHandle;
@@ -26,47 +25,35 @@ import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * 人脸技战法-昼伏夜出
+ * 人脸技战法-深夜出入
  *
  * @author guoyl
  * @version 2019年11月12日
  * @since
  */
-@LocalComponent(id = "technicalTactics/dayHideNightActive", isLog = "true")
-public class DayHideNightActiveService {
+@LocalComponent(id = "technicalTactics/NightActive", isLog = "true")
+public class NightActiveService {
 
     @BeanService(id = "query", type = "remote")
     public void query(RequestContext context) throws Exception {
 
         String beginDate = StringUtil.toString(context.getParameter("BEGIN_DATE"));
         String endDate = StringUtil.toString(context.getParameter("END_DATE"));
-        String dayBeginTime = StringUtil.toString(context.getParameter("DAY_BEGIN_TIME"));
-        String dayEndTime = StringUtil.toString(context.getParameter("DAY_END_TIME"));
+
         String nightBeginTime = StringUtil.toString(context.getParameter("NIGHT_BEGIN_TIME"));
         String nightEndTime = StringUtil.toString(context.getParameter("NIGHT_END_TIME"));
-        int dayFrequence = Integer.valueOf(StringUtil.toString(context.getParameter("DAY_FREQUENCE")));
+
         int nightFrequence = Integer.valueOf(StringUtil.toString(context.getParameter("NIGHT_FREQUENCE")));
         String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
         int similarity = Integer.valueOf(StringUtil.toString(context.getParameter("THRESHOLD"), "80"));
         String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"), "65");
-
-        if (dayFrequence > nightFrequence) {
-            context.getResponse().setWarn("昼出频次必须小于夜出频次");
-            return;
-        }
+        String algoCode = StringUtil.toString(context.getParameter("ALGORITHM_CODE"));
 
         List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> timeRegionList = new ArrayList<Map<String, Object>>();
-        Map<String, Object> dayGroup = new HashMap<String, Object>();
-        dayGroup.put("BEGIN_DATE", beginDate);
-        dayGroup.put("END_DATE", endDate);
-        dayGroup.put("BEGIN_TIME", dayBeginTime);
-        dayGroup.put("END_TIME", dayEndTime);
-        dayGroup.put("CROSS", deviceIds);
-        groupList.add(dayGroup);
+
 
         if (nightBeginTime.compareTo(nightEndTime) > 0) {
 
@@ -124,7 +111,7 @@ public class DayHideNightActiveService {
         params.put("faceScore", faceScore);
         commandContext.setBody(params);
 
-        ServiceLog.debug("昼伏夜出 调用sdk参数:" + params);
+        ServiceLog.debug("深夜出入 调用sdk参数:" + params);
 
         Registry registry = Registry.getInstance();
 
@@ -180,36 +167,15 @@ public class DayHideNightActiveService {
                 ids = personIds.get(i);
                 List<Map<String, Object>> result = handlePersonId(ids);
 
-                if (result.size() > 0) { // 过滤反查不到的结果列表
+                if (result.size() > nightFrequence) { // 过滤反查不到的结果列表
                     resultList.add(result);
                 }
             }
         }
 
-        DateTime dayBeginDate = DateUtil.parse(StringUtil.toString(context.getParameter("DAY_BEGIN_TIME")));
-        DateTime dayEndDate = DateUtil.parse(StringUtil.toString(context.getParameter("DAY_END_TIME")));
-
-        // 昼伏夜出分析 -- 将每人个的出现记录按照时间划分出昼时间与夜时间 再进行过滤
-        resultList = resultList.stream().filter(o -> {
-            int dayNum = 0;
-            int nightNum = 0;
-            for (Map<String, Object> x : o) {
-                DateTime time = DateUtil.parse(DateUtil.formatTime(DateUtil.parse(StringUtil.toString(x.get("TIME")))));
-                if (time.compareTo(dayBeginDate) > 0 && dayEndDate.compareTo(time) > 0) {
-                    dayNum++;
-                } else {
-                    nightNum++;
-                }
-            }
-
-            if (dayNum <= dayFrequence && nightNum >= nightFrequence) {
-                return true;
-            }
-            ServiceLog.debug("数据不符合昼伏夜出规则，过滤 " + JSONObject.toJSONString(o));
-            return false;
-        }).collect(Collectors.toList());
 
         context.getResponse().putData("DATA", resultList);
+
     }
 
     /**
