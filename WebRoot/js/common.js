@@ -3257,7 +3257,7 @@ function projectDisplay (type) {
 	
 	var permissionBlackList = {
 
-    	'shunde': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score'],
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score'],
 	}
 	var projectPermission = permissionBlackList[top.projectID];
 	
@@ -3268,7 +3268,7 @@ function domPermission () {
 
 	var permissionHide = {
 		
-    	'shunde': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score']
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score']
 	}
 
 	if(permissionHide[top.projectID]) {
