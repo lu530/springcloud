@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人脸N:N结果</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/faceTrajectory.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/theme/theme-azure-efacecloud.css" />
+
+</head>
+<body>
+	<div class="tab-content">
+		<div class="tab-pane active list-wrap">
+			<div class="page-list-head">
+				<a id="backBtn" class="back-btn">
+					<i class="icon-arrow-left10"></i>
+					<em>返回</em>
+				</a>
+				<span class='pageTitle'>昼伏夜出分析结果</span>
+			</div>
+			<div class="data-wrap listviewImgBox icon-text-list-unit" id="collisionList" style="bottom:50px;">
+				<div class="nodata"></div>
+			</div>
+			<script id="listTempl" type="text/x-tmpl">
+             {% for(var i=0;i<o.length;i++){ %}
+				<div class="tilelist {%=renderTwenty(i+1)%} livtview-list-node-unit" page="{%=renderCurrentPage(i+1)%}">
+					<dl class="list-node"  order="{%=i %}">
+						<dt class="node-img">
+							<span>
+								<img src="{%=o[i][0].OBJ_PIC %}" attrimg="zoom">
+							</span>
+						</dt>
+						<dd class="node-text picMessage">
+							<p class="w70 fl" picMsg="最近抓拍时间:{%=o[i][0].TIME %}">
+								<label>最近抓拍时间：</label>
+								<span title="{%=o[i][0].TIME %}">{%=o[i][0].TIME %}</span>
+							</p>
+							<p class="w30 fl tr" picMsg="次数:{%=o[i][0].REPEATS%}次">
+								<span class="orange">{%=o[i][0].REPEATS%}次</span>
+							</p>
+							<p class="w70 fl mb0" picMsg="最近抓拍卡口:{%=o[i][0].DEVICE_NAME %}">
+								<label>最近抓拍卡口：</label>
+								<span title="{%=o[i][0].DEVICE_NAME%}">{%=o[i][0].DEVICE_NAME %}</span>
+							</p>
+							<p class="w30 fl tr mb0 control-wrap">
+								<span class="showDetailBtn">详情>></span>
+							</p>
+						</dd>
+					</dl>
+				</div>
+             {% } %}
+			</script>
+			<div class="pager-bottom">
+				<ul class="pager bigbtn-pager" listview-page="">        	
+				    <li>
+				    	共有<i class="blue" listview-counts="">0</i>条记录，
+				    	<i class="blue" listview-current="">0</i>/<i class="blue" listview-total="">0</i>页
+				    </li>
+				    <li><a class="ml10 disable" href="#" listview-prev-btn=""><span class="icon-arrow-left9" aria-hidden="true"></span></a></li>
+				    <li><a class="mr10 ml10" href="#" listview-next-btn=""><span class="icon-arrow-right9" aria-hidden="true"></span></a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="tab-pane">
+			<div class="page-list-head">
+				<a id="timesBtn" class="back-btn">
+					<i class="icon-arrow-left10"></i>
+					<em>返回</em>
+				</a>
+				<span>抓拍详情</span>
+			</div>
+			<div class="data-wrap">
+				<div class="timeline-wrap listviewImgBox icon-text-list-unit" id="detailList">
+				<script id="detailTempl" type="text/x-tmpl">
+                  {% for(var j=0;j<o.length;j++){ %}
+					<div class="item {% if(j==0){ %} first {% } %}">
+						<span class="circle"></span>
+						<div class="tilelist livtview-list-node-unit">
+							<dl class="list-node detail" index="{%=j%}" x="{%=o[j].X%}" y="{%=o[j].Y%}" kkmc="{%=o[j].DEVICE_NAME%}" txmc1="{%=o[j].OBJ_PIC%}">
+								<dt class="node-img">
+									<span>
+										<img src="{%=o[j].OBJ_PIC%}" attrimg="zoom">
+									</span>
+								</dt>
+								<dd class="node-text picMessage">
+									<p picMsg="时间:{%=o[j].TIME%}">
+										<label>时间：</label>
+										<span title="{%=o[j].TIME%}">{%=o[j].TIME%}</span>
+									</p>
+									<p class="mb0" picMsg="卡口:{%=o[j].DEVICE_NAME %}">
+										<label>卡口：</label>
+										<span title="{%=o[j].DEVICE_NAME %}">{%=o[j].DEVICE_NAME %}</span>
+									</p>
+								</dd>
+							</dl>
+						</div>
+					</div>
+                  {% } %}
+				</script>	
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script> 
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/vehicleConstant.js"></script>
+<script src="/efacecloud/js/technicalStation/mock.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/dayLurkNightOut.js"></script>
+</html>

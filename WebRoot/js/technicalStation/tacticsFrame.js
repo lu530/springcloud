@@ -26,7 +26,9 @@ var pageUrlObj = {
 	"partner":'/efacecloud/page/technicalStation/persontogethercarForm.html',//同伙分析
 	"frequently":'/efacecloud/page/technicalStation/personfrequentAccessForm.html',//频繁出现
 	'region':'/efacecloud/page/technicalStation/faceCollisionForm.html',//区域碰撞
-	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html'//库碰撞
+	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html', //库碰撞
+	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html', // 昼伏夜出
+	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html', // 深夜出入
 }
 $(function(){
 	initEvent();
