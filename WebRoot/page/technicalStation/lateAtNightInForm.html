@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>人员深夜出入分析</title>
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
+</head>
+<body class="full-screen bgWhite">
+<div class="page-list-head">
+	<a id="backBtn" class="back-btn">
+		<i class="icon-arrow-left10"></i>
+		<em>返回</em>
+	</a>
+	<span id="technicalTitle"></span>
+</div>
+<div class="form-con form-inline form-silde">
+ 	<ul id="warningTabMenuList" class="nav nav-tab-style1 hide">
+	   <li class="hand active"><a ref="#dayLurkNightOut"><span class="icon-brush001"></span> 昼伏夜出</a></li>
+	   <li class="hand"><a ref="#alarmSetting"><span class="icon-bell2"></span> 预警设置</a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="dayLurkNightOut" class="tab-pane active">
+		<dl class="sort-cell clearfix">
+			<dd class="form-group time-wrap time-style-1 mb15">
+				<div class="begin-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5" >选择日期：</label>
+					<div class="time-box ml0">
+						<label>从</label>
+						<input class="form-control" id="beginTime" name="beginTime" type="text" readonly="readonly"/>
+					</div>
+					<span class="red">*</span>
+				</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">      
+						<label>到</label>
+						<input class="form-control" id="endTime" name="endTime" type="text" readonly="readonly"/>
+					</div> 
+					<span class="red">*</span>
+				</div>	
+			</dd>
+			<!-- <dd class="form-group time-wrap time-style-1 mb15">
+				<div class="begin-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5" >昼时间：</label>
+					<div class="time-box ml0">
+						<label>从</label>
+						<input class="form-control" id="begindayTime" name="begindayTime" type="text" readonly="readonly"/>
+					</div>
+					<span class="red">*</span>
+				</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">      
+						<label>到</label>
+						<input class="form-control" id="enddayTime" name="enddayTime" type="text" readonly="readonly"/>
+					</div> 
+					<span class="red">*</span>
+				</div>	
+			</dd> -->
+			<dd class="form-group time-wrap time-style-1 mb15">
+				<div class="begin-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5" >夜时间：</label>
+					<div class="time-box ml0">
+						<label>从</label>
+						<input class="form-control" id="beginnightTime" name="beginnightTime" type="text" readonly="readonly"/>
+					</div>
+					<span class="red">*</span>
+				</div>
+				<div class="end-time mt10 clearfix">
+					<label class="control-label fl tl mr0 mt5"></label>
+					<div class="time-box ml0">      
+						<label>到</label>
+						<input class="form-control" id="endnightTime" name="endnightTime" type="text" readonly="readonly"/>
+					</div> 
+					<span class="red">*</span>
+				</div>	
+			</dd>
+			<!-- <dd class="form-group form-group-block">
+				<label class="control-label w35">昼出频次 <=：</label>
+				<input class="form-control" value="" id="dayNum" style="width: 220px;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+				<span class="red">*</span>
+			</dd> -->
+			<dd class="form-group form-group-block">
+				<label class="control-label w35">夜出频次 >=：</label>
+				<input class="form-control" value="" id="nightNum" style="width: 220px;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+				<span class="red">*</span>
+			</dd>
+			<dd class="form-group form-group-block">
+				<label class="control-label">选择区域：</label>
+				<ul class="map-icon-list clearfix" layerName="L_CAMERA_FACE">
+					<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+					<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+					<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+					<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+					<li title="显示隐藏感知设备" class="active"><i map="mapBtn" togglebtn="kktree" class="map-icon map-icon-area icon-list22" name="showKKTree"></i></li>
+					<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+				</ul>
+				<span class="red">*</span>
+				<div class="table-wrap" style="border: none;">
+					<table class="table" cellspacing="0" cellpadding="0">  
+						<tbody id="bayonetList">
+						</tbody>         
+					</table>
+					<input type="hidden" id="selectedBayonet" ui-validate="required" name="CAMERA_IDS" ui-vtext="选择区域">
+				</div>
+			</dd>
+			<dd class="form-group form-group-block">
+				<label class="control-label">感知设备：</label>
+				<div class="dropdown-list device-select">
+					<div class="dropdown-list-text">
+						<span class="list-title" id="deviceNames"></span> 
+						<input type="hidden" id="faceDetect" name="DEVICE_IDS">
+						<input type="hidden" id="deviceIdInt" name="DEVICE_IDS_INT">
+						<a class="dropdown">
+							<i class="icon-arrow-down7"></i>
+						</a>
+					</div>
+					<div class="dropdown-menu">
+						<ul class="list-con" id="deviceNameList"></ul>
+					</div>
+				</div>
+			</dd>
+			<dd class="form-group form-group-block">
+				<label class="control-label" title='图片相似度分数'>检索阈值：</label>
+				<div id="sliderThreshold" style="width:197px;display:inline-block;"></div>
+				<input class="form-control ml20 tc" style="width:30px; padding:2px" id="THRESHOLD" name="THRESHOLD" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="检索阈值" value=70><span class="red"> *</span>
+			</dd> 
+			<dd class="form-group form-group-block">
+				<label class="control-label" title='图片质量分数'>特征分数：</label>
+				<div id="sliderScore" style="width:197px;display:inline-block;"></div>
+				<input class="form-control ml20 tc" style="width:30px; padding:2px" id="FACESCORE" name="FACE_SCORE" maxlength=" " ui-validate="{pattern:'required,integer',max:100,min:1}" ui-vtext="特征分数" value=60><span class="red"> *</span>
+			</dd>
+		</dl>
+		<div class="btn-wrap">
+			<button id="searchBtn" class="btn w100 ">查询</button>
+		</div>
+	</div>
+	</div>
+</div>
+
+<div class="frame-form-full l0" style="display: none;">
+	<iframe class="frame-form" id="frameFormFull" frameborder="0"></iframe>
+</div>	  
+
+<script id="bayonetListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<tr deviceId="{%=o[i].DEVICE_ID%}" deviceName="{%=o[i].DEVICE_NAME%}" >
+		<td class="w5 tc"><span class="circle"></span></td>                                           
+                 <td class="w70"><span title="">{%=o[i].DEVICE_NAME%}</span></td>	                	                                                   
+		<td class="tc w15">
+			<ul class="btn-group-icons list-inline">
+			    <li class="delete"><span title="删除" class="delete-bayonet-item icon-cross2"></span></li>
+			</ul>
+		</td>
+	</tr>
+	{% } %}
+</script>
+<script id="deviceNameListTemp" type="text/x-tmpl">					
+	{% for(var i=0; i<o.length; i++) { %} 
+	<li>
+		<a>
+			<span class="deviceName">{%=o[i].DEVICE_NAME%}</span>
+			<span class="removeDeviceBtn operate-btn" deviceid="{%=o[i].DEVICE_ID%}">×</span>
+		</a>
+	</li>
+	{% } %}
+</script>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/ztree/jquery.ztree.all-3.5.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/util/StringUtil.js"></script>
+
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/lateAtNightInForm.js"></script>
+</body>
+</html>
