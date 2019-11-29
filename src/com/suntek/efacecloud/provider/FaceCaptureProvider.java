@@ -57,21 +57,20 @@ public class FaceCaptureProvider {
 		// 大数据检索方式
 		String isSearchFace = StringUtil.toString(params.get("PIC"));
 		String needDevice = StringUtil.toString(params.get("NEED_DEVICE"));
-		String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
+//		String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
 		String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
 		try {
 			if (StringUtil.isEmpty(deviceIds) && !context.getUserCode().equals("admin")) {
 				Set<String> deviceSet = DevicesRedisUtil.getDeviceList(context.getUserCode(), Constants.DEVICE_TYPE_FACE);
-				if (ObjectUtils.isEmpty(deviceSet)) {
-					context.putParameter("DEVICE_IDS", "-1");
-				} else {
+				if (!ObjectUtils.isEmpty(deviceSet)) {
 					context.putParameter("DEVICE_IDS", String.join(",", deviceSet));
 				}
 			}
 			//根据来源选择设备
-			if(!StringUtil.isEmpty(sourceType) && StringUtil.isEmpty(deviceIds)) {
-				context.putParameter("DEVICE_IDS", String.join(",", DeviceInfoUtil.getDeviceListBySourceType(sourceType, context.getUserCode())));
-			}
+			//暂时无用，先隐藏 2019-11-28 wudapei
+//			if(!StringUtil.isEmpty(sourceType) && StringUtil.isEmpty(deviceIds)) {
+//				context.putParameter("DEVICE_IDS", String.join(",", DeviceInfoUtil.getDeviceListBySourceType(sourceType, context.getUserCode())));
+//			}
 			// 添加判断条件,当无设备id且needDevice=1时,不是查询所有设备
 			if (StringUtil.isEmpty(deviceIds) && needDevice.equals("1")) {
 				context.putParameter("DEVICE_IDS", "-1");
@@ -199,7 +198,7 @@ public class FaceCaptureProvider {
 			List<Map<String, Object>> resultList = new ArrayList<>();
 			//添加来源字段
 			String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
-			boolean isAdd = !StringUtil.isEmpty(sourceType);
+//			boolean isAdd = !StringUtil.isEmpty(sourceType);
 			for (Map<String, Object> algoDataMap : tempResultList) {
 				Map<String, Object> tempMap = new HashMap<String, Object>();
 				
@@ -220,10 +219,10 @@ public class FaceCaptureProvider {
 					continue;
 				}
 				Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
-				if(isAdd) {
-					Set<String> set = infoList.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
-					idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
-				}
+//				if(isAdd) {
+//					Set<String> set = infoList.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
+//					idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
+//				}
 				for (Map<String, Object> info : infoList) {
 					String createTime = StringUtil.toString(info
 							.get("CREATETIME"));
@@ -245,11 +244,11 @@ public class FaceCaptureProvider {
 						ServiceLog.error("不存在activity_info表: " + e);
 					}
 					//是否添加来源类型
-					if(isAdd) {
-						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
-						info.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
-						info.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
-					}
+//					if(isAdd) {
+//						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
+//						info.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
+//						info.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
+//					}
 				}
 				tempMap.put("ALGORITHM_CODE", algorithmCode);
 				tempMap.put("ALGORITHM_ANME", algorithmName);

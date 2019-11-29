@@ -39,6 +39,7 @@ import com.suntek.efacecloud.dao.FaceAlgorithmNameDao;
  */
 public class CommonUtil {
 	private final static DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private final static String SUCCESS = "0";
 	
 	/**
 	 * 获取图片路径
@@ -722,6 +723,33 @@ public class CommonUtil {
 		}
 		
 		return recordObj;
+	}
+
+	public static  List<Map<String, Object>> getData(String jsonStr){
+
+		if(StringUtil.isEmpty(jsonStr)) {
+			return null;
+		}
+
+		JSONObject jsobObj = JSONObject.parseObject(jsonStr);
+
+		String opCode = StringUtil.toString(jsobObj.get("OpCode"), "1");
+		String opDesc = StringUtil.toString(jsobObj.get("OpDesc"), "接口异常");
+
+		ServiceLog.debug("接口返回操作码 opCode = " + opCode + "，opDesc = " + opDesc);
+		if(!SUCCESS.equals(opCode)) {
+			return null;
+		}
+
+		Object data = jsobObj.get("Data");
+
+		List<Map<String, Object>> recordsList = null;
+
+		if(null != data && data instanceof List<?>){
+			recordsList = (List<Map<String, Object>>)data;
+		}
+
+		return recordsList;
 	}
 
 }
