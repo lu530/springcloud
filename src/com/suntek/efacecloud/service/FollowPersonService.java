@@ -43,7 +43,6 @@ public class FollowPersonService {
 
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
-        commandContext.setServiceUri(BaseCommandEnum.followPerson.getUri());
         commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
         Map<String, Object> params = new HashMap<String, Object>();
@@ -56,9 +55,13 @@ public class FollowPersonService {
 
         ServiceLog.debug("团伙分析  调用sdk参数:" + params);
 
+        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
+                "EAPLET_VENDOR", "Suntek");
+
         Registry registry = Registry.getInstance();
 
-        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+        registry.selectCommand(BaseCommandEnum.followPerson.getUri(), "4401",
+                vendor).exec(commandContext);
 
         ServiceLog.debug("团伙分析  调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
@@ -88,7 +91,8 @@ public class FollowPersonService {
                 queryParams.put("IDS", idStr);
                 commandContext.setBody(queryParams);
                 ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
-                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                registry.selectCommand(BaseCommandEnum.faceQueryByIds.getUri(), "4401",
+                        vendor).exec(commandContext);
                 ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
                         + commandContext.getResponse().getMessage() + " result:"
                         + commandContext.getResponse().getResult());

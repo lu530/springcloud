@@ -2,6 +2,7 @@ package com.suntek.efacecloud.service;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.PageQueryResult;
@@ -92,10 +93,13 @@ public class RegionCollsionService {
         commandContext.setBody(params);
 
         ServiceLog.debug("区域碰撞 调用sdk参数:" + params);
+        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
+                "EAPLET_VENDOR", "Suntek");
 
         Registry registry = Registry.getInstance();
 
-        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+        registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(), "4401",
+                vendor).exec(commandContext);
 
         ServiceLog.debug("区域碰撞 调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());

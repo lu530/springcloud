@@ -4,6 +4,7 @@ import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.util.DateUtil;
 import com.suntek.eap.common.util.IDGenerator;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
@@ -42,7 +43,9 @@ public class FrequentAccessTacticsService {
 
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
-        commandContext.setServiceUri(BaseCommandEnum.frequentAccess.getUri());
+        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
+                "EAPLET_VENDOR", "Suntek");
+
         try {
             commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
         } catch (Exception e) {
@@ -57,7 +60,8 @@ public class FrequentAccessTacticsService {
 
         Registry registry = Registry.getInstance();
 
-        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+        registry.selectCommand(BaseCommandEnum.frequentAccess.getUri(), "4401",
+                vendor).exec(commandContext);
 
         ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
