@@ -100,7 +100,6 @@ public class FrequentAccessTacticsService {
         String ids = StringUtil.toString(context.getParameter("IDS"));
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
-        commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
         commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
         Map<String, Object> params = new HashMap<String, Object>();
@@ -109,9 +108,13 @@ public class FrequentAccessTacticsService {
 
         ServiceLog.debug("调用sdk参数:" + params);
 
+        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
+                "EAPLET_VENDOR", "Suntek");
+
         Registry registry = Registry.getInstance();
 
-        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+        registry.selectCommand(BaseCommandEnum.faceQueryByIds.getUri(), "4401",
+                vendor).exec(commandContext);
 
         ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());

@@ -84,7 +84,6 @@ public class FollowPersonService {
                 HashMap map = (HashMap) personIds.get(i);
                 String idStr = (String) map.get("IDS");
 
-                commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
                 commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
                 Map<String, Object> queryParams = new HashMap<String, Object>();
