@@ -347,4 +347,7 @@ public class Constants {
     public static final String IS_BLACK = "1";
     /** 华云算法 */
     public static final String HUAYUN_ALGO = "80003";
+
+	/** 是否导入导出文件上传dfs */
+	public static final String IS_FILE_SAVE = "1";
 }

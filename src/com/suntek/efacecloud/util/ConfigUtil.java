@@ -199,4 +199,11 @@ public class ConfigUtil {
         }
         return redListDbId;
     }
+
+    /**
+     * 是否导入导出文件上传dfs
+     */
+    public static boolean isFileSave() {
+        return Constants.IS_FILE_SAVE.equals(AppHandle.getHandle(Constants.CONSOLE).getProperty("IS_FILE_SAVE", "0"));
+    }
 }
