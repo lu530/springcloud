@@ -142,12 +142,7 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/WebRoot/WEB-INF/lib/eap-ui-1.0.2.jar</systemPath>
 		</dependency>
-		<dependency>
-			<groupId>com.hikvision</groupId>
-			<artifactId>artemis-http-client</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>

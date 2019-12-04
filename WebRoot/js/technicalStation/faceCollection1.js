@@ -89,14 +89,14 @@ function initEvent(){
 			deviceIdInt:$('#orgCodeInt').val(),
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
-		
+
 		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
 			$('#deviceNames').html(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);
 			$('#orgCode').val(resp.deviceId);
 			$('#orgCodeInt').val(resp.deviceIdInt);
-			
+
 			addDrowdownDeviceList({
 				deviceId:resp.deviceId,
 				deviceName:resp.deviceName,
@@ -106,7 +106,7 @@ function initEvent(){
 		});
 		e.stopPropagation();
 	});
-	
+
 	//删除已选设备
 	$("body").on("click",".removeDeviceBtn",function(e){
 		var $this = $(this);
@@ -117,7 +117,7 @@ function initEvent(){
 		var index = deviceIdArr.indexOf(deviceId),
 			orgCode = $("#deviceNames").attr("orgcode"),
 			orgCodeArr = orgCode.split(",");
-		
+
 		$this.parents("li").remove();
 		deviceIdArr.splice(index,1);
 		deviceIdIntArr.splice(index,1);
@@ -133,10 +133,10 @@ function initEvent(){
 			$(".dropdown-list-text .dropdown").addClass("hide");
 			$(".dropdown-list").removeClass("open");
 		}
-		
+
 		e.stopPropagation();
 	});
-	
+
 	//点击进入卡口选择地图
 	$('#locate').click(function(){
 		UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600,function(resp){
@@ -145,7 +145,7 @@ function initEvent(){
 			$('#deviceNames').attr('orgcode',resp.orgCode);
 			$('#orgCode').val(resp.deviceId);
 			$('#orgCodeInt').val(resp.deviceIdInt);
-			
+
 			addDrowdownDeviceList({
 				deviceId:resp.deviceId,
 				deviceName:resp.deviceName,
@@ -154,7 +154,7 @@ function initEvent(){
 			});
 		});
 	});
-	
+
 	//移除集合的当前图片
 	$("body").on("click",".removeFaceBtn",function(){
 		var $this = $(this),
@@ -162,7 +162,7 @@ function initEvent(){
 			curUuid = $parent.attr("uuid"),
 			picVal = picMap.get(curUuid),
 			isRemove = picMap.remove(curUuid);
-		
+
 		if(isRemove){
 			var listMapVal = listMap.get(curUuid),
 				isListRemove = listMap.remove(curUuid),
@@ -187,14 +187,14 @@ function initEvent(){
 			}
 		}
 	});
-	
+
 	//确认检索按钮
 	$('#confirmSearch').click(function(){
 		doSearch();
 		$("#checkAll").prop("checked",false);
 		$("#exportPersonalBtn").addClass("disabled");
 	});
-	
+
 	//并集
 	$("#andSet").click(function(){
 		if($(this).hasClass("disabled")){
@@ -208,7 +208,7 @@ function initEvent(){
 			$('.tilelist').html(tmpl("faceListTmpl", andSetArr));
 		}
 	});
-	
+
 	//交集
 	$("#intersection").click(function(){
 		if($(this).hasClass("disabled")){
@@ -222,25 +222,25 @@ function initEvent(){
 			$('.tilelist').html(tmpl("faceListTmpl", intersetArr));
 		}
 	});
-	
+
 	//集合新增时CheckBox事件
 	$("body").on('click','.list-node-wrap-face',function(event){
 		var $this = $(this),
 			$checkbox = $this.find(".checkbox-opacity"),
 			curIndex = $this.attr("index");
-        if($checkbox.prop("checked")){
-        	$checkbox.prop("checked",false)
-        	$this.removeClass("active");
-        	var removeIndex = checkedIndexArr.indexOf(curIndex);
-        	checkedIndexArr.splice(removeIndex, 1);
-        } else {
-        	$checkbox.prop("checked",true)
-        	$this.addClass("active");
-        	checkedIndexArr.push(curIndex);
-        }
-        event.stopPropagation();
-    });
-	
+		if($checkbox.prop("checked")){
+			$checkbox.prop("checked",false)
+			$this.removeClass("active");
+			var removeIndex = checkedIndexArr.indexOf(curIndex);
+			checkedIndexArr.splice(removeIndex, 1);
+		} else {
+			$checkbox.prop("checked",true)
+			$this.addClass("active");
+			checkedIndexArr.push(curIndex);
+		}
+		event.stopPropagation();
+	});
+
 	$("body").on("click",".list-node-wrap",function(){
 		var len = $(".list-node-wrap.active").length;
 		if(len == 0){
@@ -249,7 +249,7 @@ function initEvent(){
 			$("#exportPersonalBtn").removeClass("disabled");
 		}
 	});
-	
+
 	//全选
 	$('body').on('click','#checkAll',function(){
 		var $this = $(this),
@@ -258,28 +258,28 @@ function initEvent(){
 			$checkbox = $this.parents(".pager-content").find(".list-node-face .node-text input"),
 			$listNode = $this.parents(".pager-content").find(".tilelist .list-node-wrap"),
 			$nodeInput = $this.parents(".pager-content").find(".list-node .node-text input");
-        if($this.is(":checked")){
-            if(!$listNodeFace) {
-            	$listNodeWrapFace.addClass("active");
-            	$checkbox.attr("checked",true);
-            }else {
-            	$listNode.addClass("active");
-                $nodeInput.attr("checked",true);
-            }
-            $("#exportPersonalBtn").removeClass("disabled");
-        }
-        else {
-            if(!$listNodeFace) {
-            	$listNodeWrapFace.removeClass("active");
-            	$checkbox.attr("checked", false);
-            } else {
-            	$listNode.removeClass("active");
-            	$nodeInput.attr("checked",false);
-            }
-            $("#exportPersonalBtn").addClass("disabled");
-        }
-    });
-	
+		if($this.is(":checked")){
+			if(!$listNodeFace) {
+				$listNodeWrapFace.addClass("active");
+				$checkbox.attr("checked",true);
+			}else {
+				$listNode.addClass("active");
+				$nodeInput.attr("checked",true);
+			}
+			$("#exportPersonalBtn").removeClass("disabled");
+		}
+		else {
+			if(!$listNodeFace) {
+				$listNodeWrapFace.removeClass("active");
+				$checkbox.attr("checked", false);
+			} else {
+				$listNode.removeClass("active");
+				$nodeInput.attr("checked",false);
+			}
+			$("#exportPersonalBtn").addClass("disabled");
+		}
+	});
+
 	//导出
 	$('#exportPersonalBtn').click(function(){
 		if($(this).hasClass("disabled")){
@@ -323,8 +323,8 @@ function initEvent(){
 			if (exportData.length > 0) {
 				exportParams.EXPORT_DATA = JSON.stringify(exportData);
 			} else {
-				exportParams.DEVICE_IDS = $("#orgCode").val();    
-				exportParams.THRESHOLD = $('#threshold').val();   
+				exportParams.DEVICE_IDS = $("#orgCode").val();
+				exportParams.THRESHOLD = $('#threshold').val();
 				exportParams.KEYWORDS = $("#searchText").val() || "";
 				exportParams.BEGIN_TIME = $('#beginTime').val() || "";
 				exportParams.END_TIME = $('#endTime').val() || "";
@@ -332,65 +332,65 @@ function initEvent(){
 		}
 		bigDataToDownload(url,"exportFrame",exportParams);
 	});
-	
+
 	//身份核查
-    $("body").on("click",".verification-search",function(){
-        openWindowPopup('identity',$(this).attr("url"));
-    });
-    
-    //列表中的搜索链接
+	$("body").on("click",".verification-search",function(){
+		openWindowPopup('identity',$(this).attr("url"));
+	});
+
+	//列表中的搜索链接
 	$("body").on("click",".search-btn",function(event){
 		var url = $(this).attr("fileurl");
 		addImg(url);
 		doSearch();
 		event.stopPropagation();
 	});
-	
+
 	//轨迹分析
 	$("body").on("click",".trajectory-search",function(){
 		var url = $(this).attr("url");
 		openWindowPopup('track',url);
 	});
-	
+
 	$('#trajectoryGeneBtn').click(function(){
-        if(getFaceTrackInfoList()){
-        	trackData.sort(
-                function(a,b){
-                    return a.TIME - b.TIME;
-                }
-            );
-        	
-        	var pageUrl = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=trackResult&getDataType=trackResult';
+		if(getFaceTrackInfoList()){
+			trackData.sort(
+				function(a,b){
+					return a.TIME - b.TIME;
+				}
+			);
+
+			var pageUrl = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=trackResult&getDataType=trackResult';
 			UI.util.showCommonIframe('.frame-form-full',pageUrl);
-        }
-    });
+		}
+	});
 }
 
 function getFaceTrackInfoList(){
 
-    var inputCheck = $('.list-node-wrap.active');
+	var inputCheck = $('.list-node-wrap.active');
 
-    if (inputCheck.length < 2) {
-        UI.util.alert('生成轨迹至少勾选两条记录！', 'warn');
-        return false;
-    }
-    trackData = [];
-    for (var i = 0; i < inputCheck.length; i++) {
-        var obj = {};
-        obj.ORIGINAL_DEVICE_ID = $(inputCheck[i]).attr("device_id");
-        obj.DEVICE_NAME = $(inputCheck[i]).attr("device_name");
-        obj.OBJ_PIC = $(inputCheck[i]).attr("obj_pic");
-        obj.PIC = $(inputCheck[i]).attr("pic");
-        obj.X = $(inputCheck[i]).attr("x");
-        obj.Y = $(inputCheck[i]).attr("y");
+	if (inputCheck.length < 2) {
+		UI.util.alert('生成轨迹至少勾选两条记录！', 'warn');
+		return false;
+	}
+	trackData = [];
+	for (var i = 0; i < inputCheck.length; i++) {
+		var obj = {};
+		obj.ORIGINAL_DEVICE_ID = $(inputCheck[i]).attr("device_id");
+		obj.DEVICE_NAME = $(inputCheck[i]).attr("device_name");
+		obj.OBJ_PIC = $(inputCheck[i]).attr("obj_pic");
+		obj.PIC = $(inputCheck[i]).attr("pic");
+		obj.X = $(inputCheck[i]).attr("x");
+		obj.Y = $(inputCheck[i]).attr("y");
 
-        obj.jgsj = $(inputCheck[i]).attr("jgsk");
-        obj.TIME = standardTimeToStamp(obj.jgsj); //地图使用,毫秒时间戳
-        trackData.push(obj);
+		obj.jgsj = $(inputCheck[i]).attr("jgsk");
+		obj.TIME = standardTimeToStamp(obj.jgsj); //地图使用,毫秒时间戳
+		trackData.push(obj);
 
-    }
+	}
 
-    return true;
+	return true;
 }
 
 //表单回填
@@ -401,23 +401,23 @@ function backfillForm(data){
 	infoIdMap.clear();
 	$(".photo-scroll").empty();
 	$('[time-control="zdy"]').click();
-	
+
 	var params = JSON.parse(data);
 	$("#orgCode").val(params.DEVICE_IDS);
 	$("#orgCodeInt").val(params.DEVICE_IDS_INT);
 	$("#deviceNames").html(params.deviceName);
 	$('#threshold').val(params.THRESHOLD);
-	
+
 	$('#beginTime').val(params.BEGIN_TIME);
 	$('#endTime').val(params.END_TIME);
-	
+
 	var curImg = params.PIC.split(",");
 	var curImgUuid = params.IMGUUID.split(",");
-	
+
 	$.each(curImg,function(i,n){
 		addImg(n,curImgUuid[i]);
 	});
-	
+
 	searchData();
 }
 
@@ -427,7 +427,7 @@ function doSearch(){
 		queryParams.DEVICE_IDS = $("#orgCode").val();
 		queryParams.DEVICE_IDS_INT = $("#orgCodeInt").val();
 		queryParams.THRESHOLD = $("#threshold").val();
-		
+
 		//检索案件录入
 		if(isRedList()){
 			var searchParams = queryParams,
@@ -441,7 +441,7 @@ function doSearch(){
 		}else{
 			searchData();
 		}
-			
+
 	}
 }
 
@@ -453,14 +453,14 @@ function searchData(){
 			$("#andSet,#intersection").removeClass("disabled");
 		}
 		var imgArr = picMap.values(),
-		imgUuidArr = picMap.keys(),
-		obj = {
-			imgArr:imgArr,
-			imgUuidArr:imgUuidArr,
-			index:0,
-			len:imgArr.length
-		}
-		
+			imgUuidArr = picMap.keys(),
+			obj = {
+				imgArr:imgArr,
+				imgUuidArr:imgUuidArr,
+				index:0,
+				len:imgArr.length
+			}
+
 		picSearch(obj)
 	}else{
 		queryParams.PIC = "";
@@ -471,26 +471,26 @@ function searchData(){
 //通过图片检索返回当前结果集
 function picSearch(obj){
 	UI.util.showLoadingPanel();
-	
+
 	queryParams.PIC = obj.imgArr[obj.index];
-	
+
 	var curKey = obj.imgUuidArr[obj.index],
 		hasResult = listMap.containsKey(curKey);
-	
+
 	if(!hasResult){
 		queryParams.id="faceCollectionList";
 
 		var curParams = JSON.parse(queryParams.ALGO_LIST);
 		curParams[0].THRESHOLD = queryParams.THRESHOLD;
 		queryParams.ALGO_LIST = JSON.stringify(curParams);
-		
+
 		UI.control.remoteCall("face/capture/query", queryParams, function (resp){
 			if(resp.faceCollectionList.LIST.length>0){
 				var data = resp.faceCollectionList.LIST[0].ALGORITHM_LIST;
 			}else{
 				var data = [];
 			}
-			
+
 			var curInfoIdArr = [];
 			//记录infoId
 			$.each(data,function(j,con){
@@ -502,21 +502,21 @@ function picSearch(obj){
 			});
 			infoIdMap.put(curKey,JSON.stringify(curInfoIdArr));
 			listMap.put(curKey, JSON.stringify(data));
-			
+
 			obj.index = obj.index+1;
-			
+
 			if(obj.index < obj.len){
 				picSearch(obj);
 			}else{
 				//展示结果集
 				showResultList();
-				
+
 				listMap.remove(curKey),
-				infoIdMap.remove(curKey);
-				
+					infoIdMap.remove(curKey);
+
 				UI.util.hideLoadingPanel();
 			}
-			
+
 		},function(data, status, e) {
 			UI.util.hideLoadingPanel();
 		}, {
@@ -524,7 +524,7 @@ function picSearch(obj){
 		});
 	}else{
 		obj.index = obj.index+1;
-		
+
 		if(obj.index < obj.len){
 			picSearch(obj);
 		}else{
@@ -536,21 +536,21 @@ function picSearch(obj){
 
 //分数排序
 function sortNumber(a, b){
-    return b.SCORE-a.SCORE;
+	return b.SCORE-a.SCORE;
 }
 
 //展示结果
 function showResultList(){
 	var resultListArr = [],
 		keysArr = listMap.keys();
-	
+
 	$.each(keysArr,function(i,n){
 		var curValArr = JSON.parse(listMap.get(n));
 		resultListArr = resultListArr.concat(curValArr);
 	});
-	
+
 	resultListArr.sort(sortNumber);
-	
+
 	var curLiLen = $(".photo-scroll >li").length;
 	if(curLiLen == 1){
 		if(resultListArr.length == 0){
@@ -577,16 +577,16 @@ function showResultList(){
 			}
 		});
 		andSetArr = curResultMap.values();
-		
+
 		//交集
 		var infoKeysArr = infoIdMap.keys(),
-		infoArr = [],
-		resultArr = [];
-		
+			infoArr = [],
+			resultArr = [];
+
 		$.each(infoKeysArr,function(i,n){
 			infoArr[i] = JSON.parse(infoIdMap.get(n));
 		});
-		
+
 		for(var i = 0;i<infoArr.length;i++){
 			if(i == 0){
 				resultArr = intersectArr(infoArr[i],infoArr[i+1]);
@@ -596,7 +596,7 @@ function showResultList(){
 				}
 			}
 		}
-		
+
 		var curIntersetArr = [],curInfoId=[];
 		$.each(resultListArr,function(i,n){
 			var curIndex = resultArr.indexOf(n.INFO_ID);
@@ -610,11 +610,11 @@ function showResultList(){
 				}
 			}
 		});
-		
+
 		intersetArr = curIntersetArr;
 		$("#andSet").click();
 	}
-	
+
 }
 
 //获取交集
@@ -624,7 +624,7 @@ function intersectArr(prevArr,arr){
 		arrLen = arr.length,
 		minArr = [],
 		maxArr = [];
-	
+
 	if(prevArrLen<=arrLen){
 		minArr = prevArr;
 		maxArr = arr;
@@ -643,16 +643,16 @@ function intersectArr(prevArr,arr){
 
 //头部图片上传组件
 function topUploadPicFace() {
-    //上传图片
-    $("body").on('change','.searchImgButton',function(){
-    	var $this = $(this),
-    		upImgId = $this.attr('id'),
-    		val = $this.val();
-    	if(val == ''){
-    		return false;
-    	}
-        ajaxFileUpload(upImgId,picSuccFunction1);
-    });
+	//上传图片
+	$("body").on('change','.searchImgButton',function(){
+		var $this = $(this),
+			upImgId = $this.attr('id'),
+			val = $this.val();
+		if(val == ''){
+			return false;
+		}
+		ajaxFileUpload(upImgId,picSuccFunction1);
+	});
 }
 
 /**
@@ -662,97 +662,97 @@ function topUploadPicFace() {
  * @author：lwb
  */
 function picSuccFunction1(data, status) {
-    var fileElementId =  this.fileElementId;
-    data = eval("(" + data + ")");
-    var fastDfs = null;
-    var server = "", port = "", url = "";
+	var fileElementId =  this.fileElementId;
+	data = eval("(" + data + ")");
+	var fastDfs = null;
+	var server = "", port = "", url = "";
 
-    if (data && !data.error) {
+	if (data && !data.error) {
 
-        if(data.fastDfsParam){
-            fastDfs = data.fastDfsParam;
-            server = fastDfs.server;
-            port = fastDfs.port;
-            url = "http://";
-        }
-        var fileId = data.id;
-        url += server+":"+port+"/"+fileId;
+		if(data.fastDfsParam){
+			fastDfs = data.fastDfsParam;
+			server = fastDfs.server;
+			port = fastDfs.port;
+			url = "http://";
+		}
+		var fileId = data.id;
+		url += server+":"+port+"/"+fileId;
 
-        if (data.fastDfsParam && data.fastDfsParam.fullUrl) {
-            url = data.fastDfsParam.fullUrl;
-        }
-        
-        $(fileElementId).val('');
+		if (data.fastDfsParam && data.fastDfsParam.fullUrl) {
+			url = data.fastDfsParam.fullUrl;
+		}
 
-        addImg(url);
+		$(fileElementId).val('');
 
-        //doSearch(1)
-        UI.util.alert("上传成功！请点击按钮进行检索查询");
-        UI.util.hideLoadingPanel();
-        return true;
-    } else {
-        UI.util.alert("上传失败！",'warn');
-    }
+		addImg(url);
 
-    UI.util.hideLoadingPanel();
-    return false;
+		//doSearch(1)
+		UI.util.alert("上传成功！请点击按钮进行检索查询");
+		UI.util.hideLoadingPanel();
+		return true;
+	} else {
+		UI.util.alert("上传失败！",'warn');
+	}
+
+	UI.util.hideLoadingPanel();
+	return false;
 }
 
 //增加图片
 function addImg(url,uuid){
 	//显示阈值
-    $('.bottom-pic-bar').removeClass('hide');
-    
-    if(!uuid){
-    	uuid=UI.util.guid();
-    }
+	$('.bottom-pic-bar').removeClass('hide');
 
-    if(($(".photo-scroll >li").length>9)) {
-        UI.util.alert("搜索图片不能大于10张图片！", "warn");
-        UI.util.hideLoadingPanel();
-        return;
-    }
-    
-    $(".face").removeClass("hide");
-    //加入图片
-    var appendHtml = '<li rltz="" imgurl="'+url+'" uuid="'+uuid+'"><img src="'+url+'" ><span class="close-btn removeFaceBtn">×</span></li>';
-    $(".photo-scroll").append(appendHtml);
-    
-    //记录图片
-    picMap.put(uuid, url);
-    
-    //显示上传图片集合
-    toggleImg();
+	if(!uuid){
+		uuid=UI.util.guid();
+	}
+
+	if(($(".photo-scroll >li").length>9)) {
+		UI.util.alert("搜索图片不能大于10张图片！", "warn");
+		UI.util.hideLoadingPanel();
+		return;
+	}
+
+	$(".face").removeClass("hide");
+	//加入图片
+	var appendHtml = '<li rltz="" imgurl="'+url+'" uuid="'+uuid+'"><img src="'+url+'" ><span class="close-btn removeFaceBtn">×</span></li>';
+	$(".photo-scroll").append(appendHtml);
+
+	//记录图片
+	picMap.put(uuid, url);
+
+	//显示上传图片集合
+	toggleImg();
 }
 
 //显示上传图片集合
 function toggleImg(){
 	//设置图片集合长度
-    var curLiWidth = $(".photo-scroll >li").eq(0).width();
-    var curLiLen = $(".photo-scroll >li").length;
-    var allLiWidth = curLiWidth*curLiLen+5;//+5图片右边距+20距离条件右边距
-    
-    if(curLiLen == 0){
-    	$(".data-wrap").removeClass("has-data");
-    	$(".face").addClass("hide");
-    	$("#andSet,#intersection").addClass("disabled");
-    	return false;
-    }
-    if(curLiLen >0){
-    	$(".data-wrap").addClass("has-data");
-    }
-    
-    //最多显示图片数量
-    var parentWidth = $(".data-wrap").width();
-    var photoToolsWidth = $(".photo-tools").width();
-    var otherWidth = parentWidth - photoToolsWidth -(30+30+30+30);//两个包裹层30padding
-    var allLen = Math.round(otherWidth/curLiWidth);
-    if(curLiLen < allLen-2){
-    	$(".face").width(allLiWidth);
-    }else{
-    	$(".face").width(otherWidth);
-    }
-    $(".photo-scroll").width(curLiWidth*curLiLen);
+	var curLiWidth = $(".photo-scroll >li").eq(0).width();
+	var curLiLen = $(".photo-scroll >li").length;
+	var allLiWidth = curLiWidth*curLiLen+5;//+5图片右边距+20距离条件右边距
+
+	if(curLiLen == 0){
+		$(".data-wrap").removeClass("has-data");
+		$(".face").addClass("hide");
+		$("#andSet,#intersection").addClass("disabled");
+		return false;
+	}
+	if(curLiLen >0){
+		$(".data-wrap").addClass("has-data");
+	}
+
+	//最多显示图片数量
+	var parentWidth = $(".data-wrap").width();
+	var photoToolsWidth = $(".photo-tools").width();
+	var otherWidth = parentWidth - photoToolsWidth -(30+30+30+30);//两个包裹层30padding
+	var allLen = Math.round(otherWidth/curLiWidth);
+	if(curLiLen < allLen-2){
+		$(".face").width(allLiWidth);
+	}else{
+		$(".face").width(otherWidth);
+	}
+	$(".photo-scroll").width(curLiWidth*curLiLen);
 }
 
 //时间控件回调

@@ -751,4 +751,49 @@ public class FaceDispatchedAlarmService {
         context.getResponse().putData("MESSAGE", "操作失败");
     }
 
+    @BeanService(id = "getTotalAlarm", type = "remote")
+    public void getTotalAlarm(RequestContext context) throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String orgCode = StringUtil.toString(context.getParameter("ORG_CODE"));
+            if(StringUtil.isEmpty(orgCode)){
+                context.getResponse().setWarn("行政区划不能为空");
+                return;
+            }
+            List<Map<String, Object>> totalAlarm = alarmDao.getTotalAlarm(orgCode, context.getUserCode());
+            if(totalAlarm.size() == 0){
+                resultMap.put("RED",0);
+                resultMap.put("YELLOW",0);
+                resultMap.put("ORANGE",0);
+                resultMap.put("BLUE",0);
+                context.getResponse().putData("CODE",0);
+                context.getResponse().putData("MESSAGE","查询成功");
+                context.getResponse().putData("DATA",resultMap);
+                return;
+            }
+            Map<Object, Object> temp = totalAlarm.stream().collect(Collectors.toMap(o -> o.get("ALARM_LEVEL"), o -> o.get("COUNT")));
+            ServiceLog.debug("temp >>> " + JSON.toJSONString(temp));
+
+            if(!temp.containsKey("RED")){
+                temp.put("RED", 0);
+            }
+            if(!temp.containsKey("ORANGE")){
+                temp.put("ORANGE", 0);
+            }
+            if(!temp.containsKey("YELLOW")){
+                temp.put("YELLOW", 0);
+            }
+            if(!temp.containsKey("BLUE")){
+                temp.put("BLUE", 0);
+            }
+            context.getResponse().putData("CODE",0);
+            context.getResponse().putData("MESSAGE","查询成功");
+            context.getResponse().putData("DATA",temp);
+        } catch (Exception e) {
+            ServiceLog.error("异常 >>> " + e.getMessage());
+            context.getResponse().putData("CODE",1);
+            context.getResponse().putData("MESSAGE","查询失败");
+        }
+    }
+
 }
