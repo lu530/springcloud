@@ -1,8 +1,8 @@
-﻿var pageType = UI.util.getUrlParam('pageType') || '';
+﻿﻿var pageType = UI.util.getUrlParam('pageType') || '';
 var checkName = UI.util.getUrlParam('checkName') || '';
 var checkNameString = "";
 if(checkName){
-	checkNameString = "("+checkName+")";
+    checkNameString = "("+checkName+")";
 }
 if (pageType === '身份确认') {
     $('.page-title span').text('身份确认'+checkNameString);
@@ -216,10 +216,10 @@ function initEvent() {
         openWindowPopup('track', $(this).attr("url"));
     });
 
-    // 路人检索 
+    // 路人检索
     $("body").on("click", ".lrjs-search", function () {
-    	var curSrc = matcher('/efacecloud/page/library/faceCaptureList.html/' + top.projectID).url;
-		curSrc += '?imgSrc=' + $(this).attr("url");
+        var curSrc = matcher('/efacecloud/page/library/faceCaptureList.html/' + top.projectID).url;
+        curSrc += '?imgSrc=' + $(this).attr("url");
         // 打开页面
         UI.util.showCommonWindow(curSrc, '路人检索', $(top.window).width() * .95, $(top.window).height() * .9, function (obj) { });
     });
@@ -239,10 +239,10 @@ function initEvent() {
         var $listNodeWrap = $(this).parents('.list-node-wrap');
 
         var personId = $listNodeWrap.attr('personid'),
-		    identitynum = $listNodeWrap.find('.identity-id').text(),
-		    rpID = $listNodeWrap.attr('face-id'),
-			pic = $listNodeWrap.find('.person-img').find('.mb0').attr('src'),
-			faceid = $listNodeWrap.attr('face-id'),
+            identitynum = $listNodeWrap.find('.identity-id').text(),
+            rpID = $listNodeWrap.attr('face-id'),
+            pic = $listNodeWrap.find('.person-img').find('.mb0').attr('src'),
+            faceid = $listNodeWrap.attr('face-id'),
             name = $listNodeWrap.find('.similar-name').find('a').text();
 
         var queryStr = '?personId=' + personId + "&identityNum=" + identitynum + "&rpID=" + rpID + "&pic=" + pic + "&name=" + name + '&faceid=' + faceid;
@@ -417,7 +417,7 @@ function initEvent() {
                     PIC: imgUrl,           // 抓拍人脸URL
                     DEVICE_ID: deviceID,     // 抓拍人脸的设备ID
                     CAPTURE_TIME: captureTime,  // 抓拍人脸的抓拍时间
-                    TYPE: 2,          // 判断状态 2、确认或选择推荐 3、误判          
+                    TYPE: 2,          // 判断状态 2、确认或选择推荐 3、误判
                     ALGO_TYPE: algoList[0].ALGO_TYPE
                 });
             } else {
@@ -569,12 +569,12 @@ function initEvent() {
 }
 function initPage() {
     // 初始化人脸库
-	UI.control.remoteCall('face/common/feishiAlgoLib', {}, function(resp) {
-		if(resp.DATA && resp.DATA.length > 0) {
+    UI.control.remoteCall('face/common/feishiAlgoLib', {}, function(resp) {
+        if(resp.DATA && resp.DATA.length > 0) {
             initVanUnit(resp.DATA);
             $(".faceLibrary").removeClass("hide");
         }
-	}, function() {});
+    }, function() {});
     if (!hasLocalSearch) {  // 初始化算法筛选列表
         appendSFList();
     } else {
@@ -635,11 +635,13 @@ function imgDoSearch(isInit) {
         UI.util.showLoadingPanel(null, 'currentPage'); //显示加载进度条
     }
     searchingFlag = true; //页面正在检索
-    if (hasLocalSearch && !isBlack) {
-        lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
-    }else {
-        initTmpl(JSON.stringify(searchImgList));
-    }
+    // 屏蔽本地检索
+    // if (hasLocalSearch && !isBlack) {
+    //     lacalSearch(JSON.parse(JSON.stringify(searchImgList)));//本地一人一档检索
+    // }else {
+    //     initTmpl(JSON.stringify(searchImgList));
+    // }
+    initTmpl(JSON.stringify(searchImgList));
     if (($(".resultTab li").length) * 130 > $(".page-info-metro").width() - 50) {
         $(".resultTab li").width(($(".page-info-metro").width() - 50) / ($(".resultTab li").length) - 5 - 30)
     }
@@ -744,7 +746,7 @@ function initTmpl(searchImgUrl) {
                     }
                     $('#tmplContent').append(tmpl("personListTml_3rd", arrOuter));
                 }
-            });      
+            });
         }
         if (resp.SEARCHTIMES) {
             $('.searchNum').text(resp.SEARCHTIMES).parents('.action-btn-group').removeClass('hide');
@@ -758,7 +760,7 @@ function initTmpl(searchImgUrl) {
             $('#resultTab li[attrId="' + attrId + '"]').find('.load-icon').addClass('hide');
             $('#resultTab li[attrId="' + attrId + '"]').removeClass('disabled');
         });
-        
+
         // 默认展示第一个tag
         if (isFirstLoading) { //第一次检索
             // 根据ID展示图片检索结果
@@ -766,7 +768,7 @@ function initTmpl(searchImgUrl) {
             isFirstLoading = false;
         }
         searchingFlag = false;
-        // $('#resultTab li').find('.load-icon').addClass('hide');
+        $('#resultTab li').find('.load-icon').addClass('hide');
         UI.util.hideLoadingPanel('currentPage'); //隐藏加载进度条
     }, function() {
         searchingFlag = false;
@@ -857,75 +859,75 @@ function renderRecommend() {
 }
 
 
-/** 
+/**
  * @author: dorsey
  * @description: 多选框组件，由 initDbTree 改版
  * @version: 2019-07-11
- * 
+ *
  * */
 
 function initTmplRender (options) {
 
-	$("#" + options.ele).html(tmpl(options.tmpl, options.data));
-	//点击标签
-	$("#" + options.ele).on("click","label",function(event){
-		$(this).toggleClass('active');
-		event.stopPropagation();
-	});
-	//点击全选或全不选标签
-	$("#" + options.ele).on("click", ".selectAll", function () {
-
-		if($(this).hasClass('active')){
-			$("#" + options.ele).find('label').addClass('active');
-			$(this).removeClass('active').html('取消');
-		}
-		else{
-			$("#" + options.ele).find('label').removeClass('active');
-			$(this).addClass('active').html('全选');;
-		}
-	})
-	$("body").on("click",".db-list",function(){
-		return false;
+    $("#" + options.ele).html(tmpl(options.tmpl, options.data));
+    //点击标签
+    $("#" + options.ele).on("click","label",function(event){
+        $(this).toggleClass('active');
+        event.stopPropagation();
     });
-	$(".attrSureBtn").click(function(){
-		var area ="";
-		vanList = [];
-		$('#' + options.ele + ' label').each(function(i){
-			if($(this).hasClass("active")){
+    //点击全选或全不选标签
+    $("#" + options.ele).on("click", ".selectAll", function () {
 
-				area+=$(this).text()+",";
-				vanList.push($(this).attr('NODE_ID'));
-			}
-		});
-		area = area.slice(0,-1);
-		area = (area==""?"请选择":area);
-		$('.selectedDb').html(area);
+        if($(this).hasClass('active')){
+            $("#" + options.ele).find('label').addClass('active');
+            $(this).removeClass('active').html('取消');
+        }
+        else{
+            $("#" + options.ele).find('label').removeClass('active');
+            $(this).addClass('active').html('全选');;
+        }
+    })
+    $("body").on("click",".db-list",function(){
+        return false;
+    });
+    $(".attrSureBtn").click(function(){
+        var area ="";
+        vanList = [];
+        $('#' + options.ele + ' label').each(function(i){
+            if($(this).hasClass("active")){
+
+                area+=$(this).text()+",";
+                vanList.push($(this).attr('NODE_ID'));
+            }
+        });
+        area = area.slice(0,-1);
+        area = (area==""?"请选择":area);
+        $('.selectedDb').html(area);
         $('#registerDb').val(vanList.join(','));
-		if(typeof options.callback === 'function') {
-			options.callback(vanList);
-		}
-		$('.dropdown-menu').click();
-	});
-	$(".attrCancelBtn").click(function(){
-		var $treeWrap = $(this).parents('.tree-wrap');
-		$treeWrap.find(".selectedDb").html("请选择");
-		$treeWrap.find("input").val("");
-		$('.dropdown-menu').click();
-	});
-	return false;
+        if(typeof options.callback === 'function') {
+            options.callback(vanList);
+        }
+        $('.dropdown-menu').click();
+    });
+    $(".attrCancelBtn").click(function(){
+        var $treeWrap = $(this).parents('.tree-wrap');
+        $treeWrap.find(".selectedDb").html("请选择");
+        $treeWrap.find("input").val("");
+        $('.dropdown-menu').click();
+    });
+    return false;
 }
 
 function initVanUnit (data) {
 
-	var vanUnit = JSON.parse(JSON.stringify(data));
+    var vanUnit = JSON.parse(JSON.stringify(data));
 
-	var options = {
-		ele: 'faceDb',
-		data: vanUnit,
-		tmpl: 'faceDbTmpl',
-		callback: ''
-	}
-	initTmplRender(options);
+    var options = {
+        ele: 'faceDb',
+        data: vanUnit,
+        tmpl: 'faceDbTmpl',
+        callback: ''
+    }
+    initTmplRender(options);
 }
 
 // 根据人物标签属性请求接口获取任务人物基本信息
@@ -1135,7 +1137,7 @@ function addID() {
     for (var i = 0; i < cacheIDs.length; i++) {
         $('#imgBox li').eq(i).attr('attrId', cacheIDs[i]);
         $('#resultTab li').eq(i).attr('attrId', cacheIDs[i]);
-        // $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
+        $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
         $('body').find('.recommendList').eq(i).attr('attrId', cacheIDs[i]);
     }
 }
@@ -1220,22 +1222,22 @@ function isBase64(src) {
 
 //获取当前算法或者黑人算法
 function getFaceAndForeignAlgoType(){
-	var algoType;
-	if(isBlack){
-		var params = {
-				'MENUID': 'EFACE_faceVerification',
-				'RACE': 3
-			};
-		var serviceUrl = 'face/common/getAlgorithmByRace';
-		
-	}else{
-		var params = {
-				'MENUID':'EFACE_faceVerification'
-			};
-		var serviceUrl = 'face/common/getFaceAlgoType';
-	}
-	UI.control.remoteCall(serviceUrl, params, function (resp) {
-		algoType = resp && resp.data && resp.data.length > 0 ? resp.data[0].ALGORITHM_ID : '10003';
-	});
-	return algoType;
+    var algoType;
+    if(isBlack){
+        var params = {
+            'MENUID': 'EFACE_faceVerification',
+            'RACE': 3
+        };
+        var serviceUrl = 'face/common/getAlgorithmByRace';
+
+    }else{
+        var params = {
+            'MENUID':'EFACE_faceVerification'
+        };
+        var serviceUrl = 'face/common/getFaceAlgoType';
+    }
+    UI.control.remoteCall(serviceUrl, params, function (resp) {
+        algoType = resp && resp.data && resp.data.length > 0 ? resp.data[0].ALGORITHM_ID : '10003';
+    });
+    return algoType;
 }

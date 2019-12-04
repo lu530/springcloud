@@ -1,88 +1,108 @@
 package com.suntek.efacecloud.service;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
-import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
+import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 人员区域碰撞
+ * 人脸技战法-深夜出入
  *
- * @author yana
- * @version 2017年07月18日
+ * @author guoyl
+ * @version 2019年11月12日
+ * @since
  */
-@LocalComponent(id = "technicalTactics/regionCollsion")
-public class RegionCollsionService {
+@LocalComponent(id = "technicalTactics/NightActive", isLog = "true")
+public class NightActiveService {
 
-    @SuppressWarnings("unchecked")
-    @BeanService(id = "query", description = "人员技战法区域碰撞查询", since = "2.0.0", type = "remote")
+    @BeanService(id = "query", type = "remote")
     public void query(RequestContext context) throws Exception {
 
-        String[] bT_arr = StringUtil.toString(context.getParameter("BEGIN_TIMES")).split("_");
-        String[] eT_arr = StringUtil.toString(context.getParameter("END_TIMES")).split("_");
-        String[] kkbh_arr = StringUtil.toString(context.getParameter("DEVICE_IDS")).split("_");
+        String beginDate = StringUtil.toString(context.getParameter("BEGIN_DATE"));
+        String endDate = StringUtil.toString(context.getParameter("END_DATE"));
 
+        String nightBeginTime = StringUtil.toString(context.getParameter("NIGHT_BEGIN_TIME"));
+        String nightEndTime = StringUtil.toString(context.getParameter("NIGHT_END_TIME"));
+
+        int nightFrequence = Integer.valueOf(StringUtil.toString(context.getParameter("NIGHT_FREQUENCE")));
+        String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
         int similarity = Integer.valueOf(StringUtil.toString(context.getParameter("THRESHOLD"), "80"));
-
         String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"), "65");
+        String algoCode = StringUtil.toString(context.getParameter("ALGORITHM_CODE"));
 
+        List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> timeRegionList = new ArrayList<Map<String, Object>>();
 
-        for (int i = 0; i < bT_arr.length && i < eT_arr.length && i < kkbh_arr.length; i++) {
 
-            Map<String, Object> esSearchTime = ModuleUtil.searchEsTime(bT_arr[i], eT_arr[i]);
-            if (Integer.valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_LACK) {
-                context.getResponse().setError("应用模块配置项：人脸抓拍索引起始月份  未配置");
-                return;
+        if (nightBeginTime.compareTo(nightEndTime) > 0) {
 
-            } else if (Integer
-                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_OVERSTEP) {
-                context.getResponse().putData("DATA", Collections.EMPTY_LIST);
-                return;
+            Map<String, Object> nightGroupFirst = new HashMap<String, Object>();
+            nightGroupFirst.put("BEGIN_DATE", beginDate);
+            nightGroupFirst.put("END_DATE", endDate);
+            nightGroupFirst.put("BEGIN_TIME", nightBeginTime);
+            nightGroupFirst.put("END_TIME", "23:59:59");
+            nightGroupFirst.put("CROSS", deviceIds);
+            groupList.add(nightGroupFirst);
 
-            } else if (Integer
-                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_SUCCESS) {
-                bT_arr[i] = StringUtil.toString(esSearchTime.get("beginTime"));
-                eT_arr[i] = StringUtil.toString(esSearchTime.get("endTime"));
-            }
+            Map<String, Object> nightGroupSecond = new HashMap<String, Object>();
+            nightGroupSecond.put("BEGIN_DATE", beginDate);
+            nightGroupSecond.put("END_DATE", endDate);
+            nightGroupSecond.put("BEGIN_TIME", "00:00:00");
+            nightGroupSecond.put("END_TIME", nightEndTime);
+            nightGroupSecond.put("CROSS", deviceIds);
+            groupList.add(nightGroupSecond);
 
-            Map<String, Object> temp = new HashMap<String, Object>();
-            temp.put("beginTime", bT_arr[i]);
-            temp.put("endTime", eT_arr[i]);
-            temp.put("cross", kkbh_arr[i]);
-            timeRegionList.add(temp);
+        } else {
+            Map<String, Object> nightGroup = new HashMap<String, Object>();
+            nightGroup.put("BEGIN_DATE", beginDate);
+            nightGroup.put("END_DATE", endDate);
+            nightGroup.put("BEGIN_TIME", nightBeginTime);
+            nightGroup.put("END_TIME", nightEndTime);
+            nightGroup.put("CROSS", deviceIds);
+            groupList.add(nightGroup);
         }
+
+        groupList.stream().forEach(o -> {
+            DateTime date1 = DateUtil.parse(StringUtil.toString(o.get("BEGIN_DATE")));
+            DateTime date2 = DateUtil.parse(StringUtil.toString(o.get("END_DATE")));
+            String time1 = StringUtil.toString(o.get("BEGIN_TIME"));
+            String time2 = StringUtil.toString(o.get("END_TIME"));
+            long betweenDay = DateUtil.between(date1, date2, DateUnit.DAY);
+            for (int i = 0; i < betweenDay + 1; i++) {
+                DateTime newDate = DateUtil.offset(date1, DateField.DAY_OF_MONTH, i);
+                Map<String, Object> temp = new HashMap<String, Object>();
+                temp.put("beginTime", DateUtil.formatDate(newDate) + " " + time1);
+                temp.put("endTime", DateUtil.formatDate(newDate) + " " + time2);
+                temp.put("cross", o.get("CROSS"));
+                timeRegionList.add(temp);
+            }
+        });
 
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
         commandContext.setServiceUri(BaseCommandEnum.regionCollsion.getUri());
-
-        try {
-            commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-        } catch (Exception e) {
-            ServiceLog.debug("外部调用。");
-        }
+        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("timeRegionList", timeRegionList);
@@ -91,7 +111,7 @@ public class RegionCollsionService {
         params.put("faceScore", faceScore);
         commandContext.setBody(params);
 
-        ServiceLog.debug("区域碰撞 调用sdk参数:" + params);
+        ServiceLog.debug("深夜出入 调用sdk参数:" + params);
 
         Registry registry = Registry.getInstance();
 
@@ -136,24 +156,26 @@ public class RegionCollsionService {
                     return;
                 }
                 List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
-                list.stream().forEach(o->{
-                    o.put("REPEATS",map.get("REPEATS"));
-                    o.put("ORIGINAL_DEVICE_ID",map.get("DEVICE_ID"));
-                    o.put("FACE_SCORE","0");
+                list.stream().forEach(o -> {
+                    o.put("REPEATS", map.get("REPEATS"));
+                    o.put("ORIGINAL_DEVICE_ID", map.get("DEVICE_ID"));
+                    o.put("FACE_SCORE", "0");
                 });
                 resultList.add(list);
             } else {
-                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                // 一个人所有id集合
+                ids = personIds.get(i);
                 List<Map<String, Object>> result = handlePersonId(ids);
 
-                if (result.size() > 0) { // 过滤反查不到的结果列表
+                if (result.size() > nightFrequence) { // 过滤反查不到的结果列表
                     resultList.add(result);
                 }
             }
-
         }
 
+
         context.getResponse().putData("DATA", resultList);
+
     }
 
     /**
@@ -173,9 +195,19 @@ public class RegionCollsionService {
 
         try {
 
-            PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
-            List<Map<String, Object>> resultSet = pageResult.getResultSet();
+            List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 
+            // 获取大数据检索方式，0：ES，1：MPPDB
+            String serachFun = AppHandle.getHandle(Constants.CONSOLE).getProperty("BIGDATA_SEARCH_FUN", "0");
+            if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
+
+                PageQueryResult pageResult = EAP.bigdata.queryByIds(indexName, Constants.FACE_TABLE, idsArr);
+                resultSet = pageResult.getResultSet();
+            } else {
+
+                MppQueryDao dao = new MppQueryDao();
+                resultSet = dao.queryByIds(idsArr);
+            }
 
             Log.fanchaLog.debug("1 区域碰撞 反查  查询条件主键id->" + aPersonIds);
             Log.fanchaLog.debug("2 区域碰撞 反查  查询结果-> " + resultSet + "\n");
@@ -187,8 +219,14 @@ public class RegionCollsionService {
                 // 图片
                 personData.put("OBJ_PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("OBJ_PIC"))));
                 // 时间
-                personData.put("TIME", DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
-                        DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
+                if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
+
+                    personData.put("TIME", com.suntek.eap.util.DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
+                            com.suntek.eap.util.DateUtil.yyMMddHHmmss_style, com.suntek.eap.util.DateUtil.standard_style));
+                } else {
+                    personData.put("TIME", com.suntek.eap.util.DateUtil
+                            .dateToString(com.suntek.eap.util.DateUtil.toDate(StringUtil.toString(map.get("JGSK")), "yyyy-MM-dd HH:mm:ss")));
+                }
 
                 // 区域
                 personData.put("ORIGINAL_DEVICE_ID", StringUtil.toString(map.get("DEVICE_ID")));
@@ -196,8 +234,7 @@ public class RegionCollsionService {
                 // 特征分数
                 personData.put("FACE_SCORE", StringUtil.toString(map.get("FACE_SCORE")));
 
-                Map<Object, Object> device
-                        = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
+                Map<Object, Object> device = EAP.metadata.getDictMap(DictType.D_FACE, StringUtil.toString(map.get("DEVICE_ID")));
 
                 if (null != device) {
                     personData.put("DEVICE_NAME", device.get("DEVICE_NAME"));
@@ -224,8 +261,9 @@ public class RegionCollsionService {
                 }
             });
         } catch (SearchEngineException e) {
-            Log.fanchaLog.error("区域碰撞 渲染人脸数据异常:", e);
+            Log.fanchaLog.error("区域碰撞 渲染人脸数据异常:" + e.getMessage(), e);
         }
         return aPersonList;
     }
+
 }

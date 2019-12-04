@@ -5,7 +5,7 @@ var cameraIds = parent.cachedData.deviceIds||'';
 var deviceIdInt = parent.cachedData.deviceIdInt||'';
 var pageType = UI.util.getUrlParam("pageType");              // 判断页面的类型
 var threshold = UI.util.getUrlParam('threshold');           // 阈值
-var number = UI.util.getUrlParam('number'); 
+var number = UI.util.getUrlParam('number');
 var isScreenShot = UI.util.getUrlParam('isScreenShot');     //是否用截图比对
 var sceShotParms = UI.util.getUrlParam('sceShotParms');     //截图参数
 var togetherMinute = UI.util.getUrlParam('togetherMinute'); //同行分钟数
@@ -13,14 +13,14 @@ var togetherMinute = UI.util.getUrlParam('togetherMinute'); //同行分钟数
 var iframeType = UI.util.getUrlParam("iframeType")||'';//判断页面的弹窗方式
 
 var searchParams={
-		BEGIN_TIME:beginTime,
-		END_TIME:endTime,
-		PIC:fileId,
-		THRESHOLD:threshold,
-		TOP_N:number,
-		DEVICE_IDS:cameraIds,
-		DEVICE_IDS_INT:deviceIdInt
-		
+	BEGIN_TIME:beginTime,
+	END_TIME:endTime,
+	PIC:fileId,
+	THRESHOLD:threshold,
+	TOP_N:number,
+	DEVICE_IDS:cameraIds,
+	DEVICE_IDS_INT:deviceIdInt
+
 }
 
 var similarData = "";  //模拟数据
@@ -36,6 +36,10 @@ $(document).ready(function(){
 	pageTopFixed();
 	initData();
 	initWaterMark();
+	//  顺德项目不显示wifi碰撞
+	if(top.projectID !== 'shunde5000') {
+		$('#wifiCollisionBtn').removeClass('hide');
+	}
 });
 function doScroll(){
 	window.aTime = $('.day-block');
@@ -59,7 +63,7 @@ function doScroll(){
 			aTime.eq(0).removeClass('px');
 			circleTop.eq(0).removeClass('hide').removeClass('px');
 		}
-						
+
 	};
 };
 function findLatePos(n,arr){
@@ -68,7 +72,7 @@ function findLatePos(n,arr){
 		if(n>=arr[i]){
 			if(n<arr[i+1] || i == len-1){
 				return i;
-			};			
+			};
 		};
 	};
 	return -1;
@@ -101,7 +105,7 @@ function initEvents(){
 		}else if($('#place').hasClass("active")){  //地点排序 
 			$('.place-list .query-checkbox').prop("checked",checked);
 		}
-		
+
 		if(checked){
 			$("#trajectoryGeneBtn,#wifiCollisionBtn").removeClass("disabled");
 		}else{
@@ -110,59 +114,59 @@ function initEvents(){
 	});
 
 	//轨迹分析
-    $("body").on("click",".trajectory-search",function(){
-        openWindowPopup('track',$(this).attr("url"));
-    });
-    //身份核查
-    $("body").on("click",".verification-search",function(){
-        openWindowPopup('identity',$(this).attr("url"));
-    });
+	$("body").on("click",".trajectory-search",function(){
+		openWindowPopup('track',$(this).attr("url"));
+	});
+	//身份核查
+	$("body").on("click",".verification-search",function(){
+		openWindowPopup('identity',$(this).attr("url"));
+	});
 
 	//checkbox
-    $("body").on('click','.list-node .lb-elm input',function(event){
-        if($(this).is(":checked")){
-            $(this).parent().parent().addClass("active");
-        }else{
-            $(this).parent().parent().removeClass("active");
-        }
-        if($(".query-checkbox:checked").length>1){
-        	$("#trajectoryGeneBtn,#wifiCollisionBtn").removeClass("disabled");
-        }else{
-        	$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
-        }
-        
-        if($(".list-node:visible").length == $(".query-checkbox:checked").length || $(".people-list .query-checkbox").length == $(".query-checkbox:checked").length){
-        	$("#checkAll").prop("checked",true);
-        }else{
-        	$("#checkAll").prop("checked",false);
-        }
-        event.stopPropagation();
-    });
+	$("body").on('click','.list-node .lb-elm input',function(event){
+		if($(this).is(":checked")){
+			$(this).parent().parent().addClass("active");
+		}else{
+			$(this).parent().parent().removeClass("active");
+		}
+		if($(".query-checkbox:checked").length>1){
+			$("#trajectoryGeneBtn,#wifiCollisionBtn").removeClass("disabled");
+		}else{
+			$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
+		}
 
-    $("body").on('click','.list-node',function(){
-        var $input = $(this).find(".lb-elm >input");
-        if($input.length){
-            if($input.is(":checked")){
-                $(this).removeClass("active");
-                $input.attr("checked",false);
-            }else{
-                $(this).addClass("active");
-                $input.attr("checked","checked");
-            }
-            if($(".query-checkbox:checked").length>1){
-            	$("#trajectoryGeneBtn,#wifiCollisionBtn").removeClass("disabled");
-            }else{
-            	$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
-            }
-            
-            if($(".list-node:visible").length == $(".query-checkbox:checked").length || $(".people-list .query-checkbox").length == $(".query-checkbox:checked").length){
-            	$("#checkAll").prop("checked",true);
-            }else{
-            	$("#checkAll").prop("checked",false);
-            }
-        }
-    });
-	
+		if($(".list-node:visible").length == $(".query-checkbox:checked").length || $(".people-list .query-checkbox").length == $(".query-checkbox:checked").length){
+			$("#checkAll").prop("checked",true);
+		}else{
+			$("#checkAll").prop("checked",false);
+		}
+		event.stopPropagation();
+	});
+
+	$("body").on('click','.list-node',function(){
+		var $input = $(this).find(".lb-elm >input");
+		if($input.length){
+			if($input.is(":checked")){
+				$(this).removeClass("active");
+				$input.attr("checked",false);
+			}else{
+				$(this).addClass("active");
+				$input.attr("checked","checked");
+			}
+			if($(".query-checkbox:checked").length>1){
+				$("#trajectoryGeneBtn,#wifiCollisionBtn").removeClass("disabled");
+			}else{
+				$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
+			}
+
+			if($(".list-node:visible").length == $(".query-checkbox:checked").length || $(".people-list .query-checkbox").length == $(".query-checkbox:checked").length){
+				$("#checkAll").prop("checked",true);
+			}else{
+				$("#checkAll").prop("checked",false);
+			}
+		}
+	});
+
 	//点击列表项的详细按钮
 	$('body').on('click','.more-icon',function(){
 		var url = $(this).closest('.list-node').find('img')[0].src;
@@ -176,12 +180,12 @@ function initEvents(){
 			width: '1250px'
 		});
 	})
-	
+
 	//关闭
 	$('body').on('click','#closeBtn',function(){
 		parent.rightMainFrameOut();
 	});
-	
+
 	if( pageType == 'multiple'){
 		$('.page-head').html('多重轨迹查询列表');
 		$('.tool-bar').addClass('hide');
@@ -193,46 +197,46 @@ function initEvents(){
 		$('.tool-bar.gangs').removeClass('hide');
 		operateName = '团伙分析';
 	}
-	
+
 	$('#relativeMACbtn').click(function(){
 		var param = getOptionIdsParam('wifideviceids');
 		if(param != ''){
 			showForm('/efacecloud/page/technicalStation/relationMACList.html?type=MAC&checkQuery='+param);
 		}
 	});
-	
+
 	$('#relativeDOORbtn').click(function(){
 		var param = getOptionIdsParam('doordeviceids');
 		if(param != ''){
 			showForm('/efacecloud/page/technicalStation/relationMACList.html?type=DOOR&checkQuery='+param);
 		}
 	});
-	
+
 	$('#relativeCARbtn').click(function(){
 		var param = getOptionIdsParam('cardeviceids');
 		if(param != ''){
 			showForm('/efacecloud/page/technicalStation/relationMACList.html?type=CAR&checkQuery='+param);
 		}
 	});
-	
+
 	$('#relativeIMEIbtn').click(function(){
 		var param = getOptionIdsParam('efencedeviceids');
 		if(param != ''){
 			showForm('/efacecloud/page/technicalStation/relationPHONEList.html?type=IMEI&checkQuery='+param);
 		}
 	});
-	
+
 	$('#relativeIMSIbtn').click(function(){
 		var param = getOptionIdsParam('efencedeviceids');
 		if(param != ''){
 			showForm('/efacecloud/page/technicalStation/relationPHONEList.html?type=IMSI&checkQuery='+param);
 		}
 	});
-	
+
 	$('#relativePERSONbtn').click(function(){
 		showForm('/efacecloud/page/technicalStation/searchPersonList.html');
 	});
-	
+
 	///同行人员-生成轨迹
 	$('#generatingLocusBtn').click(function(){
 		if(!parent.window.frames['mainFrameContent'].setFieldValue()){
@@ -245,28 +249,28 @@ function initEvents(){
 			top.rightMainFrameOut();
 		}
 	});
-	
+
 	//人像追踪-生成轨迹
 	$('#trajectoryGeneBtn').click(function(){
 		if(getFaceTrackInfoList()){
-		
+
 			trackArr.sort(function(a,b){   //按时间排序
 				return a.TIME - b.TIME;
 			})
-		
+
 			/*parent.window.frames['leftFrameCon'].trackData = trackArr;
 			parent.window.frames['leftFrameCon'].showForm('/efacecloud/page/technicalStation/persontogetherResultList.html?type=faceTrack');*/
-			
+
 			parent.trackData = trackArr;
-			
+
 			//parent.window.frames['mainFrameContent'].showTracksOnMap(trackArr);
 			//showTracksOnMap(trackArr);
-			
+
 			parent.showLeftResult('/efacecloud/page/technicalStation/persontogetherResultList.html');
 			parent.rightMainFrameOut('hide');
 		}
 	});
-	
+
 	//同行人分析
 	$('#gangsAnalysisBtn').click(function() {
 		var param = {};
@@ -277,7 +281,7 @@ function initEvents(){
 			UI.util.alert('请勾选需要分析的数据！', 'warn');
 			return '';
 		}
-		
+
 		for (var i = 0; i < inputCheck.length; i++) {
 			var index = $(inputCheck[i]).attr("index");
 			var d = index.split('-');
@@ -286,32 +290,32 @@ function initEvents(){
 			obj.ORIGINAL_DEVICE_ID = data[d[0]].list[d[1]].list[d[2]].ORIGINAL_DEVICE_ID;
 			objArr.push(obj);
 		}
-		
+
 		if (inputCheck.length < 2) {
 			UI.util.alert('生成轨迹至少勾选两条记录！', 'warn');
 			return false;
 		}
-		
+
 		var _arr = [];
 		for (var i = 0; i < inputCheck.length; i++) {
 			var index = $(inputCheck[i]).attr("index");
 			var d = index.split('-');
-	    	var obj = {};
-	    	obj.ORIGINAL_DEVICE_ID = data[d[0]].list[d[1]].list[d[2]].ORIGINAL_DEVICE_ID;
-	    	obj.DEVICE_NAME = data[d[0]].list[d[1]].list[d[2]].DEVICE_NAME;
-	    	obj.OBJ_PIC = renderVendorImage(data[d[0]].list[d[1]].list[d[2]].vd, data[d[0]].list[d[1]].list[d[2]].capture_image_id);
-	    	obj.X = data[d[0]].list[d[1]].list[d[2]].X;
-	    	obj.Y = data[d[0]].list[d[1]].list[d[2]].Y;
-	    	obj.TIME = data[d[0]].list[d[1]].list[d[2]].TIME;
-	    	_arr.push(obj);
+			var obj = {};
+			obj.ORIGINAL_DEVICE_ID = data[d[0]].list[d[1]].list[d[2]].ORIGINAL_DEVICE_ID;
+			obj.DEVICE_NAME = data[d[0]].list[d[1]].list[d[2]].DEVICE_NAME;
+			obj.OBJ_PIC = renderVendorImage(data[d[0]].list[d[1]].list[d[2]].vd, data[d[0]].list[d[1]].list[d[2]].capture_image_id);
+			obj.X = data[d[0]].list[d[1]].list[d[2]].X;
+			obj.Y = data[d[0]].list[d[1]].list[d[2]].Y;
+			obj.TIME = data[d[0]].list[d[1]].list[d[2]].TIME;
+			_arr.push(obj);
 		}
-		
+
 		param.list = objArr;
 		//parent.window.frames['mainFrameContent'].showMultiTracksOnMap("faceTrack", _arr, "face");
 		//showForm('/cloudsearch/page/technicalStation/persontogetherRightList.html?recordId='+JSON.stringify(objArr));
 		showForm('/efacecloud/page/technicalStation/persontogethercarQueryResult.html?recordId='+JSON.stringify(param)+"&togetherMinute=" + togetherMinute);
 	});
-	
+
 	//checkbox
 	$("body").on('click','.list-node .lb-elm input',function(event){
 		if($(this).is(":checked")){
@@ -321,7 +325,7 @@ function initEvents(){
 		}
 		event.stopPropagation();
 	});
-	
+
 	$("body").on('click','.list-node',function(){
 		var $input = $(this).children(".lb-elm").find("input");
 		if($input.length){
@@ -334,16 +338,16 @@ function initEvents(){
 			}
 		}
 	});
-	
+
 	$("body").on('click','.search-video',function(){
 		var time = $(this).attr("time");
 		var deviceId = $(this).attr("deviceId");
 		var beginTime = getLimitSec(time, -30);
 		var endTime = getLimitSec(time, 30);
 		var openUrl = "http://"+window.location.host+"/connectplus/page/common/videoRecordWindowCache.html?" +
-				"videoIds="+deviceId+"&beginTime="+beginTime+"&endTime="+endTime+"&btnType=1";
+			"videoIds="+deviceId+"&beginTime="+beginTime+"&endTime="+endTime+"&btnType=1";
 		UI.util.showCommonWindow(openUrl, "抓拍历史视频", 960, 650, function(){});
-		
+
 		/*UI.control.remoteCall("cs/portraitTracking/getPlayUrl", {
 			deviceId: deviceId
 		}, function (resp){
@@ -359,19 +363,19 @@ function initEvents(){
 			});
 		});*/
 	});
-	
+
 	$('body').on('dblclick','.node-img img',function(){
 		var $this = $(this);
 		var src = $this.attr('src');
 		top.showPictureZoom( src,true);
 	});
-	
+
 	//切换按钮样式
 	$('.left-bar span').click(function(){
 		$(this).addClass('active');
 		$(this).siblings('span').removeClass('active');
 	})
-	
+
 	//切换排序
 	$('#time').click(function(){
 		$('.library-info').hide();
@@ -384,7 +388,7 @@ function initEvents(){
 		$("#checkAll").prop("checked",false);
 		$(".query-checkbox").prop("checked",false);
 		$(this).addClass('active').siblings().removeClass('active');
-		
+
 	})
 	$('#similar').click(function(){
 		$('.personList').hide();
@@ -394,7 +398,7 @@ function initEvents(){
 			return ;
 		}
 		$(this).addClass('active').siblings().removeClass('active');
-		
+
 		$("#checkAll").prop("checked",false);
 		$(".query-checkbox").prop("checked",false);
 		$(".library-info .list-node").removeClass("active");
@@ -402,7 +406,7 @@ function initEvents(){
 	})
 
 	tranPanel ();
-	
+
 	$('#place').click(function(){
 		$('.library-info').hide();
 		$('.personList').hide();
@@ -411,14 +415,14 @@ function initEvents(){
 			return;
 		}
 		$(this).addClass('active').siblings().removeClass('active');
-	
+
 		$("#checkAll").prop("checked",false);
 		$(".query-checkbox").prop("checked",false);
 		$(".library-info .list-node").removeClass("active");
 		$("#trajectoryGeneBtn,#wifiCollisionBtn").addClass("disabled");
-		
+
 	});
-	
+
 	/************************ wifi碰撞 start ************************/
 	//wifi碰撞展示列表
 	$("#wifiCollisionBtn").click(function(){
@@ -428,12 +432,12 @@ function initEvents(){
 		}
 		initWifiCollision();
 	});
-	
+
 	//wifi关闭列表
 	$("#removeWifiListBtn").click(function(){
 		$(".mac-list").removeClass("show");
 	});
-	
+
 	//地点展开收起
 	$("body").on("click",".mac-title",function(){
 		var $this = $(this),
@@ -447,7 +451,7 @@ function initEvents(){
 			$icon.attr("class","icon-arrow-up7");
 		}
 	});
-	
+
 	/************************* wifi碰撞 end ***********************/
 }
 
@@ -468,7 +472,7 @@ function getFaceTrackInfoList(){
 	if($('#time').is('.active') || $('#place').is('.active')){
 		var inputCheck = $('.query-checkbox:checked');
 	}
-	
+
 	else{
 		var inputCheck = $('.list-node.active').find('.query-checkbox');
 	}
@@ -479,20 +483,20 @@ function getFaceTrackInfoList(){
 	}
 	trackArr = [];
 	for (var i = 0; i < inputCheck.length; i++) {
-    	var obj = {};
-    	obj.ORIGINAL_DEVICE_ID = $(inputCheck[i]).attr("device_id");
-    	obj.DEVICE_NAME = $(inputCheck[i]).attr("device_name");
-    	obj.OBJ_PIC = $(inputCheck[i]).attr("obj_pic");
-    	obj.X = $(inputCheck[i]).attr("x");
-    	obj.Y = $(inputCheck[i]).attr("y");
-    	
-    	//obj.TIME = $(inputCheck[i]).attr("time");
-    	//obj.jgsj = formatTimestamp(obj.TIME);
-    	obj.jgsj = $(inputCheck[i]).attr("jgsk");
-    	obj.TIME = standardTimeToStamp(obj.jgsj); //地图使用,毫秒时间戳
-    	trackArr.push(obj);
+		var obj = {};
+		obj.ORIGINAL_DEVICE_ID = $(inputCheck[i]).attr("device_id");
+		obj.DEVICE_NAME = $(inputCheck[i]).attr("device_name");
+		obj.OBJ_PIC = $(inputCheck[i]).attr("obj_pic");
+		obj.X = $(inputCheck[i]).attr("x");
+		obj.Y = $(inputCheck[i]).attr("y");
+
+		//obj.TIME = $(inputCheck[i]).attr("time");
+		//obj.jgsj = formatTimestamp(obj.TIME);
+		obj.jgsj = $(inputCheck[i]).attr("jgsk");
+		obj.TIME = standardTimeToStamp(obj.jgsj); //地图使用,毫秒时间戳
+		trackArr.push(obj);
 	}
-	
+
 	return true;
 }
 
@@ -533,31 +537,31 @@ function getOptionIdsParam(type){
 	}
 	var flag = (type == 'doordeviceids');
 	for (var i = 0; i < inputCheck.length; i++) {
-    	var obj = {};
-    	obj.capture_device_id = $(inputCheck[i]).attr(type);
-    	if(obj.capture_device_id != ''){
-    		var capture_time = $(inputCheck[i]).attr('real-time');
-    		if(flag){
-    			//var time = newDateAndTime(capture_time);
-        		//time.setDate(time.getDate()-7);
-        		//capture_time = time.format("yyyy-MM-dd HH:mm:ss");
-    		}
-    		obj.capture_time = capture_time;
-        	objArr.push(obj);
-    	}
+		var obj = {};
+		obj.capture_device_id = $(inputCheck[i]).attr(type);
+		if(obj.capture_device_id != ''){
+			var capture_time = $(inputCheck[i]).attr('real-time');
+			if(flag){
+				//var time = newDateAndTime(capture_time);
+				//time.setDate(time.getDate()-7);
+				//capture_time = time.format("yyyy-MM-dd HH:mm:ss");
+			}
+			obj.capture_time = capture_time;
+			objArr.push(obj);
+		}
 	}
-	
+
 	if(objArr.length == 0){
 		UI.util.alert('没有查询到可碰撞的设备！', 'warn');
 		return '';
 	}
-	
+
 	param.list = objArr;
 	return JSON.stringify(param);
 }
 
 function initData(){
-	
+
 	UI.util.showLoadingPanel('');
 	UI.control.remoteCall(serviceUrl, searchParams, function (resp){
 		var data = resp.DATA;
@@ -575,7 +579,7 @@ function initData(){
 			}
 			data.sort(sortByDateTime); //按日期排序
 			sortArr.sort(sortNumber);
-			$(".personList").html(tmpl('personTmpl', data)); 
+			$(".personList").html(tmpl('personTmpl', data));
 			$(".tilelist").html(tmpl('personTmplP',sortArr));
 			$(".placeList").html(tmpl('personPlaceTmpl',resp.PALCE));
 		}else{
@@ -589,7 +593,7 @@ function initData(){
 	})
 }
 function sortNumber(a, b){
-    return b.SCORE - a.SCORE
+	return b.SCORE - a.SCORE
 }
 function sortByTime(a, b){
 	return Date.parse(new Date(b.TIME.replace(/-/g,'/'))) - Date.parse(new Date(a.TIME.replace(/-/g,'/')));
@@ -599,7 +603,7 @@ function sortByDateTime(a, b){
 	astr = astr.replace(/-/g,"/");
 	astr += ' 00:00:00';
 	var adate = new Date(astr);
-	
+
 	var bstr = b.DATE_TIME;
 	bstr = bstr.replace(/-/g,"/");
 	bstr += ' 00:00:00';
@@ -612,20 +616,20 @@ function sortByDateTime(a, b){
 function initWifiCollision(){
 	var curDeviceList = getWifiList();
 	var params = {
-			PARAMS:curDeviceList,
-			SORT_TYPE:"date"
+		PARAMS:curDeviceList,
+		SORT_TYPE:"date"
 	}
 	UI.util.showLoadingPanel();
 	UI.control.remoteCall("collision/face/wifi", params, function (resp){
 		var data = resp.data;
 		if(data.code == 0){
 			if(data.record.length>0){
-				$(".mac-list-detail").html(tmpl('wifiTmpl', data.record)); 
+				$(".mac-list-detail").html(tmpl('wifiTmpl', data.record));
 			}else{
 				$(".mac-list-detail").html('<div class="nodata"></div>');
 			}
 			if(data.collisionRet.length>0){
-				$(".list-result-con").html(tmpl('wifiResultTmpl', data.collisionRet)); 
+				$(".list-result-con").html(tmpl('wifiResultTmpl', data.collisionRet));
 			}else{
 				$(".list-result-con").html('<div class="nodata"></div>');
 			}
@@ -647,16 +651,16 @@ function getWifiList(){
 	if($('#time').is('.active') || $('#place').is('.active')){
 		var inputCheck = $('.query-checkbox:checked');
 	}
-	
+
 	else{
 		var inputCheck = $('.list-node.active').find('.query-checkbox');
 	}
 
 	for (var i = 0; i < inputCheck.length; i++) {
-    	var obj = {};
-    	obj.DEVICE_ID = $(inputCheck[i]).attr("device_id");
-    	obj.TIME = $(inputCheck[i]).attr("jgsk");
-    	wifiListArr.push(obj);
+		var obj = {};
+		obj.DEVICE_ID = $(inputCheck[i]).attr("device_id");
+		obj.TIME = $(inputCheck[i]).attr("jgsk");
+		wifiListArr.push(obj);
 	}
 	return JSON.stringify(wifiListArr);
 }

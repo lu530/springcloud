@@ -20,12 +20,7 @@ import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -81,10 +76,69 @@ public class FollowPersonService {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
 
         for (int i = 0; i < personIds.size(); i++) {
+            List<Object> ids;
+            if (personIds.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) personIds.get(i);
+                String idStr = (String) map.get("IDS");
 
-            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
+                commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
 
-            resultList.add(handlePersonId(ids));
+                Map<String, Object> queryParams = new HashMap<String, Object>();
+                queryParams.put("IDS", idStr);
+                commandContext.setBody(queryParams);
+                ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
+                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
+                        + commandContext.getResponse().getMessage() + " result:"
+                        + commandContext.getResponse().getResult());
+
+                code = commandContext.getResponse().getCode();
+                if (0L != code) {
+                    context.getResponse().setWarn(commandContext.getResponse().getMessage());
+                    return;
+                }
+
+                List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
+                Map<String, Object> personData = new HashMap<String, Object>();
+                List infoIds = new ArrayList<>();
+                List pics = new ArrayList();
+                List originalPics = new ArrayList();
+                List faceScores = new ArrayList();
+                List devids = new ArrayList();
+                List times = new ArrayList();
+                List addrs = new ArrayList();
+                List xf = new ArrayList();
+                List yf = new ArrayList();
+                list.stream().forEach(o -> {
+                    infoIds.add(o.get("INFO_ID"));
+                    pics.add(o.get("OBJ_PIC"));
+                    originalPics.add(o.get("PIC"));
+                    faceScores.add("0");
+                    devids.add(o.get("DEVICE_ID"));
+                    times.add(o.get("JGSK"));
+                    addrs.add(o.get("ADDR"));
+                    xf.add(StringUtil.toString(o.get("X")));
+                    yf.add(StringUtil.toString(o.get("Y")));
+                });
+                personData.put("INFO_IDS", String.join(",", infoIds));
+                personData.put("PICS", String.join(",", pics));
+                personData.put("BIG_PIC", String.join(",", originalPics));
+                personData.put("DEVIDS", String.join(",", devids));
+                personData.put("TIMES", String.join(",", times));
+                personData.put("ADDRS", String.join(",", addrs));
+                personData.put("REPEATS", map.get("REPEATS"));
+                personData.put("XS", String.join(",", xf));
+                personData.put("YS", String.join(",", yf));
+                personData.put("NAMES", String.join(",", addrs));
+                personData.put("FACE_SCORES", String.join(",", faceScores));
+                resultList.add(personData);
+            } else {
+                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                resultList.add(handlePersonId(ids));
+            }
+
+
         }
 
         context.getResponse().putData("DATA", resultList);
