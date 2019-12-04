@@ -73,7 +73,6 @@ function getDeviceModule() {
     })
 }
 
-
 //常用数据字典
 var CONSTANTS = {
         ZALX: {
@@ -3250,4 +3249,32 @@ function ifConfigProperty(moduleName, key, value, call) {
             }
         }
     );
+}
+
+function projectDisplay (type) {
+
+	//	配置黑白名单 - 注意，黑名单优先级更高，即配置了黑名单不管白名单怎么配置都无效
+	
+	var permissionBlackList = {
+
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score'],
+	}
+	var projectPermission = permissionBlackList[top.projectID];
+	
+	return projectPermission ? projectPermission.indexOf(type) > -1 ? 'hide' : '' : '';
+}
+
+function domPermission () {
+
+	var permissionHide = {
+		
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score']
+	}
+
+	if(permissionHide[top.projectID]) {
+
+		$.each(permissionHide[top.projectID], function (index, item) {
+			$('[permissionHide=' + item + ']').addClass('hide');
+		});	
+	}
 }
