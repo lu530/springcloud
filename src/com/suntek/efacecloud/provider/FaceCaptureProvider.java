@@ -63,7 +63,8 @@ public class FaceCaptureProvider {
 			if (StringUtil.isEmpty(deviceIds) && !context.getUserCode().equals("admin")) {
 				Set<String> deviceSet = DevicesRedisUtil.getDeviceList(context.getUserCode(), Constants.DEVICE_TYPE_FACE);
 				if (!ObjectUtils.isEmpty(deviceSet)) {
-					context.putParameter("DEVICE_IDS", String.join(",", deviceSet));
+					deviceIds = String.join(",", deviceSet);
+					context.putParameter("DEVICE_IDS", deviceIds);
 				}
 			}
 			//根据来源选择设备
