@@ -28,6 +28,6 @@ public class Log{
 	public static Logger importDataLog = LogFactory.getServiceLog(Constants.APP_NAME + "_importData");  //导入数据记录日志 importDataLog
 
 	public static Logger requestPingGaoLog = LogFactory.getServiceLog(Constants.APP_NAME + "_requestPingGao");  //导入数据记录日志 importDataLog
-
+	public static Logger deviceLog = LogFactory.getServiceLog(Constants.APP_NAME + "_device");
 }
 

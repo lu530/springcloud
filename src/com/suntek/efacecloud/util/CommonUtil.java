@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.suntek.efacecloud.log.Log;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -736,7 +737,7 @@ public class CommonUtil {
 		String opCode = StringUtil.toString(jsobObj.get("OpCode"), "1");
 		String opDesc = StringUtil.toString(jsobObj.get("OpDesc"), "接口异常");
 
-		ServiceLog.debug("接口返回操作码 opCode = " + opCode + "，opDesc = " + opDesc);
+		Log.deviceLog.debug("接口返回操作码 opCode = " + opCode + "，opDesc = " + opDesc);
 		if(!SUCCESS.equals(opCode)) {
 			return null;
 		}

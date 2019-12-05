@@ -7,8 +7,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
+import com.suntek.eap.log.LogFactory;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.StringUtil;
+import com.suntek.efacecloud.log.Log;
+import org.apache.log4j.Logger;
 
 public class DevicesRedisUtil {
 
@@ -50,19 +53,20 @@ public class DevicesRedisUtil {
 		url.append(addr).append(apiStr).append("&userCode=" + userCode);
 
 		if(!StringUtil.isEmpty(deviceType)){
-			url.append("&deviceSpeicaltypeDict=" + deviceType);
+			String deviceSpeicaltypeDict = Constants.deviceTypeMap.get(deviceType);
+			url.append("&deviceSpeicaltypeDict=" + deviceSpeicaltypeDict);
 		}
 
 		try {
 			String structTreeStr = HttpUtil.HttpGet(url.toString());
-			ServiceLog.info("接口 : " + url.toString() + "--->返回结果--->" + structTreeStr);
+			Log.deviceLog.info("接口 : " + url.toString() + "--->返回结果--->" + structTreeStr);
 
 			List<Map<String, Object>> ret = CommonUtil.getData(structTreeStr);
 			if(null != ret && ret.size() > 0) {
 				return ret.stream().map(o -> StringUtil.toString(o.get("VideodevGbId"))).collect(Collectors.toSet());
 			}
 		}catch(Exception e) {
-			ServiceLog.error("获取用户权限设备列表失败！", e);
+			Log.deviceLog.error("获取用户权限设备列表失败！", e);
 		}
 
 		return Collections.emptySet();
