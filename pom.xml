@@ -298,6 +298,7 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.0.5</version>
+			<scope>provided</scope>
         </dependency>
 
 	</dependencies>
