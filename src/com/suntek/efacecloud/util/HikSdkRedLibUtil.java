@@ -1,13 +1,5 @@
 package com.suntek.efacecloud.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,6 +9,13 @@ import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.face.compare.sdk.model.CollisionResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 海康红名单静态库管理工具类
