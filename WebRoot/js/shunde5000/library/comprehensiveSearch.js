@@ -145,7 +145,7 @@ function initFaceAlgoType() {
                     ALGO_TYPE: value.ALGORITHM_ID,
                     THRESHOLD: 60
                 });
-                options.algoListRate[value.ALGORITHM_ID] = value.SCORE_RATE;
+                options.algoListRate[value.ALGORITHM_ID] = value.SCORE_RATE || '1';
 			})
             $('.arithmeticFilter').append(ATHtml);
             options.commonParams.ALGO_LIST = JSON.stringify(options.algoList);
