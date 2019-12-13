@@ -105,51 +105,6 @@ public class WJFaceCaptureService {
         }
         params.put("ALGO_LIST", ownAlgoList);
 
-        // 通过上传图片调用开放平台人脸属性提取服务开始 2018年9月4日 陈文杰添加
-        /* String faceTypeAlgoTypes = AppHandle.getHandle(Constants.APP_NAME).getProperty("FACE_TYPE_ALGO_TYPES", "");
-        String isSearchFace = StringUtil.toString(params.get("PIC"));
-        ServiceLog.info("ALGO_LIST:" + params.get("ALGO_LIST"));
-        ServiceLog.info("FACE_TYPE_ALGO_TYPES:" + faceTypeAlgoTypes);
-        if (!faceTypeAlgoTypes.equals("")) {
-        
-            Map<String, String> searchAlgoMap = new HashMap<String, String>();
-            for (int i = 0; i < ownAlgoList.size(); i++) {
-                JSONObject searchAlgoJsonObject = ownAlgoList.getJSONObject(i);
-                searchAlgoMap.put(searchAlgoJsonObject.get("ALGO_TYPE").toString(),
-                    searchAlgoJsonObject.get("THRESHOLD").toString());
-            }
-            ServiceLog.info("前端需要查询的算法列表:" + searchAlgoMap);
-            CommandContext commandContext = new CommandContext(context.getHttpRequest());
-            params.put("fileUrl", isSearchFace);
-            params.put("algoType", faceTypeAlgoTypes);// 分类算法
-            commandContext.setBody(params);
-            registry.selectCommand(BaseCommandEnum.faceAttributesExtract.getUri(), "4401", vendor).exec(commandContext);
-            if (commandContext.getResponse().getCode() != 0L) {
-                ServiceLog.error("调用开放平台人脸属性提取服务出错" + commandContext.getResponse().getMessage());
-            } else {
-                JSONObject structInfo
-                    = JSONObject.parseObject(StringUtil.toString(commandContext.getResponse().getData("struct_info")));
-                String race = StringUtil.toString(structInfo.get("race"));// 照片的种族
-                ServiceLog.info("照片的种族:" + race);
-                List<Map<String, Object>> algorithmList = commonDao.getAlgorithmByRace(race);
-                JSONArray algoArray = new JSONArray();
-                for (Map<String, Object> algoMap : algorithmList) {
-                    JSONObject algoObject = new JSONObject();
-                    algoObject.put("ALGO_TYPE", algoMap.get("ALGORITHM_ID"));
-                    algoObject.put("THRESHOLD", searchAlgoMap.get(algoMap.get("ALGORITHM_ID")));
-                    algoArray.add(algoObject);
-                }
-                if (algoArray.size() > 0) {
-                    ServiceLog.info("种族[" + race + "]路由查询到的特征提取算法：" + algoArray);
-                    context.putParameter("ALGO_LIST", algoArray);
-                } else {
-                    ServiceLog.info("未配置种族特征提取算法路由");
-                }
-                ServiceLog.info("请求参数:" + context.getParameters());
-            }
-        
-        }*/
-
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
         commandContext.setBody(context.getParameters());
         registry.selectCommand(BaseCommandEnum.faceCapture.getUri(), "4401", vendor).exec(commandContext);
@@ -199,21 +154,10 @@ public class WJFaceCaptureService {
             for (Map<String, Object> info : infoList) {
                 String createTime = StringUtil.toString(info.get("CREATETIME"));
                 if (!StringUtil.isEmpty(createTime)) {
-                    createTime
-                        = DateUtil.convertByStyle(createTime, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style);
+                    createTime = DateUtil.convertByStyle(createTime, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style);
                 }
                 info.put("CREATETIME", createTime);
-                String infoId = StringUtil.toString(info.get("INFO_ID"));
-                try {
-                    if (!StringUtils.isBlank(infoId)) {
-                        List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                        for (Map<String, Object> actMap : actList) {
-                            info.putAll(actMap);
-                        }
-                    }
-                } catch (Exception e) {
-                    ServiceLog.error("不存在activity_info表: " + e);
-                }
+
                 // 是否添加来源类型
                 if (isAdd) {
                     Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
