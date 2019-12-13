@@ -2,6 +2,7 @@ package com.suntek.efacecloud.provider;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
@@ -29,10 +30,7 @@ import net.sf.json.JSONArray;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 人脸布控库告警查询（去重）
@@ -50,8 +48,9 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
 
 	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
-
-
+	
+	private ObjectMapper objectMapper = new ObjectMapper();
+	
 	/**
 	 * 
 	 */
@@ -537,20 +536,22 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 						}
 						// 获取比对结果
 						if (json.containsKey("MUTIL_ALGO_CHECK")) {
-							JSONObject algoCheck = json.getJSONObject("MUTIL_ALGO_CHECK");
-							JSONObject object = algoCheck.getJSONObject(Constants.ALGO_TYPE_FEISHI);
-							if (null != object) {
-								fsName = StringUtil.toString(object.getString("FS_NAME"));
-								fsPic = ModuleUtil.renderImage(StringUtil.toString(object.getString("FS_PIC")));
-								fsIdentityId = StringUtil.toString(object.getString("FS_IDENTITY_ID"));
-								fsHitTime = StringUtil.toString(object.getString("FS_HIT_TIME"));
-								fsWjr = StringUtil.toString(object.getString("FS_WJR"));
-							}
+                            String algoCheck = json.getString("MUTIL_ALGO_CHECK");
+                            Map algoCheckMap = objectMapper.readValue(algoCheck, Map.class);
+                            if (null != algoCheckMap.get(Constants.ALGO_TYPE_FEISHI)) {
+								Map object = (Map) algoCheckMap.get(Constants.ALGO_TYPE_FEISHI);
+                                fsName = StringUtil.toString(object.get("FS_NAME"));
+                                fsPic = ModuleUtil.renderImage(StringUtil.toString(object.get("FS_PIC")));
+                                fsIdentityId = StringUtil.toString(object.get("FS_IDENTITY_ID"));
+                                fsHitTime = StringUtil.toString(object.get("FS_HIT_TIME"));
+                                fsWjr = StringUtil.toString(object.get("FS_WJR"));
+                            }
 						}
 						thirdImplName = json.getString("THIRDIMPL_NAME");
 						thirdImplHit = json.getString("THIRDIMPL_HIT");
 					} catch (Exception e) {
 						ServiceLog.error("转换extendInfo异常", e);
+						ServiceLog.error("extendInfo："+extendInfo);
 					}
 
 					if ("1".equals(sexCode)) {

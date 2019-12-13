@@ -643,26 +643,28 @@ public class ModuleUtil {
     /**
      * 获取核验算法
      * 
-     * @param checkAlgoArray
+     * @param checkAlgoMap
      * @return
      */
-    public static List<Map<String, Object>> getCheckAlgoList(com.alibaba.fastjson.JSONObject checkAlgoObject) {
+    public static List<Map<String, Object>> getCheckAlgoList(Map checkAlgoMap) {
 
         List<Map<String, Object>> checkAlgoList = new ArrayList<>();
 
-        if (null != checkAlgoObject) {
+        if (null != checkAlgoMap) {
 
-            for (String algoType : checkAlgoObject.keySet()) {
-
-                String algoName = ModuleUtil.getNameByAlgoType(Integer.parseInt(algoType));
+            for (Object algoType : checkAlgoMap.keySet()) {
+    
+                Map algoTypeMap = (Map) checkAlgoMap.get(algoType);
+    
+                String algoName = ModuleUtil.getNameByAlgoType(Integer.parseInt(algoType.toString()));
                 if (!StringUtil.isEmpty(algoName)) {
 
-                    Map<String, Object> map = new HashMap<String, Object>();
+                    Map<String, Object> map = new HashMap<>();
 
-                    String score = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("SCORE"));
-                    String errorNo = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("ERROR_NO"), "");
-                    String errorMsg = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("ERROR_MSG"), "");
-                    String status = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("STATUS"), "0");
+                    String score = StringUtil.toString(algoTypeMap.get("SCORE"));
+                    String errorNo = StringUtil.toString(algoTypeMap.get("ERROR_NO"), "");
+                    String errorMsg = StringUtil.toString(algoTypeMap.get("ERROR_MSG"), "");
+                    String status = StringUtil.toString(algoTypeMap.get("STATUS"), "0");
                     if (StringUtil.isEmpty(score) || score.equals("-1") || score.equals("0")) {
                         if (!StringUtil.isEmpty(errorMsg)) {
                             map.put("SCORE", errorMsg);
