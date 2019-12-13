@@ -50,7 +50,8 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
 
 	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
-	
+
+
 	/**
 	 * 
 	 */
