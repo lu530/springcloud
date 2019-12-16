@@ -139,12 +139,15 @@ function initEvent(){
 }
 
 function getAlgo() {
-	UI.control.remoteCall('face/common/feishiAlgoList', null, function(resp) {
-		var data = resp.DATA;
-		$('#oneToOne .tagslist').html(tmpl('algoTmpl', data));
-		autoCompare();
-	}, null, null, true);
+	ifConfigProperty("efacecloud", "USE_FEISHI", "true", function () {
+		UI.control.remoteCall('face/common/feishiAlgoList', null, function(resp) {
+			var data = resp.DATA;
+			$('#oneToOne .tagslist').html(tmpl('algoTmpl', data));
+			autoCompare();
+		}, null, null, true);
+	});
 }
+
 function getLocalAlgo() {
     UI.control.remoteCall('face/common/getFaceAlgoType', {'MENUID':'EFACE_faceCapture'}, function(resp) {
         var data = resp.data;
@@ -214,19 +217,4 @@ function autoCompare() {
 		}
 		$('#' + tabSel + ' button').trigger('click');
 	}
-}
-
-// 判断是否是黑人项目
-function isBlack(){
-	var isBlack = false;
-	var configParam ={"applicationName":"datadefence"};
-	UI.control.remoteCall('platform/webapp/config/get', configParam, function(resp) {
-		var jsonObj = resp.attrList;
-		for(var i=0;i<jsonObj.length;i++){
-			if(jsonObj[i].key=="IS_BLACK"&&jsonObj[i].value=="1"){
-				isBlack = true;
-			}
-		}
-	});   
-	return isBlack;
 }

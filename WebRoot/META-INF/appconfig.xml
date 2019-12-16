@@ -50,4 +50,5 @@
 	<param key="FACE_LIST_SEARCH" name="路人检索-以图搜图配置，0关闭，1开启，默认关闭" description="路人检索-以图搜图配置，0关闭，1开启，默认关闭" type="String">0</param>
 	<param key="ALARM_DETAILS_BUTTON_CONFIG" name="告警详情-底部按钮配置，告警确认-警情下发-关注-忽略-签收-反馈-处置记录-确认抓捕，0关闭，1开启" description="告警详情-底部按钮配置，告警确认-警情下发-关注-忽略-签收-反馈-处置记录-确认抓捕，0关闭，1开启" type="String">1,1,1,1,1,1,1,1</param>
 	<param key="PERSON_SEARCH_LB_ID" name="寻人系统配置的布控库ID" type="String" description="寻人系统配置的布控库ID，清远项目所加配置">89d4f8f0e4264f0283b896f0924c43f1</param>
+	<param key="USE_FEISHI" name="是否启用飞识检索" type="String" description="是否启用飞识检索，true是false否，默认否">false</param>
 </config>
