@@ -5,7 +5,7 @@ import com.suntek.face.compare.sdk.model.CollisionResult;
 
 public class HuaWeiSdkRedLibUtil {
 
-    private static HuaWeikFaceRedListUtilImpl util = new HuaWeikFaceRedListUtilImpl();
+    private static HuaWeiFaceRedListUtilImpl util = new HuaWeiFaceRedListUtilImpl();
 
     public static CollisionResult deleteFace(RequestContext context) {
         CollisionResult collisionResult = new CollisionResult();

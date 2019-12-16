@@ -17,6 +17,13 @@ public abstract class FaceRedListUtil {
 
     protected FaceRedListDao dao = new FaceRedListDao();
 
+    public abstract void addOrEdit(RequestContext context) throws Exception;
+
+    public abstract int importRedList(RequestContext context,
+                                      List<Map<String, Object>> successList,
+                                      List<String> failList,
+                                      Map<String, String> importErrorMsgCache) throws Exception;
+
     protected void deleteRedPerson(String infoId) throws Exception {
         Dao dao = new DaoProxy(Constants.APP_NAME);
         dao.addSQL("delete from EFACE_RED_LIST where INFO_ID = ?", infoId);
@@ -37,11 +44,4 @@ public abstract class FaceRedListUtil {
 
         dao.commit();
     }
-
-    public abstract void addOrEdit(RequestContext context) throws Exception;
-
-    public abstract int importRedList(RequestContext context,
-                                      List<Map<String, Object>> successList,
-                                      List<String> failList,
-                                      Map<String, String> importErrorMsgCache) throws Exception;
 }
