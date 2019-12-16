@@ -167,7 +167,7 @@ var CONSTANTS = {
 }
 
 function initFeishiAlgoLib(){
-	ifConfigProperty("efacecloud", "USE_FEISHI", "true", function () {
+	ifConfigProperty("opengw", "FEISHI_TYPE", "2", function () {
 		UI.control.remoteCall('face/common/feishiAlgoLib', {}, function(resp) {
 			var data = resp.DATA ? JSON.parse(JSON.stringify(resp.DATA).replace(/id/g,"DB_ID").replace(/name/g,"DB_NAME")) : [];
 			data.push({DB_ID: '-1',DB_NAME:'全部'});
@@ -177,7 +177,7 @@ function initFeishiAlgoLib(){
 }
 
 function initFeishiAlgoList(){
-	ifConfigProperty("efacecloud", "USE_FEISHI", "true", function () {
+	ifConfigProperty("opengw", "FEISHI_TYPE", "2", function () {
 		UI.control.remoteCall('face/common/feishiAlgoList', null, function (resp) {
 			if (resp.CODE == 0 && resp.DATA && resp.DATA.length > 0) {
 				CONSTANTS.SFLIST = resp.DATA;

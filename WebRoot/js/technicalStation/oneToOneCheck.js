@@ -139,7 +139,7 @@ function initEvent(){
 }
 
 function getAlgo() {
-	ifConfigProperty("efacecloud", "USE_FEISHI", "true", function () {
+	ifConfigProperty("opengw", "FEISHI_TYPE", "2", function () {
 		UI.control.remoteCall('face/common/feishiAlgoList', null, function(resp) {
 			var data = resp.DATA;
 			$('#oneToOne .tagslist').html(tmpl('algoTmpl', data));
