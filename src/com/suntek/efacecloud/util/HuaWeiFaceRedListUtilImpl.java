@@ -9,6 +9,7 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,31 +139,33 @@ public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
 
     @Override
     public int importRedList(RequestContext context, List<Map<String, Object>> successList, List<String> failList, Map<String, String> importErrorMsgCache) throws Exception {
-        long code = 0L;
-        String message = null;
-        for (int i = 0; i < 3; i++) {
-            Map<String, Object> tempMap = new LinkedHashMap<>();
-            CommandContext commandContext = new CommandContext(context.getHttpRequest());
-            successList.forEach(row -> row.put("PERSON_ID", EAP.keyTool.getIDGenerator()));
-            tempMap.put("PERSON_LIST", successList);
-            tempMap.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
-            ServiceLog.debug("此次批量导入数据 ： " + JSONObject.toJSONString(tempMap));
-            Registry registry = Registry.getInstance();
-            commandContext.setBody(tempMap);
-            commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
-            commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
-            registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
-            code = commandContext.getResponse().getCode();
-            message = commandContext.getResponse().getMessage();
-            if (0L != code) {
-                ServiceLog.error("批量红名单布控人员失败 " + message + " 重试中 " + i);
-            } else {
-                break;
+        int batchNum = 10;
+        successList.forEach(row -> row.put("PERSON_ID", EAP.keyTool.getIDGenerator()));
+        List<Map<String, Object>> subList = new ArrayList<>(batchNum);
+        for (int i = 0; i < successList.size(); i++) {
+            subList.add(successList.get(i));
+            if (i % batchNum == 0) {
+                Map<String, Object> tempMap = new LinkedHashMap<>();
+                CommandContext commandContext = new CommandContext(context.getHttpRequest());
+                tempMap.put("PERSON_LIST", subList);
+                tempMap.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
+                ServiceLog.debug("此次批量导入数据 ： " + JSONObject.toJSONString(tempMap));
+                Registry registry = Registry.getInstance();
+                commandContext.setBody(tempMap);
+                commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
+                commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
+                registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
+                long  code = commandContext.getResponse().getCode();
+                String  message = commandContext.getResponse().getMessage();
+                if (0L != code) {
+                    for (int j = 0; j < batchNum; j++) {
+                        failList.add(message);
+                    }
+                } else {
+                    this.batchInsertRedList(context, subList);
+                }
+                subList.clear();
             }
-        }
-        this.batchInsertRedList(context, successList);
-        if (0L != code) {
-            throw new Exception("批量增加布控人员失败 " + message);
         }
         return successList.size();
     }
