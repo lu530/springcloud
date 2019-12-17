@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
 
+    private final int BATCH_IMPORT_NUM = 10;
+
     @Override
     public void addOrEdit(RequestContext context) throws Exception {
         Map<String, Object> params = context.getParameters();
@@ -139,34 +141,38 @@ public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
 
     @Override
     public int importRedList(RequestContext context, List<Map<String, Object>> successList, List<String> failList, Map<String, String> importErrorMsgCache) throws Exception {
-        int batchNum = 10;
         successList.forEach(row -> row.put("PERSON_ID", EAP.keyTool.getIDGenerator()));
-        List<Map<String, Object>> subList = new ArrayList<>(batchNum);
+        List<Map<String, Object>> subList = new ArrayList<>(BATCH_IMPORT_NUM);
         for (int i = 0; i < successList.size(); i++) {
             subList.add(successList.get(i));
-            if (i % batchNum == 0) {
-                Map<String, Object> tempMap = new LinkedHashMap<>();
-                CommandContext commandContext = new CommandContext(context.getHttpRequest());
-                tempMap.put("PERSON_LIST", subList);
-                tempMap.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
-                ServiceLog.debug("此次批量导入数据 ： " + JSONObject.toJSONString(tempMap));
-                Registry registry = Registry.getInstance();
-                commandContext.setBody(tempMap);
-                commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
-                commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
-                registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
-                long  code = commandContext.getResponse().getCode();
-                String  message = commandContext.getResponse().getMessage();
-                if (0L != code) {
-                    for (int j = 0; j < batchNum; j++) {
-                        failList.add(message);
-                    }
-                } else {
-                    this.batchInsertRedList(context, subList);
-                }
-                subList.clear();
+            if (1 != 0 && i % BATCH_IMPORT_NUM == 0) {
+                this.realImportRedList(context, subList, failList);
             }
         }
+        this.realImportRedList(context, subList, failList);
         return successList.size();
+    }
+
+    private void realImportRedList(RequestContext context, List<Map<String, Object>> subList, List<String> failList) {
+        Map<String, Object> tempMap = new LinkedHashMap<>();
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+        tempMap.put("PERSON_LIST", subList);
+        tempMap.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
+        ServiceLog.debug("此次批量导入数据 ： " + JSONObject.toJSONString(tempMap));
+        Registry registry = Registry.getInstance();
+        commandContext.setBody(tempMap);
+        commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
+        commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
+        registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
+        long code = commandContext.getResponse().getCode();
+        String message = commandContext.getResponse().getMessage();
+        if (0L != code) {
+            for (int j = 0; j < BATCH_IMPORT_NUM; j++) {
+                failList.add(message);
+            }
+        } else {
+            this.batchInsertRedList(context, subList);
+        }
+        subList.clear();
     }
 }
