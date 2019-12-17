@@ -22,6 +22,7 @@ public class FaceSearchRedListDelegate extends FaceSearchRedListService {
         } else {
             return pci;
         }
+
     }
 
     @Override
