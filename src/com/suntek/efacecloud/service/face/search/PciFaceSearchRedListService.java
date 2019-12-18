@@ -31,4 +31,24 @@ public class PciFaceSearchRedListService extends FaceSearchRedListService {
         CollisionResult collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
         return collisionResult;
     }
+
+    @Override
+    public void initRedListLib() {
+        try {
+            long time = System.currentTimeMillis();
+            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+            if (result.getCode() == Constants.COLLISISON_RESULT_SUCCESS) {
+                boolean isExist = (boolean) result.getList().get(0);
+                if (!isExist) {
+                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+                    if (createReult.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
+                        log.error("初始化红名单库[" + Constants.STATIC_LIB_ID_RED_LIST + "]异常");
+                    }
+                }
+            }
+            log.debug("初始化红名单--耗时:" + (System.currentTimeMillis() - time) + "ms");
+        } catch (Exception e) {
+            log.error("初始化静态库，发生异常", e);
+        }
+    }
 }

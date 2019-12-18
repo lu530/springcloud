@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HikFaceSearchRedListService extends FaceSearchRedListService {
+
     @Override
     public CollisionResult faceOne2NSearch(RequestContext context, String pic) {
         String threshold = StringUtil.toString(context.getParameter("THRESHOLD")); //阈值
@@ -19,5 +20,10 @@ public class HikFaceSearchRedListService extends FaceSearchRedListService {
         params.put("THRESHOLD", "0." + threshold);
         CollisionResult collisionResult = HikSdkRedLibUtil.faceOne2NSearch(Constants.STATIC_LIB_ID_RED_LIST, params);
         return collisionResult;
+    }
+
+    @Override
+    public void initRedListLib() {
+
     }
 }

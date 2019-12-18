@@ -22,11 +22,15 @@ public class FaceSearchRedListDelegate extends FaceSearchRedListService {
         } else {
             return pci;
         }
-
     }
 
     @Override
     public CollisionResult faceOne2NSearch(RequestContext context, String pic) {
         return this.instance().faceOne2NSearch(context, pic);
+    }
+
+    @Override
+    public void initRedListLib() {
+        this.instance().initRedListLib();
     }
 }

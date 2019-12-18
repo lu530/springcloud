@@ -83,6 +83,25 @@ public class HuaWeiFaceSearchRedListService extends FaceSearchRedListService {
         return collisionResult;
     }
 
+    @Override
+    public void initRedListLib() {
+        try {
+            if (!this.isExistRedListDB()) {
+                Map<String, Object> param = new HashMap<>();
+                CommandContext ctx = new CommandContext("admin", "localhost");
+                param.put("DB_TYPE", Constants.LIB_TYPE_PERSON);
+                param.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
+                param.put("DB_NAME", Constants.STATIC_LIB_ID_RED_LIST);
+
+                ctx.setBody(param);
+                Registry.getInstance().selectCommands("hw" + BaseCommandEnum.staticLibAdd.getUri()).exec(ctx);
+            }
+        } catch (Exception e) {
+            ServiceLog.error(e);
+        }
+
+    }
+
     /**
      * 看华为静态库中是否有名称为Constants.STATIC_LIB_ID_RED_LIST的库
      * @return 如果有返回true，如果没有返回false
@@ -111,16 +130,7 @@ public class HuaWeiFaceSearchRedListService extends FaceSearchRedListService {
      */
     @BeanService(id = "createRedListDB", description = "创建红名单库", type = "remote")
     public void createRedListDB(RequestContext context) throws Exception {
-        if (!this.isExistRedListDB()) {
-            Map<String, Object> param = new HashMap<>();
-            CommandContext ctx = new CommandContext("admin", "localhost");
-            param.put("DB_TYPE", Constants.LIB_TYPE_PERSON);
-            param.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
-            param.put("DB_NAME", Constants.STATIC_LIB_ID_RED_LIST);
-
-            ctx.setBody(param);
-            Registry.getInstance().selectCommands("hw" + BaseCommandEnum.staticLibAdd.getUri()).exec(ctx);
-        }
+        this.initRedListLib();
     }
 }
 
