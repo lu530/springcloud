@@ -18,6 +18,9 @@ public abstract class FaceSearchRedListService {
      */
     public abstract CollisionResult faceOne2NSearch(RequestContext context, String pic);
 
+    /**
+     * 初始化红名单库
+     */
     public abstract void initRedListLib();
 
 
