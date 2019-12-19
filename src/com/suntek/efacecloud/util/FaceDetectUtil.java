@@ -196,9 +196,9 @@ public class FaceDetectUtil {
      */
     public static FaceRedListUtil getFaceRedListUtilInstance() {
         String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if (vendor.equals(Constants.HIK_VENDOR)) {
+        if (Constants.HIK_VENDOR.equals(vendor)) {
             return new HikFaceRedListUtilImpl();
-        } else if (vendor.equals("huawei")) {
+        } else if (Constants.HW_VENDOR.equals(vendor)) {
             return new HuaWeiFaceRedListUtilImpl();
         }
         return new FaceRedListUtilImpl();

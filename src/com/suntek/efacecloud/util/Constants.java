@@ -26,9 +26,16 @@ public class Constants {
 	public final static String DATA_DEFENCE = "datadefence";
 	
 	public final static String MPPDB_NAME = "MPPDB_RES";
-	
+
+	/**
+	 * 厂商-海康
+	 */
 	public final static String HIK_VENDOR = "Hikvision";
-	
+	/**
+	 * 厂商-华为
+	 */
+	public final static String HW_VENDOR = "huawei";
+
 	//红名单比对阈值
 	public final static String RED_SIMILARITY = "RED_SIMILARITY";
 	

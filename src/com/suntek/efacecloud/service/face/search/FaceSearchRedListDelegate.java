@@ -17,7 +17,7 @@ public class FaceSearchRedListDelegate extends FaceSearchRedListService {
         String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
         if (Constants.HIK_VENDOR.equals(vendor)) {
            return hik;
-        } else if ("huawei".equals(vendor)) {
+        } else if (Constants.HW_VENDOR.equals(vendor)) {
             return huawei;
         } else {
             return pci;
