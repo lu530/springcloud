@@ -113,6 +113,7 @@ public class FaceRedListProvider extends ExportGridDataProvider
 		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
 		String threshold = StringUtil.toString(context.getParameter("THRESHOLD")); //阈值
 		String elementId = StringUtil.toString(context.getParameter("elementId"));
+
 		List<Long> idList = new ArrayList<Long>();
 		CollisionResult collisionResult = null;
 		if(vendor.equals(Constants.HIK_VENDOR)){
@@ -133,7 +134,9 @@ public class FaceRedListProvider extends ExportGridDataProvider
 			picSearchParam.put("similarity", Integer.parseInt(threshold));
 			picSearchParam.put("feature", featureResp.getRltz());
 			picSearchParam.put("topN", 10000000);
-			picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+
+			int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
+			picSearchParam.put("algoType", algoType);
 			
 			collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
 			

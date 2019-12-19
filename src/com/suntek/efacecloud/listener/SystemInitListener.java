@@ -116,12 +116,13 @@ public class SystemInitListener implements ServletContextListener {
 	private void initStaticLib()
 	{
 		try {
+			int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
 			long time = System.currentTimeMillis();
-			CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+			CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, algoType);
 			if (result.getCode() == Constants.COLLISISON_RESULT_SUCCESS) {
 				boolean isExist = (boolean) result.getList().get(0);
 				if (!isExist) {
-					CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+					CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, algoType);
 					if (createReult.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
 						log.error("初始化红名单库[" + Constants.STATIC_LIB_ID_RED_LIST + "]异常");
 					}

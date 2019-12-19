@@ -116,12 +116,13 @@ public class FaceRedListService
 		try {
 			Map<String, Object> params = context.getParameters();	
 			String personId = StringUtil.toString(params.get("INFO_ID"));
+			int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
 			CollisionResult deleteFaceResult = null;
 			String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
 			if (vendor.equals(Constants.HIK_VENDOR)){
 				deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
 			}else{
-				deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
+				deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, algoType);
 			}
 			if (deleteFaceResult == null || deleteFaceResult.getCode() !=0) {
 				context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
@@ -170,7 +171,8 @@ public class FaceRedListService
 	   
 		String userCode = context.getUserCode();
 	    int belongRedFlag = 1; //1表示 不属于红名单 0 表示属于红名单
-	    
+
+		int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
 	    String taskId = EAP.keyTool.getUUID();
 		String remoteAddr = context.getRemoteAddr();
 		params.put("CREATOR_IP", remoteAddr);
@@ -268,7 +270,7 @@ public class FaceRedListService
 					}
 					result = SdkStaticLibUtil.faceOne2NSearch(
 							Constants.STATIC_LIB_ID_RED_LIST, Integer.valueOf(threshold),
-							featureResp.getRltz(), 20, Constants.DEFAULT_ALGO_TYPE);
+							featureResp.getRltz(), 20, algoType);
 				}
 				//红名单中比中
 				if (result != null && result.getCode() == 0) {			

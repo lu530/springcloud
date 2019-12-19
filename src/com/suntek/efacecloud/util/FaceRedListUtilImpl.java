@@ -1,6 +1,7 @@
 package com.suntek.efacecloud.util;
 
 import com.suntek.eap.EAP;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.metadata.Dao;
 import com.suntek.eap.metadata.DaoProxy;
@@ -26,7 +27,7 @@ public class FaceRedListUtilImpl implements FaceRedListUtil {
         Map<String, Object> params = context.getParameters();
         String infoId = StringUtil.toString(params.get("INFO_ID"));
         String pic = StringUtil.toString(params.get("PIC"));
-    
+        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
         FaceFeatureUtil.FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(pic);
         if (!featureResp.isValid()) {
             context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
@@ -38,7 +39,7 @@ public class FaceRedListUtilImpl implements FaceRedListUtil {
         if (!StringUtil.isEmpty(infoId)) {
         
             CollisionResult deleteFaceResult = SdkStaticLibUtil.deleteFace(
-                    Constants.STATIC_LIB_ID_RED_LIST, infoId, Constants.DEFAULT_ALGO_TYPE);
+                    Constants.STATIC_LIB_ID_RED_LIST, infoId, algoType);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
@@ -67,7 +68,7 @@ public class FaceRedListUtilImpl implements FaceRedListUtil {
         
             CollisionResult saveFaceResult = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST,
                     newPersonId, rltz,
-                    Constants.DEFAULT_ALGO_TYPE);
+                    algoType);
             if (saveFaceResult == null || saveFaceResult.getCode() !=0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "注册人脸到静态小库失败！");
