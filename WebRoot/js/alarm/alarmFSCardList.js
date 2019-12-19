@@ -144,7 +144,7 @@ function initEvent(){
 			alarmTime = $this.attr("alarmtime"),
 		UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html?OBJECT_ID='+objectId+'&curTime='+curTime+'&isFly=1&ALARM_ID=' + ALARM_ID + '&level=' + level
 				+ '&name=' + name+ '&idCard=' + idCard+ '&time=' + time +'&alarmTime='+alarmTime, "告警详情",
-			1080, 640,
+			1080, 730,
 			function(obj) {});
 	});
 	
