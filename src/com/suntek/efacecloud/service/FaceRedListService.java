@@ -1,14 +1,5 @@
 package com.suntek.efacecloud.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.suntek.efacecloud.util.*;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
@@ -22,83 +13,96 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceRedListDao;
 import com.suntek.efacecloud.dao.FaceRedTaskDao;
-import com.suntek.efacecloud.util.FaceFeatureUtil.FeatureResp;
+import com.suntek.efacecloud.service.face.search.FaceSearchRedListDelegate;
+import com.suntek.efacecloud.util.ConfigUtil;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.FaceDetectUtil;
+import com.suntek.efacecloud.util.FileMd5Util;
+import com.suntek.efacecloud.util.HikSdkRedLibUtil;
+import com.suntek.efacecloud.util.HuaWeiSdkRedLibUtil;
+import com.suntek.efacecloud.util.ModuleUtil;
+import com.suntek.efacecloud.util.SdkStaticLibUtil;
 import com.suntek.face.compare.sdk.model.CollisionResult;
 import com.suntek.sp.sms.util.SmsUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 红名单库服务
  * efacecloud/rest/v6/face/redlist
+ *
  * @author lx
- * @since 1.0.0
  * @version 2018-03-05
- * @Copyright (C)2018 , Suntektech
+ * @since 1.0.0
  */
 @LocalComponent(id = "face/redlist")
-public class FaceRedListService 
-{
-	private FaceRedListDao dao = new FaceRedListDao();
-	private FaceRedTaskDao taskDao = new FaceRedTaskDao();
-	
-	@BeanService(id="add", description="新增或编辑红名单库人脸")
-	public void edit(RequestContext context) throws Exception {
-		FaceDetectUtil.getFaceRedListUtilInstance().addOrEdit(context);
-	}
-	
-	@BeanService(id="open", description="是否开启红名单", type="remote")
-	public void open(RequestContext context) throws Exception
-	{
-		String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_LIST_OPEN, "0");//默认不开启红名单
-		if(context.getUser().isAdministrator()) { //admin不需要此操作
-			status = "0";
-		}
-		String wartermarkOpen = AppHandle.getHandle(Constants.PORTAL).getProperty("WARTERMARK_OPEN", "0");//默认不开启水印
-		
-		context.getResponse().putData("STATUS", status);
-		context.getResponse().putData("WARTERMARK_OPEN", wartermarkOpen);
-	}
-	
-	@BeanService(id="openSearchCause", description="是否开启查询操作事由", type="remote")
-	public void openSearchCause(RequestContext context) throws Exception
-	{
-		String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.SEARCH_CAUSE_OPEN, "0");//默认不开启红名单
-		if(context.getUser().isAdministrator()) { //admin不需要此操作
-			status = "0";
-		}
-		context.getResponse().putData("STATUS", status);
-	}
-	
-	@BeanService(id="confirmApply", description="确认涉红后是否继续发起申请", type="remote")
-	public void confirmApply(RequestContext context) throws Exception
-	{
-		Map<String, Object> params = context.getParameters();
-		String taskId = StringUtil.toString(params.get("TASK_ID"));
-		int applyFlag = MapUtils.getIntValue(params, "APPLY_FLAG", 1);
-		String expiryDate = StringUtil.toString(params.get("EXPIRY_DATE"),
-				DateUtil.getDate());
-		if (dao.updateApproveStatus(applyFlag, expiryDate, taskId)) {
-			UserModel user = context.getUser();
-			sendSmsToAdmin(user.getDept().getName(), user.getName());
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-		} else {
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-		}
-	}
-	
-	private void sendSmsToAdmin(String deptName, String userName)
-	{
-		String enableSendSms = ConfigUtil.getEnableSendSms();
-		if (Constants.SEND_MESSAGE_TIMER == Integer.parseInt(enableSendSms)) {
+public class FaceRedListService {
+    private FaceRedListDao dao = new FaceRedListDao();
+
+    private FaceRedTaskDao taskDao = new FaceRedTaskDao();
+
+    private FaceSearchRedListDelegate faceSearchRedListDelegate = new FaceSearchRedListDelegate();
+
+    @BeanService(id = "add", description = "新增或编辑红名单库人脸")
+    public void edit(RequestContext context) throws Exception {
+        FaceDetectUtil.getFaceRedListUtilInstance().addOrEdit(context);
+    }
+
+    @BeanService(id = "open", description = "是否开启红名单", type = "remote")
+    public void open(RequestContext context) throws Exception {
+        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_LIST_OPEN, "0");//默认不开启红名单
+        if (context.getUser().isAdministrator()) { //admin不需要此操作
+            status = "0";
+        }
+        String wartermarkOpen = AppHandle.getHandle(Constants.PORTAL).getProperty("WARTERMARK_OPEN", "0");//默认不开启水印
+
+        context.getResponse().putData("STATUS", status);
+        context.getResponse().putData("WARTERMARK_OPEN", wartermarkOpen);
+    }
+
+    @BeanService(id = "openSearchCause", description = "是否开启查询操作事由", type = "remote")
+    public void openSearchCause(RequestContext context) throws Exception {
+        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.SEARCH_CAUSE_OPEN, "0");//默认不开启红名单
+        if (context.getUser().isAdministrator()) { //admin不需要此操作
+            status = "0";
+        }
+        context.getResponse().putData("STATUS", status);
+    }
+
+    @BeanService(id = "confirmApply", description = "确认涉红后是否继续发起申请", type = "remote")
+    public void confirmApply(RequestContext context) throws Exception {
+        Map<String, Object> params = context.getParameters();
+        String taskId = StringUtil.toString(params.get("TASK_ID"));
+        int applyFlag = MapUtils.getIntValue(params, "APPLY_FLAG", 1);
+        String expiryDate = StringUtil.toString(params.get("EXPIRY_DATE"),
+                DateUtil.getDate());
+        if (dao.updateApproveStatus(applyFlag, expiryDate, taskId)) {
+            UserModel user = context.getUser();
+            sendSmsToAdmin(user.getDept().getName(), user.getName());
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+        } else {
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+        }
+    }
+
+    private void sendSmsToAdmin(String deptName, String userName) {
+        String enableSendSms = ConfigUtil.getEnableSendSms();
+        if (Constants.SEND_MESSAGE_TIMER == Integer.parseInt(enableSendSms)) {
 			/*String msmAddress = ConfigUtil.getSendSmsAddress();
 			String msmAccount = ConfigUtil.getSendSmsAccount();
 			String msmPassword = ConfigUtil.getSendSmsPassword();*/
-			String phone = ConfigUtil.getRedApprovalSendPhone();
-			if (StringUtil.isEmpty(phone)) {
-				ServiceLog.debug("未配置红名单审批管理员发送短信手机号码，本次不发送通知--");
-				return;
-			}
-			
-			ServiceLog.debug("确认审批后通知红名单审批管理员--" + phone);
+            String phone = ConfigUtil.getRedApprovalSendPhone();
+            if (StringUtil.isEmpty(phone)) {
+                ServiceLog.debug("未配置红名单审批管理员发送短信手机号码，本次不发送通知--");
+                return;
+            }
+
+            ServiceLog.debug("确认审批后通知红名单审批管理员--" + phone);
 
             String content = "您有新的由(" + deptName + "-" + userName + ")发起的红名单审批任务，请及时登录平台进行处理。";
             try {
@@ -250,74 +254,57 @@ public class FaceRedListService
                     }
                 }
 
-				String threshold = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87");
-				//int actureScore =  Integer.parseInt(String.valueOf(ModuleUtil.renderActualScore(THRESHOLD))); ;
-				String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-				CollisionResult result = null;
-				if (vendor.equals(Constants.HIK_VENDOR)){
-					Map<String, Object> searchParam = new HashMap<>();
-					searchParam.put("TOP_N", 20);
-					searchParam.put("PIC", pic);
-					searchParam.put("THRESHOLD", threshold);
-					result = HikSdkRedLibUtil.faceOne2NSearch(Constants.STATIC_LIB_ID_RED_LIST, searchParam);
-				}else{
-					FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
-					if (!featureResp.isValid()) {
-						ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-						context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
-						return;
-					}
-					result = SdkStaticLibUtil.faceOne2NSearch(
-							Constants.STATIC_LIB_ID_RED_LIST, Integer.valueOf(threshold),
-							featureResp.getRltz(), 20, Constants.DEFAULT_ALGO_TYPE);
-				}
-				//红名单中比中
-				if (result != null && result.getCode() == 0) {			
-					List<Map<String, Object>> collisionList = result.getList();
-					if (CollectionUtils.isNotEmpty(collisionList)) {
-						belongRedFlag = 0;	
-						for (Map<String, Object> map : collisionList) {
-							String id = MapUtils.getString(map, "ID");
-							int score = MapUtils.getIntValue(map, "SIMILARITY");
-							Map<String,Object> person = new HashMap<>();
-							person.put("TASK_ID", taskId);
-							person.put("INFO_ID", id);
-							person.put("SIMILARITY", score);
-							relatedPersons.add(person);
-						}
-					}
-				}
-	    	}
-	    	
-		}
-    	params.put("PIC_MD5", picMd5);
-    	params.put("IS_INVOLVE_RED_LIST", belongRedFlag); //是否涉 红名单
-		dao.addRedTask(params, relatedPersons);
-		
-		context.getResponse().putData("TASK_ID", taskId);
-		context.getResponse().putData("BELONG_FLAG", belongRedFlag);
-	    
-	}
-	
-	@BeanService(id="detail", description="红名单库人脸详情")
-	public void detail(RequestContext context) throws Exception
-	{
-		Map<String, Object> params = context.getParameters();	
-		String personId = StringUtil.toString(params.get("INFO_ID"));
-		List<Map<String, Object>> list = dao.getDetailById(personId);
-		if (CollectionUtils.isNotEmpty(list)) {
-			Map<String, Object> map = list.get(0);
-			map.put("PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("PIC"))));
-			map.put("INFO_ID", StringUtil.toString(map.get("INFO_ID")));
-			map.put("IDENTITY_TYPE", StringUtil.toString(map.get("IDENTITY_TYPE")));
-			map.put("IDENTITY_ID", StringUtil.toString(map.get("IDENTITY_ID")));
-			map.put("PERMANENT_ADDRESS", StringUtil.toString(map.get("PERMANENT_ADDRESS")));
-			map.put("PRESENT_ADDRESS", StringUtil.toString(map.get("PRESENT_ADDRESS")));
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-			context.getResponse().putData("DATA", map);
-		} else {
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			context.getResponse().putData("MESSAGE", "未查询到相关信息");
-		}
-	}
+                String threshold = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87");
+                context.putParameter("THRESHOLD", threshold);
+                context.putParameter("TOP_N", 30);
+                context.putParameter("PIC", pic);
+                CollisionResult result = this.faceSearchRedListDelegate.faceOne2NSearch(context, pic);
+                //红名单中比中
+                if (result != null && result.getCode() == 0) {
+                    List<Map<String, Object>> collisionList = result.getList();
+                    if (CollectionUtils.isNotEmpty(collisionList)) {
+                        belongRedFlag = 0;
+                        for (Map<String, Object> map : collisionList) {
+                            String id = MapUtils.getString(map, "ID");
+                            int score = MapUtils.getIntValue(map, "SIMILARITY");
+                            Map<String, Object> person = new HashMap<>();
+                            person.put("TASK_ID", taskId);
+                            person.put("INFO_ID", id);
+                            person.put("SIMILARITY", score);
+                            relatedPersons.add(person);
+                        }
+                    }
+                }
+            }
+
+        }
+        params.put("PIC_MD5", picMd5);
+        params.put("IS_INVOLVE_RED_LIST", belongRedFlag); //是否涉 红名单
+        dao.addRedTask(params, relatedPersons);
+
+        context.getResponse().putData("TASK_ID", taskId);
+        context.getResponse().putData("BELONG_FLAG", belongRedFlag);
+
+    }
+
+    @BeanService(id = "detail", description = "红名单库人脸详情")
+    public void detail(RequestContext context) throws Exception {
+        Map<String, Object> params = context.getParameters();
+        String personId = StringUtil.toString(params.get("INFO_ID"));
+        List<Map<String, Object>> list = dao.getDetailById(personId);
+        if (CollectionUtils.isNotEmpty(list)) {
+            Map<String, Object> map = list.get(0);
+            map.put("PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("PIC"))));
+            map.put("INFO_ID", StringUtil.toString(map.get("INFO_ID")));
+            map.put("IDENTITY_TYPE", StringUtil.toString(map.get("IDENTITY_TYPE")));
+            map.put("IDENTITY_ID", StringUtil.toString(map.get("IDENTITY_ID")));
+            map.put("PERMANENT_ADDRESS", StringUtil.toString(map.get("PERMANENT_ADDRESS")));
+            map.put("PRESENT_ADDRESS", StringUtil.toString(map.get("PRESENT_ADDRESS")));
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+            context.getResponse().putData("DATA", map);
+        } else {
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+            context.getResponse().putData("MESSAGE", "未查询到相关信息");
+        }
+    }
 }

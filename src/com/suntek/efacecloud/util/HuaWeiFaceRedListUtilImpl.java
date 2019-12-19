@@ -1,5 +1,7 @@
 package com.suntek.efacecloud.util;
 
+import com.alibaba.fastjson.JSONObject;
+import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.StringUtil;
@@ -7,13 +9,18 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 华为红名单操作
  */
-public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
+public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
+
+    private static final int BATCH_IMPORT_NUM = 10;
 
     @Override
     public void addOrEdit(RequestContext context) throws Exception {
@@ -21,8 +28,10 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
         String infoId = StringUtil.toString(params.get("INFO_ID"));
         if (!StringUtil.isEmpty(infoId)) {
             this.deletePerson(context);
+        } else {
+            params.put("INFO_ID", EAP.keyTool.getIDGenerator());
         }
-
+        this.insertPerson(context);
     }
 
     /**
@@ -41,6 +50,7 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
 
         ServiceLog.info("开始添加静态库人员");
         long startTime = System.currentTimeMillis();
+        param.put("PERSON_ID", param.get("INFO_ID"));
         param.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
         param.put("PIC_MD5", FileMd5Util.getUrlMD5String(StringUtil.toString(param.get("PIC"))));
         String pic = StringUtil.toString(param.get("PIC"));
@@ -63,13 +73,8 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
         context.getResponse().putData("MESSAGE", message);
 
         if (0L == code) {
-            String personId = StringUtil.toString(param.get("PERSON_ID"));
-            param.put("PERSON_ID", personId);
-            param.put("FILING_UNIT_NAME", StringUtil.toString(param.get("FILING_UNIT_NAME")));
-            this.insertPerson(context);
-            // if (result) {
-            // sendDispatchedNoticeMsg(context);
-            // }
+            this.addExtraInfo(context, param);
+            this.insertRedPerson(param);
             ServiceLog.info("添加静态库人员完成 耗时" + (System.currentTimeMillis() - startTime) + "ms");
             return ctx.getResponse().getBody();
         } else {
@@ -79,7 +84,18 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
     }
 
     /**
+     * 增加额外的信息
+     */
+    private void addExtraInfo(RequestContext context, Map<String, Object> param) {
+        param.put("PIC_QUALITY", null);
+        param.put("CREATOR", context.getUser().getCode());
+        param.put("CREATE_TIME", DateUtil.dateToString(new Date()));
+        param.put("RLTZ", null);
+    }
+
+    /**
      * 删除红名单中的人
+     *
      * @param context
      * @throws Exception
      */
@@ -88,8 +104,8 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
         Map<String, Object> params = context.getParameters();
         context.getParameters().put("ALGO_TYPE", ModuleUtil.getAlgoTypeStr());
         String infoId = StringUtil.toString(params.get("INFO_ID"));
-        params.put("DELETE_THIRD_PERSON_ID", infoId);
-        params.put("THIRD_DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
+        params.put("PERSON_ID", infoId);
+        params.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
         ctx.setBody(context.getParameters());
         ctx.setOrgCode(context.getUser().getDepartment().getCivilCode());
         ctx.setUserCode(context.getUserCode());
@@ -106,8 +122,61 @@ public class HuaWeikFaceRedListUtilImpl extends FaceRedListUtil {
         }
     }
 
+    /**
+     * 把红名单的人员批量添加到数据库
+     *
+     * @param list
+     */
+    private void batchInsertRedList(RequestContext context, List<Map<String, Object>> list) {
+        list.forEach(row -> {
+            try {
+                row.put("INFO_ID", row.get("PERSON_ID"));
+                this.addExtraInfo(context, row);
+                this.insertRedPerson(row);
+            } catch (Exception e) {
+                ServiceLog.error("红名单批量添加到数据库失败", e);
+            }
+        });
+    }
+
     @Override
     public int importRedList(RequestContext context, List<Map<String, Object>> successList, List<String> failList, Map<String, String> importErrorMsgCache) throws Exception {
-        return 0;
+        successList.forEach(row -> row.put("PERSON_ID", EAP.keyTool.getIDGenerator()));
+        List<Map<String, Object>> subList = new ArrayList<>(BATCH_IMPORT_NUM);
+        for (int i = 0; i < successList.size(); i++) {
+            subList.add(successList.get(i));
+            if (1 != 0 && i % BATCH_IMPORT_NUM == 0) {
+                this.realImportRedList(context, subList, failList);
+            }
+        }
+        this.realImportRedList(context, subList, failList);
+        return successList.size();
+    }
+
+    private void realImportRedList(RequestContext context, List<Map<String, Object>> subList, List<String> failList) {
+        Map<String, Object> tempMap = new LinkedHashMap<>();
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+        tempMap.put("PERSON_LIST", subList);
+        tempMap.put("DB_ID", Constants.STATIC_LIB_ID_RED_LIST);
+        ServiceLog.debug("此次批量导入数据 ： " + JSONObject.toJSONString(tempMap));
+        Registry registry = Registry.getInstance();
+        commandContext.setBody(tempMap);
+        commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
+        commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
+        try {
+            registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
+        } catch (Exception e) {
+            ServiceLog.error(e);
+        }
+        long code = commandContext.getResponse().getCode();
+        String message = commandContext.getResponse().getMessage();
+        if (0L != code) {
+            for (int j = 0; j < BATCH_IMPORT_NUM; j++) {
+                failList.add(message);
+            }
+        } else {
+            this.batchInsertRedList(context, subList);
+        }
+        subList.clear();
     }
 }
