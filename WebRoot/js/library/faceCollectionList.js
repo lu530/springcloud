@@ -84,9 +84,9 @@ $(function () {
     initDateTimeControl(timeOption);
     //调用页面回填
     fatherSearchDevice();
-    initFilterBar(); //先加载人脸来源再加载数据
+    // initFilterBar(); //先加载人脸来源再加载数据
     getDeviceModule();  //定义在common中
-    //initData();
+    initData();
     topSpecialUploadPic();
     initWaterMark();
    	initPage();
