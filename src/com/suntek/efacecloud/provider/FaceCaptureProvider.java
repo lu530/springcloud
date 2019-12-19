@@ -15,17 +15,30 @@ import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
-import com.suntek.efacecloud.util.*;
+import com.suntek.efacecloud.util.ConfigUtil;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.DeviceInfoUtil;
+import com.suntek.efacecloud.util.DevicesRedisUtil;
+import com.suntek.efacecloud.util.ExcelFileUtil;
+import com.suntek.efacecloud.util.FileDowloader;
+import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * 人脸抓拍库查询 efacecloud/rest/v6/face/capture
- * 
+ *
  * @author wsh
  * @since 1.0.0
  * @version 2017-06-29
@@ -189,7 +202,7 @@ public class FaceCaptureProvider {
 //			boolean isAdd = !StringUtil.isEmpty(sourceType);
 			for (Map<String, Object> algoDataMap : tempResultList) {
 				Map<String, Object> tempMap = new HashMap<String, Object>();
-				
+
 				ServiceLog.error("路人库检索返回的行数据：" + algoDataMap);
 				ArrayList<Map<String, Object>> algoList = (ArrayList<Map<String, Object>>) algoDataMap
 						.get("LIST");
@@ -200,7 +213,7 @@ public class FaceCaptureProvider {
 				String algorithmName = StringUtil.toString(algoMap
 						.get("ALGORITHM_NAME"));
 				List<Map<String, Object>> infoList = algoList;
-				
+
 				if (infoList.size() == 0) {
 					ServiceLog.debug("算法代码为" + algorithmCode + "的算法"
 							+ algorithmName + "数据为空,过滤掉该算法返回");

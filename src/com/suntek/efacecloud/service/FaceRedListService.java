@@ -100,155 +100,155 @@ public class FaceRedListService
 			
 			ServiceLog.debug("确认审批后通知红名单审批管理员--" + phone);
 
-			String content = "您有新的由(" + deptName + "-" + userName + ")发起的红名单审批任务，请及时登录平台进行处理。";
-			try {
-				SmsUtil.sendSms(phone, "", content);
-				//SendSmsUtil.sendSms(msmAddress, phone, content, Constants.SEND_MESSAGE_IMMEDIATELY, Calendar.getInstance(), msmAccount, msmPassword);
-			} catch (Exception e) {
-				ServiceLog.error("调用短信推送接口异常>>" + e);
-			}
-		}
-	}
-	
-	@BeanService(id="delete", description="删除红名单库人脸")
-	public void delete(RequestContext context) throws Exception
-	{
-		try {
-			Map<String, Object> params = context.getParameters();	
-			String personId = StringUtil.toString(params.get("INFO_ID"));
-			CollisionResult deleteFaceResult = null;
-			String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-			if (vendor.equals(Constants.HIK_VENDOR)){
-				deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
-			}else{
-				deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
-			}
-			if (deleteFaceResult == null || deleteFaceResult.getCode() !=0) {
-				context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-				context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
-				return;
-			}
-			
-			Dao dao = new DaoProxy(Constants.APP_NAME);
-			String[] personIdArr = personId.split(",");
-			for (int i = 0; i < personIdArr.length; i++) {
-				dao.addSQL("update EFACE_SEARCH_TASK set IS_APPROVE = 1 where TASK_ID in ("
-						+ "select TASK_ID from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ? )", personIdArr[i]);
-				dao.addSQL("delete from EFACE_RED_LIST where INFO_ID = ?", personIdArr[i]);
-				dao.addSQL("delete from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ?", personIdArr[i]);
-			}
-			
-			dao.commit();
-			
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-			context.getResponse().putData("MESSAGE", "删除成功");
-			
-		} catch (Exception e) {
-			context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			context.getResponse().putData("MESSAGE", "删除失败" + e);
-		}
-	}
-	@BeanService(id="isChecked", description="检查案情是否与历史数据符合")
-	public void isChecked(RequestContext context) throws Exception {
-		Map<String, Object> params = context.getParameters();
-		String caseId = StringUtil.toString(params.get("CASE_ID"));
-    	String caseIdType = StringUtil.toString(params.get("CASE_ID_TYPE"));
-    	String caseName = StringUtil.toString(params.get("CASE_NAME"));
-    	int countCase = taskDao.notMatchCaseIdOrName(caseId, caseName, caseIdType, context.getUserCode());
-    	if(countCase > 0) {
-    		context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-        	context.getResponse().putData("MESSAGE", "案情编号、案情名称与历史数据不符，请检查！");
-    	}else {
-        	context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-    	}
-	}
-	
-	@BeanService(id="belongRedList", description="查询人员是否涉红名单", type="remote")
-	public void belongRedList(RequestContext context) throws Exception
-	{
-		Map<String, Object> params = context.getParameters();
-	   
-		String userCode = context.getUserCode();
-	    int belongRedFlag = 1; //1表示 不属于红名单 0 表示属于红名单
-	    
-	    String taskId = EAP.keyTool.getUUID();
-		String remoteAddr = context.getRemoteAddr();
-		params.put("CREATOR_IP", remoteAddr);
-		params.put("TASK_ID", taskId);
-		params.put("CREATOR", userCode);
-		params.put("CREATE_TIME", DateUtil.getDateTime());	
-		params.put("IS_APPROVE", 2); //是否审批，未知，等待用户下一步操作才可知
-		params.put("APPROVER", ""); //审批人
-		params.put("CASE_ID_TYPE", StringUtil.toString(params.get("CASE_ID_TYPE"), "2"));
-		params.put("CASE_ID", StringUtil.toString(params.get("CASE_ID")));
-		params.put("CASE_NAME", StringUtil.toString(params.get("CASE_NAME")));
-		//因没用到查询参数，故暂时不存查询参数
-		//params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
-		params.put("SAERCH_PARAM", "");
-		
-		params.put("SEARCH_CAUSE", StringUtil.toString(params.get("SEARCH_CAUSE")));
-		params.put("SEARCH_PIC", StringUtil.toString(params.get("SEARCH_PIC")));
-		params.put("SEARCH_TYPE", StringUtil.toString(params.get("SEARCH_TYPE")));
-		params.put("CAUSE_TYPE", StringUtil.toString(params.get("CAUSE_TYPE"), "3"));
-	    
-		List<Map<String,Object>> relatedPersons = new ArrayList<Map<String,Object>>();
-		
-		//是否开启操作事由 1是0否
-    	String searchCauseOpen = AppHandle.getHandle(Constants.APP_NAME)
-    			.getProperty(Constants.SEARCH_CAUSE_OPEN, "0");
-    	//是否开启红名单 1是0否
-    	String redListOpen = AppHandle.getHandle(Constants.APP_NAME)
-    			.getProperty(Constants.RED_LIST_OPEN, "0");
-		if(context.getUser().isAdministrator()) { //admin不需要此操作
-			searchCauseOpen = "0";
-			redListOpen = "0";
-		}
-    	context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
-    	String picMd5 = "";
-		if("1".equals(searchCauseOpen)) {
-			String caseId = StringUtil.toString(params.get("CASE_ID"));
-        	String caseIdType = StringUtil.toString(params.get("CASE_ID_TYPE"));
-        	String caseName = StringUtil.toString(params.get("CASE_NAME"));
-        	int countCase = taskDao.notMatchCaseIdOrName(caseId, caseName, caseIdType, context.getUserCode());
-        	if(countCase > 0) {
-            	context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-            	context.getResponse().putData("MESSAGE", "案情编号、案情名称与历史数据不符，请检查！");
-            	return;
-        	}
-		}
-		
-		if("1".equals(redListOpen)) {
-			String pic = StringUtil.toString(params.get("SEARCH_PIC")); //图片
-		    boolean needSearchRedList = true;
-		    if (StringUtil.isEmpty(pic)) {
-		    	needSearchRedList = false;
-		    }else{
-		    	int redPriv = dao.getRedPriv(context.getUserCode());
-		    	if(redPriv > 0){
-			    	needSearchRedList = false;
-		    	}
-		    }
-	    	if(needSearchRedList) {
-	    		picMd5 = FileMd5Util.getUrlMD5String(ModuleUtil.renderImage(pic));
-				Map<String, Object> statusParams = new HashMap<>();
-				statusParams.put("PIC_MD5", picMd5);
-				statusParams.put("USER_CODE", context.getUserCode());
-				List<String> statusList = dao.getTaskRedListStatusByMd5(statusParams);
-				if(statusList.size() > 0) {
-					//1通过 2不通过 0待审核
-					if(statusList.contains("1")) {
-				    	context.getResponse().putData("BELONG_FLAG", belongRedFlag);
-						return;
-					}else if(statusList.contains("2")) {
-			        	context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			        	context.getResponse().putData("MESSAGE", "该人脸为红名单疑似人员[审核不通过]，请检查！");
-			        	return;
-					}else if(statusList.contains("0")) {
-			        	context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
-			        	context.getResponse().putData("MESSAGE", "该人脸为红名单疑似人员[未审核]，请等待审核后再操作！");
-			        	return;
-					}
-				}
+            String content = "您有新的由(" + deptName + "-" + userName + ")发起的红名单审批任务，请及时登录平台进行处理。";
+            try {
+                SmsUtil.sendSms(phone, "", content);
+                //SendSmsUtil.sendSms(msmAddress, phone, content, Constants.SEND_MESSAGE_IMMEDIATELY, Calendar.getInstance(), msmAccount, msmPassword);
+            } catch (Exception e) {
+                ServiceLog.error("调用短信推送接口异常>>" + e);
+            }
+        }
+    }
+
+    @BeanService(id = "delete", description = "删除红名单库人脸")
+    public void delete(RequestContext context) throws Exception {
+        try {
+            Map<String, Object> params = context.getParameters();
+            String personId = StringUtil.toString(params.get("INFO_ID"));
+            CollisionResult deleteFaceResult = null;
+            String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+            if (vendor.equals(Constants.HIK_VENDOR)) {
+                deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
+            } else if (vendor.equals("huawei")) {
+                deleteFaceResult = HuaWeiSdkRedLibUtil.deleteFace(context);
+            } else {
+                deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
+            }
+            if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
+                context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+                context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
+                return;
+            }
+
+            Dao dao = new DaoProxy(Constants.APP_NAME);
+            String[] personIdArr = personId.split(",");
+            for (int i = 0; i < personIdArr.length; i++) {
+                dao.addSQL("update EFACE_SEARCH_TASK set IS_APPROVE = 1 where TASK_ID in ("
+                        + "select TASK_ID from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ? )", personIdArr[i]);
+                dao.addSQL("delete from EFACE_RED_LIST where INFO_ID = ?", personIdArr[i]);
+                dao.addSQL("delete from EFACE_SEARCH_TASK_RED_LIST where INFO_ID = ?", personIdArr[i]);
+            }
+
+            dao.commit();
+
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+            context.getResponse().putData("MESSAGE", "删除成功");
+
+        } catch (Exception e) {
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+            context.getResponse().putData("MESSAGE", "删除失败" + e);
+        }
+    }
+
+    @BeanService(id = "isChecked", description = "检查案情是否与历史数据符合")
+    public void isChecked(RequestContext context) throws Exception {
+        Map<String, Object> params = context.getParameters();
+        String caseId = StringUtil.toString(params.get("CASE_ID"));
+        String caseIdType = StringUtil.toString(params.get("CASE_ID_TYPE"));
+        String caseName = StringUtil.toString(params.get("CASE_NAME"));
+        int countCase = taskDao.notMatchCaseIdOrName(caseId, caseName, caseIdType, context.getUserCode());
+        if (countCase > 0) {
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+            context.getResponse().putData("MESSAGE", "案情编号、案情名称与历史数据不符，请检查！");
+        } else {
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+        }
+    }
+
+    @BeanService(id = "belongRedList", description = "查询人员是否涉红名单", type = "remote")
+    public void belongRedList(RequestContext context) throws Exception {
+        Map<String, Object> params = context.getParameters();
+
+        String userCode = context.getUserCode();
+        int belongRedFlag = 1; //1表示 不属于红名单 0 表示属于红名单
+
+        String taskId = EAP.keyTool.getUUID();
+        String remoteAddr = context.getRemoteAddr();
+        params.put("CREATOR_IP", remoteAddr);
+        params.put("TASK_ID", taskId);
+        params.put("CREATOR", userCode);
+        params.put("CREATE_TIME", DateUtil.getDateTime());
+        params.put("IS_APPROVE", 2); //是否审批，未知，等待用户下一步操作才可知
+        params.put("APPROVER", ""); //审批人
+        params.put("CASE_ID_TYPE", StringUtil.toString(params.get("CASE_ID_TYPE"), "2"));
+        params.put("CASE_ID", StringUtil.toString(params.get("CASE_ID")));
+        params.put("CASE_NAME", StringUtil.toString(params.get("CASE_NAME")));
+
+        params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
+
+        params.put("SEARCH_CAUSE", StringUtil.toString(params.get("SEARCH_CAUSE")));
+        params.put("SEARCH_PIC", StringUtil.toString(params.get("SEARCH_PIC")));
+        params.put("SEARCH_TYPE", StringUtil.toString(params.get("SEARCH_TYPE")));
+        params.put("CAUSE_TYPE", StringUtil.toString(params.get("CAUSE_TYPE"), "3"));
+
+        List<Map<String, Object>> relatedPersons = new ArrayList<Map<String, Object>>();
+
+        //是否开启操作事由 1是0否
+        String searchCauseOpen = AppHandle.getHandle(Constants.APP_NAME)
+                .getProperty(Constants.SEARCH_CAUSE_OPEN, "0");
+        //是否开启红名单 1是0否
+        String redListOpen = AppHandle.getHandle(Constants.APP_NAME)
+                .getProperty(Constants.RED_LIST_OPEN, "0");
+        if (context.getUser().isAdministrator()) { //admin不需要此操作
+            searchCauseOpen = "0";
+            redListOpen = "0";
+        }
+        context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+        String picMd5 = "";
+        if ("1".equals(searchCauseOpen)) {
+            String caseId = StringUtil.toString(params.get("CASE_ID"));
+            String caseIdType = StringUtil.toString(params.get("CASE_ID_TYPE"));
+            String caseName = StringUtil.toString(params.get("CASE_NAME"));
+            int countCase = taskDao.notMatchCaseIdOrName(caseId, caseName, caseIdType, context.getUserCode());
+            if (countCase > 0) {
+                context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+                context.getResponse().putData("MESSAGE", "案情编号、案情名称与历史数据不符，请检查！");
+                return;
+            }
+        }
+
+        if ("1".equals(redListOpen)) {
+            String pic = StringUtil.toString(params.get("SEARCH_PIC")); //图片
+            boolean needSearchRedList = true;
+            if (StringUtil.isEmpty(pic)) {
+                needSearchRedList = false;
+            } else {
+                int redPriv = dao.getRedPriv(context.getUserCode());
+                if (redPriv > 0) {
+                    needSearchRedList = false;
+                }
+            }
+            if (needSearchRedList) {
+                picMd5 = FileMd5Util.getUrlMD5String(ModuleUtil.renderImage(pic));
+                Map<String, Object> statusParams = new HashMap<>();
+                statusParams.put("PIC_MD5", picMd5);
+                statusParams.put("USER_CODE", context.getUserCode());
+                List<String> statusList = dao.getTaskRedListStatusByMd5(statusParams);
+                if (statusList.size() > 0) {
+                    //1通过 2不通过 0待审核
+                    if (statusList.contains("1")) {
+                        context.getResponse().putData("BELONG_FLAG", belongRedFlag);
+                        return;
+                    } else if (statusList.contains("2")) {
+                        context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+                        context.getResponse().putData("MESSAGE", "该人脸为红名单疑似人员[审核不通过]，请检查！");
+                        return;
+                    } else if (statusList.contains("0")) {
+                        context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+                        context.getResponse().putData("MESSAGE", "该人脸为红名单疑似人员[未审核]，请等待审核后再操作！");
+                        return;
+                    }
+                }
 
 				String threshold = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87");
 				//int actureScore =  Integer.parseInt(String.valueOf(ModuleUtil.renderActualScore(THRESHOLD))); ;

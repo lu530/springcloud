@@ -30,7 +30,10 @@ import net.sf.json.JSONArray;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人脸布控库告警查询（去重）
@@ -48,9 +51,9 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
 
 	private AlarmHandleRecordDao alarmHandleRecordDao = new AlarmHandleRecordDao();
-	
+
 	private ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	/**
 	 * 
 	 */
@@ -551,7 +554,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 						thirdImplHit = json.getString("THIRDIMPL_HIT");
 					} catch (Exception e) {
 						ServiceLog.error("转换extendInfo异常", e);
-						ServiceLog.error("extendInfo："+extendInfo);
 					}
 
 					if ("1".equals(sexCode)) {

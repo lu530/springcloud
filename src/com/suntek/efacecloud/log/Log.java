@@ -15,6 +15,7 @@ import com.suntek.efacecloud.util.Constants;
 public class Log{
 	public static Logger joblog = LogFactory.getServiceLog(Constants.APP_NAME + "_job");
 	public static Logger synclog = LogFactory.getServiceLog(Constants.APP_NAME + "_sync");
+	public static Logger tasklog = LogFactory.getServiceLog(Constants.APP_NAME + "_task");
 	public static Logger dispatchedimportSuccessLog = LogFactory.getServiceLog("dispatchedimport_success");
 	public static Logger dispatchedimportFailLog = LogFactory.getServiceLog("dispatchedimport_fail");
 	public static Logger archiveimportLog = LogFactory.getServiceLog(Constants.APP_NAME + "_archiveimport");
@@ -29,5 +30,7 @@ public class Log{
 
 	public static Logger requestPingGaoLog = LogFactory.getServiceLog(Constants.APP_NAME + "_requestPingGao");  //导入数据记录日志 importDataLog
 	public static Logger deviceLog = LogFactory.getServiceLog(Constants.APP_NAME + "_device");
+
+	public static Logger technicalLog = LogFactory.getServiceLog(Constants.APP_NAME + "_technical");
 }
 
