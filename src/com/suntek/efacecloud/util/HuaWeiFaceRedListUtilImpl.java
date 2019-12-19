@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
 
-    private final int BATCH_IMPORT_NUM = 10;
+    private static final int BATCH_IMPORT_NUM = 10;
 
     @Override
     public void addOrEdit(RequestContext context) throws Exception {
@@ -163,7 +163,11 @@ public class HuaWeiFaceRedListUtilImpl extends FaceRedListUtil {
         commandContext.setBody(tempMap);
         commandContext.setOrgCode(StringUtil.toString(tempMap.get("ORG_CODE")));
         commandContext.setUserCode(StringUtil.toString(tempMap.get("USER_CODE")));
-        registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
+        try {
+            registry.selectCommands("hw" + BaseCommandEnum.staticLibFaceBatchAdd.getUri()).exec(commandContext);
+        } catch (Exception e) {
+            ServiceLog.error(e);
+        }
         long code = commandContext.getResponse().getCode();
         String message = commandContext.getResponse().getMessage();
         if (0L != code) {
