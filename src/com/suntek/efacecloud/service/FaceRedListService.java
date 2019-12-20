@@ -121,12 +121,13 @@ public class FaceRedListService {
             String personId = StringUtil.toString(params.get("INFO_ID"));
             CollisionResult deleteFaceResult = null;
             String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+            int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
             if (Constants.HIK_VENDOR.equals(vendor)) {
                 deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
             } else if (Constants.HW_VENDOR.equals(vendor)) {
                 deleteFaceResult = HuaWeiSdkRedLibUtil.deleteFace(context);
             } else {
-                deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
+                deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, algoType);
             }
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);

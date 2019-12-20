@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.service.face.search;
 
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
@@ -13,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PciFaceSearchRedListService extends FaceSearchRedListService {
+
+    private int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
     @Override
     public CollisionResult faceOne2NSearch(RequestContext context, String pic) {
         String threshold = StringUtil.toString(context.getParameter("THRESHOLD")); //阈值
@@ -27,7 +30,7 @@ public class PciFaceSearchRedListService extends FaceSearchRedListService {
         picSearchParam.put("similarity", Integer.parseInt(threshold));
         picSearchParam.put("feature", featureResp.getRltz());
         picSearchParam.put("topN", 10000000);
-        picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+        picSearchParam.put("algoType", algoType);
         CollisionResult collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
         return collisionResult;
     }
@@ -36,11 +39,11 @@ public class PciFaceSearchRedListService extends FaceSearchRedListService {
     public void initRedListLib() {
         try {
             long time = System.currentTimeMillis();
-            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, algoType);
             if (result.getCode() == Constants.COLLISISON_RESULT_SUCCESS) {
                 boolean isExist = (boolean) result.getList().get(0);
                 if (!isExist) {
-                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, algoType);
                     if (createReult.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
                         log.error("初始化红名单库[" + Constants.STATIC_LIB_ID_RED_LIST + "]异常");
                     }
