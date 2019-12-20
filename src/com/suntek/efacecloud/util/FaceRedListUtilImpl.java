@@ -1,6 +1,7 @@
 package com.suntek.efacecloud.util;
 
 import com.suntek.eap.EAP;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.StringUtil;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class FaceRedListUtilImpl extends FaceRedListUtil {
 
     private FaceRedListDao dao = new FaceRedListDao();
-
+    
     private FaceAlgorithmNameDao algoDao = new FaceAlgorithmNameDao();
 
     @Override
@@ -25,18 +26,18 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
         Map<String, Object> params = context.getParameters();
         String infoId = StringUtil.toString(params.get("INFO_ID"));
         String pic = StringUtil.toString(params.get("PIC"));
-
+        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
         FaceFeatureUtil.FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(pic);
         if (!featureResp.isValid()) {
             context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
             context.getResponse().putData("MESSAGE", "人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
             return;
         }
-
+    
         if (!StringUtil.isEmpty(infoId)) {
-
+        
             CollisionResult deleteFaceResult = SdkStaticLibUtil.deleteFace(
-                    Constants.STATIC_LIB_ID_RED_LIST, infoId, Constants.DEFAULT_ALGO_TYPE);
+                    Constants.STATIC_LIB_ID_RED_LIST, infoId, algoType);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
@@ -45,7 +46,7 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
 
             this.deleteRedPerson(infoId);
         }
-
+    
         try {
             String createTime = DateUtil.getDateTime();
             long newPersonId = EAP.keyTool.getIDGenerator();
@@ -53,17 +54,17 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
             params.put("CREATE_TIME", createTime);
             params.put("CREATOR", context.getUserCode()); //创建人
             params.put("PIC_QUALITY", featureResp.getScore()); //图片质量
-
+        
             String rltz = featureResp.getRltz();
             params.put("RLTZ", rltz); //人脸特征
-
+        
             Map<Long, String> features = new HashMap<Long, String>();
             features.put(newPersonId, rltz);
-
+        
             CollisionResult saveFaceResult = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST,
                     newPersonId, rltz,
-                    Constants.DEFAULT_ALGO_TYPE);
-            if (saveFaceResult == null || saveFaceResult.getCode() != 0) {
+                    algoType);
+            if (saveFaceResult == null || saveFaceResult.getCode() !=0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "注册人脸到静态小库失败！");
                 return;
@@ -78,9 +79,9 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
             ServiceLog.error("保存人脸到红名单库失败", e);
         }
     }
-
+    
     @Override
-    public int importRedList(RequestContext context, List<Map<String, Object>> successList, List<String> failList, Map<String, String> importErrorMsgCache) throws Exception {
+    public int importRedList(RequestContext context, List<Map<String,Object>> successList,List<String> failList, Map<String,String> importErrorMsgCache) throws Exception {
         int successCount = 0;
         //修改整体获取逻辑,改由配置获取，而不是从缓存内获取全部算法
         List<Integer> algoTypeList = algoDao.getAlgorithNameList(Constants.RED_LIST_MENUID).stream().map(f -> Integer.parseInt(StringUtil.toString(f.get("ALGORITHM_ID"))))
@@ -96,28 +97,28 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
             long personId = EAP.keyTool.getIDGenerator();
             String rltz = featureResp.getRltz();
             features.put(personId, rltz);
-
+        
             successMap.put("INFO_ID", StringUtil.toString(personId));
             successMap.put("CREATOR", context.getUserCode());
             successMap.put("CREATE_TIME", DateUtil.getDateTime());
             successMap.put("RLTZ", rltz);
             successMap.put("PIC_QUALITY", featureResp.getScore());
-
+            
             try {
                 /*CollisionResult saveFaceResult = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST, features);
                 if (saveFaceResult == null || saveFaceResult.getCode() != 0) {
                     failList.add(successMap.get("FILE_NAME") + "注册到库失败");
                     continue;
                 }*/
-                for (int algoType : algoTypeList) {
+                for(int algoType : algoTypeList) {
                     CollisionResult result = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST, personId, featureResp.getRltz(), algoType);
-                    if (result.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
+                    if(result.getCode() != Constants.COLLISISON_RESULT_SUCCESS){
                         failList.add(successMap.get("FILE_NAME") + "注册到库失败," + result.getMessage());
                         continue;
                     }
                 }
                 dao.add(successMap);
-                successCount++;
+                successCount ++;
             } catch (Exception e) {
                 ServiceLog.error(e);
                 failList.add(successMap.get("FILE_NAME") + "入库或注册到库失败," + e.getMessage());

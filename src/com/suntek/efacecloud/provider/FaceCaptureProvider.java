@@ -15,25 +15,12 @@ import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
-import com.suntek.efacecloud.util.ConfigUtil;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
-import com.suntek.efacecloud.util.DevicesRedisUtil;
-import com.suntek.efacecloud.util.ExcelFileUtil;
-import com.suntek.efacecloud.util.FileDowloader;
-import com.suntek.efacecloud.util.ModuleUtil;
+import com.suntek.efacecloud.util.*;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import net.sf.json.JSONArray;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

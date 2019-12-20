@@ -619,7 +619,7 @@ function imgDoSearch(isInit,isLocalSearch) {
     }
     queryParams.IMG_URL_LIST = JSON.stringify(searchImgList);//搜索图片列表
     queryParams.ALGORITHM_ID = $("#sfVal").val() || getalgos();//算法
-    queryParams.REPOSITORY_ID = $('body').find("#registerDb").val() || repositorys();//人脸库
+    queryParams.REPOSITORY_ID = $('body').find("#registerDb").val();//人脸库
     queryParams.THRESHOLD = $("#threshold").val();//;阈值
     queryParams.TOP_NUMBER = $("#retrieveNum").val();//检索数量
     queryParams.PRIORITY = 1; //最高优先级
@@ -1040,16 +1040,6 @@ function getalgos() {
         }
     }
     return ALGORITHM_IDS.join(",");
-}
-// 人脸库字符串
-function repositorys() {
-    var REPOSITORY_IDS = [];
-    for (var i = 0; i < CONSTANTS.RLK.length; i++) {
-        if (CONSTANTS.RLK[i].DB_NAME != "全部") {
-            REPOSITORY_IDS.push(CONSTANTS.RLK[i].DB_ID);
-        }
-    }
-    return REPOSITORY_IDS.join(",");
 }
 
 // 删除数组指定值

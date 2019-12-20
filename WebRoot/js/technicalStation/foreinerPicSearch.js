@@ -261,16 +261,6 @@ function getalgos(){
 	return ALGORITHM_IDS.join(",");
 }
 
-function repositorys(){
-	var REPOSITORY_IDS = [];
-	for(var i = 0 ; i < CONSTANTS.RLK.length ; i++){
-		if(CONSTANTS.RLK[i].DB_NAME != "全部"){
-			REPOSITORY_IDS.push(CONSTANTS.RLK[i].DB_ID);
-		}
-	}
-	return REPOSITORY_IDS.join(",");
-}
-
 function initPage() {
     // 初始化算法筛选列表
     if(!hasLocalSearch) {
@@ -357,7 +347,7 @@ function imgDoSearch() {
 
     queryParams.IMG_URL_LIST = JSON.stringify(searchImgList);
     queryParams.ALGORITHM_ID = $("#sfVal").val()||getalgos();
-    queryParams.REPOSITORY_ID = $('body').find("#registerDb").val()||repositorys();
+    queryParams.REPOSITORY_ID = $('body').find("#registerDb").val();
     queryParams.PRIORITY = 1; //最高优先级
 
     if (isFirstLoading) { //第一次检索
