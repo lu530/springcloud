@@ -164,6 +164,9 @@ function initEvent(){
 			isRemove = picMap.remove(curUuid);
 
 		if(isRemove){
+			if(picMap.size() == 0) {
+				$('.bottom-pic-bar').addClass('hide');
+			}
 			var listMapVal = listMap.get(curUuid),
 				isListRemove = listMap.remove(curUuid),
 				infoIdVal = infoIdMap.get(curUuid),

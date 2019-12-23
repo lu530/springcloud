@@ -1,6 +1,7 @@
 HELP.md
 
 !.mvn/wrapper/maven-wrapper.jar
+WebRoot/js/theme
 
 ### STS ###
 **.apt_generated

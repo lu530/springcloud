@@ -332,7 +332,7 @@
                                     <label picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                     <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</span>
                                 </p>
-                                <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                <p class='{%= projectDisplay("faceCaptureList-quality-score") %} hide'>
                                     <label picMsg="质量分数:{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}">质量分数：</label>
                                     <span title="{%=o.FACE_SCORE ? o.FACE_SCORE:'未知'%}">{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}</span>
                                 </p>
@@ -440,7 +440,7 @@
                                 <th class="w10 tc"><span>行政区域</span></th>
                                 <th class="w10 tc" permissionHide='faceCaptureList-register'><span>注册状态</span></th>
                                 <th class="w10 tc" permissionHide='faceCaptureList-algo-type'><span>算法类型</span></th>
-                                <th class="w10 tc" permissionHide='faceCaptureList-quality-score'><span>质量分数</span></th>
+                                <th class="w10 tc hide" permissionHide='faceCaptureList-quality-score'><span>质量分数</span></th>
                                 <th class="tc" style="width: 350px;"><span>操作</span></th>
                             </tr>
                         </thead>
@@ -469,7 +469,7 @@
                                     <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o.ORG_NAME)%}" title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</td>
                                     <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</td>
                                     <td class="tc {%= projectDisplay('faceCaptureList-algo-type') %}" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</td>
-                                    <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}</td>
+                                    <td class="tc hide {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}</td>
                                     {% if(o.ACTIVITY_NAME) { %}
                                     <p class="hide">
                                         <label picMsg="活动名称:{%=o.ACTIVITY_NAME%}"></label>
@@ -594,7 +594,7 @@
                                         <label picMsg="算法类型:{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                         <span title="{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</span>
                                     </p>
-                                    <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                    <p class='hide {%= projectDisplay("faceCaptureList-quality-score") %}'>
                                         <label picMsg="质量分数:{%=o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">质量分数：</label>
                                         <span title="{%= o[i].FACE_SCORE %}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</span>
                                     </p>
@@ -680,7 +680,7 @@
                                     <th class="w10 tc"><span>行政区域</span></th> 
                                     <th class="w10 tc"><span>注册状态</span></th>      
                                     <th class="w10 tc"><span>算法类型</span></th> 
-                                    <th class="w10 tc"><span>质量分数</span></th>
+                                    <th class="w10 hide tc"><span>质量分数</span></th>
                                     <th class="tc" style="width: 422px;"><span>操作</span></th> 
                                 </tr>
                             </thead>
@@ -708,7 +708,7 @@
                                         <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}" title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</td>
                                         <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</td>
                                         <td class="tc {%= projectDisplay('faceCaptureList-algo-type') %}" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</td>
-                                        <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</td>
+                                        <td class="tc hide {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</td>
 
                                         {% if(o[i].ACTIVITY_NAME) { %}
                                         <p class="hide">
@@ -832,7 +832,7 @@
                                                 <label picMsg="算法类型:{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                                 <span title="{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}</span>
                                             </p>
-                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                            <p class='hide {%= projectDisplay("faceCaptureList-quality-score") %}'>
                                                 <label picMsg="质量分数:{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知' %}">质量分数：</label>
                                                 <span title="{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE %}">{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知'%}</span>
                                             </p>
@@ -961,7 +961,7 @@
                                                 <label picMsg="算法类型:{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                                 <span title="{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[key][i].ALGORITHM_NAME?o[key][i].ALGORITHM_NAME:'未知'%}</span>
                                             </p>
-                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                            <p class='hide {%= projectDisplay("faceCaptureList-quality-score") %}'>
                                                 <label picMsg="质量分数:{%=o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}">质量分数：</label>
                                                 <span title="{%= o[key][i].FACE_SCORE %}">{%= o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}</span>
                                             </p>
