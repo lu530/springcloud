@@ -1,24 +1,92 @@
-package com.suntek.efacecloud.util;
+package com.suntek.efacecloud.service.redlist;
 
 import com.suntek.eap.EAP;
+import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceAlgorithmNameDao;
-import com.suntek.efacecloud.dao.FaceRedListDao;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.FaceFeatureUtil;
+import com.suntek.efacecloud.util.ModuleUtil;
+import com.suntek.efacecloud.util.SdkStaticLibUtil;
+import com.suntek.face.compare.sdk.common.constant.operation.FaceOperationEnum;
 import com.suntek.face.compare.sdk.model.CollisionResult;
+import com.suntek.face.compare.sdk.service.manage.FaceOperationManager;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FaceRedListUtilImpl extends FaceRedListUtil {
-
-    private FaceRedListDao dao = new FaceRedListDao();
+public class PciFaceRedListService extends FaceRedListService {
 
     private FaceAlgorithmNameDao algoDao = new FaceAlgorithmNameDao();
+
+    @Override
+    public CollisionResult faceOne2NSearch(RequestContext context, String pic) {
+        String threshold = StringUtil.toString(context.getParameter("THRESHOLD")); //阈值
+        FaceFeatureUtil.FeatureResp featureResp = FaceFeatureUtil.faceQualityCheck(ModuleUtil.renderImage(pic));
+        if (!featureResp.isValid()) {
+            ServiceLog.error("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+            context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
+            return null;
+        }
+        Map<String, Object> picSearchParam = new HashMap<String, Object>();
+        picSearchParam.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
+        picSearchParam.put("similarity", Integer.parseInt(threshold));
+        picSearchParam.put("feature", featureResp.getRltz());
+        picSearchParam.put("topN", 10000000);
+        picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+        CollisionResult collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
+        return collisionResult;
+    }
+
+    @Override
+    public void initRedListLib() {
+        try {
+            long time = System.currentTimeMillis();
+            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+            if (result.getCode() == Constants.COLLISISON_RESULT_SUCCESS) {
+                boolean isExist = (boolean) result.getList().get(0);
+                if (!isExist) {
+                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+                    if (createReult.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
+                        log.error("初始化红名单库[" + Constants.STATIC_LIB_ID_RED_LIST + "]异常");
+                    }
+                }
+            }
+            log.debug("初始化红名单--耗时:" + (System.currentTimeMillis() - time) + "ms");
+        } catch (Exception e) {
+            log.error("初始化静态库，发生异常", e);
+        }
+    }
+
+    /**
+     * 从静态小库注销人脸
+     *
+     * @param libraryId
+     * @param ids
+     * @return
+     * @throws SearchEngineException
+     */
+    public CollisionResult deleteFace(RequestContext context) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
+        map.put("ids", StringUtil.toString(context.getParameters().get("INFO_ID")));
+        map.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+
+        ServiceLog.debug("从静态小库注销人脸参数：" + map);
+        CollisionResult result = FaceOperationManager.runOperation(map, FaceOperationEnum.FACEDB_LOGOUT);
+        if (result != null) {
+            ServiceLog.info("从静态小库注销人脸结果：" + result.toJson());
+        } else {
+            ServiceLog.debug("从静态小库注销人脸结果：null");
+        }
+
+        return result;
+    }
 
     @Override
     public void addOrEdit(RequestContext context) throws Exception {
@@ -35,8 +103,7 @@ public class FaceRedListUtilImpl extends FaceRedListUtil {
 
         if (!StringUtil.isEmpty(infoId)) {
 
-            CollisionResult deleteFaceResult = SdkStaticLibUtil.deleteFace(
-                    Constants.STATIC_LIB_ID_RED_LIST, infoId, Constants.DEFAULT_ALGO_TYPE);
+            CollisionResult deleteFaceResult = this.deleteFace(context);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");

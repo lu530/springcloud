@@ -12,7 +12,7 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
-import com.suntek.efacecloud.service.face.search.FaceSearchRedListDelegate;
+import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
@@ -40,7 +40,7 @@ import java.util.Map;
 public class FaceRedListProvider extends ExportGridDataProvider {
     private Map<String, Integer> scoreMap = new HashMap<String, Integer>();
 
-    private FaceSearchRedListDelegate faceSearchRedListDelegate = new FaceSearchRedListDelegate();
+    private FaceRedListDelegate faceRedListDelegate = new FaceRedListDelegate();
 
     private String pic = "";
 
@@ -111,7 +111,7 @@ public class FaceRedListProvider extends ExportGridDataProvider {
     public boolean prepareForSearch(RequestContext context) {
         String elementId = StringUtil.toString(context.getParameter("elementId"));
         List<Long> idList = new ArrayList<Long>();
-        CollisionResult collisionResult = this.faceSearchRedListDelegate.faceOne2NSearch(context, pic);
+        CollisionResult collisionResult = this.faceRedListDelegate.faceOne2NSearch(context, pic);
         if (collisionResult == null) {
             return false;
         }

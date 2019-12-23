@@ -3,7 +3,6 @@ package com.suntek.efacecloud.util;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.util.StringUtil;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.sp.common.common.BaseCommandEnum;
@@ -187,21 +186,6 @@ public class FaceDetectUtil {
         public FaceDetectResp call() throws Exception {
             return FaceDetectUtil.getFaceDetectResp(faceImgUrl, algo);
         }
-    }
-
-    /**
-     * 获取红名单工具类实例--兼容不同厂商
-     *
-     * @return
-     */
-    public static FaceRedListUtil getFaceRedListUtilInstance() {
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if (vendor.equals(Constants.HIK_VENDOR)) {
-            return new HikFaceRedListUtilImpl();
-        } else if (vendor.equals("huawei")) {
-            return new HuaWeiFaceRedListUtilImpl();
-        }
-        return new FaceRedListUtilImpl();
     }
 
 }

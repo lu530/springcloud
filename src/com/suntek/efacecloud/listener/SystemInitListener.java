@@ -8,7 +8,7 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.job.FaceCompareJob;
-import com.suntek.efacecloud.service.face.search.FaceSearchRedListDelegate;
+import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.AlluxioClientUtil;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -113,8 +113,8 @@ public class SystemInitListener implements ServletContextListener {
     }
 
     private void initStaticLib() {
-        FaceSearchRedListDelegate faceSearchRedListDelegate = new FaceSearchRedListDelegate();
-        faceSearchRedListDelegate.initRedListLib();
+        FaceRedListDelegate faceRedListDelegate = new FaceRedListDelegate();
+        faceRedListDelegate.initRedListLib();
     }
 
     private void initAddressData() {

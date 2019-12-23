@@ -133,30 +133,6 @@ public class SdkStaticLibUtil {
         return saveFaceToLib(libraryId, features, algoType);
     }
 
-    /**
-     * 从静态小库注销人脸
-     *
-     * @param libraryId
-     * @param ids
-     * @return
-     * @throws SearchEngineException
-     */
-    public static CollisionResult deleteFace(String libraryId, String ids, int algoType) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("libraryId", libraryId);
-        map.put("ids", ids);
-        map.put("algoType", algoType);
-
-        ServiceLog.debug("从静态小库注销人脸参数：" + map);
-        CollisionResult result = FaceOperationManager.runOperation(map, FaceOperationEnum.FACEDB_LOGOUT);
-        if (result != null) {
-            ServiceLog.info("从静态小库注销人脸结果：" + result.toJson());
-        } else {
-            ServiceLog.debug("从静态小库注销人脸结果：null");
-        }
-
-        return result;
-    }
 
     /**
      * 静态小库检索1：N

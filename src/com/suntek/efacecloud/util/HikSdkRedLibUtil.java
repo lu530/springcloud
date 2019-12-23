@@ -319,47 +319,6 @@ public class HikSdkRedLibUtil {
     }
 
     /**
-     * 从静态小库注销人脸
-     *
-     * @param libraryId
-     * @return
-     * @throws SearchEngineException
-     */
-    public static CollisionResult deleteFace(String libraryId, String humanId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("humanId", humanId);
-
-        logger.debug("删除人脸参数：" + map);
-
-        String getCamsApi = ARTEMIS_PATH + "/api/fms/v2/staticlist/deleteRecord";
-        Map<String, String> path = new HashMap<String, String>(2) {
-            {
-                put("https://", getCamsApi);
-            }
-        };
-
-        String result = ArtemisHttpUtil.doPostStringArtemis(path, JSON.toJSONString(map), null, null, APPLICATION_JSON_UTF_8);
-
-        logger.debug("调用海康删除静态库人员接口返回结果：" + result);
-
-        CollisionResult collisionResult = new CollisionResult();
-        collisionResult.setList(new ArrayList<Object>());
-        JSONObject returnData = JSONObject.parseObject(result);
-        if (returnData.containsKey("code")) {
-            String code = StringUtil.toString(returnData.get("code"));
-            String msg = StringUtil.toString(returnData.get("msg"));
-            collisionResult.setCode(Integer.parseInt(code));
-            collisionResult.setMessage(msg);
-        } else {
-            String status = StringUtil.toString(returnData.get("status"));
-            collisionResult.setCode(Integer.parseInt(status));
-            collisionResult.setMessage("调用海康接口异常：" + HikStatusCode.getName(Long.valueOf(status)).name());
-        }
-
-        return collisionResult;
-    }
-
-    /**
      * 静态库1：N
      *
      * @param libraryId

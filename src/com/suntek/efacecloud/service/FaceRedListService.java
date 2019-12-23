@@ -13,15 +13,11 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceRedListDao;
 import com.suntek.efacecloud.dao.FaceRedTaskDao;
-import com.suntek.efacecloud.service.face.search.FaceSearchRedListDelegate;
+import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.FaceDetectUtil;
 import com.suntek.efacecloud.util.FileMd5Util;
-import com.suntek.efacecloud.util.HikSdkRedLibUtil;
-import com.suntek.efacecloud.util.HuaWeiSdkRedLibUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.efacecloud.util.SdkStaticLibUtil;
 import com.suntek.face.compare.sdk.model.CollisionResult;
 import com.suntek.sp.sms.util.SmsUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -46,11 +42,11 @@ public class FaceRedListService {
 
     private FaceRedTaskDao taskDao = new FaceRedTaskDao();
 
-    private FaceSearchRedListDelegate faceSearchRedListDelegate = new FaceSearchRedListDelegate();
+    private FaceRedListDelegate faceRedListDelegate = new FaceRedListDelegate();
 
     @BeanService(id = "add", description = "新增或编辑红名单库人脸")
     public void edit(RequestContext context) throws Exception {
-        FaceDetectUtil.getFaceRedListUtilInstance().addOrEdit(context);
+        faceRedListDelegate.addOrEdit(context);
     }
 
     @BeanService(id = "open", description = "是否开启红名单", type = "remote")
@@ -119,15 +115,7 @@ public class FaceRedListService {
         try {
             Map<String, Object> params = context.getParameters();
             String personId = StringUtil.toString(params.get("INFO_ID"));
-            CollisionResult deleteFaceResult = null;
-            String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-            if (vendor.equals(Constants.HIK_VENDOR)) {
-                deleteFaceResult = HikSdkRedLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId);
-            } else if ("huawei".equals(vendor)) {
-                deleteFaceResult = HuaWeiSdkRedLibUtil.deleteFace(context);
-            } else {
-                deleteFaceResult = SdkStaticLibUtil.deleteFace(Constants.STATIC_LIB_ID_RED_LIST, personId, Constants.DEFAULT_ALGO_TYPE);
-            }
+            CollisionResult deleteFaceResult = faceRedListDelegate.deleteFace(context);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "从静态小库注销人脸失败！");
@@ -259,7 +247,7 @@ public class FaceRedListService {
                 context.putParameter("THRESHOLD", threshold);
                 context.putParameter("TOP_N", 30);
                 context.putParameter("PIC", pic);
-                CollisionResult result = this.faceSearchRedListDelegate.faceOne2NSearch(context, pic);
+                CollisionResult result = this.faceRedListDelegate.faceOne2NSearch(context, pic);
                 //红名单中比中
                 if (result != null && result.getCode() == 0) {
                     List<Map<String, Object>> collisionList = result.getList();
