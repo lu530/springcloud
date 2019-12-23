@@ -359,6 +359,11 @@ public class Constants {
     /** 华云算法 */
     public static final String HUAYUN_ALGO = "80003";
 
+	/** 有效库-有特征值*/
+	public static final String IS_CORRECT = "1";
+	/** 残缺库-特征值*/
+	public static final String IS_INCORRECT = "0";
+
 	/**
 	 * 视频云设备类型--中台设备类型对应关系
 	 * 中台暂时只支持：

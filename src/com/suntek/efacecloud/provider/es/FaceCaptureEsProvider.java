@@ -141,6 +141,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"), "desc");
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
+        String registerStatus = StringUtil.toString(params.get("REGISTER_STATUS"), "");
+
+        if(Constants.IS_CORRECT.equals(registerStatus)){
+            query.addEqualCriteria("RLTZ", Constants.IS_CORRECT);
+        }else if(Constants.IS_INCORRECT.equals(registerStatus)){
+            query.addNotEqualCriteria("RLTZ", Constants.IS_CORRECT);
+        }
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
