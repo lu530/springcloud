@@ -721,11 +721,13 @@
 
                                         <div class="btn-group w100">
                                             <span class="tr">
+                                                {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
                                                 <a config-control="1" class="btn-i-t btn-xs verification-search hide" title="身份核查" url="{%= o.ALARM_IMG %}"
                                                     identity-id="{%= o.IDENTITY_ID %}" capture-time="{%= o.CAPTURE_TIME %}"
                                                     algo-id="{%= algoID %}">
                                                     身份
                                                 </a>
+                                                {% } %}
                                                 <a config-control="2" class="btn-i-t btn-xs trajectory-searchAll hide" title="轨迹分析" url="{%=o.ALARM_IMG%}" zjhm="{%= o.IDENTITY_ID %}">
                                                     轨迹
                                                 </a>
@@ -754,7 +756,7 @@
                                                 </a>
                                                 {% } %}
                                                 <a config-control="9" class="btn-i-t btn-xs btn-more searchPage hide" title="档案 " data-flag="{%=o.IDENTITY_ID%}" >
-                                                        档案
+                                                    档案
                                                 </a>
                                                 {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
                                                 <a config-control="10" class="btn-i-t btn-xs structuredSearch hide" title="结构化检索" imgUrl="{%=o.FRAME_IMG%}">
@@ -769,9 +771,8 @@
                                     </dd>
                                 </dl>
                             </div>
-                            </script>
+                        </script>
                 </div>
-                <!-- list end -->
             </div>
 
             <div class="tab-pane" id="tabDraw">

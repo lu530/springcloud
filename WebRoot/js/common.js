@@ -163,7 +163,47 @@ var CONSTANTS = {
 	    '3':"国外",
         '2':"国内",
         '1':"港澳台"
-    }
+	},
+	TACTICS_TASK:{
+
+		STATUS: {
+			'0': '待启动',
+			'1': '进行中',
+			'2': '已完成',
+			// '3': '已完成'
+			'3': '任务异常'
+		},
+		STATUS_COLOR: {
+			'0': 'task-blue',
+			'1': 'task-yellow',
+			'2': 'task-green',
+			// '3': 'task-green'
+			'3': 'task-red'
+		},
+		SPECIAL_STATUS: {
+			'0': '待启动',
+			'1': '进行中',
+			'2': '已完成',
+			'3': '已完成'
+		},
+		SPECIAL_STATUS_COLOR: {
+			'0': 'task-blue',
+			'1': 'task-yellow',
+			'2': 'task-green',
+			'3': 'task-green'
+		},
+		//任务类型 - 对应最终结果查看的页面
+		TASK_TYPE: {
+			'1': 'flow',	//	人脸聚档 - 人流量分析
+			'2': 'specificResult'	//	特定人群轨迹分析
+		},
+		// 所有技战法三种类型滑块的默认数值
+		VAL: {
+			THRESHOLD: 70,	//	检索阈值默认70
+			FACESCORE: 30,	//	特征分数默认30
+			SEARCHNUM: 100	//	检索数量默认100
+		}
+	}
 }
 initRlk();
 function initRlk(){
@@ -3255,7 +3295,7 @@ function projectDisplay (type) {
 	
 	var permissionBlackList = {
 
-    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score', 'verification'],
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score'],
 	}
 	var projectPermission = permissionBlackList[top.projectID];
 	
