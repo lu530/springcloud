@@ -97,7 +97,7 @@ public class HuaWeiFaceSearchRedListService extends FaceSearchRedListService {
                 Registry.getInstance().selectCommands("hw" + BaseCommandEnum.staticLibAdd.getUri()).exec(ctx);
             }
         } catch (Exception e) {
-            ServiceLog.error(e);
+            log.error("初始化静态库，发生异常", e);
         }
 
     }
