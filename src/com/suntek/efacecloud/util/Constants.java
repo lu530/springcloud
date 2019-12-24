@@ -352,10 +352,6 @@ public class Constants {
     /** 华云算法 */
     public static final String HUAYUN_ALGO = "80003";
 
-	/*** 0 代表特征值为空 */
-	public  final static String RLTZ_NULL = "0";
-	/*** 1代表特征值不为空 */
-	public  final static String RLTZ_NOT_NULL = "1";
 
 	/**
 	 * 视频云设备类型--中台设备类型对应关系

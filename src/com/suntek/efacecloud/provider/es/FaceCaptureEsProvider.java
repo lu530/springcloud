@@ -149,7 +149,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"), "desc");
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
-        String rltzIsNull = StringUtil.toString(params.get("RLTZ_IS_NULL"));
+        String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -228,10 +228,10 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 
         query.addSort("JGSK", timeSortType);
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        if (rltzIsNull.equals(Constants.RLTZ_NULL)) {
-            queryBuilder.mustNot(QueryBuilders.existsQuery("FACE_SCORE"));
-        } else if (rltzIsNull.equals(Constants.RLTZ_NOT_NULL)) {
-            queryBuilder.must(QueryBuilders.existsQuery("FACE_SCORE"));
+        if ("有效库".equals(isEffective)) {
+            queryBuilder.must(QueryBuilders.existsQuery("RLTZ"));
+        } else if ("残缺库".equals(isEffective)) {
+            queryBuilder.mustNot(QueryBuilders.existsQuery("RLTZ"));
         }
         query.addQueryBuilder(queryBuilder);
     }

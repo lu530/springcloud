@@ -1052,7 +1052,7 @@ function doSearch() {
             queryParams.SOURCE_TYPE = deviceType;
         }
 
-        queryParams.RLTZ_IS_NULL = $("#personBase .tag-item.active").attr("val");
+        queryParams.IS_EFFECTIVE = $("#personBase .tag-item.active").attr("val");
         //检索案件录入
         /*if(isOpenSearchCause()){*/
         var searchParams = queryParams;
