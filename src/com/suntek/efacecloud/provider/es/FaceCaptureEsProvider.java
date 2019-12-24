@@ -1,12 +1,5 @@
 package com.suntek.efacecloud.provider.es;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
@@ -22,10 +15,16 @@ import com.suntek.efacecloud.dao.DeviceInfoDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
-
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人脸抓拍库查询 efacecloud/rest/v6/face/capture
@@ -150,6 +149,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"), "desc");
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
+        String rltzIsNull = StringUtil.toString(params.get("RLTZ_IS_NULL"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -227,6 +227,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         }
 
         query.addSort("JGSK", timeSortType);
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if (rltzIsNull.equals(Constants.RLTZ_NULL)) {
+            queryBuilder.mustNot(QueryBuilders.existsQuery("FACE_SCORE"));
+        } else if (rltzIsNull.equals(Constants.RLTZ_NOT_NULL)) {
+            queryBuilder.must(QueryBuilders.existsQuery("FACE_SCORE"));
+        }
+        query.addQueryBuilder(queryBuilder);
     }
 
 }
