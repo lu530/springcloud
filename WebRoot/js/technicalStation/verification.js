@@ -1137,7 +1137,7 @@ function addID() {
     for (var i = 0; i < cacheIDs.length; i++) {
         $('#imgBox li').eq(i).attr('attrId', cacheIDs[i]);
         $('#resultTab li').eq(i).attr('attrId', cacheIDs[i]);
-        // $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
+        $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
         $('body').find('.recommendList').eq(i).attr('attrId', cacheIDs[i]);
     }
 }
