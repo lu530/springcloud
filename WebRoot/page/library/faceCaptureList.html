@@ -125,6 +125,16 @@
                         <input type="hidden" id="orgCode"> -->
                         </dd>
                     </dl>
+                    <dl class="filter-bar hide" dom-permission="faceCaptureList-effective-library">
+                        <dt class="filter-arrt">人员库：</dt>
+                        <dd class="filter-tag">
+                            <ul id="personBase" class="tagslist filter-color">
+                                <li class="tag-item active" val=""><span>所有库</span></li>
+                                <li class="tag-item" val="1"><span>有效库</span></li>
+                                <li class="tag-item" val="0"><span>残缺库</span></li>
+                            </ul>
+                        </dd>
+                    </dl>
                     <dl class="filter-bar hide" cj-permission="people_category">
                         <dt class="filter-arrt">人员分类：</dt>
                         <dd class="filter-tag">
@@ -400,10 +410,6 @@
                                         ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
                                         <i class="btn-icon location-icon"></i>
                                     </a>
-
-
-
-                                    
                                     <!-- 如果有权限，显示结构化搜索图标 -->
                                     {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
                                         <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o.PIC%}" title="结构化检索">
@@ -438,9 +444,9 @@
                                 <th class="w10 tc"><span>入库时间</span></th>
                                 <th class="w10 tc"><span>设备名称</span></th>
                                 <th class="w10 tc"><span>行政区域</span></th>
-                                <th class="w10 tc" permissionHide='faceCaptureList-register'><span>注册状态</span></th>
-                                <th class="w10 tc" permissionHide='faceCaptureList-algo-type'><span>算法类型</span></th>
-                                <th class="w10 tc" permissionHide='faceCaptureList-quality-score'><span>质量分数</span></th>
+                                <th class="w10 tc" dom-permission="faceCaptureList-register"><span>注册状态</span></th>
+                                <th class="w10 tc" dom-permission="faceCaptureList-algo-type"><span>算法类型</span></th>
+                                <th class="w10 tc" dom-permission="faceCaptureList-quality-score"><span>质量分数</span></th>
                                 <th class="tc" style="width: 350px;"><span>操作</span></th>
                             </tr>
                         </thead>
@@ -505,7 +511,7 @@
                                                 <b><i class="btn-icon verification-icon"></i></b>
                                             </li>
                                             {% } %}
-                                            {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %} 
+                                            {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
                                             <li class="verification-search" url="{%=o.OBJ_PIC%}" onClick="facestoreGetData('{%=o.OBJ_PIC%}')" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" ui-permission="EFACE_faceVerificationArchive" title="身份核查">
                                                 <b><i class="btn-icon verification-icon"></i></b>
                                             </li>

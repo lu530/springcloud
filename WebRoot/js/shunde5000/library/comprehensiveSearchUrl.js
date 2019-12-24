@@ -63,7 +63,7 @@ var options = {
         //  布控库
         MonitorLB: '/eapmanageutils/rest/v6/facedispatched/relPerson/getData',
         //  一人一档
-        personLB: '/efacestore/rest/v6/facestore/archivesPerson/getData',
+        // personLB: '/efacestore/rest/v6/facestore/archivesPerson/getData',
         //  身份核查
         feiShiLB: '/efacecloud/rest/v6/face/technicalTactics/batchFaceSearch'
     },

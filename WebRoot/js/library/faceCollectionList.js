@@ -121,7 +121,6 @@ function initPage(){
     	$(".picUpdata").removeClass("hide");
     	$(".top-box").removeClass("pl0");
     }
-
     domPermission();
 }
 function hideModule(selector) {
@@ -228,6 +227,10 @@ function initEvent() {
             type = $(this).attr('type');
         var url = '/efacecloud/page/library/faceCaptureDetail.html?id=' + id + '&type=' + type;
         UI.util.showCommonWindow(url, '人脸详情', 1000, 600, function(data) {});
+    });
+    //人员库切换
+    $("#personBase .tag-item").click(function (e) {
+        $(this).addClass('active').siblings().removeClass('active');
     })
 
     //有人脸检索的选中问题
@@ -1049,6 +1052,7 @@ function doSearch() {
             queryParams.SOURCE_TYPE = deviceType;
         }
 
+        queryParams.REGISTER_STATUS = $("#personBase .tag-item.active").attr("value");
         //检索案件录入
         /*if(isOpenSearchCause()){*/
         var searchParams = queryParams;

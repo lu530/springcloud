@@ -19,6 +19,11 @@ cachedData.endTime = UI.util.getUrlParam("endTime")||'';
 cachedData.noBackBtn = UI.util.getUrlParam("noBackBtn")||false;
 cachedData.imgUrl = UI.util.getUrlParam("imgUrl")||"";
 
+var TASK_ID = UI.util.getUrlParam("TASK_ID")||"",
+	resultLooking = UI.util.getUrlParam("resultLooking")||"";
+
+var projectKey = top.projectID;
+
 var pageUrlObj = {
 	"track": "/efacecloud/page/technicalStation/trackFaceForm.html?beginTime="+cachedData.beginTime+
 				"&endTime="+cachedData.endTime+"&imgUrl="+cachedData.imgUrl+"&noBackBtn="+cachedData.noBackBtn , //轨迹分析
@@ -29,6 +34,7 @@ var pageUrlObj = {
 	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html', //库碰撞
 	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html', // 昼伏夜出
 	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html', // 深夜出入
+	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
 }
 $(function(){
 	initEvent();

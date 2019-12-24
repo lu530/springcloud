@@ -3252,29 +3252,56 @@ function ifConfigProperty(moduleName, key, value, call) {
 }
 
 function projectDisplay (type) {
-
-	//	配置黑白名单 - 注意，黑名单优先级更高，即配置了黑名单不管白名单怎么配置都无效
 	
 	var permissionBlackList = {
 
-    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score'],
+    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score', 'verification'],
 	}
 	var projectPermission = permissionBlackList[top.projectID];
 	
 	return projectPermission ? projectPermission.indexOf(type) > -1 ? 'hide' : '' : '';
 }
 
+// function domPermission () {
+
+// 	var permissionHide = {
+		
+//     	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score', 'faceCaptureList-effective-library']
+// 	}
+
+// 	if(permissionHide[top.projectID]) {
+
+// 		$.each(permissionHide[top.projectID], function (index, item) {
+// 			$('[permissionHide=' + item + ']').addClass('hide');
+// 		});
+// 	}
+// }
+
+//	这部分针对非模板
 function domPermission () {
 
-	var permissionHide = {
-		
-    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score']
+	var permissionConfig = {
+
+		'shunde5000': {
+			"faceCaptureList-effective-library"	: '',		//	有效库所有库
+			"faceCaptureList-register"			: 'hide',	//	注册状态
+			"faceCaptureList-algo-type"			: 'hide',	//	算法类型
+			"faceCaptureList-quality-score" 	: 'hide',	//	质量分数
+			"alarmDetail-history-video"			: ''		//	录像播放
+		}
 	}
 
-	if(permissionHide[top.projectID]) {
+	var permissionDetail = permissionConfig[top.projectID];
 
-		$.each(permissionHide[top.projectID], function (index, item) {
-			$('[permissionHide=' + item + ']').addClass('hide');
-		});	
+	if(permissionDetail) {
+
+		$('[dom-permission]').each(function () {
+
+			var permissionStr = $(this).attr('dom-permission');
+
+			if('undefined' !== typeof permissionDetail[permissionStr]) {
+				permissionDetail[permissionStr] ? $(this).addClass('hide') : $(this).removeClass('hide')
+			}
+		});
 	}
 }
