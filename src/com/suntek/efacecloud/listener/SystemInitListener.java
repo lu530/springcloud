@@ -8,16 +8,11 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.job.FaceCompareJob;
-import com.suntek.efacecloud.service.face.search.FaceSearchRedListDelegate;
-import com.suntek.efacecloud.job.PersonFlowAnalysisJob;
-import com.suntek.efacecloud.job.SpecialPersonTrackJob;
-import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.AlluxioClientUtil;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.HttpUtil;
-import com.suntek.efacecloud.util.SdkStaticLibUtil;
-import com.suntek.face.compare.sdk.model.CollisionResult;
 import com.suntek.feature.client.AlgorithmType;
 import com.suntek.feature.client.DSSClient;
 import com.suntek.tactics.api.dss.service.DssService;
@@ -37,11 +32,11 @@ import java.util.Map;
 
 /**
  * 模块初始化监听类
- * 
+ *
  * @author lx
- * @since 1.0.0
  * @version 2017-06-29
  * @Copyright (C)2017 , Suntektech
+ * @since 1.0.0
  */
 public class SystemInitListener implements ServletContextListener {
 	public static Logger log = LogFactory.getServiceLog(Constants.APP_NAME);
@@ -139,52 +134,9 @@ public class SystemInitListener implements ServletContextListener {
         }
     }
 
-    /**
-     * 特定人群轨迹分析任务
-     */
-    private void initSpecialPersonsTrack(){
-        try {
-            Log.technicalLog.debug("====== 特定人群轨迹分析任务启动 ======");
-
-            String cron = AppHandle.getHandle(Constants.APP_NAME).getProperty("TECHNICAL_SPECIAL_PERSON_TRACK");
-            if (!StringUtil.isEmpty(cron)) {
-                EAP.schedule.addCronTrigger(SpecialPersonTrackJob.class,
-                        cron,
-                        "specialPersonTrackJob",
-                        "specialTrackGroup",
-                        new HashMap<String, Object>());
-            }
-            Log.technicalLog.debug("====== 特定人群轨迹分析任务无需启动 ======");
-        } catch (SchedulerException e) {
-            Log.technicalLog.error("特定人群轨迹分析任务异常" + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * 人流量分析任务
-     */
-    private void initPersonFlowAnalysisTask(){
-        try {
-            Log.technicalLog.debug("====== 人流量分析任务启动 ======");
-
-            String cron = AppHandle.getHandle(Constants.APP_NAME).getProperty("TECHNICAL_PERSON_FLOW_ANALYSIS");
-            if (!StringUtil.isEmpty(cron)) {
-                EAP.schedule.addCronTrigger(PersonFlowAnalysisJob.class,
-                        cron,
-                        "personFlowAnalysisJob",
-                        "personFlowGroup",
-                        new HashMap<String, Object>());
-            }
-        } catch (SchedulerException e) {
-            log.error("人流量分析任务异常" + e.getMessage(), e);
-        }
-    }
-    /**
-     * 初始化红名单库
-     */
     private void initStaticLib() {
-        FaceSearchRedListDelegate faceSearchRedListDelegate = new FaceSearchRedListDelegate();
-        faceSearchRedListDelegate.initRedListLib();
+        FaceRedListDelegate faceRedListDelegate = new FaceRedListDelegate();
+        faceRedListDelegate.initRedListLib();
     }
 
 	private void initAddressData() {
@@ -199,10 +151,10 @@ public class SystemInitListener implements ServletContextListener {
 			log.debug("加载地址缓存--耗时:" + (System.currentTimeMillis() - time) + "ms");
 		}
 	}
-	
+
 	/**
 	 * 加载大数据schema
-	 * 
+	 *
 	 * @param context
 	 */
 	@SuppressWarnings("unchecked")
