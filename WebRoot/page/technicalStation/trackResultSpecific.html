@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>特定人群分析结果</title>
+<link type="text/css" rel="stylesheet" href="/ui/plugins/font-images/font.css" />
+<link type="text/css" rel="stylesheet" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/trackResultSpecific.css"/>
+<link type="text/css" rel="stylesheet" href="/efacecloud/css/theme/theme-azure-efacecloud.css" />
+</head>
+<body class="full-screen azure technical">
+	<div class="page-list-head" style="display: none;">
+		<a id="backBtn" class="back-btn hide"> <i class="icon-arrow-left10"></i>
+			<em>返回</em>
+		</a>
+		<span class="pl10" id="pageTitle">
+			<i class="title-icon icon-track"></i>
+			特定人群分析结果
+		</span>
+		<span class='fr'>已匹配档案数：<span class='resultNum'>0</span>人</span>
+	</div>
+	<!-- <div class=''> --><!-- {% for(var i = 0; i < o.length; i ++) { %} -->
+	<div class='person-list-container mCustomScrollbar'>
+		<div id='person' class='tilelist'>
+			<script id="personTmpl" type="x-tmpl">
+			{% for(var i = 0; i < o.length; i ++) { %}
+			<div class="list-node-wrap ellipsis-wrap personUnit" PIC="{%= o[i].PIC %}" personId="{%= o[i].PERSON_ID %}" idcard="{%= o[i].IDENTITY_ID%}">
+				<dl class="list-node compare-pic">
+					
+					<dt class="node-img person-img">
+						<span>
+							<img src="{%= renderImg(o[i].PIC) %}" class="rIMG" attrimg="zoom">
+						</span>
+					</dt>
+					<dd class="node-text pl10">
+						<input type="checkbox" listview-check="" class="checkbox-opacity hide nodeCheck">
+						<p >
+							<label>姓名:</label>
+							<span class="ellipsis-list" title="{%= o[i].NAME %}">{%= o[i].NAME %}</span>
+							{% if (o[i].KSS_NUM > 0) { %}
+								<span class="fr tr text-primary">进所{%= o[i].KSS_NUM %}次</span>
+							{% } %}
+						</p>
+						<p>
+							<label>身份证号:</label>
+							<span class="ellipsis-list" title="{%= o[i].IDENTITY_ID %}">{%= o[i].IDENTITY_ID %}</span>
+						</p>
+						<p>
+							<label>个人信息:</label>
+							<span class="ellipsis-list" title="{%= renderAddress(o[i].PERMANENT_ADDRESS) %}/{%= renderSex(o[i].SEX) %}">{%= renderAddress(o[i].PERMANENT_ADDRESS) %}/{%= renderSex(o[i].SEX) %}</span>
+						</p>
+						<p>
+							<label>轨迹数量:</label>
+							<span class="ellipsis-list" title="{%= o[i].COUNT %}">{%= o[i].COUNT %}</span>
+						</p>
+						<p class="hide">
+							<label>入库状态:</label>
+							<span title="">222222222222222</span>
+						</p>
+						<div class="tags">
+							<label>人员标签:</label>
+							{%	var tags = renderTag(o[i].PERSON_TAG_LIST); %}
+							{% if(tags.length>0){  %}
+							<div class="tag-line-wrap">
+								<span class="tag-line clearfix tagLine">
+									{%= renderTagArr(tags,1)%}
+								</span>
+							</div>
+							{% }else{ %}
+								<span>暂无</span>
+							{% }  %}
+							<span class="more hide">
+								<span class="tagmore-icon moreTagsBtn"></span>
+								<div class="more-tags clearfix moreTags">
+									{%= renderTagArr(tags)%}
+								</div>
+							</span>
+						</div>
+						<div class="btn-group">
+							<a class="btn-i-t fl tagEdit hide" title="{%= o[i].IS_WORK == 1 ? '未打标签' : '已打标签' %}" identity-id = "{%= o[i].IDENTITY_ID %}" data-name="{%= o[i].NAME %}" person-id="{%= o[i].PERSON_ID %}" kss-num='{%= o[i].KSS_NUM %}'>
+								<svg class="pci-icon svg-icon {%= o[i].IS_WORK == 1 ? 'red' : 'green' %}" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-biaoqian1"></use>
+								</svg>
+							</a>
+							<!-- <a class="btn-i-t btn-xs btn-search" title="搜索 ">
+								<i class="btn-icon search-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs btn-more searchPage" title="详情 " kss-num='{%= o[i].KSS_NUM %}'>
+								<i class="btn-icon more-icon"></i>
+							</a> -->
+							<a class="btn-i-t btn-com btn-search" title="搜索 ">
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-sousuo"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-com btn-more searchPage" title="详情 " kss-num='{%= o[i].KSS_NUM %}'>
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-xiangqing1"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-com searchByImage" title="以图搜图 " imgSrc='{%= renderImg(o[i].PIC) %}'>
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconlurenkujiansuo-jiansuo"></use>
+								</svg>
+							</a>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			{% } %}
+		</script>
+		</div>
+		
+	</div>
+	<!-- </div> -->
+	<div class="frame-form-full l0" style="display: none; z-index: 999;">
+		<iframe class="frame-form" name="frameFormFull" id="frameFormFull" frameborder="0"></iframe>
+	</div>
+	<script id="deviceNameListTemp" type="text/x-tmpl">					
+		{% for(var i=0; i<o.length; i++) { %} 
+			<li>
+				<a>
+				<span class="deviceName">{%=o[i].DEVICE_NAME%}</span>
+				<span class="removeDeviceBtn operate-btn" deviceid="{%=o[i].DEVICE_ID%}">×</span>
+				</a>
+			</li>
+		{% } %}
+	</script>
+
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/font4.0/iconfont.js"></script>
+	<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+
+	<script type="text/javascript" src="/efacecloud/js/common4.0.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/technicalStation/trackResultSpecific.js"></script>
+</body>
+</html>

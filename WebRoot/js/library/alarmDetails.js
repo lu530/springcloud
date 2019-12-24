@@ -30,7 +30,7 @@ var curIsBlack = (top.projectID == "foreigners");
 if(top.isBigScreen){
 	$('head').append('<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/alarmDetailsBigScreen.css" />')
 }
-
+var deviceId = UI.util.getUrlParam("deviceId") || '';
 $(function () {
 	UI.control.init();
 	showSwitchBtn();
@@ -46,7 +46,12 @@ function initEvent() {
 	
 	//初始多脸维护配置
 	initConfigFaceMaintain();
-	
+
+	$('#historyVideo').attr({
+		'deviceid': deviceId,
+		'attr-time': alarmTime
+	})
+	domPermission();
 	if (level == 100) {
 		$('.btn-wrap').addClass('hide');
 	} else {

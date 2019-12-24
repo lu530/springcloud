@@ -13,10 +13,12 @@ $(function () {
 function initPage () {
 
     uploadPic();    //  图片上传初始化
+
+    _domPermission();   //  权限初始化
     
     initEfacesurveillance();    //  布控算法初始化
 
-    initEfaceStore();       //  一人一档算法初始化
+    // initEfaceStore();       //  一人一档算法初始化
 
     getSpecialTag();    //  一人一档特殊标签初始化
 
@@ -589,6 +591,19 @@ function reloadAlarmPart (keyWords) {
     })
 }
 
+
+//  综合检索 - 视频网隐藏飞识的所有东西，包括调接口
+function hideFeiShi () {
+
+    var permission = top.UI.control.getPermissionMenus();
+    
+    if(!permission.EFACE_faceVerification){
+        
+    }
+}
+
+
+
 //  综合检索每个小卡片上的按钮事件问题统计在这里添加
 
 var addBtnClickEvent = {
@@ -832,4 +847,20 @@ var addBtnClickEvent = {
             openWindowPopup('faceStore', $(this).attr("url"));
         });
     }
+}
+
+//	视频网屏蔽身份核查
+function _domPermission () {
+
+    $('[dom-permission]').addClass('hide');
+
+    var menusIDList = UI.control.getPermissionMenus();
+
+    $('[dom-permission]').each(function (i) {
+        var permissionStr = $(this).attr('dom-permission');
+        menusIDList[permissionStr] && $(this).removeClass('hide');
+    });
+	if(!UI.control.hasPermission('EFACE_faceVerificationArchive')) {
+		delete options.url.feiShiLB;
+	}
 }

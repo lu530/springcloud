@@ -1,6 +1,14 @@
 package com.suntek.efacecloud.provider.es;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
 import com.suntek.eap.EAP;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.IndexSearchProvider;
 import com.suntek.eap.index.Query;
@@ -18,6 +26,7 @@ import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -42,6 +51,11 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 
     public FaceCaptureEsProvider() {
         super(EAP.bigdata);
+        try {
+        	isBlack = "1".equals(StringUtil.toString(AppHandle.getHandle(Constants.DATA_DEFENCE).getProperty("IS_BLACK", "0")));
+        } catch (Exception e) {
+        	// do no thing
+        }
     }
 
     public Map<String, Object> query(RequestContext context) throws Exception {
@@ -83,8 +97,15 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             String personId = StringUtil.toString(map.get("PERSON_ID"));
             String infoId = StringUtil.toString(map.get("INFO_ID"));
 
-            if (actMap.containsKey(infoId)) {
-                map.putAll(actMap.get(infoId));
+            try{
+            	if(!StringUtils.isBlank(infoId)){
+            		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
+                    for (Map<String, Object> actMap : actList) {
+                        map.putAll(actMap);
+                    }
+            	}
+            }catch(Exception e){
+            	ServiceLog.error("不存在activity_info表: " + e);
             }
             map.put("DEVICE_ID", deviceId);
             map.put("VIID_OBJECT_ID", viidObjectId);
@@ -141,13 +162,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"), "desc");
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
-        String registerStatus = StringUtil.toString(params.get("REGISTER_STATUS"), "");
-
-        if(Constants.IS_CORRECT.equals(registerStatus)){
-            query.addEqualCriteria("RLTZ", Constants.IS_CORRECT);
-        }else if(Constants.IS_INCORRECT.equals(registerStatus)){
-            query.addNotEqualCriteria("RLTZ", Constants.IS_CORRECT);
-        }
+        String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -225,6 +240,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         }
 
         query.addSort("JGSK", timeSortType);
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if ("有效库".equals(isEffective)) {
+            queryBuilder.must(QueryBuilders.existsQuery("RLTZ"));
+        } else if ("残缺库".equals(isEffective)) {
+            queryBuilder.mustNot(QueryBuilders.existsQuery("RLTZ"));
+        }
+        query.addQueryBuilder(queryBuilder);
     }
 
 }

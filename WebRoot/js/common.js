@@ -163,7 +163,47 @@ var CONSTANTS = {
 	    '3':"国外",
         '2':"国内",
         '1':"港澳台"
-    }
+	},
+	TACTICS_TASK:{
+
+		STATUS: {
+			'0': '待启动',
+			'1': '进行中',
+			'2': '已完成',
+			// '3': '已完成'
+			'3': '任务异常'
+		},
+		STATUS_COLOR: {
+			'0': 'task-blue',
+			'1': 'task-yellow',
+			'2': 'task-green',
+			// '3': 'task-green'
+			'3': 'task-red'
+		},
+		SPECIAL_STATUS: {
+			'0': '待启动',
+			'1': '进行中',
+			'2': '已完成',
+			'3': '已完成'
+		},
+		SPECIAL_STATUS_COLOR: {
+			'0': 'task-blue',
+			'1': 'task-yellow',
+			'2': 'task-green',
+			'3': 'task-green'
+		},
+		//任务类型 - 对应最终结果查看的页面
+		TASK_TYPE: {
+			'1': 'flow',	//	人脸聚档 - 人流量分析
+			'2': 'specificResult'	//	特定人群轨迹分析
+		},
+		// 所有技战法三种类型滑块的默认数值
+		VAL: {
+			THRESHOLD: 70,	//	检索阈值默认70
+			FACESCORE: 30,	//	特征分数默认30
+			SEARCHNUM: 100	//	检索数量默认100
+		}
+	}
 }
 
 function initFeishiAlgoLib(){
@@ -3264,8 +3304,6 @@ function ifConfigProperty(moduleName, key, value, call) {
 }
 
 function projectDisplay (type) {
-
-	//	配置黑白名单 - 注意，黑名单优先级更高，即配置了黑名单不管白名单怎么配置都无效
 	
 	var permissionBlackList = {
 
@@ -3276,17 +3314,46 @@ function projectDisplay (type) {
 	return projectPermission ? projectPermission.indexOf(type) > -1 ? 'hide' : '' : '';
 }
 
+// function domPermission () {
+
+// 	var permissionHide = {
+		
+//     	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score', 'faceCaptureList-effective-library']
+// 	}
+
+// 	if(permissionHide[top.projectID]) {
+
+// 		$.each(permissionHide[top.projectID], function (index, item) {
+// 			$('[permissionHide=' + item + ']').addClass('hide');
+// 		});
+// 	}
+// }
+
+//	这部分针对非模板
 function domPermission () {
 
-	var permissionHide = {
-		
-    	'shunde5000': ['faceCaptureList-register', 'faceCaptureList-algo-type', 'faceCaptureList-quality-score']
+	var permissionConfig = {
+
+		'shunde5000': {
+			"faceCaptureList-effective-library"	: '',		//	有效库所有库
+			"faceCaptureList-register"			: 'hide',	//	注册状态
+			"faceCaptureList-algo-type"			: 'hide',	//	算法类型
+			"faceCaptureList-quality-score" 	: 'hide',	//	质量分数
+			"alarmDetail-history-video"			: ''		//	录像播放
+		}
 	}
 
-	if(permissionHide[top.projectID]) {
+	var permissionDetail = permissionConfig[top.projectID];
 
-		$.each(permissionHide[top.projectID], function (index, item) {
-			$('[permissionHide=' + item + ']').addClass('hide');
-		});	
+	if(permissionDetail) {
+
+		$('[dom-permission]').each(function () {
+
+			var permissionStr = $(this).attr('dom-permission');
+
+			if('undefined' !== typeof permissionDetail[permissionStr]) {
+				permissionDetail[permissionStr] ? $(this).addClass('hide') : $(this).removeClass('hide')
+			}
+		});
 	}
 }

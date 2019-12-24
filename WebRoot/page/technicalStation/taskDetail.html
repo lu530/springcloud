@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/taskDetail.css" >
+    <title>任务详情</title>
+</head>
+<body class='full-screen'>
+    <div class='full-screen mCustomScrollbar'>
+        <div class='task-detail-container taskDetail'>
+            <script id="taskDetail" type="text/x-tmpl">
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">任务类型：</div>
+                        <div class="task-unit-right fl">{%= o.TASK_TYPE %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">任务名称：</div>
+                        <div class="task-unit-right fl">{%= o.TASK_NAME %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">开始时间：</div>
+                        <div class="task-unit-right fl">{%= o.BEGIN_TIME %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">结束时间：</div>
+                        <div class="task-unit-right fl">{%= o.END_TIME %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl" title='图片相似度分数'>检索阈值：</div>
+                        <div class="task-unit-right fl">{%= o.THRESHOLD %}</div>
+                    </dd>
+                </dl>
+                {% if(TASK_TYPE === '1') { %}
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl" title='图片质量分数'>特征分数：</div>
+                        <div class="task-unit-right fl">{%= o.FACE_SCORE %}</div>
+                    </dd>
+                </dl>
+                {% } %}
+                {% if(TASK_TYPE === '2') { %}
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl" title='设备抓拍的图片数量'>检索数量：</div>
+                        <div class="task-unit-right fl">{%= o.TOP_N %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">库类型：</div>
+                        <div class="task-unit-right fl">{%= o.LIB_TYPE_DESC %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit'>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">库名称：</div>
+                        <div class="task-unit-right fl">{%= o.LIB_NAME %}</div>
+                    </dd>
+                </dl>
+                {% } %}
+                <dl class='col-md-6 task-unit '>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">设备名称：</div>
+                        <div class="task-unit-right fl multi-line-overflow" title="{%= o.DEVICE_NAMES %}">{%= o.DEVICE_NAMES %}</div>
+                    </dd>
+                </dl>
+                <dl class='col-md-6 task-unit '>
+                    <dd class="form-group">
+                        <div class="task-unit-left fl">设备ID：</div>
+                        <div class="task-unit-right fl multi-line-overflow" title="{%= o.DEVICE_IDS %}">{%= addSpace(o.DEVICE_IDS) %}</div>
+                    </dd>
+                </dl>
+            </script>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/taskDetail.js"></script>
+</html>
