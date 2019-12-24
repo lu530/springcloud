@@ -477,10 +477,10 @@
                         <dt class="filter-arrt">布控库</dt>
                         <dd class="filter-tag pt3" id="domicileAll">
                             <script id="childNodeListTemplateAll" type="x-tmpl">
-                                            {% for(var i = 0; i
-                                            < o.length; i++){ %} <label ORG_CODE="{%=o[i].DB_ID %}" NODE_ID="{%= o[i].DB_ID %}">{%= o[i].DB_NAME %}</label>
-                                                {% } %}
-                                        </script>
+                                {% for(var i = 0; i
+                                < o.length; i++){ %} <label ORG_CODE="{%=o[i].DB_ID %}" NODE_ID="{%= o[i].DB_ID %}">{%= o[i].DB_NAME %}</label>
+                                    {% } %}
+                            </script>
                         </dd>
                     </dl>
 

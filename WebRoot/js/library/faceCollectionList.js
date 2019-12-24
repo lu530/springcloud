@@ -1065,7 +1065,6 @@ function doSearch() {
         /*}else{
             filterSearch();
         }*/
-
     }
 }
 
