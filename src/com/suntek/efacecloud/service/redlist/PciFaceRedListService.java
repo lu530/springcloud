@@ -1,4 +1,4 @@
-package com.suntek.efacecloud.util;
+package com.suntek.efacecloud.service.redlist;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.index.SearchEngineException;
