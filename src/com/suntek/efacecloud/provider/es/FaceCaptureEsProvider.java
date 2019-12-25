@@ -163,6 +163,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
         String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
+        String viidObjectIds = StringUtil.toString(params.get("VIID_OBJECT_IDS"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -175,7 +176,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 
         // 避免 某个分片检索时间超出了超时时间，导致会出现每次结果不一样的情况
         query.setTimeout(30000L);
+        //如果VIID_OBJECT_ID不为空。根据VIID_OBJECT_ID字段查。提供给视图库使用
+        if (!StringUtil.isEmpty(viidObjectIds)) {
 
+            String[] viidArray = viidObjectIds.split(",");
+            query.addEqualCriteria("VIID_OBJECT_ID", viidArray);
+
+        }
         if (!StringUtil.isEmpty(treeNodeId)) {
 
             Object[] treeNodeIdArr = treeNodeId.split(",");
