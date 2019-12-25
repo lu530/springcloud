@@ -381,4 +381,8 @@ public class Constants {
 		deviceTypeMap.put("190", "6");
 		deviceTypeMap.put("189", "7");
 	}
+
+
+	/** 是否导入导出文件上传dfs */
+	public static final String IS_FILE_SAVE = "1";
 }

@@ -66,7 +66,8 @@ public class FaceFavoriteFileService
 		
 		String favoriteId = StringUtil.toString(params.get("FAVORITE_ID")); //--收藏夹ID
 		String fileId = StringUtil.toString(params.get("FILE_ID")); //--文件ID
-		
+		params.putAll(fileDao.getFavoriteFile(favoriteId, fileId));
+
 		boolean status = fileDao.deleteFavoriteFile(favoriteId, fileId);
 		if (status) {
 			context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
