@@ -17,10 +17,7 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -592,6 +589,15 @@ public class FaceDispatchedAlarmDao {
         String sql = "select ACTIVITY_NAME, ACTIVITY_TIME, ACTIVITY_PLACE, PURCHASER_SEAT_NO, PURCHASER_NAME,"
                 + " PURCHASER_IDENTITY, FACE_PIC, ENTRANCE_NAME from activity_info WHERE INFO_ID = ?";
         return jdbc.queryForList(sql, new Object[]{infoId});
+    }
+
+    public List<Map<String, Object>> queryActivityInfo(Set infoIds) {
+        if (infoIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        String sql = "select INFO_ID, ACTIVITY_NAME, ACTIVITY_TIME, ACTIVITY_PLACE, PURCHASER_SEAT_NO, PURCHASER_NAME,"
+                + " PURCHASER_IDENTITY, FACE_PIC, ENTRANCE_NAME from activity_info WHERE INFO_ID in " + SqlUtil.getSqlInParams(infoIds.toArray());
+        return jdbc.queryForList(sql, infoIds.toArray());
     }
 
     /**

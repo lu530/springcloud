@@ -1,5 +1,9 @@
 package com.suntek.efacecloud.util;
 
+import org.apache.commons.collections.map.HashedMap;
+
+import java.util.Map;
+
 /**
  * 应用基础常量类
  * @version 2017-06-27
@@ -22,9 +26,16 @@ public class Constants {
 	public final static String DATA_DEFENCE = "datadefence";
 	
 	public final static String MPPDB_NAME = "MPPDB_RES";
-	
+
+	/**
+	 * 厂商-海康
+	 */
 	public final static String HIK_VENDOR = "Hikvision";
-	
+	/**
+	 * 厂商-华为
+	 */
+	public final static String HW_VENDOR = "huawei";
+
 	//红名单比对阈值
 	public final static String RED_SIMILARITY = "RED_SIMILARITY";
 	
@@ -348,6 +359,26 @@ public class Constants {
     /** 华云算法 */
     public static final String HUAYUN_ALGO = "80003";
 
-	/** 是否导入导出文件上传dfs */
-	public static final String IS_FILE_SAVE = "1";
+	/** 有效库-有特征值*/
+	public static final String IS_CORRECT = "1";
+	/** 残缺库-特征值*/
+	public static final String IS_INCORRECT = "0";
+
+	/**
+	 * 视频云设备类型--中台设备类型对应关系
+	 * 中台暂时只支持：
+	 * 	'1：车辆卡口，2：人员卡口，3：微卡口，
+	 * 	4：特征摄像机，5：普通监控，6：人员结构化，
+	 * 	7：车辆结构化， 99：其他'
+	 */
+	public static Map<String, String> deviceTypeMap = null;
+
+    static{
+		deviceTypeMap = new HashedMap(4);
+		deviceTypeMap.put("193", "1");
+		deviceTypeMap.put("194", "2");
+		deviceTypeMap.put("131", "5");
+		deviceTypeMap.put("190", "6");
+		deviceTypeMap.put("189", "7");
+	}
 }

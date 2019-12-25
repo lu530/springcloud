@@ -24,7 +24,7 @@ var queryParams = {
     REPOSITORY_ID: ''
 };
 var imgUrl = UI.util.getUrlParam("imgUrl");
-var isBlack = isBlack();
+
 var hasLocalSearch = false;
 UI.control.remoteCall('platform/webapp/config/get', { "applicationName": "efacestore" }, function (resp) {
     var jsonObj = resp.attrList;
@@ -82,16 +82,6 @@ var cacheIDs = []; //存储当前检索的列表IDS
 //     'addressId': ['registerDbList'],//初始化人脸库内容
 //     'tmpl': 'childNodeListTemplate',//初始化模板
 // };
-// 算法查询
-var SFLIST = [
-    { ID: '', NAME: '全部' },
-    { ID: '112', NAME: '云从' },
-    { ID: '110', NAME: '依图' },
-    { ID: '111', NAME: '商汤' },
-    { ID: '113', NAME: 'Face++' },
-    { ID: '114', NAME: '云天励飞' },
-    { ID: '115', NAME: '像素' }
-]
 
 $(function () {
     UI.control.init();
@@ -568,13 +558,8 @@ function initEvent() {
     }
 }
 function initPage() {
-    // 初始化人脸库
-    UI.control.remoteCall('face/common/feishiAlgoLib', {}, function(resp) {
-        if(resp.DATA && resp.DATA.length > 0) {
-            initVanUnit(resp.DATA);
-            $(".faceLibrary").removeClass("hide");
-        }
-    }, function() {});
+    initVanUnit(); // 初始化飞识算法库列表
+
     if (!hasLocalSearch) {  // 初始化算法筛选列表
         appendSFList();
     } else {
@@ -695,7 +680,6 @@ function lacalSearch(imgList) {
         // $('#resultTab li').removeClass('disabled');
         if(imgList.length == 0) {
             initTmpl(JSON.stringify(imgArr)); //第三方搜索
-            if (isBlack) $('.faceLibrary').hide();
         }
     }, function (XMLHttpRequest, textStatus) {
         if (textStatus === 'timeout') {
@@ -722,8 +706,8 @@ function initTmpl(searchImgUrl) {
         THRESHOLD: THRESHOLD,
         TOP_NUMBER: TOP_NUMBER,
         IMG_URL_LIST: searchImgUrl,
-        ALGORITHM_ID: $('#sfVal').val() || getalgos(),
-        REPOSITORY_ID: $("#registerDb").val() || repositorys()
+        ALGORITHM_ID: $('#sfVal').val(),
+        REPOSITORY_ID: $("#registerDb").val()
     };
     UI.control.remoteCall('face/technicalTactics/IntegrationFaceSearch', params, function (resp) {
         var data = resp.DATA;
@@ -917,17 +901,16 @@ function initTmplRender (options) {
     return false;
 }
 
-function initVanUnit (data) {
-
-    var vanUnit = JSON.parse(JSON.stringify(data));
-
+function initVanUnit () {
+    initFeishiAlgoLib();
     var options = {
         ele: 'faceDb',
-        data: vanUnit,
+        data: CONSTANTS.RLK,
         tmpl: 'faceDbTmpl',
         callback: ''
     }
     initTmplRender(options);
+    $(".faceLibrary").removeClass("hide");
 }
 
 // 根据人物标签属性请求接口获取任务人物基本信息
@@ -962,8 +945,8 @@ function compareFilter() {
     var filterOptions = {
         THRESHOLD: $("#threshold").val(),
         TOP_NUMBER: $("#retrieveNum").val(),
-        ALGORITHM_ID: $('#sfVal').val() || getalgos(),
-        REPOSITORY_ID: $("#registerDb").val() || repositorys()
+        ALGORITHM_ID: $('#sfVal').val(),
+        REPOSITORY_ID: $("#registerDb").val()
     }
 
     for (var i in filterOptions) {
@@ -972,26 +955,6 @@ function compareFilter() {
         }
     }
     return isReload;
-}
-// 算法数组字符串
-function getalgos() {
-    var ALGORITHM_IDS = [];
-    for (var i = 0; i < SFLIST.length; i++) {
-        if (SFLIST[i].name != "全部" && SFLIST[i].NAME != "全部") {
-            ALGORITHM_IDS.push(SFLIST[i].id || SFLIST[i].ID);
-        }
-    }
-    return ALGORITHM_IDS.join(",");
-}
-// 人脸库字符串
-function repositorys() {
-    var REPOSITORY_IDS = [];
-    for (var i = 0; i < CONSTANTS.RLK.length; i++) {
-        if (CONSTANTS.RLK[i].DB_NAME != "全部") {
-            REPOSITORY_IDS.push(CONSTANTS.RLK[i].DB_ID);
-        }
-    }
-    return REPOSITORY_IDS.join(",");
 }
 
 // 删除数组指定值
@@ -1137,7 +1100,7 @@ function addID() {
     for (var i = 0; i < cacheIDs.length; i++) {
         $('#imgBox li').eq(i).attr('attrId', cacheIDs[i]);
         $('#resultTab li').eq(i).attr('attrId', cacheIDs[i]);
-        // $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
+        $('body').find('.personList').eq(i).attr('attrId', cacheIDs[i]);
         $('body').find('.recommendList').eq(i).attr('attrId', cacheIDs[i]);
     }
 }
@@ -1178,23 +1141,18 @@ function deleteResult(id) {
 
 // 渲染 "算法"的筛选列表
 function appendSFList() {
-    UI.control.remoteCall('face/common/feishiAlgoList', null, function (resp) {
-        var html = ''
-        if (resp.CODE == 0 && resp.DATA && resp.DATA.length > 0) { //请求成功重置 SFLIST
-            var data = resp.DATA;
-            data.unshift({ id: '', name: '全部' })
-            SFLIST = data;
-            for (var i = 0; i < data.length; i++) {
-                if (i == 0) {
-                    html += '<li class="tags-list-item active" val=' + data[i].id + '>' + data[i].name + "</li>";
-                } else {
-                    html += '<li class="tags-list-item" val=' + data[i].id + '>' + data[i].name + "</li>";
-                }
-            }
-            $('#sfList').append(html);
-            $("#sfWrap").removeClass("hide");
+    initFeishiAlgoList();
+    var data = CONSTANTS.SFLIST;
+    data.unshift({ id: '', name: '全部' });
+    for (var i = 0; i < data.length; i++) {
+        if (i == 0) {
+            html += '<li class="tags-list-item active" val=' + data[i].id + '>' + data[i].name + "</li>";
+        } else {
+            html += '<li class="tags-list-item" val=' + data[i].id + '>' + data[i].name + "</li>";
         }
-    }, function() {});
+    }
+    $('#sfList').append(html);
+    $("#sfWrap").removeClass("hide");
 }
 
 function setWidth() {
@@ -1223,19 +1181,11 @@ function isBase64(src) {
 //获取当前算法或者黑人算法
 function getFaceAndForeignAlgoType(){
 	var algoType;
-	if(isBlack){
-		var params = {
-				'MENUID': 'EFACE_faceVerification',
-				'RACE': 3
-			};
-		var serviceUrl = 'face/common/getAlgorithmByRace';
+    var params = {
+            'MENUID':'EFACE_faceVerification'
+        };
+    var serviceUrl = 'face/common/getFaceAlgoType';
 
-	}else{
-		var params = {
-				'MENUID':'EFACE_faceVerification'
-			};
-		var serviceUrl = 'face/common/getFaceAlgoType';
-	}
 	UI.control.remoteCall(serviceUrl, params, function (resp) {
 		algoType = resp && resp.data && resp.data.length > 0 ? resp.data[0].ALGORITHM_ID : '10003';
 	});

@@ -194,7 +194,7 @@ public class ConfigUtil {
     public static String getRedListDbId() {
         String redListDbId = "RED_LIST_DB";
         String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if(vendor.equals(Constants.HIK_VENDOR)){
+        if(Constants.HIK_VENDOR.equals(vendor)){
             redListDbId = AppHandle.getHandle(Constants.APP_NAME).getProperty("HIK_RED_LIST_DB", "");
         }
         return redListDbId;

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>综合检索</title>
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+		<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/library/comprehensiveSearch.css" />
+		<link rel="stylesheet" type="text/css" href="/efacecloud/css/theme/theme-azure-efacecloud.css" />
+	</head>
+	<body class=''>
+		<div class="tool-page-content pr">
+			<div class="img-compare pl20 pr20" id="imgCompare">
+				<div class="title-tools pr">
+					比对工具
+					<div class="compare-tools" id="twiceCompareTools">
+						比对工具
+						<span>
+							<svg class="pci-icon svg-icon pt5" aria-hidden="true">
+								<use xlink:href="#iconbufangbukong-daochu"></use>
+							</svg>
+						</span>
+					</div>
+				</div>
+				<div class="drap-img-area">
+					<div class="photo-title tc">图片1</div>
+					<div class="photo-tools mb10 pr photo-top">
+						<div class="percent-num pa percentNum">0%</div>
+						<div class="compare-img">
+							<img src="/efacecloud/images/noPhoto2.png" alt="" id="compareTopPhoto" foruploadimg="picBtn,uploadPicBtn">
+							<!-- <div class="pic-con isNeedHide">
+								<span class="pci-image-icon pci-image-display">
+									<svg class="pci-icon svg-icon" aria-hidden="true">
+										<use xlink:href="#iconjiansuotiaojian-genghuantupian"></use>
+									</svg>
+									<span class='upload-introduce'>点击上传图片</span>
+								</span>
+							</div> -->
+							<input class="file-style compareBtn" type="file" issearch=true id="uploadPicBtn" name="uploadPicBtn"/>
+						</div>
+					</div>
+					<div class="photo-tools pr photo-bottom">
+						<div class="compare-img">
+							<img src="/efacecloud/images/noPhoto2.png" alt="" id="compareBottomPhoto" foruploadimg="picBtn,imgBtn">
+							<!-- <div class="pic-con isNeedHide">
+								<span class="pci-image-icon pci-image-display">
+									<svg class="pci-icon svg-icon" aria-hidden="true">
+										<use xlink:href="#iconjiansuotiaojian-genghuantupian"></use>
+									</svg>
+									<span class='upload-introduce'>点击上传图片</span>
+								</span>
+							</div> -->
+							<input class="file-style compareBtn" type="file" issearch=true id="imgBtn" name="imgBtn"/>
+						</div>
+					</div>
+					<div class="photo-title tc">图片2</div>
+					<div class="algo-typy" id="algoType">
+						<script id="algoListTemplate" type="x-tmpl">
+							{% for(var i = 0; i
+								< o[i].length; i++){ %} <div class="algo-item{%= i==0?" active ":" " %}" algoId="{%= o[i][i].ALGORITHM_ID %}">{%= o[i][i].ALGORITHM_NAME %}</div>
+							{% } %}
+						</script>
+					</div>
+					<div class="tc clearfix">
+						<button class="btn btn-i-t active mr10" id="oneCompareOne">1 : 1 比对</button>
+						<button class="btn btn-i-t" id="emptyImg">清空</button>
+					</div>
+				</div>
+			</div>
+			<div class="right-panel pa" style='left: 0px;'>
+				<div class="pager-wrap">
+					<div class="pager-content">
+						<div class="page-title">
+							<span>综合检索</span>
+						</div>
+						<span class="page-close-btn pageCloseBtn">
+							<svg class="pci-icon svg-icon" aria-hidden="true">
+								<use xlink:href="#iconzhinengwajue-sanjicaidan-guanbi"></use>
+							</svg>
+						</span>
+						<div class="top-box">
+							<div class="photo-tools" id="photoTools">
+								<div class="top-pic-box">
+									<div class="img-wrap">
+										<img id="filterImg" src="/efacecloud/images/noPhoto2.png" foruploadimg="picBtn,uploadImg"> 
+										<!-- <span class="pci-image-icon pciImageIcon pci-image-display">
+											<svg class="pci-icon svg-icon" aria-hidden="true">
+												<use xlink:href="#iconjiansuotiaojian-genghuantupian"></use>
+											</svg>
+											<span class='upload-introduce'>点击上传图片</span>
+										</span> -->
+										<input class="file-style searchImgButton" type="file" id="uploadImg" name="uploadImg" issearch=true />
+									</div>
+									<ul>
+										<li class="re-upload">
+											<i class="icon-image2"></i>
+											<input class="file-style searchImgButton" type="file" id="picBtn" name="picBtn" issearch=true />
+										</li>
+										<li class="del-pic short-line" id="deleteImgBtn" title="删除"><i class="icon-trash"></i></li>
+										<li class="edit-pic" id="editImgBtn" title="编辑图片">
+											<i class="icon-pencil3"></i>
+										</li>
+										<li class="hide" attrimg="shotzoom" shotpic="left" fillback="true">
+											<span>
+												<img src="" alt="" class="check-shot hide">
+												<em class="hide">上传图片</em>
+											</span>
+											<span>
+												<img src="/efacecloud/images/noPhoto2.png" alt="">
+												<em class="hide"></em>
+											</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="filter-view">
+								<dl class="filter-bar search-bar pl0">
+									<dt class="filter-arrt tr pr10">关键词：</dt>
+									<dd class="filter-bar-search">
+										<div class="fifler-group">
+											<div class="search-box deepen-border-color">
+												<input class="search-input" type="text" id="searchText" placeholder="请输入姓名、证件号码" maxlength="18">
+												<span class="icon-search22" id="searchBtn"></span>
+											</div>
+										</div>
+									</dd>
+								</dl>
+								<dl class="filter-bar pl0">
+									<dt class="filter-arrt tr pr10">相似度阈值：</dt>
+									<dd class="filter-tag" id="thresholdValidate">
+										<input class="form-control search-similar searchSimilarCon" placeholder="请输入1-100之间的整数" ui-validate="{pattern:'integer',max:100,min:1}" ui-vtext="阈值应为1-100的整数" value="60">
+									</dd>
+								</dl>
+								<dl class="filter-bar pl0">
+									<dt class="filter-arrt tr pr10">检索算法：</dt>
+									<dd class="filter-tag">
+										<div class="tagslist arithmetic-filter arithmeticFilter" id="allATFilter">
+											<span class="tag-item active">全部</span>
+										</div>
+									</dd>
+								</dl>
+								<button class="btn-confirm btn btn-i-t" id="confirmSearch">确认检索</button>
+								<!-- <button class="btn-confirm btn close-page-btn closePageBtn">关闭页面</button>
+								<button class="btn-confirm btn compare-btn" id="twiceCompareTools">比对工具</button>
+								<button class="btn-confirm btn" id="confirmSearch">确认检索</button> -->
+							</div>
+						</div>
+						<div class="page-info-metro-contain">
+							<div class="page-info-metro full">
+								<div class="action-btn-group pt15 pb0">
+									<span scrollid="#faceCaptureLB" class="navItemBtn list-nav-unit active">路人库</span>
+									<span scrollid="#alarmLB" class="navItemBtn list-nav-unit">告警库</span>
+									<span scrollid="#MonitorLB" class="navItemBtn list-nav-unit">布控库</span>
+									<span scrollid="#personLB" class="navItemBtn list-nav-unit hide">一人一档</span>
+									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit" dom-permission="EFACE_faceVerificationArchive">身份核查库</span>
+								</div>
+							</div>
+						</div>
+						<div class="page-info-metro-contain nav-pb navPb hide">
+							<div class="page-info-metro full">
+								<div class="action-btn-group pt15 pb0">
+									<span scrollid="#faceCaptureLB" class="navItemBtn list-nav-unit active">路人库</span>
+									<span scrollid="#alarmLB" class="navItemBtn list-nav-unit">告警库</span>
+									<span scrollid="#MonitorLB" class="navItemBtn list-nav-unit">布控库</span>
+									<span scrollid="#personLB" class="navItemBtn list-nav-unit hide">一人一档</span>
+									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit" dom-permission="EFACE_faceVerificationArchive">身份核查库</span>
+								</div>
+							</div>
+						</div>
+						<div class='item-list tilelist vertical'>
+							<!-- 路人库 -->
+							<div attr-key='faceCaptureLB' id='faceCaptureLB'>
+								<div class='item-list-title'>
+									<span>路人库</span>
+									<span class='look-more lookmore' attr-title="路人库" attr-key='faceCaptureLB'>查看更多 > </span>
+								</div>
+								<div class='item-list-content itemContent clearfix'>
+									<div class='nodata'></div>
+								</div>
+							</div>
+							<!-- 告警库 -->
+							<div id='alarmLB' attr-key='alarmLB'>
+								<div class='item-list-title'>
+									<span>告警库</span>
+									<span class='look-more lookmore' attr-title="告警库" attr-key='alarmLB'>查看更多 > </span>
+								</div>
+								<div class='item-list-content itemContent clearfix'>
+									<div class='nodata'></div>
+								</div>
+							</div>
+							<!-- 布控库 -->
+							<div id='MonitorLB' attr-key='MonitorLB'>
+								<div class='item-list-title'>
+									<span>布控库</span>
+									<span class='look-more lookmore' attr-title="布控库" attr-key='MonitorLB'>查看更多 > </span>
+								</div>
+								<div class='item-list-content itemContent clearfix'>
+									<div class='nodata'></div>
+								</div>
+							</div>
+							<!-- 一人一档 -->
+							<div id='personLB' attr-key='personLB' class='hide'>
+								<div class='item-list-title'>
+									<span>一人一档</span>
+									<span class='look-more lookmore' attr-title="一人一档" attr-key='personLB'>查看更多 > </span>
+								</div>
+								<div class='item-list-content itemContent clearfix person-lb'>
+									<div class='nodata'></div>
+								</div>
+							</div>
+							<!-- 身份核查库 -->
+							<div id='feiShiLB' attr-key='feiShiLB' dom-permission="EFACE_faceVerificationArchive">
+								<div class='item-list-title'>
+									<span>身份核查库</span>
+									<span class='look-more lookmore' attr-title="身份核查库" attr-key='feiShiLB'>查看更多 > </span>
+								</div>
+								<div class='item-list-content itemContent clearfix'>
+									<div class='nodata'></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="frame-form-full">
+			<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+		</div>
+		<!-- 路人库模板 -->
+		<script id="faceCaptureLBTmpl" type="text/x-tmpl">
+			{% for(var i = 0; i < o.length; i ++) { %}
+			<div class="list-node-wrap">
+			 <dl class="list-node picMessage">
+				<dt class="node-img compare-img" attrimg="doublezoom">
+					<span class="compare-large">
+						<img src="{%=o[i].PIC%}" zoom-url="{%=o[i].PIC%}" style="width:100%">
+						<!-- <em>原图</em> -->
+					</span>
+					<span class="compare-small ml0">
+						<img src="{%=o[i].OBJ_PIC%}" zoom-url="{%=o[i].OBJ_PIC%}">
+						<!-- <em>抓拍图片</em> -->
+					</span>
+					{% if(o[i].SCORE!=""&&typeof o[i].SCORE!="undefined"){ %}
+						<b class="similar color-blue" key="similar" picMsg="相似度:{%=o[i].SCORE%}%">{%=o[i].SCORE%}%</b>
+					{% } %}
+				</dt>
+				  <dd class="node-text mt10">
+					<input type="checkbox" listview-check="" class="checkbox-opacity hide nodeCheck">
+					   <p class="similar-name">
+						<label picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">地点：</label>
+						<span title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</span>
+					</p>
+					   <p>
+						<label picMsg="时间:{%=renderNullToNotKnow(o[i].JGSK)%} <span deviceid='{%=o[i].DEVICE_ID%}' devicename = '{%= o[i].DEVICE_NAME %}' attr-time='{%=o[i].JGSK%}' devicename='{%= o[i].DEVICE_NAME %}' class='icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>">时间：</label>
+						<span title="抓拍时间：{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</span>
+					</p>
+					   <p>
+						<label picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">设备名称：</label>
+						<span title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</span>
+					</p>
+					<p>
+						<label picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%} <span deviceid='{%=o[i].DEVICE_ID%}' attr-time='{%=o[i].JGSK%}' class='portal-icon icon icon-search2 fr SearchByImage' title='以图搜图' style='color:#777;font-size:20px;'></span>">行政区域：</label>
+						<span title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</span>
+					</p>
+					   <p>
+						<label picMsg="注册状态:{%=o[i].RLTZ == '' ? '失败' : '成功'%}">注册状态：</label>
+						<span title="{%=o[i].RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</span>
+					</p>
+					   <p>
+						<label picMsg="算法类型:{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}">算法类型：</label>
+						<span title="{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</span>
+					</p>
+					<div class="btn-group fr">
+						{% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
+							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
+								<!-- <i class="btn-icon verification-icon"></i> -->
+								<svg class="pci-icon" aria-hidden="true">
+									<use xlink:href="#iconlurenkujiansuo-shenfenhecha"></use>
+								</svg>
+							</a>
+						{% } %}
+						<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
+							<!-- <i class="btn-icon trajectory-icon"></i> -->
+							<svg class="pci-icon" aria-hidden="true">
+								<use xlink:href="#iconlurenkujiansuo-guijifenxi"></use>
+							</svg>
+						</a>
+						<a fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%=o[i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+							<!-- <i class="btn-icon search-icon"></i> -->
+							<svg class="pci-icon" aria-hidden="true">
+								<use xlink:href="#iconlurenkujiansuo-jiansuo"></use>
+							</svg>
+						</a>
+						<a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[i].DEVICE_ID%}&deviceName={%=o[i].DEVICE_NAME%}&infoId={%=o[i].INFO_ID%}&pic={%=o[i].PIC%}&objPci={%=o[i].OBJ_PIC%}&jgsj={%=o[i].JGSK%}" title="收藏">
+							<!-- <i class="btn-icon collection-icon"></i> -->
+							<svg class="pci-icon" aria-hidden="true">
+								<use xlink:href="#iconlurenkujiansuo-shoucang"></use>
+							</svg>
+						</a>
+						<a fileUrl="{%=o[i].OBJ_PIC%}" 
+							LATITUDE="{%= o[i].LATITUDE %}"
+							LONGITUDE="{%= o[i].LONGITUDE %}"
+							attr-time="{%=renderNullToNotKnow(o[i].JGSK)%}" 
+							attr-addr="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" 
+							class="btn-i-t btn-xs locationBtn location-btn" 
+							ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
+							<!-- <i class="btn-icon location-icon"></i> -->
+							<svg class="pci-icon" aria-hidden="true">
+								<use xlink:href="#iconlurenkujiansuo-dingwei"></use>
+							</svg>
+						</a>
+					</div>		
+				  </dd>
+			</dl>
+			</div>
+			{% } %}
+		</script>
+		<!-- 告警库 -->
+		<script id="alarmLBTmpl" type="x-tmpl">
+			{% for(var i = 0; i < o.length; i ++) { %}
+			<div class="list-node-wrap" obj_id="{%=o[i].OBJECT_ID%}">
+				{% if(o[i].OBJECT_EXTEND_INFO && JSON.parse(o[i].OBJECT_EXTEND_INFO) && JSON.parse(o[i].OBJECT_EXTEND_INFO).ESCAPEE_FLAG){  %}
+				<i class="{%= parseInt(JSON.parse(o[i].OBJECT_EXTEND_INFO).ESCAPEE_FLAG) == 1 ?'zt-icon-big':'hide' %}"></i>
+				{%  }  %}
+				<dl class="list-node oh picMessage" style="min-height: 345px;">
+					<dt class="node-img compare-img" attrimg="doublezoom">
+						<span class="compare-large">
+							<img src="{%=o[i].ALARM_IMG%}" class="face">
+							<em>抓拍图片</em>
+						</span>
+						<span class="ml0 compare-small">
+							<img src="{%=o[i].TEMPLET_IMG%}" class="">
+							<em>布控图片</em>
+						</span> 
+						<b class="similar {%=renderColor(o[i].ALARM_LEVEL)%}" key="similar" picMsg="相似度:{%=o[i].SCORE%}%">{%=o[i].SCORE%}%</b>
+					</dt>
+					<dd class="node-text mt10 {%=o[i].FS_HIT==1?"fly-bg":""%}">
+						<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+						<p class="similar-name" picMsg="姓名:{%=renderNullToNotKnow(o[i].PERSON_NAME)%}">
+							<label>姓名：</label>
+							<span title="{%=renderNullToNotKnow(o[i].PERSON_NAME)%}">{%=renderNullToNotKnow(o[i].PERSON_NAME)%}</span>
+							{% if(o[i].STATUS_TXT){ %}
+							<span class="{%= renderTagColor(o[i].STATUS_TXT) %} tag">{%= o[i].STATUS_TXT %}</span>
+							{%  }  %}
+							{% if (o[i].KSS_NUM > 0) { %}
+							<span class="text-primary fr">进所&nbsp;{%= o[i].KSS_NUM %}&nbsp;次</span>
+							{% } %}
+						</p>
+						<p style="width:106%;" picMsg="证件:{%=renderNullToNotKnow(o[i].IDENTITY_ID)%}"><label>证件：</label><span title="证件号码：{%=renderNullToNotKnow(o[i].IDENTITY_ID)%}">{%=renderNullToNotKnow(o[i].IDENTITY_ID)%}</span></p>
+						<p picMsg="告警地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}"><label>告警地点：</label><span title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</span></p>
+						<p picMsg="布控库:{%=renderNullToNotKnow(o[i].DB_NAME)%}"><label>布控库：</label><span title="{%=renderNullToNotKnow(o[i].DB_NAME)%}">{%=renderNullToNotKnow(o[i].DB_NAME)%}</span></p>
+						<p picMsg="告警时间:{%=renderNullToNotKnow(dateRender(o[i].ALARM_TIME,19))%} <span deviceid='{%=o[i].ORIGINAL_DEVICE_ID%}' devicename='{%= o[i].DEVICE_NAME %}' attr-time='{%=o[i].ALARM_TIME%}' class='icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>"><label>告警时间：</label><span title="告警时间：{%=renderNullToNotKnow(dateRender(o[i].ALARM_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o[i].ALARM_TIME,19))%}</span></p>
+						<p picMsg="抓拍时间:{%=renderNullToNotKnow(dateRender(o[i].CAPTURE_TIME,19))%}"><label>抓拍时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(dateRender(o[i].CAPTURE_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o[i].CAPTURE_TIME,19))%}</span></p>
+						<p surveillanceTime = "{%= o[i].DISPATCHED_TIME %}" specialFlag="{%= o[i].SPECIAL_FLAG %}" class="{%= o[i].REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o[i].OBJECT_ID %}" picMsg="告警频次:{%= o[i].REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o[i].REPEATS%}"><a class = "{%= o[i].REPEATS == 1 ? '': 'frequency' %}">{%= o[i].REPEATS%} 次</a></span></p>
+						<div class="btn-group w100">
+							<span class="tr fr">
+								{% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
+								<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].ALARM_IMG%}">
+									<!-- <i class="btn-icon verification-icon"></i> -->
+									<svg class="pci-icon" aria-hidden="true">
+										<use xlink:href="#iconlurenkujiansuo-shenfenhecha"></use>
+									</svg>
+								</a>
+								{% } %}
+								<a class="btn-i-t btn-xs trajectory-searchAll" title="轨迹分析" url="{%=o[i].ALARM_IMG%}">
+									<!-- <i class="btn-icon trajectory-icon"></i> -->
+									<svg class="pci-icon" aria-hidden="true">
+										<use xlink:href="#iconlurenkujiansuo-guijifenxi"></use>
+									</svg>
+								</a>
+								<a class="btn-i-t btn-xs searchBtnAll" title="检索" fileUrl="{%=o[i].ALARM_IMG%}">
+									<svg class="pci-icon" aria-hidden="true">
+										<use xlink:href="#iconlurenkujiansuo-jiansuo"></use>
+									</svg>
+								</a>
+								<a class="btn-i-t  btn-xs controlDetailBtn" title="布控详情" objectid="{%=o[i].OBJECT_ID%}" idcard="{%= o[i].IDENTITY_ID %}" specialFlag = "{%= o[i].SPECIAL_FLAG %}" surveillanceTime = "{%= o[i].DISPATCHED_TIME %}">
+									<!-- <i class="btn-icon library-icon"></i> -->
+									<svg class="pci-icon" aria-hidden="true">
+										<use xlink:href="#iconbukongxiangqing1"></use>
+									</svg>
+								</a>
+
+								</a>
+								<a class="btn-i-t  btn-xs detailBtnAll" title="详情" ALARM_ID="{%=o[i].ALARM_ID%}" alarm-level="{%=o[i].ALARM_LEVEL%}" isfs="{%=o[i].FS_HIT%}"
+									name="{%=renderFields(o[i].FS_NAME)%}" idcard="{%=renderFields(o[i].FS_IDENTITY_ID)%}" time="{%=renderFields(o[i].FS_HIT_TIME)%}"
+									alarmtime="{%=o[i].ALARM_TIME%}" objid="{%=o[i].OBJECT_ID%}" curtime="{%=dateRender(o[i].ALARM_TIME,19)%}">
+									<!-- <i class="btn-icon more-icon"></i> -->
+									<svg class="pci-icon" aria-hidden="true">
+										<use xlink:href="#icongaojingxiangqing1"></use>
+									</svg>
+									
+								</a>
+							</span>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			{% } %}
+		</script>
+		<!-- 布控库 -->
+		<script id="MonitorLBTmpl" type="x-tmpl">
+		{% for(var i = 0; i < o.length; i ++) { %}
+			<div class="list-node-wrap pr" db_id="{%=o[i].DB_ID%}" person-id="{%=o[i].PERSON_ID%}">
+				<dl class="list-node">
+					<dt class="node-img person-img">
+					<span>
+					<img src="{%=o[i].PIC%}" attrimg="zoom" class="mb0">
+					</span>
+					</dt>
+					<dd class="node-text picMessage pt5">
+						<input type="checkbox" listview-check class="checkbox-opacity hide"/>
+						<p class="node-title similar-name" picMsg="姓名:{%=o[i].NAME?o[i].NAME:'暂无'%}">
+							<label>姓名：</label>
+							<span class="orange" title="{%=o[i].NAME?o[i].NAME:'暂无'%}">{%=o[i].NAME?o[i].NAME:'暂无'%}</span>
+						</p>
+						<p class="w100 fl" picMsg="性别:{%=o[i].SEX == 1 ? '男' :o[i].SEX== 2 ? '女' :'未知'%}">
+							<label>性别：</label>
+							<span>{%=o[i].SEX == 1 ? '男' :o[i].SEX== 2 ? '女' :"未知"%}</span>
+							{% if (o[i].KSS_NUM > 0) { %}
+							<span class="text-primary fr">进所&nbsp;<a href="javascript:;">{%= o[i].KSS_NUM %}</a>&nbsp;次</span>
+							{% } %}
+						</p>
+						<p style="width:108%;" picMsg="证件:{%=o[i].IDENTITY_ID%}">
+							<label>证件：</label>
+							<span title="证件号码：{%=o[i].IDENTITY_ID%}">{%=o[i].IDENTITY_ID%}</span>
+						</p>
+						<p style="width:108%;" picMsg="时间:{%=o[i].CREATE_TIME.substring(0,19)%}">
+							<label>时间：</label>
+							<span title="布控时间：{%=o[i].CREATE_TIME.substring(0,19)%}">{%=o[i].CREATE_TIME.substring(0,19)%}</span>
+						</p>
+						<p class="w100 fl" picMsg="布控人:{%=o[i].CREATOR%}">
+							<label pictitle="">布控人：</label>
+							<span picVal="{%=o[i].CREATOR%}">{%=o[i].CREATOR%}</span>
+						</p>
+						<p class="w100 fl" picMsg="布控库名称:{%=o[i].DB_NAME%}">
+							<label pictitle="">布控库名称：</label>
+							<span picVal="{%=o[i].DB_NAME%}">{%=o[i].DB_NAME%}</span>
+						</p>
+						<p class="w100 fl"><label>布控单位：</label><span>{%=o[i].DEPT_NAME%}</span></p>
+						
+						<div class="btn-group fr">
+							
+							<a class="btn btn-i-t btn-xs collectionBtn hide" title="收藏">
+								<i class="btn-icon collection-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs nb deleteBtn hide" title="删除" person-id="{%=o[i].PERSON_ID%}">
+								<i class="btn-icon deleteItem-icon"></i>
+							</a>
+							
+							<a class="btn-i-t btn-xs nb editBtn hide" title="编辑" PERSON_ID="{%= o[i].PERSON_ID %}" DB_ID="{%= o[i].DB_ID %}">
+								<i class="btn-icon edit-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs nb searchPassBtn" title="路人检索" PERSON_ID="{%= o[i].PERSON_ID %}" DB_ID="{%= o[i].DB_ID %}">
+								<!-- <i class="btn-icon search-pass-icon"></i> -->
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-sousuo"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-xs nb toHisBtn" title="历史告警" OBJECT_ID="{%= o[i].OBJECT_ID %}" PERSON_ID="{%= o[i].PERSON_ID %}" DB_ID="{%= o[i].DB_ID %}">
+								<!-- <i class="btn-icon his-alarm-icon"></i> -->
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#icongaojingxiangqing1"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-xs nb detailBtn" title="详情" PERSON_ID="{%= o[i].PERSON_ID %}" DB_ID="{%= o[i].DB_ID %}">
+								<!-- <i class="btn-icon more-icon"></i> -->
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-rukushenhe-gengduo"></use>
+								</svg>
+							</a>
+						</div>
+					</dd>
+				</dl>
+				{% if(o[i].SCORE) { %}
+				<div class="pic-similar color-red">{%=o[i].SCORE %}%</div>
+				{% } %}
+			</div>
+		{% } %}
+		</script>
+		<!-- 一人一档 -->
+		<script id="personLBTmpl" type="x-tmpl">
+			{% for(var i = 0; i < o.length; i ++) { %}
+			<div class="list-node-wrap ellipsis-wrap pr" personId="{%= o[i].PERSON_ID %}" idcard="{%= o[i].IDENTITY_ID%}">
+				<dl class="w95 list-node compare-pic">
+					
+					<dt class="node-img person-img">
+						<span>
+							<img src="{%= renderImg(o[i].PIC) %}" class="rIMG" attrimg="zoom">
+						</span>
+						<p class="total-num">
+							<i class="totalnum-icon"></i>
+							<span>共{%= o[i].FACE_NUM %}张</span>
+						</p>
+					</dt>
+					<dd class="node-text pl10 pt10">
+						<input type="checkbox" listview-check="" class="checkbox-opacity hide nodeCheck">
+						<p >
+							<label>姓名:</label>
+							<span class="ellipsis-list" title="{%= o[i].NAME %}">{%= o[i].NAME %}</span>
+							{% if (o[i].KSS_NUM > 0) { %}
+								<span class="fr tr text-primary">进所{%= o[i].KSS_NUM %}次</span>
+							{% } %}
+						</p>
+						<p>
+							<label>身份证号:</label>
+							<span class="ellipsis-list" title="{%= o[i].IDENTITY_ID %}">{%= o[i].IDENTITY_ID %}</span>
+						</p>
+						<p>
+							<label>个人信息:</label>
+							<span class="ellipsis-list" title="{%= renderAddress(o[i].PERMANENT_ADDRESS) %}/{%= renderSex(o[i].SEX) %}">{%= renderAddress(o[i].PERMANENT_ADDRESS) %}/{%= renderSex(o[i].SEX) %}</span>
+						</p>
+						<p class="hide">
+							<label>入库状态:</label>
+							<span title="">222222222222222</span>
+						</p>
+						<div class="tags">
+							<label>人员标签:</label>
+							{%	var tags = renderTag(o[i].PERSON_TAG_LIST); %}
+							{% if(tags.length>0){  %}
+							<div class="tag-line-wrap">
+								<span class="tag-line clearfix tagLine">
+									{%= renderTagArr(tags,1)%}
+								</span>
+							</div>
+							{% }else{ %}
+								<span>暂无</span>
+							{% }  %}
+							<span class="more hide">
+								<span class="tagmore-icon moreTagsBtn"></span>
+								<div class="more-tags clearfix moreTags">
+									{%= renderTagArr(tags)%}
+								</div>
+							</span>
+						</div>
+						<div class="btn-group">
+							<a class="btn-i-t fl tagEdit pr5 hide" title="{%= o[i].IS_WORK == 1 ? '未打标签' : '已打标签' %}" identity-id = "{%= o[i].IDENTITY_ID %}" data-name="{%= o[i].NAME %}" person-id="{%= o[i].PERSON_ID %}" kss-num='{%= o[i].KSS_NUM %}'>
+								<svg class="pci-icon svg-icon {%= o[i].IS_WORK == 1 ? 'red' : 'green' %}" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-biaoqian1"></use>
+								</svg>
+								
+							</a>
+							<!-- <a class="btn-i-t btn-xs btn-search pr5" title="搜索 ">
+								<i class="btn-icon search-icon"></i>
+							</a>
+							<a class="btn-i-t btn-xs btn-more searchPage pr5" title="详情 " kss-num='{%= o[i].KSS_NUM %}'>
+								<i class="btn-icon more-icon"></i>
+							</a> -->
+							<a class="btn-i-t btn-com btn-search pr5" title="搜索 ">
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-sousuo"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-com btn-more searchPage" title="详情 " kss-num='{%= o[i].KSS_NUM %}'>
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconyirenyidang-renyuandangan-xiangqing1"></use>
+								</svg>
+							</a>
+							<a class="btn-i-t btn-com searchByImage" title="以图搜图 " imgSrc='{%= renderImg(o[i].PIC) %}'>
+								<svg class="pci-icon svg-icon" aria-hidden="true">
+									<use xlink:href="#iconlurenkujiansuo-jiansuo"></use>
+								</svg>
+							</a>
+						</div>
+					</dd>
+				</dl>
+				{% if(o[i].SCORE) { %}
+					<div class="pic-similar color-red">{%=o[i].SCORE %}%</div>
+				{% } %}
+			</div>
+			{% } %}
+		</script>
+		<!-- 身份核查库 -->
+		<script id="feiShiLBTmpl" type="x-tmpl">
+			<div class="personList listviewImgBox">
+				{% for(var i=0;i<o.length;i++){ %}
+				<div class="active person-item">
+					<span class="title">{%=CONSTANTS.SF[o[i].name]?CONSTANTS.SF[o[i].name]:'未知算法'%}</span>
+					<span class="num">（{%=o[i].length%}）</span>
+					<span class="distinguish"></span>
+					<span class="setting-down icon-uniE91A"></span>
+					<div class="tilelist vertical pt10">
+						{% for(var j=0;j<o[i].data.length;j++){ %}
+						<div class="list-node-wrap" personId="{%=o[i].data[j].PERSON_ID%}">
+							<dl class="list-node" name="{%= o[i].data[j].NAME %}" identity-id="{%= o[i].data[j].PERSON_ID %}" identity-type="{%= o[i].data[j].IDENTITY_TYPE %}">
+								<dt class="node-img person-img" attrimg="doublezoom">
+									<span class="hide">
+										<img class="comparePic" src="">
+									</span>
+									<span>
+										<img src="{%=o[i].data[j].IMG_URL%}" class="mb0">
+									</span>
+									<b class="similar {%=renderColor(o[i].data[j].ALARM_LEVEL)%}" key="similar">{%= o[i].data[j].SIMILARITY %}%</b>
+								</dt>
+								<dd class="node-text picMessage">
+									<input type="checkbox" listview-check class="checkbox-opacity hide"/>
+									<p class="node-title similar-name" picMsg="姓名:{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}" title="{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}">
+										<span class="orange">
+											<a info="{%=o[i].data[j].IMG_URL%}" info2="{%=o[i].data[j].REPOSITORY_NAME%}" info3="{%=o[i].data[j].SIMILARITY%}">{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}</a>
+										</span>
+									</p>
+									<p class="fl m0" title="{%=o[i].data[j].REPOSITORY_NAME%}" picMsg="人脸库:{%=o[i].data[j].REPOSITORY_NAME%}">
+										<span title="人脸库：{%=o[i].data[j].REPOSITORY_NAME%}">{%=o[i].data[j].REPOSITORY_NAME%}</span>
+									</p>
+									<p class="fl" title="{%= o[i].data[j].PERSON_ID %}" picMsg="证件号码:{%= o[i].data[j].PERSON_ID %}">
+										<span title="证件号码：{%= o[i].data[j].PERSON_ID %}">{%= o[i].data[j].PERSON_ID %}</span>
+									</p>
+									<p class="hide" picMsg="相似度:{%= o[i].data[j].SIMILARITY %}">
+										<span>{%= o[i].data[j].SIMILARITY %}</span>
+									</p>
+									{% if(!isBase64(o[i].data[j].IMG_URL)) { %}
+									<div class="btn-group fr">
+										<a class="btn-i-t btn-xs lrjs-search" title="路人检索" url="{%=o[i].data[j].IMG_URL%}">
+											<!-- <i class="btn-icon search-icon"></i> -->
+											<svg class="pci-icon svg-icon" aria-hidden="true">
+												<use xlink:href="#iconlurenkujiansuo-jiansuo"></use>
+											</svg>
+										</a>
+										<a class="btn-i-t btn-xs yryd-search" title="一人一档检索" url="{%=o[i].data[j].IMG_URL%}">
+											<!-- <i class="btn-icon yryd-icon"></i> -->
+											<svg class="pci-icon svg-icon" aria-hidden="true">
+												<use xlink:href="#iconyirenyidang-renyuandangan-sousuo"></use>
+											</svg>
+										</a>
+										<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].data[j].IMG_URL%}">
+											<!-- <i class="btn-icon trajectory-icon"></i> -->
+											<svg class="pci-icon" aria-hidden="true">
+												<use xlink:href="#iconlurenkujiansuo-guijifenxi"></use>
+											</svg>
+										</a>
+									</div>
+									{% } %}
+								</dd>
+							</dl>
+						</div>
+						{% } %}
+					</div>
+				</div>
+				{% } %}
+			</div>
+		</script>
+	</body>
+	<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+	<script type="text/javascript" src="/ui/plugins/ajaxfileupload.js"></script>
+	<script type="text/javascript" src="/ui/plugins/font4.0/iconfont.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/shunde5000/common4.0.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/specialUpload.js"></script>
+
+	<script type="text/javascript" src="/efacecloud/js/shunde5000/library/comprehensiveSearchUrl.js"></script>
+	<script type="text/javascript" src="/efacecloud/js/shunde5000/library/comprehensiveSearch.js"></script>
+</html>

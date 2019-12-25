@@ -1,5 +1,16 @@
 package com.suntek.efacecloud.util;
 
+import com.suntek.eap.EAP;
+import com.suntek.eap.blob.BlobStore;
+import com.suntek.eap.log.ServiceLog;
+import com.suntek.eap.util.DateUtil;
+import com.suntek.eap.util.IdentityUtil;
+import com.suntek.eap.util.StringUtil;
+import com.suntek.eap.util.ZipUtil;
+import com.suntek.efacecloud.dao.FaceArchivesDao;
+import com.suntek.efacecloud.log.Log;
+import org.apache.commons.io.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,24 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-
-import com.suntek.eap.EAP;
-import com.suntek.eap.blob.BlobStore;
-import com.suntek.eap.log.ServiceLog;
-import com.suntek.eap.util.DateUtil;
-import com.suntek.eap.util.IdentityUtil;
-import com.suntek.eap.util.StringUtil;
-import com.suntek.eap.util.ZipUtil;
-import com.suntek.efacecloud.dao.FaceArchivesDao;
-import com.suntek.efacecloud.log.Log;
-
 /**
  * 人员导入工具类
  * @version 2017-07-27
  * @since 1.0
  * @author swq
- * @Copyright (C)2017 , Suntektech
  *
  */
 public class PersonImportUtil {

@@ -15,30 +15,17 @@ import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
-import com.suntek.efacecloud.util.ConfigUtil;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
-import com.suntek.efacecloud.util.DevicesRedisUtil;
-import com.suntek.efacecloud.util.ExcelFileUtil;
-import com.suntek.efacecloud.util.FileDowloader;
-import com.suntek.efacecloud.util.ModuleUtil;
+import com.suntek.efacecloud.util.*;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import net.sf.json.JSONArray;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * 人脸抓拍库查询 efacecloud/rest/v6/face/capture
- * 
+ *
  * @author wsh
  * @since 1.0.0
  * @version 2017-06-29
@@ -63,7 +50,8 @@ public class FaceCaptureProvider {
 			if (StringUtil.isEmpty(deviceIds) && !context.getUserCode().equals("admin")) {
 				Set<String> deviceSet = DevicesRedisUtil.getDeviceList(context.getUserCode(), Constants.DEVICE_TYPE_FACE);
 				if (!ObjectUtils.isEmpty(deviceSet)) {
-					context.putParameter("DEVICE_IDS", String.join(",", deviceSet));
+					deviceIds = String.join(",", deviceSet);
+					context.putParameter("DEVICE_IDS", deviceIds);
 				}
 			}
 			//根据来源选择设备
@@ -197,11 +185,11 @@ public class FaceCaptureProvider {
 					.getResponse().getData("ALGO_LIST");
 			List<Map<String, Object>> resultList = new ArrayList<>();
 			//添加来源字段
-			String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
+//			String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
 //			boolean isAdd = !StringUtil.isEmpty(sourceType);
 			for (Map<String, Object> algoDataMap : tempResultList) {
 				Map<String, Object> tempMap = new HashMap<String, Object>();
-				
+
 				ServiceLog.error("路人库检索返回的行数据：" + algoDataMap);
 				ArrayList<Map<String, Object>> algoList = (ArrayList<Map<String, Object>>) algoDataMap
 						.get("LIST");
@@ -212,17 +200,21 @@ public class FaceCaptureProvider {
 				String algorithmName = StringUtil.toString(algoMap
 						.get("ALGORITHM_NAME"));
 				List<Map<String, Object>> infoList = algoList;
-				
+
 				if (infoList.size() == 0) {
 					ServiceLog.debug("算法代码为" + algorithmCode + "的算法"
 							+ algorithmName + "数据为空,过滤掉该算法返回");
 					continue;
 				}
-				Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
+//              Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
 //				if(isAdd) {
 //					Set<String> set = infoList.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
 //					idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
 //				}
+
+                //一次性查询获得infoId为key的数据集
+                Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
+
 				for (Map<String, Object> info : infoList) {
 					String createTime = StringUtil.toString(info
 							.get("CREATETIME"));
@@ -232,17 +224,11 @@ public class FaceCaptureProvider {
 								DateUtil.standard_style);
 					}
 					info.put("CREATETIME", createTime);
+
 					String infoId = StringUtil.toString(info.get("INFO_ID"));
-					try{
-						if(!StringUtils.isBlank(infoId)){
-							List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-							for (Map<String, Object> actMap : actList) {
-								info.putAll(actMap);
-							}
-						}
-					}catch(Exception e){
-						ServiceLog.error("不存在activity_info表: " + e);
-					}
+					if (actMap.containsKey(infoId)) {
+                        info.putAll(actMap.get(infoId));
+                    }
 					//是否添加来源类型
 //					if(isAdd) {
 //						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
@@ -259,6 +245,27 @@ public class FaceCaptureProvider {
 		}
 		return map;
 	}
+
+    /**
+     * 一次查询activity_info表
+     * @param infoList
+     * @return
+     */
+    public Map<String, Map<String, Object>> getActivityMap(List<Map<String, Object>> infoList) {
+        Set<String> infoIds = infoList.stream().map(o -> StringUtil.toString(o.get("INFO_ID"))).collect(Collectors.toSet());
+        Map<String, Map<String, Object>> actMap = Collections.emptyMap();
+        if (!infoIds.isEmpty()) {
+            try {
+                List<Map<String, Object>> actList = dao.queryActivityInfo(infoIds);
+                actMap = actList.stream().collect(Collectors.toMap(a -> StringUtil.toString(a.get("INFO_ID")), a -> a, (oldValue, newValue) -> newValue));
+            } catch (Exception e) {
+                ServiceLog.error("不存在activity_info表: " + e);
+            }
+        }
+        return actMap;
+    }
+
+
 
 	@SuppressWarnings({ "unchecked", "serial" })
 	@BeanService(id = "exportFace", description = "路人库检索导出")

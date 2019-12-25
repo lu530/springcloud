@@ -21,11 +21,19 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.DeviceInfoDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.model.DeviceEntity;
+import com.suntek.efacecloud.provider.FaceCaptureProvider;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
-
 import net.sf.json.JSONArray;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人脸抓拍库查询 efacecloud/rest/v6/face/capture
@@ -37,8 +45,9 @@ import net.sf.json.JSONArray;
 public class FaceCaptureEsProvider extends IndexSearchProvider {
 
     private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
-    
-    private boolean isBlack = false;// 特定外籍人项目
+
+    // 是否特定外籍人项目
+    private boolean isBlack = ConfigUtil.isBlack();
 
     public FaceCaptureEsProvider() {
         super(EAP.bigdata);
@@ -68,7 +77,10 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 //			Set<String> set = resultSet.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
 //			idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
 //		}
-        
+
+        // 一次查询activity_info表
+        Map<String, Map<String, Object>> actMap = new FaceCaptureProvider().getActivityMap(resultSet);
+
         for (Map<String, Object> map : resultSet) {
 
             String jgsk = StringUtil.toString(map.get("JGSK"));
@@ -88,8 +100,8 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             try{
             	if(!StringUtils.isBlank(infoId)){
             		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                    for (Map<String, Object> actMap : actList) {
-                        map.putAll(actMap);
+                    for (Map<String, Object> actMap1 : actList) {
+                        map.putAll(actMap1);
                     }
             	}
             }catch(Exception e){
@@ -150,6 +162,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String timeSortType = StringUtil.toString(params.get("TIME_SORT_TYPE"), "desc");
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
+        String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -227,6 +240,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         }
 
         query.addSort("JGSK", timeSortType);
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if ("有效库".equals(isEffective)) {
+            queryBuilder.must(QueryBuilders.existsQuery("RLTZ"));
+        } else if ("残缺库".equals(isEffective)) {
+            queryBuilder.mustNot(QueryBuilders.existsQuery("RLTZ"));
+        }
+        query.addQueryBuilder(queryBuilder);
     }
 
 }

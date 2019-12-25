@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>com.suntek</groupId>
 			<artifactId>service-proxy</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -142,7 +142,12 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/WebRoot/WEB-INF/lib/eap-ui-1.0.2.jar</systemPath>
 		</dependency>
-
+		<dependency>
+			<groupId>com.hikvision</groupId>
+			<artifactId>artemis-http-client</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -252,6 +257,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.framework.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -275,7 +281,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.7.0</version>
@@ -285,7 +291,7 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.7.0</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -294,11 +300,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.0.5</version>
-        </dependency>
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.0.5</version>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 

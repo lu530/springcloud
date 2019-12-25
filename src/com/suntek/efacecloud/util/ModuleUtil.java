@@ -1,24 +1,5 @@
 package com.suntek.efacecloud.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.blob.BlobType;
 import com.suntek.eap.core.app.AppHandle;
@@ -31,6 +12,25 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.util.calendar.DateUtil;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.sp.sms.util.SmsUtil;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 应用基础模块方法类
@@ -643,26 +643,28 @@ public class ModuleUtil {
     /**
      * 获取核验算法
      * 
-     * @param checkAlgoArray
+     * @param checkAlgoMap
      * @return
      */
-    public static List<Map<String, Object>> getCheckAlgoList(com.alibaba.fastjson.JSONObject checkAlgoObject) {
+    public static List<Map<String, Object>> getCheckAlgoList(Map checkAlgoMap) {
 
         List<Map<String, Object>> checkAlgoList = new ArrayList<>();
 
-        if (null != checkAlgoObject) {
+        if (null != checkAlgoMap) {
 
-            for (String algoType : checkAlgoObject.keySet()) {
-
-                String algoName = ModuleUtil.getNameByAlgoType(Integer.parseInt(algoType));
+            for (Object algoType : checkAlgoMap.keySet()) {
+    
+                Map algoTypeMap = (Map) checkAlgoMap.get(algoType);
+    
+                String algoName = ModuleUtil.getNameByAlgoType(Integer.parseInt(algoType.toString()));
                 if (!StringUtil.isEmpty(algoName)) {
 
-                    Map<String, Object> map = new HashMap<String, Object>();
+                    Map<String, Object> map = new HashMap<>();
 
-                    String score = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("SCORE"));
-                    String errorNo = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("ERROR_NO"), "");
-                    String errorMsg = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("ERROR_MSG"), "");
-                    String status = StringUtil.toString(checkAlgoObject.getJSONObject(algoType).get("STATUS"), "0");
+                    String score = StringUtil.toString(algoTypeMap.get("SCORE"));
+                    String errorNo = StringUtil.toString(algoTypeMap.get("ERROR_NO"), "");
+                    String errorMsg = StringUtil.toString(algoTypeMap.get("ERROR_MSG"), "");
+                    String status = StringUtil.toString(algoTypeMap.get("STATUS"), "0");
                     if (StringUtil.isEmpty(score) || score.equals("-1") || score.equals("0")) {
                         if (!StringUtil.isEmpty(errorMsg)) {
                             map.put("SCORE", errorMsg);
@@ -883,38 +885,49 @@ public class ModuleUtil {
             Log.smsLog.debug("手机为空，取消发送");
         }
     }
-    // public static Map<Integer,Integer> getAlgoTypeThresholdMap(String algoListStr ){
-    //
-    // Map<Integer,Integer> algoTypeThreshold = new HashMap<Integer,Integer>();
-    //
-    // if (StringUtil.isEmpty(algoListStr)) {
-    // String[] algos = ModuleUtil.getAlgoType();
-    //
-    // for (String algo : algos) {
-    // algoTypeThreshold.put(Integer.valueOf(algo), 60);
-    // }
-    // return algoTypeThreshold ;
-    // }
-    //
-    // JSONArray algoList = JSONArray.parseArray(algoListStr);
-    // for (int i = 0; i < algoList.size(); i++) {
-    //
-    // com.alibaba.fastjson.JSONObject jo = algoList.getJSONObject(i);
-    // int algoType = jo.getInteger("ALGO_TYPE");
-    // int threShold = jo.getInteger("THRESHOLD");
-    //
-    // if (algoType == -1) {
-    // String[] algos = ModuleUtil.getAlgoType();
-    //
-    // for (String algo : algos) {
-    // algoTypeThreshold.put(Integer.valueOf(algo), threShold);
-    // }
-    // return algoTypeThreshold ;
-    // }
-    //
-    // algoTypeThreshold.put(algoType,threShold);
-    // }
-    //
-    // return algoTypeThreshold;
-    // }
+    // 将包含旧dfs地址的而图片替换成新地址
+    public static String renderPic(String picUrl){
+        if(!StringUtil.isEmpty(picUrl)){
+            String oldDfsUrl = AppHandle.getHandle(Constants.CONSOLE).getProperty("OLD_FDFS_URL",
+                    "http://68.125.72.208:8088/,http://68.125.72.196:8088/");
+            String dfsUrl = AppHandle.getHandle(Constants.CONSOLE).getProperty("FDFS_URL",
+                    "http://68.125.54.161:8088/");
+            String[] urlStr = oldDfsUrl.split(",");
+            if(urlStr.length == 0){
+                return picUrl;
+            }
+            if(isContains(urlStr, picUrl)){
+                return dfsUrl + picUrl.substring(getCharacterPosition(picUrl)+1, picUrl.length());
+            }
+        }
+        return picUrl;
+    }
+
+    // 字符串中是否包含字符数组中任意一个元素
+    public static Boolean isContains(String[] arrStr, String target){
+        List<Integer> list = new ArrayList<>();
+        for (String s : arrStr) {
+            if(target.contains(s)){
+                list.add(1);
+                break;
+            }
+        }
+        if(list.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    // 获取字符串中"/"第三次出现索引
+    public static int getCharacterPosition(String string){
+        Matcher slashMatcher = Pattern.compile("/").matcher(string);
+        int mIdx = 0;
+        while(slashMatcher.find()) {
+            mIdx++;
+            if(mIdx == 3){
+                break;
+            }
+        }
+        return slashMatcher.start();
+    }
 }

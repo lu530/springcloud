@@ -84,9 +84,9 @@ $(function () {
     initDateTimeControl(timeOption);
     //调用页面回填
     fatherSearchDevice();
-    initFilterBar(); //先加载人脸来源再加载数据
+    // initFilterBar(); //先加载人脸来源再加载数据
     getDeviceModule();  //定义在common中
-    //initData();
+    initData();
     topSpecialUploadPic();
     initWaterMark();
    	initPage();
@@ -121,6 +121,7 @@ function initPage(){
     	$(".picUpdata").removeClass("hide");
     	$(".top-box").removeClass("pl0");
     }
+    domPermission();
 }
 function hideModule(selector) {
     selector.addClass("hide");
@@ -226,6 +227,10 @@ function initEvent() {
             type = $(this).attr('type');
         var url = '/efacecloud/page/library/faceCaptureDetail.html?id=' + id + '&type=' + type;
         UI.util.showCommonWindow(url, '人脸详情', 1000, 600, function(data) {});
+    });
+    //人员库切换
+    $("#personBase .tag-item").click(function (e) {
+        $(this).addClass('active').siblings().removeClass('active');
     })
 
     //有人脸检索的选中问题
@@ -1047,6 +1052,7 @@ function doSearch() {
             queryParams.SOURCE_TYPE = deviceType;
         }
 
+        queryParams.IS_EFFECTIVE = $("#personBase .tag-item.active").attr("val");
         //检索案件录入
         /*if(isOpenSearchCause()){*/
         var searchParams = queryParams;
@@ -1059,7 +1065,6 @@ function doSearch() {
         /*}else{
             filterSearch();
         }*/
-
     }
 }
 

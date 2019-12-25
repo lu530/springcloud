@@ -9,15 +9,6 @@ var options = {
         'endTime' :$('#endTime'),
         'callback': function () {}
     },
-    SFLIST: [
-        // { ID: '110', NAME: '依图' },
-        // { ID: '111', NAME: '商汤' },
-        // { ID: '112', NAME: '云从' },
-        // { ID: '113', NAME: 'Face++' },
-        // { ID: '115', NAME: '像素' },
-        // { ID: '117', NAME: '深醒' },
-        // { ID: '118', NAME: '网力' }
-    ],
     params: {
         faceCapture: {
             ALGO_LIST:'[{"ALGO_TYPE":"10003","THRESHOLD":"60"}]',
@@ -36,7 +27,7 @@ var options = {
             TOP_NUMBER: '10',
             IMG_URL_LIST: '',
             ALGORITHM_ID: '',
-            REPOSITORY_ID: CONSTANTS.RLK.map(function (item) { return item.DB_ID }).filter(function (item) {return item !== '-1'}).join(',')
+            REPOSITORY_ID: ''
         },
         // 布控
         monitor: {
@@ -75,12 +66,13 @@ $(function () {
 
 
 function initPage () {
-    
-    sFList();
+    initFeishiAlgoList();
+    initFeishiAlgoLib();
 
     //  身份核查算法列表参数
-    options.params.faceSearch.ALGORITHM_ID = options.SFLIST.map(function (item) {return item.id}).join(',');
-
+    options.params.faceSearch.ALGORITHM_ID = CONSTANTS.SFLIST.map(function (item) {return item.id}).join(',');
+    options.params.faceSearch.REPOSITORY_ID = CONSTANTS.RLK.map(function (item) { return item.DB_ID })
+                                                .filter(function (item) {return item !== '-1'}).join(',')
     // topSpecialUploadPic();
     uploadPic();
 
@@ -144,16 +136,6 @@ function sendConfirmPersonRequest (params) {
 		data: params
 
 	}, true);
-}
-
-function sFList() {
-
-    UI.control.remoteCall('face/common/feishiAlgoList', null, function (resp) {
-        if (resp.CODE == 0 && resp.DATA && resp.DATA.length > 0) {
-            var data = resp.DATA;
-            options.SFLIST = data;
-        }
-    }, function() {});
 }
 
 function doSearch() {
