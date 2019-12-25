@@ -247,7 +247,7 @@ public class FaceRedListService {
                 context.putParameter("THRESHOLD", threshold);
                 context.putParameter("TOP_N", 30);
                 context.putParameter("PIC", pic);
-                CollisionResult result = this.faceSearchRedListDelegate.faceOne2NSearch(context, pic);
+                CollisionResult result = this.faceRedListDelegate.faceOne2NSearch(context, pic);
                 //红名单中比中
                 if (result != null && result.getCode() == 0) {
                     List<Map<String, Object>> collisionList = result.getList();

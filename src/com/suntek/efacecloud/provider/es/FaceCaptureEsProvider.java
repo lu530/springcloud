@@ -100,8 +100,8 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             try{
             	if(!StringUtils.isBlank(infoId)){
             		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                    for (Map<String, Object> actMap : actList) {
-                        map.putAll(actMap);
+                    for (Map<String, Object> actMap1 : actList) {
+                        map.putAll(actMap1);
                     }
             	}
             }catch(Exception e){
