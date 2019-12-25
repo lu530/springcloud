@@ -57,10 +57,15 @@ public class HikFaceRedListService extends FaceRedListService {
      **/
     private static final int HIK_DB_TYPE_STATIC_LIB = 3;
 
-    static {
-        ArtemisConfig.host = artemisHost;
-        ArtemisConfig.appKey = artemisAppKey;
-        ArtemisConfig.appSecret = artemisAppSecret;
+    private static volatile boolean isInit = false;
+
+    public HikFaceRedListService() {
+        if (!isInit) {
+            ArtemisConfig.host = artemisHost;
+            ArtemisConfig.appKey = artemisAppKey;
+            ArtemisConfig.appSecret = artemisAppSecret;
+            isInit = true;
+        }
     }
 
     @Override
