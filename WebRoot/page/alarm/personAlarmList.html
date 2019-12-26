@@ -721,7 +721,7 @@
 
                                         <div class="btn-group w100">
                                             <span class="tr">
-                                                {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
+                                                {% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
                                                 <a config-control="1" class="btn-i-t btn-xs verification-search hide" title="身份核查" url="{%= o.ALARM_IMG %}"
                                                     identity-id="{%= o.IDENTITY_ID %}" capture-time="{%= o.CAPTURE_TIME %}"
                                                     algo-id="{%= algoID %}">
