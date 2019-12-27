@@ -290,8 +290,8 @@ var peopleFlowMap = {
     drawCircle: function () {
 
         var map = parent.UI.map.getMap(),
-            latitude = this.deviceInfo.LATITUDE,
-            longitude = this.deviceInfo.LONGITUDE;
+            latitude = this.deviceInfo.latitude,
+            longitude = this.deviceInfo.longitude;
 
         parent.L.circle([latitude,longitude], {
             radius: 1000,
@@ -314,7 +314,7 @@ var peopleFlowMap = {
 
         var _self = this;
         var params = {
-            KEYWORDS: this.deviceID,
+            DEVICE_ID: this.deviceID,
             DEVICE_TYPE: 194,
             ORG_CODE: '',
             CASCADE: 1
@@ -328,7 +328,7 @@ var peopleFlowMap = {
     
         }, function (error) {}, {
             
-            url: '/connectplus/rest/v6/cp/device/getDeviceList',
+            url: '/portal/rest/v6/cp/device/getDeviceInfoFromCache',
             data: params
 
         }, true);
