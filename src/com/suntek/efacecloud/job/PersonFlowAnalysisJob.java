@@ -94,8 +94,18 @@ public class PersonFlowAnalysisJob implements Job {
 
                     List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
                     for (int i = 0; i < personIds.size(); i++) {
-                        List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
-                        resultList.add(handlePersonId(ids));
+                        List<Object> ids;
+                        //huawei-service-proxy返回结构（map）跟pci-service-proxy的返回结构（list）不一致
+                        if (personIds.get(i) instanceof HashMap) {
+                            Map temp = (HashMap) personIds.get(i);
+
+                            temp.put("PIC",temp.get("OBJ_PIC"));
+                            temp.put("FACE_SCORE","0");
+                            resultList.add(temp);
+                        } else {
+                            ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                            resultList.add(handlePersonId(ids));
+                        }
                     }
                     Log.tasklog.debug("sdk返回数据resultList: " + resultList.size() + "条");
                     // 处理返回的结果数

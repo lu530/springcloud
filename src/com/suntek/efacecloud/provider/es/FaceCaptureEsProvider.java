@@ -90,15 +90,8 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             String personId = StringUtil.toString(map.get("PERSON_ID"));
             String infoId = StringUtil.toString(map.get("INFO_ID"));
 
-            try{
-            	if(!StringUtils.isBlank(infoId)){
-            		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                    for (Map<String, Object> actMap1 : actList) {
-                        map.putAll(actMap1);
-                    }
-            	}
-            }catch(Exception e){
-            	ServiceLog.error("不存在activity_info表: " + e);
+            if (actMap.containsKey(infoId)) {
+                map.putAll(actMap.get(infoId));
             }
             map.put("DEVICE_ID", deviceId);
             map.put("VIID_OBJECT_ID", viidObjectId);

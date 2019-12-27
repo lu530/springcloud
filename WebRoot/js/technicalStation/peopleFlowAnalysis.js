@@ -19,6 +19,7 @@ $(document).ready(function(){
         //  地图相关
         peopleFlowMap.init();
     }
+	getDeviceModule();  //定义在common中
 	initEvents();
 });
 
@@ -151,7 +152,7 @@ function initEvents(){
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
             console.log(resp);
 			$('#deviceNames').text(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);

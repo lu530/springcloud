@@ -1144,6 +1144,7 @@ function appendSFList() {
     initFeishiAlgoList();
     var data = CONSTANTS.SFLIST;
     data.unshift({ id: '', name: '全部' });
+    var html = "";
     for (var i = 0; i < data.length; i++) {
         if (i == 0) {
             html += '<li class="tags-list-item active" val=' + data[i].id + '>' + data[i].name + "</li>";

@@ -58,8 +58,11 @@ public class DevicesRedisUtil {
 		}
 
 		try {
+			long requestBeginTime = System.currentTimeMillis();
 			String structTreeStr = HttpUtil.HttpGet(url.toString());
-			Log.deviceLog.info("接口 : " + url.toString() + "--->返回结果--->" + structTreeStr);
+			long requestEndTime = System.currentTimeMillis();
+
+			Log.deviceLog.info("接口：" + url.toString() + "，耗时：" + (requestEndTime - requestBeginTime) + "ms");
 
 			List<Map<String, Object>> ret = CommonUtil.getData(structTreeStr);
 			if(null != ret && ret.size() > 0) {
