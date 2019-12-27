@@ -171,7 +171,7 @@
                             <input type="checkbox" listview-check class="checkbox-opacity hide"/>
                             <p class="node-title similar-name" picMsg="姓名:{%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}" title="{%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}">
                                 <span class="orange">
-                                    <a info="{%=o[i].ALGORITHM_LIST[j].IMG_URL%}" info2="{%=o[i].ALGORITHM_LIST[j].REPOSITORY_NAME%}" info3="{%=o[i].ALGORITHM_LIST[j].SIMILARITY%}">{%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}</a>
+                                    {%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}
                                 </span>
                             </p>
                             <p class="fl m0" title="{%=o[i].ALGORITHM_LIST[j].REPOSITORY_NAME%}" picMsg="人脸库:{%=o[i].ALGORITHM_LIST[j].REPOSITORY_NAME%}">
@@ -228,7 +228,7 @@
                             <input type="checkbox" listview-check class="checkbox-opacity hide"/>
                             <p class="node-title similar-name" picMsg="姓名:{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}" title="{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}">
                                 <span class="orange">
-                                    <a info="{%=o[i].data[j].IMG_URL%}" info2="{%=o[i].data[j].REPOSITORY_NAME%}" info3="{%=o[i].data[j].SIMILARITY%}">{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}</a>
+                                    {%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}
                                 </span>
                             </p>
                             <p class="m0" title="{%=o[i].data[j].REPOSITORY_NAME%}" picMsg="人脸库:{%=o[i].data[j].REPOSITORY_NAME%}">
@@ -314,9 +314,7 @@
                                     <span title="证件号码：{%= o[i].PERSON_ID %}">{%= o[i].PERSON_ID %}</span>
                                 </p>
                                 <p class="node-title similar-name hide" picMsg="姓名:{%=o[i].NAME||'暂无'%}" title="{%=o[i].NAME||'暂无'%}">
-                                    <span class="orange">
-                                        <a info="{%=o[i].IMG_URL%}" info2="{%=o[i].REPOSITORY_NAME%}" info3="{%=o[i].SIMILARITY%}">{%=o[i].NAME||'暂无'%}</a>
-                                    </span>
+                                    <span class="orange">{%=o[i].NAME||'暂无'%}</span>
                                 </p>
                                 <p class="m0" title="依图档案库" picMsg="人脸库:依图档案库">
                                     <span title="人脸库：依图档案库">依图档案库</span>
