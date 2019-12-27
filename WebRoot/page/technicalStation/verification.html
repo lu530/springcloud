@@ -69,7 +69,7 @@
                                                         <button class="btn btn-purple select-all selectAll active">全选</button>
                                                     </div>
                                                     {% for(var i = 0; i < o.length; i++){ %}
-                                                        <label DB_ID="{%=o[i].id %}"  NODE_ID = "{%= o[i].id %}" title="{%= o[i].name %}">{%= o[i].name %}</label>
+                                                        <label DB_ID="{%=o[i].DB_ID %}"  NODE_ID = "{%= o[i].DB_ID %}" title="{%= o[i].DB_NAME %}">{%= o[i].DB_NAME %}</label>
                                                     {% } %}
                                                 </script>
                                             </dd>
