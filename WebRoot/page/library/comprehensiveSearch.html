@@ -154,8 +154,8 @@
 									<span scrollid="#faceCaptureLB" class="navItemBtn list-nav-unit active">路人库</span>
 									<span scrollid="#alarmLB" class="navItemBtn list-nav-unit">告警库</span>
 									<span scrollid="#MonitorLB" class="navItemBtn list-nav-unit">布控库</span>
-									<span scrollid="#personLB" class="navItemBtn list-nav-unit">一人一档</span>
-									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit">身份核查库</span>
+									<span scrollid="#personLB" class="navItemBtn list-nav-unit hide">一人一档</span>
+									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit" dom-permission="EFACE_faceVerification">身份核查库</span>
 								</div>
 							</div>
 						</div>
@@ -165,8 +165,8 @@
 									<span scrollid="#faceCaptureLB" class="navItemBtn list-nav-unit active">路人库</span>
 									<span scrollid="#alarmLB" class="navItemBtn list-nav-unit">告警库</span>
 									<span scrollid="#MonitorLB" class="navItemBtn list-nav-unit">布控库</span>
-									<span scrollid="#personLB" class="navItemBtn list-nav-unit">一人一档</span>
-									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit">身份核查库</span>
+									<span scrollid="#personLB" class="navItemBtn list-nav-unit hide">一人一档</span>
+									<span scrollid="#feiShiLB" class="navItemBtn list-nav-unit" dom-permission="EFACE_faceVerification">身份核查库</span>
 								</div>
 							</div>
 						</div>
@@ -202,7 +202,7 @@
 								</div>
 							</div>
 							<!-- 一人一档 -->
-							<div id='personLB' attr-key='personLB'>
+							<div id='personLB' attr-key='personLB' class='hide'>
 								<div class='item-list-title'>
 									<span>一人一档</span>
 									<span class='look-more lookmore' attr-title="一人一档" attr-key='personLB'>查看更多 > </span>
@@ -212,7 +212,7 @@
 								</div>
 							</div>
 							<!-- 身份核查库 -->
-							<div id='feiShiLB' attr-key='feiShiLB'>
+							<div id='feiShiLB' attr-key='feiShiLB' dom-permission="EFACE_faceVerification">
 								<div class='item-list-title'>
 									<span>身份核查库</span>
 									<span class='look-more lookmore' attr-title="身份核查库" attr-key='feiShiLB'>查看更多 > </span>
@@ -274,12 +274,14 @@
 						<span title="{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</span>
 					</p>
 					<div class="btn-group fr">
-						<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
-							<!-- <i class="btn-icon verification-icon"></i> -->
-							<svg class="pci-icon" aria-hidden="true">
-								<use xlink:href="#iconlurenkujiansuo-shenfenhecha"></use>
-							</svg>
-						</a>
+						{% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
+							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].OBJ_PIC%}">
+								<!-- <i class="btn-icon verification-icon"></i> -->
+								<svg class="pci-icon" aria-hidden="true">
+									<use xlink:href="#iconlurenkujiansuo-shenfenhecha"></use>
+								</svg>
+							</a>
+						{% } %}
 						<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
 							<!-- <i class="btn-icon trajectory-icon"></i> -->
 							<svg class="pci-icon" aria-hidden="true">
@@ -355,12 +357,14 @@
 						<p surveillanceTime = "{%= o[i].DISPATCHED_TIME %}" specialFlag="{%= o[i].SPECIAL_FLAG %}" class="{%= o[i].REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o[i].OBJECT_ID %}" picMsg="告警频次:{%= o[i].REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o[i].REPEATS%}"><a class = "{%= o[i].REPEATS == 1 ? '': 'frequency' %}">{%= o[i].REPEATS%} 次</a></span></p>
 						<div class="btn-group w100">
 							<span class="tr fr">
+								{% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
 								<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o[i].ALARM_IMG%}">
 									<!-- <i class="btn-icon verification-icon"></i> -->
 									<svg class="pci-icon" aria-hidden="true">
 										<use xlink:href="#iconlurenkujiansuo-shenfenhecha"></use>
 									</svg>
 								</a>
+								{% } %}
 								<a class="btn-i-t btn-xs trajectory-searchAll" title="轨迹分析" url="{%=o[i].ALARM_IMG%}">
 									<!-- <i class="btn-icon trajectory-icon"></i> -->
 									<svg class="pci-icon" aria-hidden="true">

@@ -189,19 +189,4 @@ public class FaceDetectUtil {
         }
     }
 
-    /**
-     * 获取红名单工具类实例--兼容不同厂商
-     *
-     * @return
-     */
-    public static FaceRedListUtil getFaceRedListUtilInstance() {
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if (Constants.HIK_VENDOR.equals(vendor)) {
-            return new HikFaceRedListUtilImpl();
-        } else if (Constants.HW_VENDOR.equals(vendor)) {
-            return new HuaWeiFaceRedListUtilImpl();
-        }
-        return new FaceRedListUtilImpl();
-    }
-
 }

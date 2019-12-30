@@ -6,8 +6,8 @@ import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
+import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.FaceDetectUtil;
 import com.suntek.efacecloud.util.FileUploadUtil;
 import com.suntek.efacecloud.util.PersonImportUtil;
 import org.apache.commons.lang.StringUtils;
@@ -35,6 +35,8 @@ import java.util.Map;
 public class FaceRedListImportService {
     private static Map<String, String> importErrorMsgCache = new HashMap<String, String>();
 
+    private FaceRedListDelegate faceRedListDelegate = new FaceRedListDelegate();
+
     @BeanService(id = "import", description = "红名单库导入")
     public void importRedList(RequestContext context) {
         try {
@@ -53,7 +55,7 @@ public class FaceRedListImportService {
             PersonImportUtil.getPersonImportList(webAppPath + File.separator + saveFileName, unZipPath, successList, failList);
 
             //调用不同厂商的实现类循环入库
-            int successCount = FaceDetectUtil.getFaceRedListUtilInstance().importRedList(context, successList, failList, importErrorMsgCache);
+            int successCount = faceRedListDelegate.importRedList(context, successList, failList, importErrorMsgCache);
 
             context.getResponse().putData("SUCCESS_COUNT", successCount);
             context.getResponse().putData("FAIL_COUNT", failList.size());

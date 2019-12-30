@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="full-screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>技战法任务</title> 
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css"/>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<style>.table-wrap .table td > span{display: inline;}</style>
+</head>
+<body class="">
+<div class="pager-wrap" container="scroll" id="videoStructContainer">
+	<div class="pager-content">
+		<div class="page-title">
+			<span>技战法任务</span>
+		</div> 
+		<div class="filter-view">
+			<dl class="filter-bar search-bar">
+                <dt class="filter-arrt tr pr10">搜索：</dt>
+                <dd class="filter-bar-search">
+                    <div class="fifler-group mr5">
+                        <div class="search-box">
+                            <input class="search-input searchTask" type="text" placeholder="请输入任务名称" maxlength="20"> <span class="icon-search2 searchTaskBtn"></span>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+            <!-- <dl class="filter-bar">
+                <dt class="filter-arrt tr pr10">创建时间：</dt>
+                <dd class="filter-tag ">
+                    <div class="datepicker-range" id="timeTagList">
+                        <span class="tag-item tagsTime" time-control="jt">今天</span>
+                        <span class="tag-item tagsTime" time-control="zt">昨天</span>
+                        <span class="tag-item active tagsTime" time-control="nW">近7天</span>
+                        <span class="tag-item tagsTime" time-control="nM">近30天</span>
+                        <span class="tag-item tagsTime" time-control="zdy">自定义</span>
+                        <div class="c-datepicker-date-editor J-datepicker-range-noleft hide" id="timeTagListDatepicker">
+                            <input placeholder="开始日期" name="" class="c-datepicker-data-input" id="beginTime" value="2018-01-01 04:00:00">
+                            <span class="c-datepicker-range-separator">-</span>
+                            <input placeholder="结束日期" name="" class="c-datepicker-data-input" id="endTime" value="2018-03-01 04:23:59">
+                            <a href="javascript:;">
+                                <svg class="iconfont-datepicker" aria-hidden="true">
+                                    <use xlink:href="#icon-jiansuotiaojian-xialaxuanze"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </dd>
+            </dl> -->
+            <dl class="filter-bar">
+				<dt class="filter-arrt">创建时间：</dt>
+				<dd class="filter-tag ">
+					<div class="tagslist timelist" id="timeTagList">
+							<span class="tag-item active tagsTime" time-control="jt">今天</span>
+							<span class="tag-item tagsTime" time-control="zt">昨天</span> 
+							<!-- <span class="tag-item tagsTime" time-control="bz">本周</span>
+							<span class="tag-item tagsTime" time-control="by">本月</span> -->
+							<span class="tag-item tagsTime" time-control="nW">近7天</span> 
+							<span class="tag-item tagsTime" time-control="nM">近30天</span> 
+							<span class="tag-item tagsTime" time-control="zdy">自定义</span>
+						<div class="opera-group">
+							<div class="time-control-item">
+								<input class="time-control" id="beginTime" readonly
+									type="text"> <i></i>
+							</div>
+							<div class="time-control-item">
+								<input class="time-control" id="endTime" readonly type="text">
+								<i></i>
+							</div>
+							<button class="btn btn-i-t bsline zdyTimeBtn">确定</button>
+						</div>
+					</div>
+				</dd>
+			</dl>
+			<div>
+			<div class="person-view">
+				<dl class="filter-bar">
+					<dt class="filter-arrt tr pr10">任务类型：</dt>
+					<dd class="filter-tag">
+						<div class="tagslist" id="taskType">
+							<span class="tag-item active taskItem" val="">全部</span>
+                            <span class="tag-item taskItem hide" val="2">特定人群轨迹分析</span>
+                            <span class="tag-item taskItem" val="1">人脸聚档</span>
+						</div>
+					</dd>
+                </dl>
+                <dl class="filter-bar">
+                    <dt class="filter-arrt tr pr10">任务状态：</dt>
+                    <dd class="filter-tag">
+                        <div class="tagslist" id="taskStatus">
+                            <span class="tag-item active taskItem" val="">全部</span>
+                            <span class="tag-item taskItem" val="0">待启动</span>
+                            <span class="tag-item taskItem" val="1">进行中</span>
+                            <span class="tag-item taskItem" val="2">已完成</span>
+                            <!-- <span class="tag-item taskItem" val="3">任务异常</span> -->
+                        </div>
+                    </dd>
+                </dl>
+			</div>
+			</div>
+		</div>
+		<div>
+        <!--  -->
+        <!-- video/task/approval/getData -->
+		<div id="personStructuredList" container="scroll" ui-control="listview" ui-service="technicalTactics/task/getData"  ui-template='faceStructuredTemplate' ui-parameters="queryParams">
+			<div class="page-info-metro square-pager full">
+                <!-- <div class="action-btn-group">
+                    <a href="javascript:;" class="btn btn-i-t" id="createVideoStructTask">
+                        <svg class="pci-icon svg-icon mr5" aria-hidden="true">
+                            <use xlink:href="#iconkezhankai"></use>
+                        </svg>
+                        <span>新建任务</span>
+                    </a>
+                </div> -->
+	            <div class="page-data fr" listview-page="">
+	                <a class="page-prev fl disable" listview-prev-btn="" href="#"><i class="icon-arrow-left7"></i></a>
+	                <span class="page-num">共有 <i class="page-num" listview-counts="">1</i>条记录</span>
+	                <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+	                <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+	            </div>
+            </div>
+            <div class="table-wrap tableBox">
+		            <table class="table listBox" cellspacing="0" cellpadding="0">
+		                <thead>
+		                    <tr>
+                                <th class="w30 tc"><span>任务名称</span></th>
+                                <th class="w15 tc"><span>创建时间</span></th>
+		                    	<th class="w10 tc"><span>创建人</span></th>
+			                    <th class="w10 tc"><span>任务状态</span></th>
+                                <th class="tc"><span>操作</span></th>
+				            </tr>
+			            </thead>
+						<tbody class="listviewImgBox hide">
+                            <tr class="structTask" id="faceStructuredTemplate">
+                                <td class="tc" >{%= o.TASK_NAME %}</td>
+                                <td class="tc" >{%= o.CREATE_TIME %}</td>
+                                <td class="tc" >{%= o.CREATOR %}</td>
+                                <td class="tc" >
+                                    {% if(o.TASK_TYPE === 2) {  %}
+                                    <span class='tactics-task-status {%= CONSTANTS.TACTICS_TASK.SPECIAL_STATUS_COLOR[o.TASK_STATUS] %}'>{%= CONSTANTS.TACTICS_TASK.SPECIAL_STATUS[o.TASK_STATUS] %}</span>
+                                    {% } else { %}
+                                    <span class='tactics-task-status {%= CONSTANTS.TACTICS_TASK.STATUS_COLOR[o.TASK_STATUS] %}'>{%= CONSTANTS.TACTICS_TASK.STATUS[o.TASK_STATUS] %}</span>
+                                    {% } %}
+                                </td>
+                                <td class="tc" >
+                                    <ul class="btn-group-icons list-inline">
+                                        {% if(o.TASK_STATUS === 2 || o.TASK_STATUS === 3) {  %}
+                                        <li class="verification-search resultBtn" title="结果查看" TASK_ID='{%= o.TASK_ID %}' TASK_TYPE='{%= o.TASK_TYPE %}'>
+                                            <a href="javascript:;">结果查看</a>
+                                        </li>
+                                        {% } %}
+                                        {% if(o.TASK_STATUS === 3 && o.TASK_TYPE !== 2) {  %}
+                                        <li class="verification-search errorCause" title="任务异常" TASK_ID='{%= o.TASK_ID %}' TASK_TYPE='{%= o.TASK_TYPE %}'>
+                                            <a href="javascript:;">任务异常</a>
+                                        </li>
+                                        {% } %}
+                                        <li class="verification-search deleteBtn" title="删除" TASK_ID='{%= o.TASK_ID %}'>
+                                            <a href="javascript:;">删除</a>
+                                        </li>
+                                        <li class="verification-search detailBtn" title="任务详情" TASK_ID='{%= o.TASK_ID %}' TASK_TYPE='{%= o.TASK_TYPE %}'>
+                                            <a href="javascript:;">任务详情</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+						</tbody>                                        
+			        </table>
+				</div>
+			</div>
+		</div>
+    </div>
+    <!-- {% } else if(o.TASK_STATUS === 3) { %}
+    <li class="verification-search errorCause" title="异常原因" TASK_ID='{%= o.TASK_ID %}'>
+        <a href="javascript:;">异常原因</a>
+    </li> -->
+    <div class="frame-form-full l0" style="display: none;">
+        <iframe class="frame-form" id="frameFormFull" frameborder="0" src=""></iframe>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsTask.js"></script>
+</html>
