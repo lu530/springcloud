@@ -50,7 +50,8 @@ var total = 0; //保存分页总数
 var uiOptions = {
     isMedia: false,
     // unload: imgSrc !=''? true: false
-    unload: true
+    unload: true,
+    toPage: true
 }
 
 var timeOption = {
