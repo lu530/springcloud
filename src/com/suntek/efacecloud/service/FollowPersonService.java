@@ -2,7 +2,6 @@ package com.suntek.efacecloud.service;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
@@ -14,13 +13,19 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.service.face.tactics.async.FollowPersonAsyncService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +38,8 @@ import java.util.stream.Collectors;
 @LocalComponent(id = "technicalTactics/personFollow")
 public class FollowPersonService {
 
+    private FollowPersonAsyncService aysncService = new FollowPersonAsyncService();
+
     @BeanService(id = "togetherAnalysis", description = "同行人员分析", since = "1.0.0", type = "remote",
             paasService = "true")
     public void together(RequestContext context) throws Exception {
@@ -40,23 +47,28 @@ public class FollowPersonService {
         String togetherMinute = StringUtil.toString(context.getParameter("TOGETHER_MINUTE"));
         int similarity = Integer.parseInt(StringUtil.toString(context.getParameter("THRESHOLD"), "80"));
         String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"), "65");
-
-        CommandContext commandContext = new CommandContext(context.getHttpRequest());
-
-        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("RECORD_IDS", recordId);
         params.put("TOGETHER_MINUTE", togetherMinute);
         params.put("THRESHOLD", similarity);
         params.put("FACE_SCORE", faceScore);
         params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
+
+        if (ConfigUtil.getIsNvnAsync()) {
+            this.aysncService.together(context, params);
+            return;
+        }
+
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+
+        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
+
+
         commandContext.setBody(params);
 
         ServiceLog.debug("团伙分析  调用sdk参数:" + params);
 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
-                "EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
 
         Registry registry = Registry.getInstance();
 
@@ -172,7 +184,7 @@ public class FollowPersonService {
 
         // registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
         registry.selectCommand(BaseCommandEnum.faceCollisionQuery.getUri(), "4401", vendor).exec(commandContext);
 
         ServiceLog.debug("调用1:N接口返回结果code:" + commandContext.getResponse().getCode() + " message:"

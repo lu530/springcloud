@@ -13,6 +13,7 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.service.face.tactics.async.FrequentAccessAsyncService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
@@ -35,16 +36,20 @@ import java.util.Map;
 @LocalComponent(id = "technicalTactics/frequencyAccess")
 public class FrequentAccessTacticsService {
 
+    private FrequentAccessAsyncService asyncService = new FrequentAccessAsyncService();
+
     @SuppressWarnings("unchecked")
     @BeanService(id = "query", description = "频繁出入查询", since = "1.0.0")
     public void query(RequestContext context) throws Exception {
-
         Map<String, Object> params = context.getParameters();
-
+        params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
+        if (ConfigUtil.getIsNvnAsync()) {
+            this.asyncService.query(context);
+            return;
+        }
         CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
-                "EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
 
         try {
             commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
@@ -52,7 +57,7 @@ public class FrequentAccessTacticsService {
             ServiceLog.debug("外部调用");
         }
 
-        params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
+
 
         commandContext.setBody(params);
 
@@ -109,8 +114,7 @@ public class FrequentAccessTacticsService {
 
         ServiceLog.debug("调用sdk参数:" + params);
 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
-                "EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
 
         Registry registry = Registry.getInstance();
 

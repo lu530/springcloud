@@ -5,10 +5,10 @@ import com.suntek.eap.core.app.AppHandle;
 
 /**
  * 应用基础配置类
- * 
+ *
+ * @author lx
  * @version 2017-06-27
  * @since 1.0
- * @author lx
  */
 public class ConfigUtil {
     /**
@@ -83,7 +83,7 @@ public class ConfigUtil {
 
     /**
      * 获取图片url前缀
-     * 
+     *
      * @return
      */
     public static String getUrlPreffix() {
@@ -97,7 +97,7 @@ public class ConfigUtil {
 
     /**
      * 获取图片utl前缀,根据console配置的存储类型获取
-     * 
+     *
      * @return
      */
     public static String getImgUrlPreffix() {
@@ -132,7 +132,7 @@ public class ConfigUtil {
 
     /**
      * 获取索引开始时间
-     * 
+     *
      * @return yyMM
      */
     public static String getIndexBeginTime() {
@@ -142,7 +142,7 @@ public class ConfigUtil {
 
     /**
      * 是否开启短信功能 0禁用 1启用
-     * 
+     *
      * @return
      */
     public static String getEnableSendSms() {
@@ -152,18 +152,18 @@ public class ConfigUtil {
 
     /**
      * 获取红名单审批短信推送号码
-     * 
+     *
      * @return
      */
     public static String getRedApprovalSendPhone() {
         String redApprovalSendPhone
-            = AppHandle.getHandle(Constants.APP_NAME).getProperty("RED_APPROVAL_SEND_PHONE", "");
+                = AppHandle.getHandle(Constants.APP_NAME).getProperty("RED_APPROVAL_SEND_PHONE", "");
         return redApprovalSendPhone;
     }
 
     /**
      * 1:N
-     * 
+     *
      * @return
      */
     public static String getOne2NConfig() {
@@ -173,7 +173,7 @@ public class ConfigUtil {
 
     /**
      * N:N
-     * 
+     *
      * @return
      */
     public static String getN2NConfig() {
@@ -182,21 +182,50 @@ public class ConfigUtil {
     }
 
     /**
+     * NVN技战法查询是否为异步，0表示同步，1表示异步，默认为同步
+     *
+     * @return
+     */
+    private static String getIsNvnAsyncConfig() {
+        String n2nAddr = AppHandle.getHandle(Constants.CONSOLE).getProperty("IS_NVN_ASYNC", "0");
+        return n2nAddr;
+    }
+
+    /**
+     * NVN技战法查询是否为异步
+     *
+     * @return
+     */
+    public static boolean getIsNvnAsync() {
+        return "1".equals(getIsNvnAsyncConfig());
+    }
+
+    /**
      * 是否外籍人项目
      */
     public static boolean isBlack() {
         return Constants.IS_BLACK.equals(AppHandle.getHandle(Constants.DATA_DEFENCE).getProperty("IS_BLACK", "0"));
     }
+
     /**
      * 获取红名单库
+     *
      * @return
      */
     public static String getRedListDbId() {
         String redListDbId = "RED_LIST_DB";
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if(Constants.HIK_VENDOR.equals(vendor)){
+        String vendor = getVendor();
+        if (Constants.HIK_VENDOR.equals(vendor)) {
             redListDbId = AppHandle.getHandle(Constants.APP_NAME).getProperty("HIK_RED_LIST_DB", "");
         }
         return redListDbId;
+    }
+
+    /**
+     * 得到厂商代码
+     * @return
+     */
+    public static String getVendor() {
+        return AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
     }
 }

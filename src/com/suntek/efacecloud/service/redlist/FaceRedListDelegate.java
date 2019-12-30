@@ -1,7 +1,7 @@
 package com.suntek.efacecloud.service.redlist;
 
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.web.RequestContext;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.face.compare.sdk.model.CollisionResult;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 public class FaceRedListDelegate extends FaceRedListService {
 
     private FaceRedListService instance() {
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
         if (Constants.HIK_VENDOR.equals(vendor)) {
             return new HikFaceRedListService();
         } else if ("huawei".equals(vendor)) {

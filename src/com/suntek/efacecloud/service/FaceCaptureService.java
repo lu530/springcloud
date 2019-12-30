@@ -1,16 +1,6 @@
 package com.suntek.efacecloud.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.suntek.eap.EAP;
-import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
@@ -20,12 +10,16 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
-import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.SysUserDao;
-import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.sp.common.common.BaseCommandEnum;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人脸抓拍库服务(频繁出现)
@@ -33,59 +27,16 @@ import com.suntek.sp.common.common.BaseCommandEnum;
  * @author wsh
  * @since 1.0.0
  * @version 2017-06-29
- * @Copyright (C)2017 , Suntektech
  */
 @LocalComponent(id = "face/capture")
-public class FaceCaptureService {
+public class FaceCaptureService extends FrequentAccessTacticsService{
 	
 	SysUserDao sysUserDao = new SysUserDao();
 	
     @SuppressWarnings("unchecked")
     @BeanService(id = "freqAnalysis", description = "人脸抓拍数据频繁出现", since = "2.0")
     public void freqAnalysis(RequestContext context) throws Exception {
-
-        Map<String, Object> params = context.getParameters();
-
-        CommandContext commandContext = new CommandContext(context.getHttpRequest());
-
-        commandContext.setServiceUri(BaseCommandEnum.faceCaptureFreqAnalysis.getUri());
-        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-
-        params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
-        commandContext.setBody(params);
-
-        ServiceLog.debug(" 频繁出现  调用sdk参数:" + params);
-
-        Registry registry = Registry.getInstance();
-
-        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
-
-        ServiceLog.debug(" 频繁出现 调用sdk返回结果code:" + commandContext.getResponse().getCode()
-                + " message:" + commandContext.getResponse().getMessage()
-                + " result:" + commandContext.getResponse().getResult());
-
-        long code = commandContext.getResponse().getCode();
-
-        if (0L != code) {
-            context.getResponse().setWarn(commandContext.getResponse().getMessage());
-            return;
-        }
-
-        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
-
-        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
-
-        for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids = personIds.get(i); // 一个人员出现列表的主键id集合
-            resultList.add(handlePersonId(ids));
-        }
-
-        // 按出现次数排序
-        Collections.sort(resultList,
-                (a, b) -> StringUtil.toString(b.get("INFO_ID")).length() - StringUtil.toString(a.get("SCORE")).length());
-
-        context.getResponse().putData("DATA", resultList);
-
+        super.query(context);
     }
 
 	@BeanService(id = "getFaceUploadPicConfig", description="路人检索-以图搜图权限", since="2.0")

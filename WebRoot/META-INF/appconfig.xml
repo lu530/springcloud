@@ -53,4 +53,5 @@
 
 	<param key="TECHNICAL_PERSON_FLOW_ANALYSIS" name="人技战法人流量分析任务运行时间" type="String" description="cron表达式">0 0 1 * * ?</param>
 	<param key="TECHNICAL_SPECIAL_PERSON_TRACK" name="人技战法特定人群轨迹分析任务运行时间" type="String" description="cron表达式">0 0 3 * * ?</param>
+	<param key="IS_NVN_ASYNC" name="NVN技战法查询是否为异步" type="String" description="0为同步，1表示异步">1</param>
 </config>

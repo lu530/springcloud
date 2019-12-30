@@ -5,17 +5,17 @@ import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.LogFactory;
 import com.suntek.eap.metadata.Table;
 import com.suntek.eap.util.StringUtil;
-import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
-import com.suntek.efacecloud.job.FaceCompareJob;
+import com.suntek.efacecloud.job.FaceNvNGetResultJob;
+import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
 import com.suntek.efacecloud.job.PersonFlowAnalysisJob;
 import com.suntek.efacecloud.job.SpecialPersonTrackJob;
 import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.service.face.OnlineTaskCounter;
 import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.AlluxioClientUtil;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.HttpUtil;
 import com.suntek.feature.client.AlgorithmType;
 import com.suntek.feature.client.DSSClient;
 import com.suntek.tactics.api.dss.service.DssService;
@@ -38,7 +38,6 @@ import java.util.Map;
  *
  * @author lx
  * @version 2017-06-29
- * @Copyright (C)2017 , Suntektech
  * @since 1.0.0
  */
 public class SystemInitListener implements ServletContextListener {
@@ -62,6 +61,29 @@ public class SystemInitListener implements ServletContextListener {
             EAP.schedule.delJob("personFlowAnalysisJob", "personFlowGroup");
         } catch (SchedulerException e) {
             log.error("销毁特定人群轨迹分析任务异常异常" + e.getMessage(), e);
+        }
+        this.stopFaceNvn();
+    }
+
+    private void stopFaceNvn() {
+        if (!ConfigUtil.getIsNvnAsync()) {
+            return;
+        }
+        try {
+            OnlineTaskCounter.stopSocketIOServer();
+        } catch (Exception e) {
+            log.debug("启动nvn任务socketio服务异常" + e.getMessage(), e);
+        }
+        try {
+            EAP.schedule.delJob("FaceNvNTaskExecuteJob", "FaceNvNTaskExecuteJobGroup");
+        } catch (SchedulerException e) {
+            log.error("nvn任务执行定时器删除任务异常" + e.getMessage(), e);
+        }
+
+        try {
+            EAP.schedule.delJob("FaceNvNGetResultJob", "FaceNvNGetResultJobGroup");
+        } catch (SchedulerException e) {
+            log.error("nvn结果查询定时器删除任务异常" + e.getMessage(), e);
         }
     }
 
@@ -102,6 +124,48 @@ public class SystemInitListener implements ServletContextListener {
          * 佳都人脸特征检索服务
          */
         initPciFaceFeatureServiceLink();
+
+        initFaceNVN();
+    }
+
+    /**
+     * 华为NVN定时器初始化
+     */
+    private void initFaceNVN() {
+        if (!ConfigUtil.getIsNvnAsync()) {
+            return;
+        }
+        // nvn任务socketio服务
+        try {
+            OnlineTaskCounter.startSocketIOServer();
+
+        } catch (Exception e) {
+            log.debug("启动nvn任务socketio服务异常" + e.getMessage(), e);
+        }
+        try {
+
+            String nvnTaskExpression = StringUtil
+                    .toString(AppHandle.getHandle(Constants.APP_NAME).getProperty("FACE_NVN_EXCUTE_JOB_EXPRESSION"));
+            if (!StringUtil.isNull(nvnTaskExpression)) {
+                EAP.schedule.addCronTrigger(FaceNvNTaskExecuteJob.class, nvnTaskExpression, "FaceNvNTaskExecuteJob",
+                        "FaceNvNTaskExecuteJobGroup", new HashMap<String, Object>());
+            }
+        } catch (SchedulerException e) {
+            log.error("添加nvn任务执行定时器，发生异常" + e.getMessage(), e);
+        }
+
+        try {
+
+            String nvnResultExpression = StringUtil
+                    .toString(AppHandle.getHandle(Constants.APP_NAME).getProperty("FACE_NVN_RESULT_JOB_EXPRESSION"));
+            if (!StringUtil.isNull(nvnResultExpression)) {
+                EAP.schedule.addCronTrigger(FaceNvNGetResultJob.class, nvnResultExpression, "FaceNvNGetResultJob",
+                        "FaceNvNGetResultJobGroup", new HashMap<String, Object>());
+            }
+        } catch (SchedulerException e) {
+            log.error("获取nvn结果执行定时器，发生异常" + e.getMessage(), e);
+        }
+
     }
 
     /**
@@ -115,8 +179,8 @@ public class SystemInitListener implements ServletContextListener {
             String zkAddr = ConfigUtil.getOne2NConfig();
             String n2nAddr = ConfigUtil.getN2NConfig();
 
-            log.debug("初始化   1:N/N:N DSS集群 begin...>>>" +
-                    " zkAddr = " + zkAddr + "，n2nAddr = " + n2nAddr);
+            log.debug("初始化   1:N/N:N DSS集群 begin...>>>"
+                    + " zkAddr = " + zkAddr + "，n2nAddr = " + n2nAddr);
 
             if(!StringUtil.isNull(zkAddr)){
                 DSSClient.addClient(zkAddr, AlgorithmType.FACE_ALGORITHM, ConfigUtil.getAlgoTypes());

@@ -188,7 +188,7 @@ function showTracks(mapData){
 function doSearch(){
 
 	// UI.util.showLoadingPanel();
-    UI.control.remoteCall("technicalTactics/regionCollsion/query",parent.queryParams,function(resp){
+    UI.control.remoteCall("technicalTactics/regionCollision/query",parent.queryParams,function(resp){
 	// 	var resp = {};
     // 	resp.DATA = [[{
     //     "ORIGINAL_DEVICE_ID": "44010000001320404003",

@@ -85,8 +85,7 @@ public class FaceCaptureProvider {
 
 		ServiceLog.info("路人库检索，1:N开始");
 		Map<String, Object> params = context.getParameters();
-		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
-				"EAPLET_VENDOR", "Suntek");
+		String vendor = ConfigUtil.getVendor();
 
 		// 通过上传图片调用开放平台人脸属性提取服务开始 2018年9月4日 陈文杰添加
 		String faceTypeAlgoTypes = AppHandle.getHandle(Constants.APP_NAME)

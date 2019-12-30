@@ -16,6 +16,7 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.mppdb.MppQueryDao;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.provider.es.InternetCafesFaceEsProvider;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
@@ -86,7 +87,7 @@ public class InternetCafesFaceProvider {
 		Registry registry = Registry.getInstance();
 
 		commandContext.setBody(context.getParameters());
-		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+		String vendor = ConfigUtil.getVendor();
 		registry.selectCommand(BaseCommandEnum.faceCapture.getUri(), "4401", vendor).exec(commandContext);
 
 		ServiceLog.debug("调用faceCapture 返回参数" + commandContext.getResponse().getResult());
