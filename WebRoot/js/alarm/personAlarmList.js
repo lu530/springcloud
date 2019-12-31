@@ -727,8 +727,11 @@ function initEvent() {
       objectId = $this.attr("objectid"),
       curTime = $this.attr("curtime"),
       alarmTime = $this.attr("alarmtime"),
-      alarmImg = $this.attr('alarm-img');
-    UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html?OBJECT_ID=' + objectId + '&curTime=' + curTime + '&isFly=1&ALARM_ID=' + ALARM_ID + '&level=' + level + '&name=' + name + '&idCard=' + idCard + '&time=' + time + '&alarmTime=' + alarmTime + '&alarmImg=' + alarmImg, "告警详情", 1080, (isBlack ? 690 : 730), function(obj) {});
+      alarmImg = $this.attr('alarm-img'),
+      score=$this.attr('score')||0,
+			picz=$this.attr('picz')||"",
+      picb=$this.attr('picb')||"";
+    UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html?OBJECT_ID=' + objectId + '&curTime=' + curTime + '&isFly=1&ALARM_ID=' + ALARM_ID + '&level=' + level + '&name=' + name + '&idCard=' + idCard + '&time=' + time + '&alarmTime=' + alarmTime + '&alarmImg=' + alarmImg+'&score='+score+'&picz='+picz+'&picb='+picb, "告警详情", 1080, (isBlack ? 690 : 730), function(obj) {});
   });
   //布控详情
   $('body').on('click', '.controlDetailBtn', function() {
@@ -1183,6 +1186,9 @@ $('body').on('click', '.detailBtnAll', function() {
   var showIndex = 0;
   var _series = [];
   var parentBox = $this.parents('.tilelist');
+ var score=$this.attr('score')||0;
+			var picz=$this.attr('picz')||"";
+      var picb=$this.attr('picb')||"";
   if (parentBox.length > 0) {
     // 计算当前按钮所在索引
     if (parentBox.find('[btn-order]').length > 0 && ($this.attr('btn-order') || $this.parent('.btn-order').attr('btn-order'))) { //已经自定义序号
@@ -1217,7 +1223,7 @@ $('body').on('click', '.detailBtnAll', function() {
       query += '&switchBtn=both';
     }
   }
-  // debugger
+  query=query+'&score='+score+'&picz='+picz+'&picb='+picb;
   if (isfs == '1') {
     UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 730, function(obj) {});
   } else {
