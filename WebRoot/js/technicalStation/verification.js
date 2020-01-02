@@ -1146,10 +1146,12 @@ function appendSFList() {
     data.unshift({ id: '', name: '全部' });
     var html = "";
     for (var i = 0; i < data.length; i++) {
+        var id = data[i].id ? data[i].id : data[i].ID;
+        var name = data[i].name ? data[i].name : data[i].NAME;
         if (i == 0) {
-            html += '<li class="tags-list-item active" val=' + data[i].id + '>' + data[i].name + "</li>";
+            html += '<li class="tags-list-item active" val=' + id + '>' + name + "</li>";
         } else {
-            html += '<li class="tags-list-item" val=' + data[i].id + '>' + data[i].name + "</li>";
+            html += '<li class="tags-list-item" val=' + id + '>' + name + "</li>";
         }
     }
     $('#sfList').append(html);
