@@ -27,6 +27,9 @@ public class Constants {
 	
 	public final static String MPPDB_NAME = "MPPDB_RES";
 
+
+	public static String BASE_FACE_CAPTURE_ZKPATH = "/bigdata/config/gateway/capture";
+
 	/**
 	 * 厂商-海康
 	 */

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.efacecloud.util.CommonUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.suntek.eap.EAP;
@@ -181,5 +182,19 @@ public class FaceCaptureStatisticDao {
     }
 
 
+//    public List<Map<String, Object>> getLastTimeByDeivceId(String beginTime, String endTime, List<String> deviceIdList) {
+//        String sql = "select count(1) num,sbbh from face_capture where 1=1";
+//
+//        List<String> params = new ArrayList<String>();
+//        if (!StringUtil.isEmpty(beginTime) && !StringUtil.isEmpty(endTime)) {
+//            sql += " and (" + "jgrqsjb between extract (epoch from to_date ('" + beginTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint  "
+//                    + "and extract (epoch from to_date ('" + endTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint )";
+//        }
+//        if (!StringUtil.isEmpty(deviceIds)) {
+//            sql = sql + " and sbbh = any  " + CommonUtil.getDeviceSqlInParams(deviceIds.split(","));
+//        }
+//        sql = sql + " group by sbbh";
+//        return jdbc.queryForList(sql, params.toArray());
+//    }
 }
 
