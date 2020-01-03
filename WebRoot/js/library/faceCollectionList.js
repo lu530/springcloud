@@ -369,7 +369,7 @@ function initEvent() {
     // 打开人脸扫描页面
     $('#editImgBtn').on('click', function () {
         //		var imgUrl = $('#filterImg').attr('src');
-        var imgUrl = global.fileid;
+        var imgUrl = global.fileid ? global.fileid : $('#filterImg').attr('src');
         if ($('#filterImg').attr('src').slice(-12) != "noPhoto2.png") {  // 已上传图片
             UI.util.showCommonWindow("/efacecloud/page/scan/scanOld.html?imgUrl=" + imgUrl, "选择人脸", 1200, 700, function (data) {
                 if (data.faceImg != '') {
