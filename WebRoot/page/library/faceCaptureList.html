@@ -372,10 +372,6 @@
                                 </p>
                                 {% } %}
 
-
-
-
-
                                 {% if(!UI.isForeigners) { %}
                                 <div class="btn-group fr" >
                                     {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
@@ -404,9 +400,9 @@
                                     <a fileUrl="{%=o.OBJ_PIC%}" 
                                         LATITUDE="{%= o.LATITUDE %}"
                                         LONGITUDE="{%= o.LONGITUDE %}"
-                                        attr-time="{%=renderNullToNotKnow(o.JGSK)%}" 
+                                        attr-time="{%=renderNullToNotKnow(o.JGSK)%}"
                                         attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}"
-                                        class="btn-i-t btn-xs locationBtn location-btn" 
+                                        class="btn-i-t btn-xs locationBtn location-btn"
                                         ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
                                         <i class="btn-icon location-icon"></i>
                                     </a>

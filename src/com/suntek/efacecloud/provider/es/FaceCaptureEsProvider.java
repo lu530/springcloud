@@ -1,12 +1,5 @@
 package com.suntek.efacecloud.provider.es;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
@@ -97,15 +90,8 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             String personId = StringUtil.toString(map.get("PERSON_ID"));
             String infoId = StringUtil.toString(map.get("INFO_ID"));
 
-            try{
-            	if(!StringUtils.isBlank(infoId)){
-            		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                    for (Map<String, Object> actMap1 : actList) {
-                        map.putAll(actMap1);
-                    }
-            	}
-            }catch(Exception e){
-            	ServiceLog.error("不存在activity_info表: " + e);
+            if (actMap.containsKey(infoId)) {
+                map.putAll(actMap.get(infoId));
             }
             map.put("DEVICE_ID", deviceId);
             map.put("VIID_OBJECT_ID", viidObjectId);
@@ -163,6 +149,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String keyword = StringUtil.toString(params.get("KEYWORDS"));
         String treeNodeId = (String)params.get("DEVICE_IDS");
         String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
+        String viidObjectIds = StringUtil.toString(params.get("VIID_OBJECT_IDS"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -175,7 +162,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 
         // 避免 某个分片检索时间超出了超时时间，导致会出现每次结果不一样的情况
         query.setTimeout(30000L);
+        //如果VIID_OBJECT_ID不为空。根据VIID_OBJECT_ID字段查。提供给视图库使用
+        if (!StringUtil.isEmpty(viidObjectIds)) {
 
+            String[] viidArray = viidObjectIds.split(",");
+            query.addEqualCriteria("VIID_OBJECT_ID", viidArray);
+
+        }
         if (!StringUtil.isEmpty(treeNodeId)) {
 
             Object[] treeNodeIdArr = treeNodeId.split(",");

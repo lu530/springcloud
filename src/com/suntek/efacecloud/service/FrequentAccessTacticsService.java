@@ -78,6 +78,7 @@ public class FrequentAccessTacticsService {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
         for (int i = 0; i < personIds.size(); i++) {
             List<Object> ids;
+            //huawei-service-proxy返回结构（map）跟pci-service-proxy的返回结构（list）不一致
             if (personIds.get(i) instanceof HashMap) {
                 HashMap map = (HashMap) personIds.get(i);
 

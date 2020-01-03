@@ -19,6 +19,7 @@ $(document).ready(function(){
         //  地图相关
         peopleFlowMap.init();
     }
+	getDeviceModule();  //定义在common中
 	initEvents();
 });
 
@@ -151,7 +152,7 @@ function initEvents(){
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
             console.log(resp);
 			$('#deviceNames').text(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
@@ -289,8 +290,8 @@ var peopleFlowMap = {
     drawCircle: function () {
 
         var map = parent.UI.map.getMap(),
-            latitude = this.deviceInfo.LATITUDE,
-            longitude = this.deviceInfo.LONGITUDE;
+            latitude = this.deviceInfo.latitude,
+            longitude = this.deviceInfo.longitude;
 
         parent.L.circle([latitude,longitude], {
             radius: 1000,
@@ -313,7 +314,7 @@ var peopleFlowMap = {
 
         var _self = this;
         var params = {
-            KEYWORDS: this.deviceID,
+            DEVICE_ID: this.deviceID,
             DEVICE_TYPE: 194,
             ORG_CODE: '',
             CASCADE: 1
@@ -327,7 +328,7 @@ var peopleFlowMap = {
     
         }, function (error) {}, {
             
-            url: '/connectplus/rest/v6/cp/device/getDeviceList',
+            url: '/portal/rest/v6/cp/device/getDeviceInfoFromCache',
             data: params
 
         }, true);

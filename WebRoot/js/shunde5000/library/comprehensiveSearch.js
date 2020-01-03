@@ -860,7 +860,7 @@ function _domPermission () {
         var permissionStr = $(this).attr('dom-permission');
         menusIDList[permissionStr] && $(this).removeClass('hide');
     });
-	if(!UI.control.hasPermission('EFACE_faceVerificationArchive')) {
+	if(!UI.control.hasPermission('EFACE_faceVerification')) {
 		delete options.url.feiShiLB;
 	}
 }
