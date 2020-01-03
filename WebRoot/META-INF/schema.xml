@@ -112,48 +112,39 @@
 		<column name="RLTZ"               title="人脸特征" type="binary" length="0" index="false" store="true" />
 	</NON_MOTOR_FACE_INFO>
 
-	<NON_MOTOR_VEHICLE_INFO indice="non_motor_vehicle_indice" title="非汽车抓拍索引(分月存储)(按天路由)">
-		<column name="INFO_ID"            title="信息编号,主键ID,使用snowflake算法生成" type="long" primary-key="true" pk-generator="UUID" length="0" index="true" store="true" />
-		<column name="JGRQ"               title="经过日期,格式:yyMMdd" type="integer" length="0" index="true" store="true" default_val="-1" />
-		<column name="JGSJ"               title="经过时间,格式:HHmmss" type="integer" length="0" index="true" store="true" default_val="-1" />
-		<column name="JGSK"               title="经过时刻,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" default_val="-1" />
-		<column name="DEVICE_ID"          title="设备编号" type="string" length="0" index="true" store="true" />
-		<column name="ORIGINAL_DEVICE_ID" title="原始设备ID" type="string" length="0" index="true" store="true" />
-		<column name="HPGS"               title="号牌归属,所属省份代码" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="HPGSS"              title="号牌归属市,所属省份和城市代码,如:粤A" type="string" length="0" index="true" store="true" analyze="true" />
-		<column name="HPHM"               title="号牌号码" type="string" length="0" index="true" store="true" default_val="-" />
-		<column name="HPZL"               title="号牌种类" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="HPYS"               title="号牌颜色" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="HAS_UMBRELLA"       title="是否有车伞[0:没有 1:有]" type="byte" length="0" index="true" store="true" default_val="0" />
-		<column name="HAS_FENDER"         title="是否有挡泥板[0:没有 1:有]" type="byte" length="0" index="true" store="true" default_val="0" />
-		<column name="HAS_TRUNK"          title="是否有后备箱[0:没有 1:有]" type="byte" length="0" index="true" store="true" default_val="0" />
-		<column name="HAS_AD_BOARD"       title="是否有广告牌[0:没有 1:有]" type="byte" length="0" index="true" store="true" default_val="0" />
-		<column name="HAS_LAMP"           title="是否有车灯[0:没有 1:有]" type="byte" length="0" index="true" store="true" default_val="0" />
-		<column name="CAR_RECT"           title="车身区域" type="string" length="0" index="false" store="true" />
-		<column name="PLATE_RECT"         title="车牌区域" type="string" length="0" index="false" store="true" />
-		<column name="UMBRELLA_RECT"      title="车伞区域" type="string" length="0" index="false" store="true" />
-		<column name="FENDER_RECT"        title="挡泥板区域" type="string" length="0" index="false" store="true" />
-		<column name="TRUNK_RECT"         title="后备箱区域" type="string" length="0" index="false" store="true" />
-		<column name="AD_BOARD_RECT"      title="广告牌区域" type="string" length="0" index="false" store="true" />
-		<column name="LAMP_RECT"          title="车灯区域" type="string" length="0" index="false" store="true" />
-		<column name="UMBRELLA_COLOR"     title="车伞颜色" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="FENDER_COLOR"       title="挡泥板颜色" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="TRUNK_COLOR"        title="后备箱颜色" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="LAMP_TYPE"          title="车灯类型[-1:未知 0:倒三角 1:圆形 2:方形 3:梯形 4:椭圆]" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="PERSON_NUM"         title="人员数量" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="PERSON_INFO"        title="人员信息,[{是否带头盔，头盔颜色，衣服颜色,坐标信息}]" type="string" length="0" index="true" store="true" analyze="true" />
-		<column name="CLLX"               title="车辆类型" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="CSYS"               title="车身颜色" type="byte" length="0" index="true" store="true" default_val="-1" />
-		<column name="SPEED"              title="车速" type="integer" length="0" index="true" store="true" default_val="-1" />
-		<column name="PPDM"               title="品牌代码" type="integer" length="0" index="true" store="true" default_val="-1" />
-		<column name="ZPPDM"              title="子品牌代码" type="integer" length="0" index="true" store="true" default_val="-1" />
-		<column name="PIC_ABBREVIATE"     title="全景图" type="string" length="0" index="false" store="true" />
-		<column name="PIC_DRIVER"         title="驾驶人抓拍图" type="string" length="0" index="false" store="true" />
-		<column name="ORG_CODE"           title="行政区划代码" type="integer" length="0" index="true" store="true" />
-		<column name="VENDOR"             title="设备厂商" type="string" length="0" index="true" store="true" default_val="-" />
-		<column name="DATA_SRC"           title="数据来源[1:卡口 2:虚拟卡口 3:视频结构化]" type="string" length="0" index="true" store="true" default_val="-1" />
-		<column name="CREATE_TIME"        title="创建时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" default_val="-1" />
-		<column name="CJSJ"               title="采集时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" default_val="-1" />
-		<column name="KEYWORDS"           title="全文检索标签,车牌(粤AT4V88),车辆子品牌(中文),地点,车辆类型(中文)" type="string" length="0" index="true" store="true" analyze="true" />
-	</NON_MOTOR_VEHICLE_INFO>
+    <DRIVER_FACE_INFO indice="driver_face_indice" title="驾驶人抓拍索引(分月存储)">
+        <column name="INFO_ID"            title="信息编号,主键ID,使用snowflake算法生成" type="long" primary-key="true" pk-generator="UUID" length="0" index="true" store="true" />
+        <column name="VEHICLE_INFO_ID"    title="信息编号,外键,为车辆抓拍索引的某个记录ID" type="long" length="0" index="true" store="true" />
+        <column name="JGRQ"               title="经过日期,格式:yyMMdd" type="integer" length="0" index="true" store="true" />
+        <column name="JGSJ"               title="经过时间,格式:HHmmss" type="integer" length="0" index="true" store="true" />
+        <column name="JGSK"               title="经过时刻,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+        <column name="DEVICE_ID"          title="设备编号" type="string" length="0" index="true" store="true" />
+        <column name="ORIGINAL_DEVICE_ID" title="原始设备ID" type="string" length="0" index="true" store="true" />
+        <column name="HPHM"               title="号牌号码,完整车牌" type="string" length="0" index="true" store="true" />
+        <column name="HPGS"               title="号牌归属,所属省份代码" type="byte" length="0" index="true" store="true" />
+        <column name="HPGSS"              title="号牌归属市,所属省份和城市代码,如:粤A" type="string" length="0" index="true" store="true" analyze="true" />
+        <column name="HPZL"               title="号牌种类" type="byte" length="0" index="true" store="true" />
+        <column name="HPYS"               title="号牌颜色" type="byte" length="0" index="true" store="true" />
+        <column name="CLLX"               title="车辆类型" type="byte" length="0" index="true" store="true" />
+        <column name="CSYS"               title="车身颜色" type="byte" length="0" index="true" store="true" />
+        <column name="PPDM"               title="品牌代码" type="integer" length="0" index="true" store="true" />
+        <column name="ZPPDM"              title="子品牌代码" type="integer" length="0" index="true" store="true" />
+        <column name="WITH_GLASSES"       title="是否戴眼镜[0:未知 1:无 2:有]" type="byte" length="0" index="true" store="true" />
+        <column name="WITH_HAT"           title="是否戴帽子[0:未知 1:无 2:有]" type="byte" length="0" index="true" store="true" />
+        <column name="ORG_CODE"           title="行政区划代码" type="integer" length="0" index="true" store="true" />
+        <column name="VENDOR"             title="设备厂商" type="string" length="0" index="true" store="true" default_val="-" />
+        <column name="DATA_SRC"           title="数据来源[1:卡口 2:虚拟卡口 3:视频结构化]" type="string" length="0" index="true" store="true" />
+        <column name="FACE_SCORE"         title="人脸注册分数" type="double" length="0" index="true" store="true" />
+        <column name="DRIVER_ROLE"        title="驾驶员类型[0:副驾驶员 1:驾驶员 2:非汽车驾驶员]" type="byte" length="0" index="true" store="true" />
+        <column name="SEX"                title="性别[0:未知 1:男 2:女]" type="byte" length="0" index="true" store="true" />
+        <column name="AGE"                title="年龄段[0:未知 1:小孩 2:青少年 3:中年人 4:老年人]" type="byte" length="0" index="true" store="true" />
+        <column name="FACE_CAPTURE"       title="驾驶人抓拍坐标集合" type="string" length="0" index="false" store="true" />
+        <column name="PIC_VEHICLE"        title="车辆抓拍图" type="string" length="0" index="false" store="true" />
+        <column name="PIC_DRIVER"         title="驾驶人抓拍图" type="string" length="0" index="false" store="true" />
+        <column name="PIC_ABBREVIATE"     title="全景图" type="string" length="0" index="false" store="true" />
+        <column name="CJSJ"               title="采集时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+        <column name="CREATETIME"         title="创建时间,格式:yyMMddHHmmss" type="long" length="0" index="true" store="true" />
+        <column name="KEYWORDS"           title="全文检索标签,车牌(粤AT4V88),车辆子品牌(中文),地点,车辆类型(中文)" type="string" length="0" index="true" store="true" analyze="true" />
+        <column name="RLTZ"               title="人脸特征" type="binary" length="0" index="false" store="true" />
+    </DRIVER_FACE_INFO>
 </eap-mapping>
