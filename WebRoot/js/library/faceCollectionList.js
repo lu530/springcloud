@@ -109,7 +109,9 @@ $(function () {
     }
 });
 function initPage(){
-	var isPicSearchConfig = getConfigValue({model:"efacecloud",keys:["FACE_LIST_SEARCH"]})["FACE_LIST_SEARCH"];
+	var result = getConfigValue({model:"efacecloud",keys:["FACE_LIST_SEARCH", "FACE_PIC_EDIT"]});
+	var isPicSearchConfig = result["FACE_LIST_SEARCH"];
+	var isPicEdit = result["FACE_PIC_EDIT"];
     if(isPicSearchConfig==1){
     	UI.control.remoteCall("face/capture/getFaceUploadPicConfig",{},function(resp){
     		if(resp&&resp.FACE_SEARCH==true){
@@ -121,6 +123,10 @@ function initPage(){
     }else{
     	$(".picUpdata").removeClass("hide");
     	$(".top-box").removeClass("pl0");
+    }
+    //判断是否开启图片编辑（1开启 0关闭， 页面默认hide）
+    if (isPicEdit == 1) {
+        $("#editImgBtn").removeClass("hide");
     }
     domPermission();
 }
