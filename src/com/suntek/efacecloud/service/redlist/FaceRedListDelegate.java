@@ -14,7 +14,7 @@ public class FaceRedListDelegate extends FaceRedListService {
         String vendor = ConfigUtil.getVendor();
         if (Constants.HIK_VENDOR.equals(vendor)) {
             return new HikFaceRedListService();
-        } else if ("huawei".equals(vendor)) {
+        } else if (Constants.HW_VENDOR.equals(vendor)) {
             return new HuaWeiFaceRedListService();
         } else {
             return new PciFaceRedListService();

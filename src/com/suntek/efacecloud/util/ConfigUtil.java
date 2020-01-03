@@ -182,22 +182,12 @@ public class ConfigUtil {
     }
 
     /**
-     * NVN技战法查询是否为异步，0表示同步，1表示异步，默认为同步
-     *
-     * @return
-     */
-    private static String getIsNvnAsyncConfig() {
-        String n2nAddr = AppHandle.getHandle(Constants.CONSOLE).getProperty("IS_NVN_ASYNC", "0");
-        return n2nAddr;
-    }
-
-    /**
      * NVN技战法查询是否为异步
      *
      * @return
      */
     public static boolean getIsNvnAsync() {
-        return "1".equals(getIsNvnAsyncConfig());
+        return Constants.HW_VENDOR.equals(getVendor());
     }
 
     /**

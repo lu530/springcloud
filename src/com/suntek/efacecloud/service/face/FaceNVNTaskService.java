@@ -13,6 +13,7 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
+import com.suntek.efacecloud.service.face.tactics.SpecialPersonService;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import com.suntek.sp.huawei.HWStatusCode;
@@ -42,6 +43,8 @@ import java.util.Map;
 public class FaceNVNTaskService {
 
     private FaceNVNTaskDao dao = new FaceNVNTaskDao();
+
+    private SpecialPersonService specialPersonService = new SpecialPersonService();
 
     @BeanService(id = "executeTask", type = "remote", description = "执行nvn任务")
     public void executeTask(RequestContext context) {
@@ -113,6 +116,10 @@ public class FaceNVNTaskService {
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台路人检索频次分析出错，原因：" + e.getMessage(), e);
                         }
+                        break;
+                    //特殊人群分析
+                    case Constants.SPECIAL_PERSON:
+                        this.specialPersonService.execute(taskMap);
                         break;
                     default:
                         break;

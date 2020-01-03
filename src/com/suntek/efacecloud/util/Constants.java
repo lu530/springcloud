@@ -518,6 +518,9 @@ public class Constants {
 
     public static final String SPECIAL_PERSON = "specialPerson";
 
+    //管理员人员种类
+    public final static String ADMIN_USER_TYPE = "9";
+
 
     /**
      * 视频云设备类型--中台设备类型对应关系
