@@ -39,6 +39,8 @@ function initEvent(){
 		parent.parent.window.frames['mainFrameContent'].showForm('/efacecloud/page/technicalStation/personGangsFrequencyList.html');
 		top.rightMainFrameOut('hide');
 	});
+
+	if(top.GET_TASK_LIST_DATA) $('#backBtn').addClass("hide");
 }
 
 function coincideTimesGroup(ret) {
@@ -146,38 +148,44 @@ function renderDate(time, type)
 	return timeSplit.substring(4).replace('-','-');
 }
 
-//var deviceInfo = {};
 var timesGroupData,coincideDateGroupData;
 function gangsAnalysis(){
-	//recordId = "{list:[{CAPTURE_TIME:'2016-02-25 07:06:20',ORIGINAL_DEVICE_ID:'4'}]}";
-	if (recordId) {
-		UI.util.showLoadingPanel('');
-//		UI.control.remoteCall('person/follow/together', {
-//			recordId: recordId,togetherMinute:togetherMinute
-//		}
-		UI.control.remoteCall('technicalTactics/personFollow/togetherAnalysis', {
-			RECORD_IDS: recordId,TOGETHER_MINUTE:togetherMinute,THRESHOLD:threshold, FACE_SCORE:faceScore,INFO_IDS:infoIds
-		}, function(resp) {
-			//deviceInfo = resp.deviceInfo;
-			if(resp.DATA.length>0){
-				timesGroupData = coincideTimesGroup(resp.DATA);
-				coincideDateGroupData = resp.DATA;
-				console.log('------');
-				console.log(timesGroupData)
-				$("#frequency").html(tmpl('resultTmpl', timesGroupData));
-				$("[attrimg='zoom']").lazyload({
-					threshold : 200,
-					container: $(".pager-container")
-				});
-			}else{
-				UI.util.alert("查询结果为空",'warn');
-			}
-			UI.util.hideLoadingPanel();
-		}, function(data, status, e) {
-			UI.util.hideLoadingPanel();
-		}, {
-			async : true
+	if(top.GET_TASK_LIST_DATA){
+		var resp = top.GET_TASK_LIST_DATA.data;
+		dealWithListData(resp);
+		delete top.GET_TASK_LIST_DATA;		
+	}else{
+		if (recordId) {
+			UI.util.showLoadingPanel('');
+			UI.control.remoteCall('technicalTactics/personFollow/togetherAnalysis', {
+				RECORD_IDS: recordId,TOGETHER_MINUTE:togetherMinute,THRESHOLD:threshold, FACE_SCORE:faceScore,INFO_IDS:infoIds
+			}, function(resp) {
+				if(resp.IS_SYNC == 0){
+					dealWithListData(resp);
+				}else{
+					UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
+				}
+				UI.util.hideLoadingPanel();
+			}, function(data, status, e) {
+				UI.util.hideLoadingPanel();
+			}, {
+				async : true
+			});
+		}
+	}
+}
+
+function dealWithListData(resp){
+	if(resp.DATA.length>0){
+		timesGroupData = coincideTimesGroup(resp.DATA);
+		coincideDateGroupData = resp.DATA;
+		$("#frequency").html(tmpl('resultTmpl', timesGroupData));
+		$("[attrimg='zoom']").lazyload({
+			threshold : 200,
+			container: $(".pager-container")
 		});
+	}else{
+		UI.util.alert("查询结果为空",'warn');
 	}
 }
 

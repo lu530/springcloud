@@ -147,14 +147,18 @@ function initEvents(){
 		parent.rightMainFrameOut();
 	});
 	
-	if(fileId && beginTime && endTime && threshold){
+	if(top.GET_TASK_LIST_DATA) {
+		showForm('/efacecloud/page/technicalStation/persontogethercarQueryResult.html');
+	}else {
+		if(fileId && beginTime && endTime && threshold){
 		
-		if(isScreenShot == 'true'){
-			creatScreenShot();
+			if(isScreenShot == 'true'){
+				creatScreenShot();
+			}
+			
+			UI.util.showLoadingPanel('');
+			doCollision();
 		}
-		
-		UI.util.showLoadingPanel('');
-		doCollision();
 	}
 	
 	$('#relativeMACbtn').click(function(){
@@ -196,19 +200,6 @@ function initEvents(){
 		showForm('/efacecloud/page/technicalStation/searchPersonList.html');
 	});
 	
-	///同行人员-生成轨迹
-	/*$('#generatingLocusBtn').click(function(){
-		if(!parent.window.frames['mainFrameContent'].setFieldValue()){
-			UI.util.alert('请输入正确的条件','warn');
-			return false;
-		}
-		if(getFaceTrackInfoList()){
-			parent.window.frames['mainFrameContent'].showForm('/efacecloud/page/technicalStation/multiPathQueryCheckForm.html');
-			parent.window.frames['mainFrameContent'].showMultiTracksOnMap("faceTrack", trackArr, "face");
-			top.rightMainFrameOut();
-		}
-	});*/
-	
 	//同行人员-生成轨迹
 	$('#generatingLocusBtn').click(function(){
 		
@@ -248,15 +239,6 @@ function initEvents(){
 		
 	});
 	
-	//人像追踪-生成轨迹
-	/*$('#trajectoryGeneBtn').click(function(){
-		if(getFaceTrackInfoList()){
-		}
-		parent.window.frames['mainFrameContent'].showForm('/efacecloud/page/technicalStation/persontogetherResultList.html');
-		//parent.window.frames['mainFrameContent2'].initData(getSelectTrackData());
-		parent.window.frames['mainFrameContent'].showTracksOnMap(trackArr);
-		top.rightMainFrameOut('hide');
-	});*/
 	
 		//同行人分析
 	$('#gangsAnalysisBtn').click(function() {
@@ -295,24 +277,9 @@ function initEvents(){
 			
 			UI.util.showCommonWindow("/efacecloud/page/technicalStation/thresholdForm.html", "阈值设置", 451, 250,function(resp){
 				
-	//			var _arr = [];
-	//			for (var i = 0; i < inputCheck.length; i++) {
-	//				var index = $(inputCheck[i]).attr("index");
-	//				var d = index.split('-');
-	//		    	var obj = {};
-	//		    	obj.ORIGINAL_DEVICE_ID = data[d[0]].LIST[d[1]].LIST[d[2]].ORIGINAL_DEVICE_ID;
-	//		    	obj.DEVICE_NAME = data[d[0]].LIST[d[1]].LIST[d[2]].DEVICE_NAME;
-	//		    	obj.OBJ_PIC = renderVendorImage(data[d[0]].LIST[d[1]].LIST[d[2]].vd, data[d[0]].LIST[d[1]].LIST[d[2]].capture_image_id);
-	//		    	obj.X = data[d[0]].LIST[d[1]].LIST[d[2]].X;
-	//		    	obj.Y = data[d[0]].LIST[d[1]].LIST[d[2]].Y;
-	//		    	obj.TIME = data[d[0]].LIST[d[1]].LIST[d[2]].TIME;
-	//		    	_arr.push(obj);
-	//			}
-				
 				gangsThreshold = resp.THRESHOLD;
 				faceScore = resp.FACESCORE;
-				//parent.window.frames['mainFrameContent'].showMultiTracksOnMap("faceTrack", _arr, "face");
-				//showForm('/cloudsearch/page/technicalStation/persontogetherRightList.html?recordId='+JSON.stringify(objArr));
+
 				showForm('/efacecloud/page/technicalStation/persontogethercarQueryResult.html');
 			});
 		}
