@@ -33,7 +33,7 @@
                             <li class="re-upload"><i class="icon-image2"></i> <input class="file-style searchImgButton"
                                     type="file" id="picBtn" name="picBtn" issearch=true /></li>
                             <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
-                            <li class="edit-pic" id="editImgBtn"><i class="icon-pencil3"></i></li>
+                            <li class="edit-pic hide" id="editImgBtn"><i class="icon-pencil3"></i></li>
                         </ul>
                     </div>
                     <!--<ul class="bottom-pic-bar hide" id="thresholdValidate">
@@ -322,7 +322,7 @@
                                     {% } %}
                                     <span title="抓拍时间：{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</span>
                                 </p>
-                                <p>
+                                <p class="hide">
                                     <label picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}">入库时间：</label>
                                     <span title="入库时间：{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</span>
                                 </p>
@@ -441,7 +441,7 @@
                                 <th class="tc hide" style="width: 50px;"></th>
                                 <th class="w10 tc"><span>地点</span></th>
                                 <th class="w10 tc"><span>抓拍时间</span></th>
-                                <th class="w10 tc"><span>入库时间</span></th>
+                                <th class="w10 tc hide"><span>入库时间</span></th>
                                 <th class="w10 tc"><span>设备名称</span></th>
                                 <th class="w10 tc"><span>行政区域</span></th>
                                 <th class="w10 tc" dom-permission="faceCaptureList-register"><span>注册状态</span></th>
@@ -470,7 +470,7 @@
                                     </td>  -->
                                     <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</td>
                                     <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
-                                    <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                    <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
                                     <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</td>
                                     <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o.ORG_NAME)%}" title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</td>
                                     <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</td>
@@ -580,7 +580,7 @@
                                         <label picMsg="时间:{%=renderNullToNotKnow(o[i].JGSK)%}">抓拍时间：</label>
                                         <span title="抓拍时间：{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</span>
                                     </p>
-                                    <p>
+                                    <p class="hide">
                                         <label picMsg="入库时间:{%=renderNullToNotKnow(o[i].CREATETIME)%}">入库时间：</label>
                                         <span title="入库时间：{%=renderNullToNotKnow(o[i].CREATETIME)%}">{%=renderNullToNotKnow(o[i].CREATETIME)%}</span>
                                     </p>
@@ -681,7 +681,7 @@
                                     <th class="tc hide" style="width: 50px;"></th>
                                     <th class="w10 tc"><span>地点</span></th>      
                                     <th class="w10 tc"><span>抓拍时间</span></th> 
-                                    <th class="w10 tc"><span>入库时间</span></th> 
+                                    <th class="w10 tc hide"><span>入库时间</span></th> 
                                     <th class="w10 tc"><span>设备名称</span></th>      
                                     <th class="w10 tc"><span>行政区域</span></th> 
                                     <th class="w10 tc"><span>注册状态</span></th>      
@@ -709,7 +709,7 @@
                                         </td>  -->
                                         <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</td>
                                         <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
-                                        <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                        <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
                                         <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</td>
                                         <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}" title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</td>
                                         <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</td>
@@ -818,7 +818,7 @@
                                                 <label picMsg="时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">抓拍时间：</label>
                                                 <span title="抓拍时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}</span>
                                             </p>
-                                            <p>
+                                            <p class="hide">
                                                 <label picMsg="入库时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">入库时间：</label>
                                                 <span title="入库时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}</span>
                                             </p>
@@ -947,7 +947,7 @@
                                                 <label picMsg="时间:{%=renderNullToNotKnow(o[key][i].JGSK)%}">抓拍时间：</label>
                                                 <span title="抓拍时间：{%=renderNullToNotKnow(o[key][i].JGSK)%}">{%=renderNullToNotKnow(o[key][i].JGSK)%}</span>
                                             </p>
-                                            <p>
+                                            <p class="hide">
                                                 <label picMsg="入库时间:{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">入库时间：</label>
                                                 <span title="入库时间：{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">{%=renderNullToNotKnow(o[key][i].CREATETIME)%}</span>
                                             </p>
