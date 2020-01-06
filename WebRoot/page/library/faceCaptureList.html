@@ -340,7 +340,7 @@
                                 </p>
                                 <p class='{%= projectDisplay("faceCaptureList-algo-type") %}'>
                                     <label picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
-                                    <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</span>
+                                    <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME : '未知'%}</span>
                                 </p>
                                 <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
                                     <label picMsg="质量分数:{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}">质量分数：</label>
