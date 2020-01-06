@@ -164,8 +164,8 @@ function gangsAnalysis(){
 					dealWithListData(resp);
 				}else{
 					UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
+					UI.util.hideLoadingPanel();
 				}
-				UI.util.hideLoadingPanel();
 			}, function(data, status, e) {
 				UI.util.hideLoadingPanel();
 			}, {
@@ -187,6 +187,7 @@ function dealWithListData(resp){
 	}else{
 		UI.util.alert("查询结果为空",'warn');
 	}
+	UI.util.hideLoadingPanel();
 }
 
 function renderForRecord(index){

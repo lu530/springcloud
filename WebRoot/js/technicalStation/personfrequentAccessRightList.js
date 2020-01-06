@@ -81,9 +81,8 @@ function initFrequentAccessList(){
 				dealWithListData(resp);
 			}else{
 				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
-			}
-			UI.util.hideLoadingPanel('currentPage');
-			
+				UI.util.hideLoadingPanel('currentPage');
+			}	
 		},function(){
 			UI.util.hideLoadingPanel('currentPage');
 		},{async:true});

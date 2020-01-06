@@ -122,45 +122,6 @@ function initEvents(){
 			$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
 		},500)
 	});
-
-	if(taskStatus && taskStatus != 2){
-		$("#searchBtn").addClass("hide");
-	}
-
-	//从任务列表查看
-	if(top.GET_TASK_LIST_DATA){
-		//条件回填
-		var search = top.GET_TASK_LIST_DATA.search;
-		//1
-		$(".beginTime:eq(0)").val(search.TIME_REGION_LIST[0].BEGIN_TIME);
-		$(".endTime:eq(0)").val(search.TIME_REGION_LIST[0].END_TIME);
-		fillBackDeviceIds({
-			datas: search.TIME_REGION_LIST[0].DEVICE_IDS,
-			deviceNames: "deviceNames1",
-			faceDetect: "faceDetect1",
-			deviceIdInt: "deviceIdInt1",
-			deviceNameList: "deviceNameList1",
-			dropdownListText: "dropdown-list-text1"
-		});
-		//2
-		$(".beginTime:eq(1)").val(search.TIME_REGION_LIST[1].BEGIN_TIME);
-		$(".endTime:eq(1)").val(search.TIME_REGION_LIST[1].END_TIME);
-		fillBackDeviceIds({
-			datas: search.TIME_REGION_LIST[1].DEVICE_IDS,
-			deviceNames: "deviceNames2",
-			faceDetect: "faceDetect2",
-			deviceIdInt: "deviceIdInt2",
-			deviceNameList: "deviceNameList2",
-			dropdownListText: "dropdown-list-text2"
-		});
-		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
-		sliderT.slider( "value", search.THRESHOLD || 60);
-		$( "#THRESHOLD" ).val( search.THRESHOLD || 60);
-		//执行检索
-		if(taskStatus == 2)$('#searchBtn').trigger("click");
-	}
-		
-
 	 
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
@@ -343,6 +304,43 @@ function initEvents(){
 		});
 		e.stopPropagation();
 	})
+
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		//1
+		$(".beginTime:eq(0)").val(search.TIME_REGION_LIST[0].BEGIN_TIME);
+		$(".endTime:eq(0)").val(search.TIME_REGION_LIST[0].END_TIME);
+		fillBackDeviceIds({
+			datas: search.TIME_REGION_LIST[0].DEVICE_IDS,
+			deviceNames: "deviceNames1",
+			faceDetect: "faceDetect1",
+			deviceIdInt: "deviceIdInt1",
+			deviceNameList: "deviceNameList1",
+			dropdownListText: "dropdown-list-text1"
+		});
+		//2
+		$(".beginTime:eq(1)").val(search.TIME_REGION_LIST[1].BEGIN_TIME);
+		$(".endTime:eq(1)").val(search.TIME_REGION_LIST[1].END_TIME);
+		fillBackDeviceIds({
+			datas: search.TIME_REGION_LIST[1].DEVICE_IDS,
+			deviceNames: "deviceNames2",
+			faceDetect: "faceDetect2",
+			deviceIdInt: "deviceIdInt2",
+			deviceNameList: "deviceNameList2",
+			dropdownListText: "dropdown-list-text2"
+		});
+		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
+		sliderT.slider( "value", search.THRESHOLD || 60);
+		$( "#THRESHOLD" ).val( search.THRESHOLD || 60);
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
 }
 
 
@@ -589,4 +587,28 @@ function compatibleIndexOf(){
 	    return -1;
 	  };
 	}
+}
+
+function fillBackDeviceIds(obj){
+	var deviceName = "",orgCode = "",deviceId = "";
+	$.each(obj.datas, function(index, el) {
+		var str = "";
+		if(index != obj.datas.length - 1){
+			str = ",";
+		}
+		deviceName += el.DEVICE_NAME + str;
+		orgCode += el.ORG_CODE + str;
+		deviceId += el.DEVICE_ID + str;			
+	});
+	$('#'+obj.deviceNames).text(deviceName);
+	$('#'+obj.deviceNames).attr('title',deviceName);
+	$('#'+obj.deviceNames).attr('orgcode',orgCode);
+	$('#'+obj.faceDetect).val(deviceId);
+	$('#'+obj.deviceIdInt).val("");
+	addDrowdownDeviceList({
+		deviceId:deviceId,
+		deviceName:deviceName,
+		deviceNameList:$("#"+obj.deviceNameList),
+		dropdownListText:$("."+obj.dropdownListText)
+	});		
 }

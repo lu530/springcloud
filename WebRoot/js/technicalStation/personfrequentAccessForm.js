@@ -68,45 +68,6 @@ function initEvents(){
 			$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
 		},500)
 	})
-
-	if(taskStatus && taskStatus != 2){
-		$("#searchBtn").addClass("hide");
-	}
-
-	//从任务列表查看
-	if(top.GET_TASK_LIST_DATA){
-		//条件回填
-		var search = top.GET_TASK_LIST_DATA.search;
-		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
-		$("#beginTime").val(search.BEGIN_TIME);
-		$("#endTime").val(search.END_TIME);
-		$("#kks").val(search.NUMS);
-		sliderT.slider( "value", search.THRESHOLD );
-		$( "#THRESHOLD" ).val( search.THRESHOLD );
-		var deviceName = "",orgCode = "",deviceId = "";
-		$.each(search.DEVICE_IDS, function(index, el) {
-			var str = "";
-			if(index != search.DEVICE_IDS.length - 1){
-				str = ",";
-			}
-			deviceName += el.DEVICE_NAME + str;
-			orgCode += el.ORG_CODE + str;
-			deviceId += el.DEVICE_ID + str;			
-		});
-		$('#deviceNames').text(deviceName);
-		$('#deviceNames').attr('title',deviceName);
-		$('#deviceNames').attr('orgcode',orgCode);
-		$('#faceDetect').val(deviceId);
-		$('#deviceIdInt').val("");
-		addDrowdownDeviceList({
-			deviceId:deviceId,
-			deviceName:deviceName,
-			deviceNameList:$("#deviceNameList"),
-			dropdownListText:$(".dropdown-list-text")
-		});
-		//执行检索
-		if(taskStatus == 2)$('#searchBtn').trigger("click");
-	}
 	
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
@@ -226,6 +187,45 @@ function initEvents(){
 		});
 		e.stopPropagation();
 	});
+
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
+		$("#beginTime").val(search.BEGIN_TIME);
+		$("#endTime").val(search.END_TIME);
+		$("#kks").val(search.NUMS);
+		sliderT.slider( "value", search.THRESHOLD );
+		$( "#THRESHOLD" ).val( search.THRESHOLD );
+		var deviceName = "",orgCode = "",deviceId = "";
+		$.each(search.DEVICE_IDS, function(index, el) {
+			var str = "";
+			if(index != search.DEVICE_IDS.length - 1){
+				str = ",";
+			}
+			deviceName += el.DEVICE_NAME + str;
+			orgCode += el.ORG_CODE + str;
+			deviceId += el.DEVICE_ID + str;			
+		});
+		$('#deviceNames').text(deviceName);
+		$('#deviceNames').attr('title',deviceName);
+		$('#deviceNames').attr('orgcode',orgCode);
+		$('#faceDetect').val(deviceId);
+		$('#deviceIdInt').val("");
+		addDrowdownDeviceList({
+			deviceId:deviceId,
+			deviceName:deviceName,
+			deviceNameList:$("#deviceNameList"),
+			dropdownListText:$(".dropdown-list-text")
+		});
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
 
 }
 
