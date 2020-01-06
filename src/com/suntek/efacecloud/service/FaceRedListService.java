@@ -48,6 +48,9 @@ public class FaceRedListService {
     @BeanService(id = "add", description = "新增或编辑红名单库人脸")
     public void edit(RequestContext context) throws Exception {
         faceRedListDelegate.addOrEdit(context);
+        Map<String, Object> differentData = new CompareParamsService().getDifferentData(context);
+        context.putParameter("editParam", differentData.get("editParam"));
+        context.putParameter("originParam", differentData.get("originParam"));
     }
 
     @BeanService(id = "open", description = "是否开启红名单", type = "remote")
@@ -287,7 +290,7 @@ public class FaceRedListService {
 
     }
 
-    @BeanService(id = "detail", description = "红名单库人脸详情")
+    @BeanService(id = "detail", description = "红名单库人脸详情", paasService = "true")
     public void detail(RequestContext context) throws Exception {
         Map<String, Object> params = context.getParameters();
         String personId = StringUtil.toString(params.get("INFO_ID"));

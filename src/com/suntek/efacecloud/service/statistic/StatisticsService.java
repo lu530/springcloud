@@ -31,13 +31,10 @@ import java.util.stream.Collectors;
  * @version 2019年11月12日
  * @since
  */
-@LocalComponent(id = "face/capture", isLog = "true")
-public class StatisticsService {
-
+@LocalComponent(id = "face/capture", isLog = "true") public class StatisticsService {
 
     private FaceCommonDao faceCommonDao = new FaceCommonDao();
     private FaceCaptureStatisticDao faceCaptureDao = new FaceCaptureStatisticDao();
-
 
     //  统计类型 1:按摄像机
     private static String STATISTICS_TYPE_CAMERA = "1";
@@ -53,16 +50,17 @@ public class StatisticsService {
 
     public void statistics(RequestContext context) throws Exception {
 
-//        Integer cameraType = Integer.parseInt(StringUtil.toString(context.getParameter("CAMERA_TYPE"), "194"));
-//        String statisticsType = StringUtil.toString(context.getParameter("STATISTICS_TYPE"));
+        //  Integer cameraType = Integer.parseInt(StringUtil.toString(context.getParameter("CAMERA_TYPE"), "194"));
+        //  String statisticsType = StringUtil.toString(context.getParameter("STATISTICS_TYPE"));
         List<String> deviceIdList = getDeviceIdList(context);
         String connectType = StringUtil.toString(context.getParameter("CONNECT_TYPE"));
+        String elementId = StringUtil.toString(context.getParameter("elementId"));
         Date date = new Date();
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>() {{
             deviceIdList.stream().forEach(deviceId -> {
                 add(new HashMap<String, Object>() {{
                     try {
-                        DeviceEntity faceDevice = (DeviceEntity) EAP.metadata.getDictModel(DictType.D_FACE, deviceId, DeviceEntity.class);
+                        DeviceEntity faceDevice = (DeviceEntity)EAP.metadata.getDictModel(DictType.D_FACE, deviceId, DeviceEntity.class);
                         put("DEVICE_NAME", StringUtil.toString(faceDevice.getDeviceName()));
                         put("DEVICE_ADDR", StringUtil.toString(faceDevice.getDeviceAddr()));
                         put("ORG_NAME", StringUtil.toString(faceDevice.getOrgName()));
@@ -79,20 +77,21 @@ public class StatisticsService {
         // -- 获取设备状态数据
         renderDeviceConnectData(resultList);
         if (!StringUtil.isNull(connectType)) {
-            resultList = resultList.stream().filter(o -> o.get("CONNECT_TYPE").equals(connectType))
-                    .collect(Collectors.toList());
+            resultList = resultList.stream().filter(o -> o.get("CONNECT_TYPE").equals(connectType)).collect(Collectors.toList());
         }
 
-
         //今昨前天，公三天的设备统计数据
-        HashMap<String, Integer> todayCountData = getCountData(deviceIdList, DateUtil.offsetDay(date, 0).toString(DatePattern.PURE_DATE_PATTERN));
-        HashMap<String, Integer> lastDayCountData = getCountData(deviceIdList, DateUtil.offsetDay(date, -1).toString(DatePattern.PURE_DATE_PATTERN));
-        HashMap<String, Integer> dayBeforeCountData = getCountData(deviceIdList, DateUtil.offsetDay(date, -2).toString(DatePattern.PURE_DATE_PATTERN));
+        HashMap<String, Integer> todayCountData =
+            getCountData(deviceIdList, DateUtil.offsetDay(date, 0).toString(DatePattern.PURE_DATE_PATTERN));
+        HashMap<String, Integer> lastDayCountData =
+            getCountData(deviceIdList, DateUtil.offsetDay(date, -1).toString(DatePattern.PURE_DATE_PATTERN));
+        HashMap<String, Integer> dayBeforeCountData =
+            getCountData(deviceIdList, DateUtil.offsetDay(date, -2).toString(DatePattern.PURE_DATE_PATTERN));
 
-//        //获取设备的今天最后抓拍时间
-//        List<Map<String, Object>> deviceIdStatisList
-//                = faceCaptureDao.getLastTimeByDeivceId(DateUtil.offsetDay(date, 0).toString(DatePattern.NORM_DATETIME_PATTERN),
-//                DateUtil.offsetDay(date, -1).toString(DatePattern.NORM_DATETIME_PATTERN), deviceIdList);
+        //        //获取设备的今天最后抓拍时间
+        //        List<Map<String, Object>> deviceIdStatisList
+        //                = faceCaptureDao.getLastTimeByDeivceId(DateUtil.offsetDay(date, 0).toString(DatePattern.NORM_DATETIME_PATTERN),
+        //                DateUtil.offsetDay(date, -1).toString(DatePattern.NORM_DATETIME_PATTERN), deviceIdList);
         resultList.stream().forEach(o -> {
             String deviceId = StringUtil.toString(o.get("DEVICE_ID"));
             long num = Long.valueOf(StringUtil.toString(todayCountData.get(deviceId), "0"));
@@ -105,25 +104,29 @@ public class StatisticsService {
             o.put("BEFOREYES_NUM", beforYesNum);
         });
 
-
         //  -- 按照今日抓拍数倒排
         Collections.sort(resultList, new Comparator<Map<String, Object>>() {
-            @Override
-            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+            @Override public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 return Integer.valueOf(StringUtil.toString(o2.get("NUM"), "0")) - Integer.valueOf(StringUtil.toString(o1.get("NUM"), "0"));
             }
         });
+
+        List<Map<String, Object>> finalResultList = resultList;
+        context.getResponse().putData(elementId, new HashMap<String, Object>() {{
+            put("records", finalResultList);
+            put("count", finalResultList.size());
+        }});
+        return;
     }
 
-
-    @BeanService(id = "statisticsExport", description = "人脸抓拍统计导出", since = "2.0")
-    public void statisticsExport(RequestContext context) throws Exception {
+    @BeanService(id = "statisticsExport", description = "人脸抓拍统计导出", since = "2.0") public void statisticsExport(RequestContext context)
+        throws Exception {
         String excelType = StringUtil.toString(context.getParameter("EXCCEL_TYPE"));
         String beginTime = StringUtil.toString(context.getParameter("BEGIN_TIME"));
         String endTime = StringUtil.toString(context.getParameter("END_TIME"));
         statistics(context);
 
-        Map<String, Object> result = (Map<String, Object>) context.getResponse().getResult();
+        Map<String, Object> result = (Map<String, Object>)context.getResponse().getResult();
         JSONArray excelDataJsonArray = JSONArray.fromObject(result.get("STATISTICS_RESULT"));
         List<Map<String, Object>> excelDataList = new ArrayList<>();
 
@@ -144,7 +147,7 @@ public class StatisticsService {
         }
         try {
             for (Object obj : excelDataJsonArray) {
-                Map<String, Object> data = (Map<String, Object>) obj;
+                Map<String, Object> data = (Map<String, Object>)obj;
                 excelDataList.add(data);
             }
         } catch (Exception exception) {
@@ -159,7 +162,6 @@ public class StatisticsService {
         }
         context.getResponse().setMessage("导出成功！");
     }
-
 
     /**
      * 根据设备信息获取设备前端直连信息  从zk上获取
@@ -182,21 +184,20 @@ public class StatisticsService {
             }
         }
         list.stream().forEach(o -> {
-            String deviceId = StringUtil.toString(((Map<String, Object>) o).get("DEVICE_ID"));
+            String deviceId = StringUtil.toString(((Map<String, Object>)o).get("DEVICE_ID"));
             if (null != map.get(deviceId)) {
-                ((Map<String, Object>) o).put("STATUS_INFO", map.get(deviceId));
-                ((Map<String, Object>) o).put("IS_TASK_DEV", "是");
-                ((Map<String, Object>) o).put("CONNECT_TYPE", "1");
-                ((Map<String, Object>) o).put("CONNECT_TYPE_NAME", "直连");
+                ((Map<String, Object>)o).put("STATUS_INFO", map.get(deviceId));
+                ((Map<String, Object>)o).put("IS_TASK_DEV", "是");
+                ((Map<String, Object>)o).put("CONNECT_TYPE", "1");
+                ((Map<String, Object>)o).put("CONNECT_TYPE_NAME", "直连");
             } else {
-                ((Map<String, Object>) o).put("STATUS_INFO", "");
-                ((Map<String, Object>) o).put("IS_TASK_DEV", "否");
-                ((Map<String, Object>) o).put("CONNECT_TYPE", "2");
-                ((Map<String, Object>) o).put("CONNECT_TYPE_NAME", "对接");
+                ((Map<String, Object>)o).put("STATUS_INFO", "");
+                ((Map<String, Object>)o).put("IS_TASK_DEV", "否");
+                ((Map<String, Object>)o).put("CONNECT_TYPE", "2");
+                ((Map<String, Object>)o).put("CONNECT_TYPE_NAME", "对接");
             }
         });
     }
-
 
     /**
      * 根据设备信息获取统计数据
@@ -221,7 +222,6 @@ public class StatisticsService {
         };
     }
 
-
     //获取需要统计的设备数据
     private List<String> getDeviceIdList(RequestContext context) {
         String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
@@ -235,11 +235,10 @@ public class StatisticsService {
             int curPage = Integer.parseInt(pageNo);
             int size = Integer.parseInt(pageSize);
             int total = deviceIdList.size();
-            deviceIdList
-                    = deviceIdList.subList((curPage - 1) * size, (curPage * size) > total ? total : curPage * size);
+            deviceIdList = deviceIdList.subList((curPage - 1) * size, (curPage * size) > total ? total : curPage * size);
         }
+        ServiceLog.info("获取设备清单 size = " + deviceIdList.size());
         return deviceIdList;
     }
-
 
 }
