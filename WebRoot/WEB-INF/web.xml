@@ -12,6 +12,10 @@
 		<listener-class>com.suntek.efacecloud.listener.SystemInitListener</listener-class>
 	</listener>
 
+	<listener>
+	<listener-class>com.suntek.efacecloud.listener.DeviceHistoryStatusListener</listener-class>
+	</listener>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>every resource</web-resource-name>
