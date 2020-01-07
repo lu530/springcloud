@@ -17,9 +17,9 @@ var nightNum= $('#nightNum');
 
 $(document).ready(function(){
     UI.control.init(["userInfo"]);
-    getDeviceModule();  //定义在common中
-	initEvents();
+	getDeviceModule();  //定义在common中
 	initTime();
+	initEvents();
 
 	$('#technicalTitle').text('人员昼伏夜出分析');
 })

@@ -174,7 +174,7 @@ function initPage_Black(params) {
 
 //初始化左侧页面
 function initLeftForm(url){
-	$("#leftMainDiv iframe").attr("src",url);
+	$("#leftMainDiv #leftFrameCon").attr("src",url);
 }
 
 //显示同级iframe

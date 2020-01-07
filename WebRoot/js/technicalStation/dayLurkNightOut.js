@@ -202,7 +202,7 @@ function doSearch(){
 				dealWithListData(resp);
 			}else{
 				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
-				UI.util.hideLoadingPanel('currentPage');
+				UI.util.hideLoadingPanel();
 			}
 		},function(){},{},true);
 	}
@@ -219,6 +219,6 @@ function dealWithListData(resp){
 		UI.util.alert("查询结果为空","warn");
 		$("#collisionList").html('<div class="nodata"></div>');
 	}
-	UI.util.hideLoadingPanel('currentPage');
+	UI.util.hideLoadingPanel();
 }
 

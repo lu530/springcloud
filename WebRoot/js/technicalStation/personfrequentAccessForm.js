@@ -10,8 +10,8 @@ $(document).ready(function(){
 	UI.control.init();
 	getDeviceModule();  //定义在common中
 	/*judgePermission();*/
-	initEvents();
 	initTime();
+	initEvents();
 	/*initFaceDetectDropdowntree();*/
 })
 
