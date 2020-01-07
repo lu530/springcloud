@@ -1327,9 +1327,9 @@ function initEvent() {
 		// debugger
 
 		if (isfs == '1') {
-			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 730, function (obj) { });
+			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 800, function (obj) { });
 		} else {
-			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 880, 670, function (obj) { });
+			UI.util.showCommonWindow('/efacecloud/page/library/alarmDetails.html' + query, "告警详情", 1080, 800, function (obj) { });
 		}
 	});
 
