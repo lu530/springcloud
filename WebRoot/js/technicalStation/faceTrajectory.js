@@ -193,7 +193,7 @@ function doSearch(){
 		dealWithListData(resp);
 		delete top.GET_TASK_LIST_DATA;		
 	}else{
-		UI.control.remoteCall("technicalTactics/regionCollsion/query",parent.queryParams,function(resp){
+		UI.control.remoteCall("technicalTactics/regionCollision/query",parent.queryParams,function(resp){
 			if(resp.IS_SYNC == 0){
 				dealWithListData(resp);
 			}else{
