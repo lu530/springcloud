@@ -14,6 +14,7 @@ import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.service.face.tactics.SpecialPersonService;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import com.suntek.sp.huawei.HWStatusCode;
@@ -59,8 +60,7 @@ public class FaceNVNTaskService {
             String paramJson = StringUtil.toString(taskMap.get("PARAM"));
             Log.nvnTaskLog.debug("------------------>此次操作nvn的类型是：" + taskType);
 
-            // 将此条数据状态修改为"1"处理中
-            dao.updateTaskStatus(id, "1");
+            dao.updateTaskStatus(id, Constants.NVN_TASK_DEALING);
 
             OnlineTaskCounter.removeTask();
 
@@ -79,7 +79,9 @@ public class FaceNVNTaskService {
                     // 频繁出现
                     case Constants.FREQUENT_ACCESS:
                         try {
-                            registry.selectCommand(BaseCommandEnum.frequentAccess.getUri()).exec(commandContext);
+                            registry.selectCommand(BaseCommandEnum.frequentAccess.getUri(),
+                                    "4401",
+                                    ConfigUtil.getVendor()).exec(commandContext);
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台频繁出现出错，原因：" + e.getMessage(), e);
                         }
@@ -88,7 +90,9 @@ public class FaceNVNTaskService {
                     // 人脸区域碰撞
                     case Constants.REGION_COLLISION:
                         try {
-                            registry.selectCommand(BaseCommandEnum.regionCollsion.getUri()).exec(commandContext);
+                            registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(),
+                                    "4401",
+                                    ConfigUtil.getVendor()).exec(commandContext);
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台人脸区域碰撞出错，原因：" + e.getMessage(), e);
                         }
@@ -96,7 +100,9 @@ public class FaceNVNTaskService {
                     // 同伙分析
                     case Constants.FOLLOW_PERSON:
                         try {
-                            registry.selectCommand(BaseCommandEnum.followPerson.getUri()).exec(commandContext);
+                            registry.selectCommand(BaseCommandEnum.followPerson.getUri(),
+                                    "4401",
+                                    ConfigUtil.getVendor()).exec(commandContext);
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台同伙分析出错，原因：" + e.getMessage(), e);
                         }
@@ -104,7 +110,9 @@ public class FaceNVNTaskService {
                     // 昼伏夜出
                     case Constants.DAY_HIDE_NIGHT_ACTIVE:
                         try {
-                            registry.selectCommand(BaseCommandEnum.faceNvn.getUri()).exec(commandContext);
+                            registry.selectCommand(BaseCommandEnum.faceNvn.getUri(),
+                                    "4401",
+                                    ConfigUtil.getVendor()).exec(commandContext);
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台昼伏夜出出错，原因：" + e.getMessage(), e);
                         }
@@ -112,7 +120,9 @@ public class FaceNVNTaskService {
                     // 路人检索频次分析
                     case Constants.FACE_CAPTURE_FREQ_ANALYSIS:
                         try {
-                            registry.selectCommand(BaseCommandEnum.faceCaptureFreqAnalysis.getUri()).exec(commandContext);
+                            registry.selectCommand(BaseCommandEnum.faceCaptureFreqAnalysis.getUri(),
+                                    "4401",
+                                    ConfigUtil.getVendor()).exec(commandContext);
                         } catch (Exception e) {
                             Log.nvnTaskLog.error("调用开放平台路人检索频次分析出错，原因：" + e.getMessage(), e);
                         }
@@ -139,14 +149,14 @@ public class FaceNVNTaskService {
                     Log.nvnTaskLog.debug("------------------>调用开放平台出错，原因：" + commandContext.getResponse().getResult());
                     Object[] result = getErrMessage(taskId, commandContext.getResponse().getMessage());
                     dao.insertTaskResult(result);
-                    dao.updateTaskStatus(id, "3");
+                    dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 }
 
             } catch (Exception e) {
                 Log.nvnTaskLog.error("执行nvn任务失败，原因：" + e.getMessage(), e);
                 Object[] result = getErrMessage(taskId, e.getMessage());
                 dao.insertTaskResult(result);
-                dao.updateTaskStatus(id, "3");
+                dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 FaceNvNTaskExecuteJob.isFinish = true;
             }
 
@@ -184,7 +194,7 @@ public class FaceNVNTaskService {
             if (between.toMinutes() >= 30L) {
                 Object[] result = getErrMessage(taskId, "任务超时");
                 dao.insertTaskResult(result);
-                dao.updateTaskStatus(id, "3");
+                dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 Log.nvnTaskLog.debug(taskId + " nvn任务查询时间大于半个小时");
                 FaceNvNTaskExecuteJob.isFinish = true;
                 return;
@@ -212,7 +222,7 @@ public class FaceNVNTaskService {
                 Log.nvnTaskLog.debug("任务返回信息：" + commandContext.getResponse().getMessage());
                 Object[] result = getErrMessage(taskId, commandContext.getResponse().getMessage());
                 dao.insertTaskResult(result);
-                dao.updateTaskStatus(id, "3");
+                dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 FaceNvNTaskExecuteJob.isFinish = true;
                 return;
             }
@@ -233,7 +243,7 @@ public class FaceNVNTaskService {
             Log.nvnTaskLog.debug("------------------>接口返回结果已入库");
 
             // 任务结束更新状态
-            dao.updateTaskStatus(id, "2");
+            dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT);
             Log.nvnTaskLog.debug("------------------>任务结束，更新状态已处理");
             FaceNvNTaskExecuteJob.isFinish = true;
 
@@ -333,7 +343,7 @@ public class FaceNVNTaskService {
         param[1] = method;
         param[2] = count;
         // 任务状态："0"未处理，"1"处理中，"2"已处理
-        param[3] = "0";
+        param[3] = Constants.NVN_TASK_UN_DEAL;
         // if (count < 10000) {
         // param[3] = "2";
         // }

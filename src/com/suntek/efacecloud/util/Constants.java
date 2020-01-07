@@ -519,7 +519,28 @@ public class Constants {
     public static final String SPECIAL_PERSON = "specialPerson";
 
     //管理员人员种类
-    public final static String ADMIN_USER_TYPE = "9";
+    public static final String ADMIN_USER_TYPE = "9";
+
+
+    /**
+     * nvn任务未处理
+     */
+    public static final String NVN_TASK_UN_DEAL = "0";
+
+    /**
+     * nvn任务正在处理中
+     */
+    public static final String NVN_TASK_DEALING = "1";
+
+    /**
+     * nvn任务已处理
+     */
+    public static final String NVN_TASK_DEALT = "2";
+
+    /**
+     * nvn任务已处理,但是发生了异常
+     */
+    public static final String NVN_TASK_DEALT_ERROR = "3";
 
 
     /**

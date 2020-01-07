@@ -31,7 +31,7 @@ public class FaceNVNTaskDao {
     }
     
     public Map<String, Object> getNeedExcuteTask(){
-        String sql = "select * from EFACE_NVN_TASK_INFO where TASK_STATUS = 0 order by UPDATE_TIME desc, CREATE_TIME asc";
+        String sql = "select * from EFACE_NVN_TASK_INFO where TASK_STATUS = 0 order by UPDATE_TIME desc, CREATE_TIME asc limit 1";
         List<Map<String, Object>> list = jdbc.queryForList(sql);
         if (list.size() > 0) {
             return list.get(0);
