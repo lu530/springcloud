@@ -71,28 +71,44 @@ function doSearch() {
 //初始化频繁出入列表
 function initFrequentAccessList(){
 	
-	UI.control.remoteCall('technicalTactics/frequencyAccess/query', queryParams, function(resp){
-		if(resp.DATA.length > 0){
-			initTechnicalPage(resp.DATA.length,true);//技战法分页
-			savedData = resp.DATA;
-			
-			showData = resp.DATA;
-			showData.sort(function(a, b) {
-				return parseInt(a.REPEATS) > parseInt(b.REPEATS) ? -1 : 1;
-			});
-	        
-			var curShowData = showData.slice(0,pageSize);
+	if(top.GET_TASK_LIST_DATA){
+		var resp = top.GET_TASK_LIST_DATA.data;
+		dealWithListData(resp);
+		delete top.GET_TASK_LIST_DATA;		
+	}else{
+		UI.control.remoteCall('technicalTactics/frequencyAccess/query', queryParams, function(resp){
+			if(resp.IS_SYNC == 0){
+				dealWithListData(resp);
+			}else{
+				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
+				UI.util.hideLoadingPanel('currentPage');
+			}	
+		},function(){
+			UI.util.hideLoadingPanel('currentPage');
+		},{async:true});
+	}
 
-			$("#faceTable").html(tmpl("faceTmpl", curShowData));
-			
-		}else{
-			UI.util.alert("查询结果为空","warn");
-		}
-		UI.util.hideLoadingPanel('currentPage');
+}
+
+function dealWithListData(resp){
+	if(resp.DATA.length > 0){
 		
-	},function(){
-		UI.util.hideLoadingPanel('currentPage');
-	},{async:true});
+		initTechnicalPage(resp.DATA.length,true);//技战法分页
+		savedData = resp.DATA;
+		
+		showData = resp.DATA;
+		showData.sort(function(a, b) {
+			return parseInt(a.REPEATS) > parseInt(b.REPEATS) ? -1 : 1;
+		});
+		
+		var curShowData = showData.slice(0,pageSize);
+
+		$("#faceTable").html(tmpl("faceTmpl", curShowData));
+		
+	}else{
+		UI.util.alert("查询结果为空","warn");
+	}
+	UI.util.hideLoadingPanel('currentPage');
 }
 
 //初始化昼伏夜出列表

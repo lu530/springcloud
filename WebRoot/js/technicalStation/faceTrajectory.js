@@ -188,55 +188,37 @@ function showTracks(mapData){
 function doSearch(){
 
 	UI.util.showLoadingPanel();
-    UI.control.remoteCall("technicalTactics/regionCollision/query",parent.queryParams,function(resp){
-	// 	var resp = {};
-    // 	resp.DATA = [[{
-    //     "ORIGINAL_DEVICE_ID": "44010000001320404003",
-    //     "X": 113.325732,
-    //     "OBJ_PIC": "http://172.16.58.182:8088/g1/M00/00012001/20180314/rBA6tlqok9yIEUaSAAAcTB9rTYUAAAHQQLVt1AAABxk279.jpg",
-    //     "DEVICE_NAME": "67.81摄像机",
-    //     "Y": 23.101687,
-    //     "TIME": "2018-03-14 11:12:26",
-    //     "REPEATS": 3,
-    //     "FACE_SCORE": "62"
-    //   },
-    //   {
-    //     "ORIGINAL_DEVICE_ID": "44010000001320404003",
-    //     "X": 113.336145,
-    //     "OBJ_PIC": "http://172.16.58.182:8088/g1/M00/00012001/20180314/rBA6tlqok9yIVmq9AAAcTB9rTYUAAAHQQLV07QAABxk746.jpg",
-    //     "DEVICE_NAME": "67.81摄像机",
-    //     "Y": 23.106294,
-    //     "TIME": "2018-03-14 11:12:26",
-    //     "REPEATS": 3,
-    //     "FACE_SCORE": "62"
-    //   },
-    //   {
-    //         "ORIGINAL_DEVICE_ID": "44010000001320404003",
-    //         "X": 113.345625,
-    //         "OBJ_PIC": "http://172.16.58.182:8088/g1/M00/00012001/20180314/rBA6tlqok9yIVmq9AAAcTB9rTYUAAAHQQLV07QAABxk746.jpg",
-    //         "DEVICE_NAME": "67.81摄像机",
-    //         "Y":  23.129308,
-    //         "TIME": "2018-03-14 11:12:26",
-    //         "REPEATS": 3,
-    //         "FACE_SCORE": "62"
-    //       }]];
-    	if(resp.DATA.length>0){
-			result = resp.DATA;
-			initTechnicalPage(result.length,true);//技战法分页
-			var curShowData = result.slice(0,pageSize);
-			$("#collisionList").html(tmpl("listTempl", curShowData));
-	    	UI.util.hideLoadingPanel();
-		}else{
-			UI.util.alert("查询结果为空","warn");
-			$("#collisionList").html('<div class="nodata"></div>');
-	    	UI.util.hideLoadingPanel();
-		}
-	},function(XMLHttpRequest, textStatus){
-		if(XMLHttpRequest && XMLHttpRequest.readyState === 0 && textStatus === 'timeout'){
-			UI.util.alert('ajax 请求超时', 'warn');
-			UI.util.hideLoadingPanel();
-		}
-	},{
-		timeout: 60000
-	},true);
+	if(top.GET_TASK_LIST_DATA){
+		var resp = top.GET_TASK_LIST_DATA.data;
+		dealWithListData(resp);
+		delete top.GET_TASK_LIST_DATA;		
+	}else{
+		UI.control.remoteCall("technicalTactics/regionCollsion/query",parent.queryParams,function(resp){
+			if(resp.IS_SYNC == 0){
+				dealWithListData(resp);
+			}else{
+				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
+			}
+		},function(XMLHttpRequest, textStatus){
+			if(XMLHttpRequest && XMLHttpRequest.readyState === 0 && textStatus === 'timeout'){
+				UI.util.alert('ajax 请求超时', 'warn');
+				UI.util.hideLoadingPanel();
+			}
+		},{
+			timeout: 60000
+		},true);
+	}
+}
+
+function dealWithListData(resp){
+	if(resp.DATA.length>0){
+		result = resp.DATA;
+		initTechnicalPage(result.length,true);//技战法分页
+		var curShowData = result.slice(0,pageSize);
+		$("#collisionList").html(tmpl("listTempl", curShowData));
+	}else{
+		UI.util.alert("查询结果为空","warn");
+		$("#collisionList").html('<div class="nodata"></div>');
+	}
+	UI.util.hideLoadingPanel();
 }

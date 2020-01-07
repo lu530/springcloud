@@ -98,20 +98,26 @@ public class FaceNVNTaskProvider extends GridDataProvider{
                     
                     String taskType = StringUtil.toString(map.get("TASK_TYPE"));
                     switch (taskType) {
-                        case "frequentAccess":
+                        case Constants.FREQUENT_ACCESS:
                             map.put("TASK_TYPE", "频繁出现");
                             break;
-                        case "regionCollsion":
+                        case Constants.REGION_COLLISION:
                             map.put("TASK_TYPE", "人脸区域碰撞");
                             break;
-                        case "followPerson":
+                        case Constants.FOLLOW_PERSON:
                             map.put("TASK_TYPE", "同伙分析");
                             break;
-                        case "faceNvn":
+                        case Constants.DAY_HIDE_NIGHT_ACTIVE:
                             map.put("TASK_TYPE", "昼伏夜出");
                             break;
-                        case "faceCaptureFreqAnalysis":
+                        case Constants.FACE_CAPTURE_FREQ_ANALYSIS:
                             map.put("TASK_TYPE", "路人检索频次分析");
+                            break;
+                        case Constants.NIGHT_ACTIVE:
+                            map.put("TASK_TYPE", "深夜出入");
+                            break;
+                        case Constants.SPECIAL_PERSON:
+                            map.put("TASK_TYPE", "重点人员分析");
                             break;
                         default:
                             break;

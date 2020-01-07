@@ -1,0 +1,34 @@
+@charset 'utf-8';
+.filter-tag .time-control{
+    height: 30px;
+}
+
+.table-wrap .table td > span.btn-item{
+    cursor: pointer;
+    font-size: 0;
+}
+
+.table-wrap .table td > span.btn-item span.table-btn{
+    margin-right: 16px;
+    font-size: 12px;
+}
+
+.table-wrap .table td > span i.task-status{
+    font-style: normal;
+    font-size: 14px;
+    color: #fff;
+    background: #24AA37;
+    padding: 5px;
+}
+
+.table-wrap .table td > span i.task-status.running{
+    background: #e2e640;
+}
+
+.table-wrap .table td > span i.task-status.stay-run{
+    background: #E5A63F;
+}
+
+.table-wrap .table td > span i.task-status.task-error{
+    background: #E64240;
+}

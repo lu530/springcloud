@@ -1,3 +1,4 @@
+var taskStatus = UI.util.getUrlParam("taskStatus") || '';
 var endTime = dateFormat(new Date(),'yyyy-MM-dd 23:59:59');
 var beginTime = dateFormat(new Date(),'yyyy-MM-dd 00:00:00');
 //查询参数
@@ -97,35 +98,39 @@ function initEvents(){
 	    });
 	 
 	 $('#THRESHOLD').keyup(function() {  
-	        //数值范围为100以内
-	    	$(this).val($(this).val().replace(/[^0-9]+/,''));
-	    	if($(this).val() > 100){
-	    		$(this).val(100);
-	    	}
-	     	$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
-	    	sliderT.slider( "value", $(this).val() );
-	     	setTimeout(function(){
-	     		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
-	     	},500)
-	    })
-	    
-	   $('#FACESCORE').keyup(function() {  
-	        //数值范围为100以内
-	    	$(this).val($(this).val().replace(/[^0-9]+/,''));
-	    	if($(this).val() > 100){
-	    		$(this).val(100);
-	    	}
-	     	$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
-	     	sliderS.slider( "value", $(this).val() );
-	     	setTimeout(function(){
-	     		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
-	     	},500)
-	    })
+		//数值范围为100以内
+		$(this).val($(this).val().replace(/[^0-9]+/,''));
+		if($(this).val() > 100){
+			$(this).val(100);
+		}
+		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
+		sliderT.slider( "value", $(this).val() );
+		setTimeout(function(){
+			$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
+		},500)
+	})
+	
+	$('#FACESCORE').keyup(function() {  
+		//数值范围为100以内
+		$(this).val($(this).val().replace(/[^0-9]+/,''));
+		if($(this).val() > 100){
+			$(this).val(100);
+		}
+		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
+		sliderS.slider( "value", $(this).val() );
+		setTimeout(function(){
+			$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
+		},500)
+	});
 	 
 	//返回菜单
-	$("#backBtn").click(function(){
-		parent.showMenu();
-	})
+	$('body').on('click','#backBtn',function(){
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
+	});
 	
 	//查询
 	$('#searchBtn').click(function(){
@@ -299,6 +304,43 @@ function initEvents(){
 		});
 		e.stopPropagation();
 	})
+
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		//1
+		$(".beginTime:eq(0)").val(search.TIME_REGION_LIST[0].BEGIN_TIME);
+		$(".endTime:eq(0)").val(search.TIME_REGION_LIST[0].END_TIME);
+		fillBackDeviceIds({
+			datas: search.TIME_REGION_LIST[0].DEVICE_IDS,
+			deviceNames: "deviceNames1",
+			faceDetect: "faceDetect1",
+			deviceIdInt: "deviceIdInt1",
+			deviceNameList: "deviceNameList1",
+			dropdownListText: "dropdown-list-text1"
+		});
+		//2
+		$(".beginTime:eq(1)").val(search.TIME_REGION_LIST[1].BEGIN_TIME);
+		$(".endTime:eq(1)").val(search.TIME_REGION_LIST[1].END_TIME);
+		fillBackDeviceIds({
+			datas: search.TIME_REGION_LIST[1].DEVICE_IDS,
+			deviceNames: "deviceNames2",
+			faceDetect: "faceDetect2",
+			deviceIdInt: "deviceIdInt2",
+			deviceNameList: "deviceNameList2",
+			dropdownListText: "dropdown-list-text2"
+		});
+		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
+		sliderT.slider( "value", search.THRESHOLD || 60);
+		$( "#THRESHOLD" ).val( search.THRESHOLD || 60);
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
 }
 
 
@@ -545,4 +587,28 @@ function compatibleIndexOf(){
 	    return -1;
 	  };
 	}
+}
+
+function fillBackDeviceIds(obj){
+	var deviceName = "",orgCode = "",deviceId = "";
+	$.each(obj.datas, function(index, el) {
+		var str = "";
+		if(index != obj.datas.length - 1){
+			str = ",";
+		}
+		deviceName += el.DEVICE_NAME + str;
+		orgCode += el.ORG_CODE + str;
+		deviceId += el.DEVICE_ID + str;			
+	});
+	$('#'+obj.deviceNames).text(deviceName);
+	$('#'+obj.deviceNames).attr('title',deviceName);
+	$('#'+obj.deviceNames).attr('orgcode',orgCode);
+	$('#'+obj.faceDetect).val(deviceId);
+	$('#'+obj.deviceIdInt).val("");
+	addDrowdownDeviceList({
+		deviceId:deviceId,
+		deviceName:deviceName,
+		deviceNameList:$("#"+obj.deviceNameList),
+		dropdownListText:$("."+obj.dropdownListText)
+	});		
 }

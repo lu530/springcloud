@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>任务列表</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/gis/css/suntekmap.css">
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/taskCompare.css" />
+</head>
+<body class="" style="overflow: hidden">
+	<div class="pager-wrap" container="scroll" id="taskList"
+		ui-control="listview" ui-service="face/nvnTask/getData"
+		ui-template="faceTemplate" ui-parameters="queryParams"
+		ui-options="{isMedia:false,toPage:true,pageCount:3,unload:true,listviewCallback:listviewCallback}">
+		<div class="pager-content">
+			<div class="page-title">
+				<span>任务列表</span>
+			</div>
+			<div class="top-box">
+				<div class="filter-view">
+					<dl class="filter-bar pl0">
+						<dt class="filter-arrt">创建时间：</dt>
+							<dd class="filter-tag ">
+								<div class="tagslist timelist" id="timeList">
+									<div class="">
+										<div class="time-control-item">
+											<input class="time-control deepen-border-color" id="beginTime" readonly="" type="text"> <i></i>
+										</div>
+										<span>-</span>
+										<div class="time-control-item">
+											<input class="time-control deepen-border-color" id="endTime" readonly="" type="text">
+											<i></i>
+										</div>
+									</div>
+								</div>
+						</dd>
+					</dl>
+					<dl class="filter-bar cameraHide pl0">
+						<dt class="filter-arrt">任务状态：</dt>
+						<dd class="filter-tag">
+							<div class="tagslist" id="taskStatus">
+								<span class="tag-item active" val="">全部</span>
+								<span class="tag-item" val="0">待启动</span>
+								<span class="tag-item" val="1">进行中</span>
+								<span class="tag-item" val="2">已完成</span>
+								<span class="tag-item" val="3">任务异常</span>
+							</div>
+						</dd>
+						<button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+					</dl>
+				</div>
+			</div>
+			<div class="page-info-metro full">
+				<div class="action-btn-group camera-admin-wrap">
+					<label class="checkbox-inline"><input type="checkbox" id="checkAll" listview-checkall="">全选</label>
+					<a class="btn btn-i-t" id="deleteBtn"> <span class="btn-icon delete-icon"></span>
+						<span>删除</span>
+					</a>
+				</div>
+				<div class="page-wrap">
+                    <div class="page-info-metro square-pager">
+                        <div class="page-data tc pageData hide" listview-page="">
+                            <a class="page-prev fl disable" listview-prev-btn="" href="#"><i
+                                    class="icon-arrow-left7"></i></a> <span class="page-num">共有<i class="page-num"
+                                    listview-counts="">0</i>条记录
+                            </span> <a class="current-page"><i listview-current="">1</i>/<i listview-total="">1</i></a>
+                            <a class="page-next fr" listview-next-btn="" href="#"><i class="icon-arrow-right7"></i></a>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="face-capture-content algorithm">
+				<div class="page-con library-info captureResult listviewImgBox " id="freqAnalysisContent">
+					<div class="table-wrap">
+			            <table class="table" cellspacing="0" cellpadding="0">  
+			                <thead>   
+			                	<tr> 
+			                		<th class="w3 tc"><span></span></th>
+			                		<th class="w10 tc"><span>任务名称</span></th>  
+			                		<th class="w15 tc"><span>创建时间</span></th>      
+			                    	<th class="w15 tc"><span>预计完成时间</span></th>
+			                    	<th class="w5 tc hide loginUserType"><span>创建人</span></th>
+			                    	<th class="w5 tc"><span>任务状态</span></th> 
+			                    	<th class="w15 tc"><span>操作</span></th>      
+					            </tr>          
+				            </thead>
+							<tbody  id="tilelist">
+								<script id="faceTemplate" type="x-tmpl">
+									<tr class="cameraItem"> 
+										<td class="tc"><span><input type="checkbox" listview-check="" class="checkbox-opacity"></span></td> 
+										<td class="tc"><span title="{%= o.TASK_TYPE %}">{%= o.TASK_TYPE %}</span></td>   
+										<td class="tc"><span title="{%= dateRender(o.CREATE_TIME,19) %}">{%= dateRender(o.CREATE_TIME,19) %}</span></td>  
+					           			<td class="tc"><span title="{%= o.PROCESS_TIME?dateRender(o.PROCESS_TIME,19):"--" %}">{%= o.PROCESS_TIME?dateRender(o.PROCESS_TIME,19):"--" %}</span></td>
+										<td class="tc{%=userInfo.userType == 9?" hide":""%}"><span title="{%= o.CREATOR||"" %}">{%= o.CREATOR||"" %}</span></td>      
+										<td class="tc"><span  TASK_ID="{%=o.TASK_ID%}">{%= renderTaskStatus(o.TASK_STATUS) %}</span></td>
+										<td class="tc">
+											<span class="blue btn-item" TASK_STATUS="{%=o.TASK_STATUS%}" TASK_TYPE="{%=o.TASK_TYPE%}" TASK_ID="{%=o.TASK_ID%}" ID="{%=o.ID%}">
+												<span class="table-btn{%=o.TASK_STATUS==3?" hide":""%}">查看</span>
+												<span class="table-btn">置顶</span>
+												<span class="table-btn">删除</span>
+												<span class="table-btn" data-toggle="popover" title="详情" data-html="true" data-content="<p>N:N数量:{%=renderNullToNotKnow(o.TASK_COUNT)%}</p><p>排队序号:{%=renderRankNo(o.RANK_NO)%}</p>">详情</span>
+											</span>
+										</td>
+									</tr>
+								</script>
+							</tbody>                                                                                            
+				        </table>
+			        </div>
+				</div>
+			</div>
+			<div class="frame-form-full">
+				<iframe class="full-screen" id="frameFormView" frameborder="0"></iframe>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/bootstrap3.3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/ui/plugins/datetimepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/efacecloud/js/common.js"></script>
+<script type="text/javascript" src="/efacecloud/js/taskCompare.js"></script>
+</html>

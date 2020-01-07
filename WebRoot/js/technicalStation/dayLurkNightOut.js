@@ -185,27 +185,40 @@ function showTracks(mapData){
 function doSearch(){
 
 	UI.util.showLoadingPanel();
+	if(top.GET_TASK_LIST_DATA){
+		var resp = top.GET_TASK_LIST_DATA.data;
+		dealWithListData(resp);
+		delete top.GET_TASK_LIST_DATA;		
+	}else{
+		var url = "technicalTactics/dayHideNightActive/query";	//	默认为昼伏夜出
 
-	var url = "technicalTactics/dayHideNightActive/query";	//	默认为昼伏夜出
-
-	if(type === 'lateNight') {
-		url = 'technicalTactics/NightActive/query'			//	深夜出入
-	}
-
-    UI.control.remoteCall(url, parent.queryParams,function(resp){
-
-    	if(resp.DATA.length>0){
-			result = resp.DATA;
-			initTechnicalPage(result.length,true);//技战法分页
-			var curShowData = result.slice(0,pageSize);
-			$("#collisionList").html(tmpl("listTempl", curShowData));
-	    	UI.util.hideLoadingPanel();
-		}else{
-			UI.util.alert("查询结果为空","warn");
-			$("#collisionList").html('<div class="nodata"></div>');
-	    	UI.util.hideLoadingPanel();
+		if(type === 'lateNight') {
+			url = 'technicalTactics/NightActive/query'			//	深夜出入
 		}
-	},function(){},{},true);
+
+		UI.control.remoteCall(url, parent.queryParams,function(resp){
+
+			if(resp.IS_SYNC == 0){
+				dealWithListData(resp);
+			}else{
+				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
+				UI.util.hideLoadingPanel('currentPage');
+			}
+		},function(){},{},true);
+	}
 }
 
+
+function dealWithListData(resp){
+	if(resp.DATA.length>0){
+		result = resp.DATA;
+		initTechnicalPage(result.length,true);//技战法分页
+		var curShowData = result.slice(0,pageSize);
+		$("#collisionList").html(tmpl("listTempl", curShowData));
+	}else{
+		UI.util.alert("查询结果为空","warn");
+		$("#collisionList").html('<div class="nodata"></div>');
+	}
+	UI.util.hideLoadingPanel('currentPage');
+}
 
