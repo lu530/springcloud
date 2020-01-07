@@ -17,6 +17,9 @@ var confirmArrest = false;
 var IDENTITY_ID ="";
 var switchBtn = UI.util.getUrlParam('switchBtn') || '';
 var personId = null;
+var picz= UI.util.getUrlParam("picz") || "";
+var picb= UI.util.getUrlParam("picb") || "";
+var score= UI.util.getUrlParam("score") || 0;
 var queryParams = {
 	'ALARM_ID': UI.util.getUrlParam("ALARM_ID") || ""
 };
@@ -92,6 +95,7 @@ function initEvent() {
 	$("#receivedBtn").click(function () {
 		UI.util.showLoadingPanel();
 		var $this = $(this);
+
 		var curParams = {
 			ALARM_ID: queryParams.ALARM_ID,
 			ALARM_TIME: curTime,
@@ -99,7 +103,7 @@ function initEvent() {
 			OP_TYPE: 1,
 			TASK_LEVEL: level
 		}
-		UI.control.remoteCall('defence/alarmHandleRecord/add', curParams, function (resp) {
+		UI.control.remoteCall('defence/alarmHandleRecord/add?score='+score+'&picb='+picb+'&picz='+picz, curParams, function (resp) {
 			if (resp.CODE == 0) {
 				UI.util.alert("确认签收");
 				$this.addClass('hide');
@@ -120,7 +124,7 @@ function initEvent() {
 			return false;
 		}
 		var opts = {
-			src: '/efacecloud/page/alarm/realTimeAlarm/feedbackForm.html?ALARM_ID=' + queryParams.ALARM_ID + '&ALARM_TIME=' + curTime + '&level=' + level + '&personId=' + personId,
+			src: '/efacecloud/page/alarm/realTimeAlarm/feedbackForm.html?score='+score+'&picb='+picb+'&picz='+picz+'&ALARM_ID=' + queryParams.ALARM_ID + '&ALARM_TIME=' + curTime + '&level=' + level + '&personId=' + personId ,
 			title: '反馈',
 			width: '450px',
 			height: '430px',
@@ -168,7 +172,7 @@ function initEvent() {
 	$("#issuedBtn").click(function () {
 		var identityID = $('#identityID').text();
 		var type = 1;
-		var url = '/datadefence/page/mobileControl/emitAlarmForm.html?type=personAlarm&ALARM_ID=' + queryParams.ALARM_ID + '&LEVEL=' + level + '&IDENTITY_ID=' + identityID + '&TYPE=' + type;
+		var url = '/datadefence/page/mobileControl/emitAlarmForm.html?type=personAlarm&ALARM_ID=' + queryParams.ALARM_ID + '&LEVEL=' + level + '&IDENTITY_ID=' + identityID + '&TYPE=' + type +'&score='+score+"&picb="+picb+"&picz="+picz;
 		UI.util.showCommonWindow(url, "警情下发", 850, 690, function (data) {
 		});
 	});
@@ -497,7 +501,7 @@ ViewHistoryVideo.prototype = {
 			var beginTime = _self.getLocalTime(time-timeC);
 			var endTime = _self.getLocalTime(time+timeC);
 			var deviceId = $(this).attr("deviceid");
-			UI.util.showCommonWindow('/datadefence/page/multiDimensional/historyCamera.html?beginTime='+beginTime+'&endTime='+endTime+'&DEVICE_ID='+deviceId, '查看视频', 958, 590,function(){});
+			UI.util.showCommonWindow('/datadefence/page/multiDimensional/historyCamera.html?beginTime='+beginTime+'&endTime='+endTime+'&DEVICE_ID='+deviceId+ '&score='+score+'&picb='+picb+'&picz='+picz, '查看视频', 958, 590,function(){});
 			if(e) e.stopPropagation();
 		});
 	},

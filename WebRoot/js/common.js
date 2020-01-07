@@ -2366,7 +2366,7 @@ function slideFn(src, argu, callback) {
  * @param {str} resourcePage : 来源页面 (路人库页面》轨迹分析)
  * @author lwb
  * */
-function openWindowPopup( type, imgUrl,time,checkName){
+function openWindowPopup( type, imgUrl,time,checkName,id){
 	var src = '',
 		title='';
 	switch(type){
@@ -2389,6 +2389,9 @@ function openWindowPopup( type, imgUrl,time,checkName){
 			title = '路人检索';
 			var src = matcher('/efacecloud/page/library/faceCaptureList.html/' + top.projectID).url;
 			break;
+	}
+	if(id) {
+		src+='&buriedPointID='+id
 	}
 	
 	var params = { 
