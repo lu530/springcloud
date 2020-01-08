@@ -173,6 +173,8 @@ function initPage_Black(params) {
 
 //初始化左侧页面
 function initLeftForm(url){
+	
+	top.logSwitch && top.LogToolPackage && ( url = top.LogToolPackage.addUrlPointID(pageUrlObj[pageType], window) );
 	$("#leftMainDiv iframe").attr("src",url);
 }
 
