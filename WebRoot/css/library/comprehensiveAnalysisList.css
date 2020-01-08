@@ -93,7 +93,7 @@
 	padding-left: 15px;
 }
 .item-block.page-con .item-title{
-	margin-bottom:60px;
+	margin-bottom:20px;
 }
 .page-con .anchor-skin{
 	top: 41px;
@@ -258,6 +258,7 @@
 }
 
 .drap-img-area .photo-tools .compare-img{
+	position: relative;
 	width: 100%;
 	height: 100%;
 	border-radius: 2px;
@@ -359,3 +360,191 @@ button.compare-btn.type1{
 }
 
 /*比对工具样式E*/
+
+/* 锚点 */
+.page-con {
+	position: relative;
+}
+.page-con .anchor-skin {
+	background-color: #f1f2f4;
+	height: 50px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: -16px;
+	z-index: 10;
+}
+.anchor-skin-ul {
+	height: 100%;
+	margin: 0;
+	padding: 0 20px;
+}
+.anchor-skin-ul li {
+	float: left;
+	line-height: 50px;
+	margin: 0 10px;
+	color: #666;
+	position: relative;
+	cursor: pointer;
+	padding: 0 5px;
+}
+.anchor-skin-ul li a {
+	display: block;
+	color: #666;
+	text-decoration: none;
+	font-size: 16px;
+}
+.anchor-skin-ul li:after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background-color: #3c8ceb;
+	display: none;
+}
+.anchor-skin-ul li.active:after {
+	display: block;
+}
+.anchor-skin-ul li:hover:after {
+	display: block;
+}
+
+.pager-wrap-new .tilelist.vertical .list-node {
+	width: 130px;
+	border: 1px solid #ccc;
+	padding: 0;
+	height: auto;
+}
+.pager-wrap-new .page-con>div.active {
+    height: 240px;
+}
+.pager-wrap-new .page-con .tilelist {
+	margin-top: 10px;
+}
+.pager-wrap-new .page-con div.active-new .title {
+	padding-left: 24px;
+	background: url(/efacecloud/images/icon-circle.png) no-repeat left center;
+}
+.pager-wrap-new .page-con>div>span {
+	color: #3d8ce8;
+}
+.pager-wrap-new .distinguish {
+	display: none;
+}
+.pager-wrap-new .tilelist .list-node .node-img img {
+	width: auto;
+	padding: 10px 10px 5px;
+	height: 103px;
+}
+.pager-wrap-new .tilelist.vertical .node-text {
+	padding: 5px 10px;
+	border-top: 1px solid #e8e8e8;
+}
+.pager-wrap-new .tilelist.vertical .node-text > p {
+	margin-bottom: 0;
+	color: #989898;
+	font-size: 12px;
+}
+.pager-wrap-new .tilelist.vertical .list-node .similar-name {
+	margin-bottom: 5px;
+}
+.pager-wrap-new .list-node .similar-name a {
+	color: #313131;
+}
+
+
+.pager-wrap-new .left-page .title {
+	color: #323232;
+	position: relative;
+	/*border-bottom: 1px solid #e8e8e8;*/
+}
+.pager-wrap-new .left-page .img-award-new {
+	position: absolute;
+	top: 0;
+	left: 23px;
+	z-index: 10;
+	width: 44px;
+	height: auto;
+}
+.pager-wrap-new .left-page .list-node {
+	position: relative;
+}
+.pager-wrap-new .left-page .list-node .node-img {
+	border: none;
+	padding-top: 27px;
+	margin: 0 auto;
+}
+.pager-wrap-new .left-page .node-img {
+	line-height: normal;
+}
+.pager-wrap-new .left-page .node-text {
+	padding-top: 0;
+	color: #333;
+}
+.pager-wrap-new .left-page .node-text label {
+	color: #999;
+}
+.pager-wrap-new .tilelist .similar {
+	z-index: 1;
+	position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0;
+    width: auto;
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    margin: 0 10px 5px;
+    border-radius: 3px;
+
+    border: 1px solid rgb(153, 190, 232);  
+	background: rgb(240, 247, 255);
+	color: rgb(61, 140, 232)
+
+}
+.pager-wrap-new .tilelist .similar.color-red {
+	border: 1px solid rgb(255, 169, 175); 
+	background-color: rgb(254, 240, 239);
+	color: rgb(235, 65, 76)
+}
+
+.pager-wrap-new .tilelist .similar.color-yellow {
+	border: 1px solid rgb(243, 204, 25);
+	background-color: rgb(254, 248, 221);
+	color: #f3cc19;
+}
+
+.pager-wrap-new .tilelist .similar.color-gray {
+	border: 1px solid rgb(230, 230, 230);
+	background-color: rgb(240, 240, 240);
+	color: rgb(102, 102, 102)
+}
+
+.setting-down-new{
+	text-align: center;
+	color: #888;
+}
+.setting-down-new span{
+	cursor: pointer;
+}
+.active-new{
+	margin-top: 20px;
+}
+.active-new .tilelist{
+	display: none;
+}
+.active-new.active .tilelist{
+	display: block;
+}
+.upload-compare-img{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}

@@ -125,7 +125,13 @@ function initEvent() {
 
     //如果是图片，选择文件之后马上上传，这样才能在页面上显示预览图
     $("body").on('change', '#uploadFile', function () {
-        ajaxMultiImageUpload();
+        var file = $(this)[0].files[0];
+        if(/^image/.test(file.type)) {
+            ajaxMultiImageUpload();
+        }else {
+            UI.util.alert('仅支持上传图片检索', 'warn');
+            $(this).val('');
+        }
     });
 
     // 切换图片检索结果

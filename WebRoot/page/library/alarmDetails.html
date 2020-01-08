@@ -198,7 +198,7 @@
                     {% if(o.FS_ALGO_LIST.length > 0){ %}
                         <div class="multil-arithmetic-face-wrap">
                             {% for(var j = 0; j < o.FS_ALGO_LIST.length; j++) { %}
-                                <div class="multil-arithmetic-face-list" style="background-color:{%= o.FS_ALGO_LIST[j].PASS == '1' ? 'rgb(62,186,248)' : '#e8ecf8' %}">
+                                <div class="multil-arithmetic-face-list {%= o.FS_ALGO_LIST[j].PASS == '1' ? 'arithmetic-main' : '' %}" >
                                     <p class="multil-name">{%= o.FS_ALGO_LIST[j].ALGORITHMNAME && o.FS_ALGO_LIST[j].ALGORITHMNAME.indexOf("++")>-1?o.FS_ALGO_LIST[j].ALGORITHMNAME:o.FS_ALGO_LIST[j].ALGORITHMNAME.split("").splice(0,2).join("") %}</p>
                                     <p class="multil-similar">{%=o.FS_ALGO_LIST[j].SIMILARITY%}%</p>
                                 </div>
