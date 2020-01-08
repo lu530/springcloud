@@ -916,6 +916,7 @@ function initEvent() {
                 obj.jgsj = n.JGSK;
                 curData.push(obj);
             });
+            top.logSwitch && top.LogToolPackage && top.LogToolPackage.specialLogClass.log_liling26(JSON.parse(JSON.stringify(trackData)));
             var pageUrl = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=trackResult&getDataType=trackResult';
             UI.util.showCommonIframe('.frame-form-full', pageUrl);
             //top.showTrajectoryWindow(curData);
