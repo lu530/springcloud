@@ -1,14 +1,13 @@
 package com.suntek.efacecloud.dao.mppdb;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.efacecloud.util.Constants;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * mppdb 数据库操作类
@@ -32,7 +31,7 @@ public class MppQueryDao {
 			return Collections.emptyList();
 		}
 		
-		String sql = "select * from FACE_CAPTURE where INFO_ID in " + SqlUtil.getSqlInParams(idsArr);
+		String sql = "select * from FACE_INFO where INFO_ID in " + SqlUtil.getSqlInParams(idsArr);
 		
 		return jdbc.queryForList(sql, idsArr);
 	}
