@@ -88,10 +88,11 @@ import java.util.stream.Collectors;
         HashMap<String, Integer> dayBeforeCountData =
             getCountData(deviceIdList, DateUtil.offsetDay(date, -2).toString(DatePattern.PURE_DATE_PATTERN));
 
-        //        //获取设备的今天最后抓拍时间
-        //        List<Map<String, Object>> deviceIdStatisList
-        //                = faceCaptureDao.getLastTimeByDeivceId(DateUtil.offsetDay(date, 0).toString(DatePattern.NORM_DATETIME_PATTERN),
-        //                DateUtil.offsetDay(date, -1).toString(DatePattern.NORM_DATETIME_PATTERN), deviceIdList);
+
+//                //获取设备的今天最后抓拍时间
+//                List<Map<String, Object>> deviceIdStatisList
+//                        = faceCaptureDao.getLastTimeByDeivceId(DateUtil.offsetDay(date, 0).toString(DatePattern.NORM_DATETIME_PATTERN),
+//                        DateUtil.offsetDay(date, -1).toString(DatePattern.NORM_DATETIME_PATTERN), deviceIdList);
         resultList.stream().forEach(o -> {
             String deviceId = StringUtil.toString(o.get("DEVICE_ID"));
             long num = Long.valueOf(StringUtil.toString(todayCountData.get(deviceId), "0"));
