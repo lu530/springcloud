@@ -738,11 +738,12 @@
                                                 <a config-control="4" class="btn-i-t  btn-xs controlDetailBtn hide logBuriedPoint" title="布控详情" objectid="{%=o.OBJECT_ID%}" buriedPointID="log_liling109" buriedPointValue="布控ID=={%= o.DB_ID %}&&姓名=={%= renderNullToNotKnow(o.PERSON_NAME) %}&&图片=={%= o.TEMPLET_IMG %}&&身份证=={%= o.IDENTITY_ID %}&&分数=={%= o.SCORE %}">
                                                     布控
                                                 </a>
-                                                {% if(top.projectID != "shunde5000") { %}
+                                                <!-- 基线暂屏蔽，需要的项目请自行加判断 -->
+                                                <!-- {% if(top.projectID != "shunde5000") { %}
                                                 <a config-control="5" class="btn-i-t btn-xs information-search hide" title="情报获取" window-control="person" window-code="{%=o.IDENTITY_ID%}">
                                                     情报
                                                 </a>
-                                                {% } %}
+                                                {% } %} -->
                                                 <a config-control="6" class="btn-i-t  btn-xs detailBtnAll hide logBuriedPoint" title="详情" data-zjhm="{%= renderNullToNotKnow(o.IDENTITY_ID) %}" ALARM_ID="{%=o.ALARM_ID%}" alarm-level="{%=o.ALARM_LEVEL%}"
                                                     isfs="{%=o.FS_HIT%}" name="{%=renderFields(o.FS_NAME)%}" idcard="{%=renderFields(o.FS_IDENTITY_ID)%}" time="{%=renderFields(o.FS_HIT_TIME)%}"
                                                     alarmtime="{%=o.ALARM_TIME%}" objid="{%=o.OBJECT_ID%}" curtime="{%=dateRender(o.ALARM_TIME,19)%}" alarm-img="{%= o.ALARM_IMG %}" buriedPointID="log_liling110" buriedPointValue="告警Id=={%= o.ALARM_ID %}&&抓拍图=={%= o.ALARM_IMG %}&&布控图=={%= o.TEMPLET_IMG %}&&分数=={%= o.SCORE %}"  picz="{%= o.ALARM_IMG %}" picb="{%= o.TEMPLET_IMG %}" score="{%= o.SCORE %}">
@@ -751,11 +752,12 @@
                                                 <a config-control="7" class="btn-i-t  btn-xs compareBtn hide" title="比对">
                                                     比对
                                                 </a>
-                                                {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde5000") { %}
+                                                <!-- 基线暂屏蔽，需要的项目请自行加判断 -->
+                                                <!-- {% if(!isBlack && top.projectID != "zhanjiang" && top.projectID != "shunde5000") { %}
                                                 <a config-control="8" class="btn-i-t  btn-xs refreshBtn hide" title="在逃检测" ALARM_ID="{%= o.ALARM_ID %}" IDENTITY_ID="{%= o.IDENTITY_ID %}">
                                                     在逃检测
                                                 </a>
-                                                {% } %}
+                                                {% } %} -->
                                                 <a config-control="9" class="btn-i-t btn-xs btn-more searchPage hide" title="档案 " data-flag="{%=o.IDENTITY_ID%}" >
                                                     档案
                                                 </a>
