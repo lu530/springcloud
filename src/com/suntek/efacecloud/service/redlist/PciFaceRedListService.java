@@ -1,6 +1,7 @@
 package com.suntek.efacecloud.service.redlist;
 
 import com.suntek.eap.EAP;
+import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.DateUtil;
@@ -33,12 +34,13 @@ public class PciFaceRedListService extends FaceRedListService {
             context.getResponse().setError("人脸质量检测不通过，原因：" + featureResp.getErrorMsg());
             return null;
         }
+        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
         Map<String, Object> picSearchParam = new HashMap<String, Object>();
         picSearchParam.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
         picSearchParam.put("similarity", Integer.parseInt(threshold));
         picSearchParam.put("feature", featureResp.getRltz());
         picSearchParam.put("topN", 10000000);
-        picSearchParam.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+        picSearchParam.put("algoType", algoType);
         CollisionResult collisionResult = SdkStaticLibUtil.faceOne2NSearch(picSearchParam);
         return collisionResult;
     }
@@ -47,11 +49,12 @@ public class PciFaceRedListService extends FaceRedListService {
     public void initRedListLib() {
         try {
             long time = System.currentTimeMillis();
-            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+            int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
+            CollisionResult result = SdkStaticLibUtil.isLibExist(Constants.STATIC_LIB_ID_RED_LIST, algoType);
             if (result.getCode() == Constants.COLLISISON_RESULT_SUCCESS) {
                 boolean isExist = (boolean) result.getList().get(0);
                 if (!isExist) {
-                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, Constants.DEFAULT_ALGO_TYPE);
+                    CollisionResult createReult = SdkStaticLibUtil.createLib(Constants.STATIC_LIB_ID_RED_LIST, algoType);
                     if (createReult.getCode() != Constants.COLLISISON_RESULT_SUCCESS) {
                         log.error("初始化红名单库[" + Constants.STATIC_LIB_ID_RED_LIST + "]异常");
                     }
@@ -72,10 +75,13 @@ public class PciFaceRedListService extends FaceRedListService {
      * @throws SearchEngineException
      */
     public CollisionResult deleteFace(RequestContext context) {
+
+        int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("libraryId", Constants.STATIC_LIB_ID_RED_LIST);
         map.put("ids", StringUtil.toString(context.getParameters().get("INFO_ID")));
-        map.put("algoType", Constants.DEFAULT_ALGO_TYPE);
+        map.put("algoType", algoType);
 
         ServiceLog.debug("从静态小库注销人脸参数：" + map);
         CollisionResult result = FaceOperationManager.runOperation(map, FaceOperationEnum.FACEDB_LOGOUT);
@@ -127,9 +133,10 @@ public class PciFaceRedListService extends FaceRedListService {
             Map<Long, String> features = new HashMap<Long, String>();
             features.put(newPersonId, rltz);
 
+            int algoType = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME).getProperty("VRS_ALGO_TYPES", "10003"));
             CollisionResult saveFaceResult = SdkStaticLibUtil.saveFaceToLib(Constants.STATIC_LIB_ID_RED_LIST,
                     newPersonId, rltz,
-                    Constants.DEFAULT_ALGO_TYPE);
+                    algoType);
             if (saveFaceResult == null || saveFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
                 context.getResponse().putData("MESSAGE", "注册人脸到静态小库失败！");
