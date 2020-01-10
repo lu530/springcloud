@@ -33,6 +33,7 @@
                             <li class="re-upload"><i class="icon-image2"></i> <input class="file-style searchImgButton"
                                     type="file" id="picBtn" name="picBtn" issearch=true /></li>
                             <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
+
                             <li class="edit-pic hide" id="editImgBtn"><i class="icon-pencil3"></i></li>
                         </ul>
                     </div>
@@ -180,7 +181,7 @@
                     </script>
                     </dl>
                     <!-- 排序 -->
-                    <dl class="filter-bar">
+                    <dl class="filter-bar" dom-permission="DEFENCE_faceCaptureList_order">
                         <dt class="filter-arrt">排序：</dt>
                         <dd class="filter-tag pt5">
                             <div class="tagslist" id="sortList">
@@ -293,7 +294,7 @@
                         <div class="list-node-wrap">
                         <dl class="list-node picMessage">
                             <!-- 图片区域 -->
-                            <dt class="node-img compare-img" attrimg="doublezoom">
+                            <dt class="node-img compare-img logBuriedPoint" buriedPointID="log_liling27" buriedPointValue="点击的抓拍图=={%= o.OBJ_PIC %}&&原图=={%= o.PIC %}" attrimg="doublezoom">
                                 <span class="compare-large">
                                     <img src="{%=o.PIC%}" zoom-url="{%=o.PIC%}" style="width:100%">
                                     <em>原图</em>
@@ -375,7 +376,7 @@
                                 {% if(!UI.isForeigners) { %}
                                 <div class="btn-group fr" >
                                     {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
-                                    <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}">
+                                    <a class="btn-i-t btn-xs verification-search logBuriedPoint" buriedPointID="log_liling28" buriedPointValue="核查的图片=={%= o.OBJ_PIC %}" title="身份核查" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}">
                                         <i class="btn-icon verification-icon"></i>
                                     </a>
                                     {% } %}
@@ -383,7 +384,7 @@
 
                                     <!-- 如果有权限，显示身份核查图标 -->
                                     {% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
-                                    <a class="btn-i-t btn-xs verification-search" title="身份核查"  url="{%=o.OBJ_PIC%}"  identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" >
+                                    <a class="btn-i-t btn-xs verification-search logBuriedPoint" buriedPointID="log_liling28" buriedPointValue="核查的图片=={%= o.OBJ_PIC %}" title="身份核查"  url="{%=o.OBJ_PIC%}"  identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" >
                                         <i class="btn-icon verification-icon"></i>
                                     </a>
                                     {% } %}
@@ -394,7 +395,7 @@
                                     <a fileUrl="{%=o.OBJ_PIC%}" bigImg="{%=o.PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="图片检索">
                                         <i class="btn-icon search-icon"></i>
                                     </a>
-                                    <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">
+                                    <a class="btn-i-t btn-xs collectionBtn logBuriedPoint" buriedPointID="log_liling31" buriedPointValue="收藏的图片=={%= o.OBJ_PIC %}" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">
                                         <i class="btn-icon collection-icon"></i>
                                     </a>
                                     <a fileUrl="{%=o.OBJ_PIC%}" 
@@ -402,7 +403,9 @@
                                         LONGITUDE="{%= o.LONGITUDE %}"
                                         attr-time="{%=renderNullToNotKnow(o.JGSK)%}"
                                         attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}"
-                                        class="btn-i-t btn-xs locationBtn location-btn"
+                                        class="btn-i-t btn-xs locationBtn location-btn logBuriedPoint"
+                                        buriedPointID="log_liling32"
+                                        buriedPointValue="定位的抓拍图=={%= o.OBJ_PIC %}"
                                         ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
                                         <i class="btn-icon location-icon"></i>
                                     </a>

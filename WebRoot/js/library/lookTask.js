@@ -45,8 +45,9 @@ function initEvent() {
 	
 	//详情
     $('body').on('click', '.detailBtn',function(event) {
-    	var taskId = $(this).attr("taskid");
-        UI.util.showCommonWindow('/efacecloud/page/library/lookTaskDetail.html?taskId='+taskId,"任务详情", 1000, 600,
+		var taskId = $(this).attr("taskid");
+		var id=$(this).attr('buriedPointID');
+        UI.util.showCommonWindow('/efacecloud/page/library/lookTaskDetail.html?buriedPointID='+id+'&taskId='+taskId,"任务详情", 1000, 600,
       		function(data){
       	});
     });
