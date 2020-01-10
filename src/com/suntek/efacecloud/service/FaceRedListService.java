@@ -288,6 +288,7 @@ public class FaceRedListService {
         }
         params.put("PIC_MD5", picMd5);
         params.put("IS_INVOLVE_RED_LIST", belongRedFlag); //是否涉 红名单
+        //新增人脸布控检测红名单场景不需要新增审批任务
         dao.addRedTask(params, relatedPersons);
 
         context.getResponse().putData("TASK_ID", taskId);
