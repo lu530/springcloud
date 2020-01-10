@@ -234,6 +234,7 @@ function initEvent(){
 		if($checkbox.prop("checked")){
 			$checkbox.prop("checked",false)
 			$this.removeClass("active");
+			$('#checkAll').prop('checked', false);
 			var removeIndex = checkedIndexArr.indexOf(curIndex);
 			checkedIndexArr.splice(removeIndex, 1);
 		} else {
