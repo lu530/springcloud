@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.service.face;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
@@ -19,6 +20,7 @@ import com.suntek.efacecloud.util.Constants;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import com.suntek.sp.huawei.HWStatusCode;
 import com.suntek.sp.huawei.command.facematch.FacenvnCommand;
+import com.suntek.sp.huawei.dto.FaceGroup;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -141,9 +143,12 @@ public class FaceNVNTaskService {
                     Log.nvnTaskLog.debug("------------------>调用开放平台，获取taskId" + commandContext.getResponse().getResult());
                     Log.nvnTaskLog.debug("任务返回信息：" + commandContext.getResponse().getMessage());
                     List<Map<String, Object>> resultList = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
-                    String asyncTaskId = StringUtil.toString(resultList.get(0).get("TASK_ID"));
+                    Map<String, Object> map = resultList.get(0);
+                    String asyncTaskId = StringUtil.toString(map.get("TASK_ID"));
+                    List<FaceGroup> requestFaceGroups = (List<FaceGroup>) map.get("REQUEST_FACE_GROUPS");
                     //华为返回任务id替换原来的任务id
-                    dao.updateTaskId(id, asyncTaskId);
+                    dao.updateTaskIdAndRequestFaceGroups(id, asyncTaskId, JSONObject.toJSONString(requestFaceGroups));
+
                     return;
                 } else {
                     Log.nvnTaskLog.debug("------------------>调用开放平台出错，原因：" + commandContext.getResponse().getResult());
@@ -185,6 +190,7 @@ public class FaceNVNTaskService {
             String paramJson = StringUtil.toString(doingTask.get("PARAM"));
 
             Map<String, Object> param = JSONObject.parseObject(paramJson, Map.class);
+            List<FaceGroup> requestFaceGroups = JSONArray.parseArray(doingTask.get("REQUEST_FACE_GROUPS").toString(), FaceGroup.class);
 
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime start = LocalDateTime.parse(updateTime, df);
