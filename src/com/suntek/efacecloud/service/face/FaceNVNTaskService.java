@@ -238,7 +238,7 @@ public class FaceNVNTaskService {
             Log.nvnTaskLog.debug("------------------>nvn任务结果查询接口xml" + xmlData);
             List<Map<String, Object>> resultList = new ArrayList<>();
             try {
-                resultList = handleXmlData(xmlData, taskType);
+                resultList = handleXmlData(xmlData, taskType, requestFaceGroups);
             } catch (Exception e) {
                 Log.nvnTaskLog.error("------------------>解析nvn任务结果查询接口xml失败，原因：" + e.getMessage());
             }
@@ -538,14 +538,21 @@ public class FaceNVNTaskService {
         return deviceMap;
     }
 
-    private FacenvnCommand command = new FacenvnCommand();
-
-    public List<Map<String, Object>> handleXmlData(String xmlData, String taskType) throws Exception {
+    /**
+     * 处理xml数据，把xml改成转成list
+     * @param xmlData
+     * @param taskType
+     * @param requestFaceGroups
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> handleXmlData(String xmlData, String taskType,  List<FaceGroup> requestFaceGroups) throws Exception {
+        FacenvnCommand command = new FacenvnCommand();
+        command.setRequestFaceGroups(requestFaceGroups);
         Document doc = DocumentHelper.parseText(xmlData);
         Element root = doc.getRootElement();
         String code = StringUtil.toString(root.element("result").element("code").getText());
         String errMsg = StringUtil.toString(root.element("result").element("errmsg").getText());
-        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         if (HWStatusCode.成功.getCode() == Long.valueOf(code)) {
             List<Element> faceInfosElements = root.element("faceInfos").elements();
             boolean isMultiRegion;
@@ -554,7 +561,7 @@ public class FaceNVNTaskService {
             } else {
                 isMultiRegion = true;
             }
-            return this.command.buildResultList(faceInfosElements, isMultiRegion);
+            return command.buildResultList(faceInfosElements, isMultiRegion);
         } else {
             Log.nvnTaskLog.error("华为接口处理出错，状态码：" + code + "， 错误信息：" + errMsg);
             return Collections.EMPTY_LIST;
