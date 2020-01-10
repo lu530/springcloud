@@ -213,7 +213,7 @@ public class FaceCaptureProvider {
 //				}
 
                 //一次性查询获得infoId为key的数据集
-                Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
+                //Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
 
 				for (Map<String, Object> info : infoList) {
 					String createTime = StringUtil.toString(info
@@ -225,10 +225,10 @@ public class FaceCaptureProvider {
 					}
 					info.put("CREATETIME", createTime);
 
-					String infoId = StringUtil.toString(info.get("INFO_ID"));
+					/*String infoId = StringUtil.toString(info.get("INFO_ID"));
 					if (actMap.containsKey(infoId)) {
                         info.putAll(actMap.get(infoId));
-                    }
+                    }*/
 					//是否添加来源类型
 //					if(isAdd) {
 //						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
