@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.listener;
 
+import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.LogFactory;
@@ -22,8 +23,10 @@ import javax.servlet.ServletContextListener;
 public class DeviceHistoryStatusListener implements ServletContextListener {
 	private static Logger log = LogFactory.getServiceLog(Constants.APP_NAME);
 	private static Logger deviceHistoryStatusLog = LogFactory.getServiceLog("deviceHistoryStatus");
+	private static String OPEN = "1";
 
 	private String zkPath = AppHandle.getHandle(Constants.APP_NAME).getProperty("ZK_DEVICE_NODE", "/bigdata/config/gateway/capture");
+	private String isListener = AppHandle.getHandle(Constants.APP_NAME).getProperty("ZK_DEVICE_NODE_LISTEN", "0");
 	private String zkServer = AppHandle.getHandle(Constants.CONSOLE).getProperty("ZK_LIST");
 	CuratorFramework curator = CuratorFrameworkFactory.builder()
 			.connectString(zkServer)
@@ -34,36 +37,40 @@ public class DeviceHistoryStatusListener implements ServletContextListener {
 	TreeCache treeCache = new TreeCache(curator, zkPath);
 
 	@Override
-		public void contextInitialized(ServletContextEvent servletContextEvent) {
-		log.debug("创建设备历史状态记录监听器");
-		curator.start();
-		treeCache.getListenable().addListener((CuratorFramework c, TreeCacheEvent event) -> {
-			switch (event.getType()) {
-				case NODE_ADDED:
-					EAP.kafkaProxy.sendMessage("QUEUE_VPLUS_DEVICE_HISTORY_STATUS", null, event.getData().getData());
-					deviceHistoryStatusLog.debug("ZK监听获取：NODE_ADDED：路径：" + event.getData().getPath() + "，数据：" + new String(event.getData().getData()));
-					deviceHistoryStatusLog.debug("成功发送Kafka，topic：QUEUE_VPLUS_DEVICE_HISTORY_STATUS");
-					break;
-				case NODE_UPDATED:
-					EAP.kafkaProxy.sendMessage("QUEUE_VPLUS_DEVICE_HISTORY_STATUS", null, event.getData().getData());
-					deviceHistoryStatusLog.debug("ZK监听获取：NODE_UPDATED：路径：" + event.getData().getPath() + "，数据：" + new String(event.getData().getData()));
-					deviceHistoryStatusLog.debug("成功发送Kafka，topic：QUEUE_VPLUS_DEVICE_HISTORY_STATUS");
-					break;
-				default:
-					break;
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		if (isListener.equals(OPEN)) {
+			log.debug("创建设备历史状态记录监听器");
+			curator.start();
+			treeCache.getListenable().addListener((CuratorFramework c, TreeCacheEvent event) -> {
+				switch (event.getType()) {
+					case NODE_ADDED:
+						EAP.kafkaProxy.sendMessage("QUEUE_VPLUS_DEVICE_HISTORY_STATUS", null, event.getData().getData());
+						deviceHistoryStatusLog.debug("ZK监听获取：NODE_ADDED：路径：" + event.getData().getPath() + "，数据：" + new String(event.getData().getData()));
+						deviceHistoryStatusLog.debug("成功发送Kafka，topic：QUEUE_VPLUS_DEVICE_HISTORY_STATUS");
+						break;
+					case NODE_UPDATED:
+						EAP.kafkaProxy.sendMessage("QUEUE_VPLUS_DEVICE_HISTORY_STATUS", null, event.getData().getData());
+						deviceHistoryStatusLog.debug("ZK监听获取：NODE_UPDATED：路径：" + event.getData().getPath() + "，数据：" + new String(event.getData().getData()));
+						deviceHistoryStatusLog.debug("成功发送Kafka，topic：QUEUE_VPLUS_DEVICE_HISTORY_STATUS");
+						break;
+					default:
+						break;
+				}
+			});
+			try {
+				treeCache.start();
+			} catch (Exception e) {
+				log.error("创建Zookeeper->TreeCache监听失败, path：" + zkPath + "error：" + e.getMessage(), e);
 			}
-		});
-		try {
-			treeCache.start();
-		} catch (Exception e) {
-			log.error("创建Zookeeper->TreeCache监听失败, path：" + zkPath + "error：" + e.getMessage(), e);
 		}
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		treeCache.close();
-		curator.close();
-		log.debug("关闭设备历史状态记录监听器");
+		if (isListener.equals(OPEN)) {
+			treeCache.close();
+			curator.close();
+			log.debug("关闭设备历史状态记录监听器");
+		}
 	}
 }

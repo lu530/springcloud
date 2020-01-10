@@ -57,4 +57,5 @@
 	<param key="FACE_PIC_EDIT" name="是否开启路人库检索图片编辑按钮,0关闭，1开启，默认关闭" description="是否开启路人库检索图片编辑按钮,0关闭，1开启，默认关闭" type="String">0</param>
 
 	<param key="ZK_DEVICE_NODE" name="zookeeper中设备信息的节点" type="String" description="zookeeper中设备信息的节点">/bigdata/config/gateway/capture</param>
+	<param key="ZK_DEVICE_NODE_LISTEN" name="是否开启监听zookeeper设备信息节点" type="String" description="是否开启监听zookeeper设备信息节点">0</param>
 </config>
