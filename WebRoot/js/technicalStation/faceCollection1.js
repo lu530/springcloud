@@ -327,11 +327,13 @@ function initEvent(){
 			if (exportData.length > 0) {
 				exportParams.EXPORT_DATA = JSON.stringify(exportData);
 			} else {
-				exportParams.DEVICE_IDS = $("#orgCode").val();
-				exportParams.THRESHOLD = $('#threshold').val();
-				exportParams.KEYWORDS = $("#searchText").val() || "";
-				exportParams.BEGIN_TIME = $('#beginTime').val() || "";
-				exportParams.END_TIME = $('#endTime').val() || "";
+				// exportParams.DEVICE_IDS = $("#orgCode").val();
+				// exportParams.THRESHOLD = $('#threshold').val();
+				// exportParams.KEYWORDS = $("#searchText").val() || "";
+				// exportParams.BEGIN_TIME = $('#beginTime').val() || "";
+				// exportParams.END_TIME = $('#endTime').val() || "";
+				UI.util.alert("请勾选导出的数据","warn");
+				return;
 			}
 		}
 		bigDataToDownload(url,"exportFrame",exportParams);
