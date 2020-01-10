@@ -72,7 +72,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
 //		}
 
         // 一次查询activity_info表
-        Map<String, Map<String, Object>> actMap = new FaceCaptureProvider().getActivityMap(resultSet);
+        //Map<String, Map<String, Object>> actMap = new FaceCaptureProvider().getActivityMap(resultSet);
 
         for (Map<String, Object> map : resultSet) {
 
@@ -90,9 +90,9 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             String personId = StringUtil.toString(map.get("PERSON_ID"));
             String infoId = StringUtil.toString(map.get("INFO_ID"));
 
-            if (actMap.containsKey(infoId)) {
+            /*if (actMap.containsKey(infoId)) {
                 map.putAll(actMap.get(infoId));
-            }
+            }*/
             map.put("DEVICE_ID", deviceId);
             map.put("VIID_OBJECT_ID", viidObjectId);
             map.put("JGSK", jgsk);
