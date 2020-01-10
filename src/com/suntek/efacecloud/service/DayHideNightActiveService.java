@@ -253,6 +253,10 @@ public class DayHideNightActiveService {
                 // 图片
                 personData.put("OBJ_PIC", ModuleUtil.renderImage(StringUtil.toString(map.get("OBJ_PIC"))));
                 // 时间
+                personData.put("TIME", com.suntek.eap.util.DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
+                        com.suntek.eap.util.DateUtil.yyMMddHHmmss_style, com.suntek.eap.util.DateUtil.standard_style));
+                /*
+                MPPDB存的JGSK也是yyMMddHHmmss格式
                 if (Constants.BIGDATA_SEARCH_ES.equals(serachFun)) {
 
                     personData.put("TIME", com.suntek.eap.util.DateUtil.convertByStyle(StringUtil.toString(map.get("JGSK")),
@@ -260,7 +264,7 @@ public class DayHideNightActiveService {
                 } else {
                     personData.put("TIME", com.suntek.eap.util.DateUtil
                             .dateToString(com.suntek.eap.util.DateUtil.toDate(StringUtil.toString(map.get("JGSK")), "yyyy-MM-dd HH:mm:ss")));
-                }
+                }*/
 
                 // 区域
                 personData.put("ORIGINAL_DEVICE_ID", StringUtil.toString(map.get("DEVICE_ID")));

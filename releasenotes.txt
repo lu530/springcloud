@@ -1,3 +1,14 @@
+3.1.2#20200107
+[提交人]
+    chenzhuyun
+[修改文件]
+    \efacecloud\src\com\suntek\efacecloud\provider\FaceRedListProvider
+    \efacecloud\WebRoot\META-INF\appconfig.xml
+[修改说明]
+          1、湛江项目人脸布控增加红名单检测
+          2、新增红名是否检测开关 RED_LIST_DISPATCHED_OPEN
+*******************************************************************************************
+
 3.1.2#20190920
 [提交人]   
     huangruijing

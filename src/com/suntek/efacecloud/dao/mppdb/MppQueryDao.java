@@ -33,7 +33,7 @@ public class MppQueryDao {
 			return Collections.emptyList();
 		}
 		
-		String sql = "select * from FACE_CAPTURE where INFO_ID in " + SqlUtil.getSqlInParams(idsArr);
+		String sql = "select * from FACE_INFO where INFO_ID in " + SqlUtil.getSqlInParams(idsArr);
 		
 		return jdbc.queryForList(sql, idsArr);
 	}
