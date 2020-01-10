@@ -1,13 +1,15 @@
 package com.suntek.efacecloud.dao.mppdb;
 
-import com.suntek.eap.EAP;
-import com.suntek.eap.util.SqlUtil;
-import com.suntek.efacecloud.util.Constants;
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.suntek.eap.EAP;
+import com.suntek.eap.util.SqlUtil;
+import com.suntek.efacecloud.util.Constants;
 
 /**
  * mppdb 数据库操作类
@@ -71,5 +73,19 @@ public class MppQueryDao {
 				+ " from passenger_public_information "
 				+ " where CCODE in " + SqlUtil.getSqlInParams(idList.toArray());
 		return jdbc.queryForList(sql, idList.toArray());
+	}
+
+
+	/**
+	 * mppdb 获取对应设备在相关时间内的最后一条
+	 * @param deviceIds 设备id
+	 * @return
+	 */
+	public List<Map<String, Object>> queryLastTimeByDeviceId(String beginTime, String eendTime, String deviceIds) {
+		List<String> list = Arrays.asList(deviceIds.split(","));
+		list.add(beginTime);
+		list.add(eendTime);
+		String sql = "select * from FACE_CAPTURE where sbbh in " + SqlUtil.getSqlInParams(deviceIds);
+		return jdbc.queryForList(sql, list.toArray());
 	}
 }

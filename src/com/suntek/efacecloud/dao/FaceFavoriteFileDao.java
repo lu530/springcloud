@@ -29,6 +29,17 @@ public class FaceFavoriteFileDao
 		String sql = "select count(1) from EFACE_FAVORITE_FILE where FAVORITE_ID = ? and INFO_ID = ?";
 		return jdbc.queryForObject(sql, Integer.class, favoriteId, infoId) > 0;
 	}
+
+
+	public Map<String, Object> getFavoriteFile(String favoriteId, String fileId) throws Exception
+	{
+		String sql = "select * from EFACE_FAVORITE_FILE where FAVORITE_ID = ? and FILE_ID = ?";
+		List<Map<String, Object>> list = jdbc.queryForList(sql, favoriteId, fileId);
+		if (list.isEmpty()){
+			return new HashMap<String, Object>();
+		}
+		return list.get(0);
+	}
 	
 	/**
 	 * 支持批量删除，文件ID以逗号分隔传进来

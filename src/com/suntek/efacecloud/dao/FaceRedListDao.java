@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.suntek.eap.common.util.SqlUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.suntek.eap.EAP;
@@ -63,13 +64,13 @@ public class FaceRedListDao
 		int[] num = EAP.jdbc.getNameParameterTransactionTemplate(Constants.APP_NAME).batchUpdate(sqlList.toArray(new String[]{}), paramList);
 		return num[0]> 0;
 	}
-	
-	public List<Map<String, Object>> getDetailById(String id) 
+
+	public List<Map<String, Object>> getDetailById(String ids)
 	{
 		String sql = "select INFO_ID, NAME, SEX, PIC, IDENTITY_TYPE, IDENTITY_ID, BIRTHDAY, PERMANENT_ADDRESS, PRESENT_ADDRESS, "
-				+ "PIC_QUALITY, CREATOR, CREATE_TIME from EFACE_RED_LIST where INFO_ID = ?";
-		
-		return jdbc.queryForList(sql, id);
+				+ "PIC_QUALITY, CREATOR, CREATE_TIME from EFACE_RED_LIST where INFO_ID in " + SqlUtil.getSqlInParams(ids);
+
+		return jdbc.queryForList(sql, ids.split(","));
 	}
 	
 	public List<String> getRedDbIdList(){

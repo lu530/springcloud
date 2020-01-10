@@ -3,6 +3,7 @@ package com.suntek.efacecloud.service;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
@@ -30,6 +31,8 @@ public class FaceRedTaskService
 		
 		String approveStatus = StringUtil.toString(params.get("APPROVAL_STATUS"));
 		String taskId = StringUtil.toString(params.get("TASK_ID"));
+		List<Map<String, Object>> relatedRedList = dao.queryRelatedRedList(taskId);
+		context.putParameter("DATA", JSONObject.toJSONString(relatedRedList));
 		String userCode = context.getUserCode();
 		if (dao.update(taskId, approveStatus, userCode)) {
 			context.getResponse().putData("CODE", 0);

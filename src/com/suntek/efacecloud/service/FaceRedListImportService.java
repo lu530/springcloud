@@ -7,9 +7,7 @@ import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.FileUploadUtil;
-import com.suntek.efacecloud.util.PersonImportUtil;
+import com.suntek.efacecloud.util.*;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +49,10 @@ public class FaceRedListImportService {
             if (!new File(zipPath).isFile()) {
                 context.getResponse().setWarn("上传文件为空");
                 return;
+            }
+
+            if (ConfigUtil.isFileSave()) {
+                context.putParameter("SAVE_FILE", FileSaveUtil.save(new File(zipPath), saveFileName));
             }
             PersonImportUtil.getPersonImportList(webAppPath + File.separator + saveFileName, unZipPath, successList, failList);
 

@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
@@ -47,6 +48,9 @@ public class FaceRedListService {
     @BeanService(id = "add", description = "新增或编辑红名单库人脸")
     public void edit(RequestContext context) throws Exception {
         faceRedListDelegate.addOrEdit(context);
+        Map<String, Object> differentData = new CompareParamsService().getDifferentData(context);
+        context.putParameter("editParam", differentData.get("editParam"));
+        context.putParameter("originParam", differentData.get("originParam"));
     }
 
     @BeanService(id = "open", description = "是否开启红名单", type = "remote")
@@ -120,6 +124,16 @@ public class FaceRedListService {
         try {
             Map<String, Object> params = context.getParameters();
             String personId = StringUtil.toString(params.get("INFO_ID"));
+            List<Map<String, Object>> list = dao.getDetailById(personId);
+            list.stream().forEach(o->{
+                o.put("PIC", ModuleUtil.renderPic(ModuleUtil.renderImage(StringUtil.toString(o.get("PIC")))));
+                o.put("INFO_ID", StringUtil.toString(o.get("INFO_ID")));
+                o.put("IDENTITY_TYPE", StringUtil.toString(o.get("IDENTITY_TYPE")));
+                o.put("IDENTITY_ID", StringUtil.toString(o.get("IDENTITY_ID")));
+                o.put("PERMANENT_ADDRESS", StringUtil.toString(o.get("PERMANENT_ADDRESS")));
+                o.put("PRESENT_ADDRESS", StringUtil.toString(o.get("PRESENT_ADDRESS")));
+            });
+            context.putParameter("DATA", JSONObject.toJSONString(list));
             CollisionResult deleteFaceResult = faceRedListDelegate.deleteFace(context);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
@@ -161,6 +175,7 @@ public class FaceRedListService {
             context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
         }
     }
+
     @BeanService(id = "belongRedList", description = "查询人员是否涉红名单", type = "remote")
     public void belongRedList(RequestContext context) throws Exception {
         Map<String, Object> params = context.getParameters();
@@ -275,6 +290,7 @@ public class FaceRedListService {
         params.put("IS_INVOLVE_RED_LIST", belongRedFlag); //是否涉 红名单
         //新增人脸布控检测红名单场景不需要新增审批任务
         dao.addRedTask(params, relatedPersons);
+
         context.getResponse().putData("TASK_ID", taskId);
         context.getResponse().putData("BELONG_FLAG", belongRedFlag);
 

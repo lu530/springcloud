@@ -501,13 +501,13 @@ button.compare-btn.type1{
     margin: 0 10px 5px;
     border-radius: 3px;
 
-    border: 1px solid rgb(153, 190, 232);  
+    border: 1px solid rgb(153, 190, 232);
 	background: rgb(240, 247, 255);
 	color: rgb(61, 140, 232)
 
 }
 .pager-wrap-new .tilelist .similar.color-red {
-	border: 1px solid rgb(255, 169, 175); 
+	border: 1px solid rgb(255, 169, 175);
 	background-color: rgb(254, 240, 239);
 	color: rgb(235, 65, 76)
 }
