@@ -43,6 +43,7 @@ $(function(){
 	initTime();   // 初始化时间段
 //	initAreaTree(addressOption);
 	initFilterEvent();
+	getDeviceModule();  //定义在common中
 	initEvent();
 	topUploadPic();
 	initFilterAgeGroup();
@@ -81,7 +82,7 @@ function initEvent() {
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=193', '地点选择', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=193', '地点选择', 1000, 600,function(resp){
 			$('#deviceNames').html(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);
@@ -100,7 +101,7 @@ function initEvent() {
 	
 	//点击进入卡口选择地图
 	$('#locate').click(function(){
-		UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=193', '地点选择', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=193', '地点选择', 1000, 600,function(resp){
 			$('#deviceNames').html(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);
