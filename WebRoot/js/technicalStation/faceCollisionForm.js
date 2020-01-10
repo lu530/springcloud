@@ -59,14 +59,14 @@ regionDeviceList = {
 	}
 };
 
-$(document).ready(function(){
+$(function(){
 //	UI.control.init(["userInfo"]);
 	UI.control.init();
 	getDeviceModule();  //定义在common中
 	/*judgePermission();*/
 	compatibleIndexOf();
-	initEvents();
 	initDateTimePicker();
+	initEvents();
 });
 
 function judgePermission(){

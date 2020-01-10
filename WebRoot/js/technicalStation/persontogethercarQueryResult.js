@@ -160,11 +160,11 @@ function gangsAnalysis(){
 			UI.control.remoteCall('technicalTactics/personFollow/togetherAnalysis', {
 				RECORD_IDS: recordId,TOGETHER_MINUTE:togetherMinute,THRESHOLD:threshold, FACE_SCORE:faceScore,INFO_IDS:infoIds
 			}, function(resp) {
-				if(resp.IS_SYNC == 0){
-					dealWithListData(resp);
-				}else{
+				if(resp.IS_ASYNC == 1){
 					UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
 					UI.util.hideLoadingPanel();
+				}else{
+					dealWithListData(resp);
 				}
 			}, function(data, status, e) {
 				UI.util.hideLoadingPanel();
