@@ -61,10 +61,10 @@ public class OnlineTaskCounter {
 			} catch (Exception e) {
 				ServiceLog.error(e);
 			}
-			String ip = AppHandle.getHandle(Constants.APP_NAME).getProperty("ONLINE_SERVER_IP", localIp);
+			String ip = AppHandle.getHandle(Constants.PORTAL).getProperty("ONLINE_SERVER_IP", localIp);
 	        config.setHostname(ip);
 	        log.debug("ip:" + ip);
-	        int port = Integer.parseInt(AppHandle.getHandle(Constants.APP_NAME)
+	        int port = Integer.parseInt(AppHandle.getHandle(Constants.PORTAL)
 	        		.getProperty("ONLINE_SERVER_PORT", "9092"));
 	        config.setPort(port);
 	        log.debug("port:" + port);

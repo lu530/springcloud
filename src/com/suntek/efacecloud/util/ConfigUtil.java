@@ -187,7 +187,8 @@ public class ConfigUtil {
      * @return
      */
     public static boolean getIsNvnAsync() {
-        return Constants.HW_VENDOR.equals(getVendor());
+        String isNvnAsync = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_NVN_ASYNC", "0");
+        return "1".equals(isNvnAsync);
     }
 
     /**

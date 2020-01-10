@@ -542,7 +542,13 @@ public class FaceNVNTaskService {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         if (HWStatusCode.成功.getCode() == Long.valueOf(code)) {
             List<Element> faceInfosElements = root.element("faceInfos").elements();
-            return this.command.buildResultList(faceInfosElements);
+            boolean isMultiRegion;
+            if (Constants.FREQUENT_ACCESS.equals(taskType)) {
+                isMultiRegion = false;
+            } else {
+                isMultiRegion = true;
+            }
+            return this.command.buildResultList(faceInfosElements, isMultiRegion);
         } else {
             Log.nvnTaskLog.error("华为接口处理出错，状态码：" + code + "， 错误信息：" + errMsg);
             return Collections.EMPTY_LIST;

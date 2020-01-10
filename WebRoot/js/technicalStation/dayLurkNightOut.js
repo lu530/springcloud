@@ -197,12 +197,11 @@ function doSearch(){
 		}
 
 		UI.control.remoteCall(url, parent.queryParams,function(resp){
-
-			if(resp.IS_SYNC == 0){
-				dealWithListData(resp);
-			}else{
+			if(resp.IS_ASYNC == 1){
 				UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
 				UI.util.hideLoadingPanel();
+			}else{
+				dealWithListData(resp);
 			}
 		},function(){},{},true);
 	}
