@@ -7,7 +7,7 @@ var topMargin = false;
 var imgRatio;
 var imgUrl = UI.util.getUrlParam("imgUrl");
 var sceShotParms = [];
-
+var SAVE_LEFT_PARAM_DATA = {};
 //var orgTreeOpts = {//初始化卡口下拉树
 //		isShowFolder: true,
 //		multiple: true,
@@ -101,6 +101,7 @@ function initEvents(){
 					topN: $("#SEARCHNUM").val(),
 					searchType:3
 			}
+			top.SAVE_LEFT_PARAM_DATA = searchParam
 			
 			//var cameraIds = $("#faceDetect").val();
 			parent.cachedData.deviceIds = $("#faceDetect").val();

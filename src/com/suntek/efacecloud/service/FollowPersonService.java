@@ -47,12 +47,14 @@ public class FollowPersonService {
         String togetherMinute = StringUtil.toString(context.getParameter("TOGETHER_MINUTE"));
         int similarity = Integer.parseInt(StringUtil.toString(context.getParameter("THRESHOLD"), "80"));
         String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"), "65");
+        String oneCompareParam = StringUtil.toString(context.getParameter("ONECOMPARE_PARAM"));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("RECORD_IDS", recordId);
         params.put("TOGETHER_MINUTE", togetherMinute);
         params.put("THRESHOLD", similarity);
         params.put("FACE_SCORE", faceScore);
         params.put("ALGO_TYPE", ConfigUtil.getAlgoType());
+        params.put("ONECOMPARE_PARAM", oneCompareParam);
 
         if (ConfigUtil.getIsNvnAsync()) {
             this.aysncService.together(context, params);

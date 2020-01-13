@@ -90,6 +90,7 @@ public class FaceNVNTaskService {
                             break;
                         // 人脸区域碰撞
                         case Constants.REGION_COLLISION:
+                        case Constants.NIGHT_ACTIVE:
                             try {
                                 registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(),
                                         "4401",
@@ -484,6 +485,7 @@ public class FaceNVNTaskService {
             case Constants.FREQUENT_ACCESS:
                 paramMap.put("DEVICE_IDS", this.buildDeviceList(paramMap.get("DEVICE_IDS")));
                 break;
+            case Constants.NIGHT_ACTIVE:
             case Constants.REGION_COLLISION:
                 List<Map<String, Object>> paramList = (List<Map<String, Object>>) paramMap.get("timeRegionList");
                 for (Map<String, Object> map : paramList) {
@@ -496,10 +498,11 @@ public class FaceNVNTaskService {
                 List<Map<String, Object>> deviceList = this.buildDeviceList(paramMap.get("DEVICE_IDS"));
                 oneCompareParam.put("DEVICE_IDS", deviceList);
                 paramMap.put("PIC", StringUtil.toString(oneCompareParam.get("PIC"), ""));
-                paramMap.put("BEGIN_TIME", StringUtil.toString(oneCompareParam.get("BEGIN_TIME"), ""));
-                paramMap.put("END_TIME", StringUtil.toString(oneCompareParam.get("END_TIME"), ""));
-                paramMap.put("TOPN", StringUtil.toString(oneCompareParam.get("TOPN"), ""));
-                paramMap.put("THRESHOLD", StringUtil.toString(oneCompareParam.get("THRESHOLD"), ""));
+                paramMap.put("beginTime", StringUtil.toString(oneCompareParam.get("beginTime"), ""));
+                paramMap.put("endTime", StringUtil.toString(oneCompareParam.get("endTime"), ""));
+                paramMap.put("topN", StringUtil.toString(oneCompareParam.get("topN"), ""));
+                paramMap.put("threshold", StringUtil.toString(oneCompareParam.get("threshold"), ""));
+                paramMap.put("togetherMinute", StringUtil.toString(oneCompareParam.get("togetherMinute"), ""));
                 paramMap.put("DEVICE_IDS", deviceList);
                 break;
             case Constants.DAY_HIDE_NIGHT_ACTIVE:
