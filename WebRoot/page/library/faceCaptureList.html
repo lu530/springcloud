@@ -310,7 +310,7 @@
                             <!-- 图片下文字列表 -->
                             <dd class="node-text mt10">
                                 <input type="checkbox" listview-check="" class="checkbox-opacity hide nodeCheck">
-                                <p class="similar-name">
+                                <p class="similar-name {%= top.domTmplDisplay('DEFENCE_faceCaptureList_card_address') %}">
                                     <label picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">地点：</label>
                                     <span title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</span>
                                 </p>
