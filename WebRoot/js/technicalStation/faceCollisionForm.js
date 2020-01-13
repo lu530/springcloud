@@ -314,10 +314,10 @@ function initEvents(){
 		//条件回填
 		var search = top.GET_TASK_LIST_DATA.search;
 		//1
-		$(".beginTime:eq(0)").val(search.TIME_REGION_LIST[0].BEGIN_TIME);
-		$(".endTime:eq(0)").val(search.TIME_REGION_LIST[0].END_TIME);
+		$(".beginTime:eq(0)").val(search.timeRegionList[0].beginTime);
+		$(".endTime:eq(0)").val(search.timeRegionList[0].endTime);
 		fillBackDeviceIds({
-			datas: search.TIME_REGION_LIST[0].DEVICE_IDS,
+			datas: search.timeRegionList[0].DEVICE_IDS,
 			deviceNames: "deviceNames1",
 			faceDetect: "faceDetect1",
 			deviceIdInt: "deviceIdInt1",
@@ -325,10 +325,10 @@ function initEvents(){
 			dropdownListText: "dropdown-list-text1"
 		});
 		//2
-		$(".beginTime:eq(1)").val(search.TIME_REGION_LIST[1].BEGIN_TIME);
-		$(".endTime:eq(1)").val(search.TIME_REGION_LIST[1].END_TIME);
+		$(".beginTime:eq(1)").val(search.timeRegionList[1].beginTime);
+		$(".endTime:eq(1)").val(search.timeRegionList[1].endTime);
 		fillBackDeviceIds({
-			datas: search.TIME_REGION_LIST[1].DEVICE_IDS,
+			datas: search.timeRegionList[1].DEVICE_IDS,
 			deviceNames: "deviceNames2",
 			faceDetect: "faceDetect2",
 			deviceIdInt: "deviceIdInt2",

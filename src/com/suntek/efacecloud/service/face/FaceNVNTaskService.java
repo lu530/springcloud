@@ -469,39 +469,31 @@ public class FaceNVNTaskService {
         }
     }
 
-    public void renderDeviceInfo(Map<String, Object> paramMap, String taskType) throws Exception {
-        String[] deviceIds = {};
+    private List<Map<String, Object>> buildDeviceList(Object deviceIds) throws Exception {
+        String[] deviceIdArray = StringUtil.toString(deviceIds).split(",");
         List<Map<String, Object>> deviceList = new ArrayList<>();
+        for (String deviceId : deviceIdArray) {
+            deviceList.add(getDeviceInfo(deviceId));
+        }
+        return deviceList;
+    }
+
+    public void renderDeviceInfo(Map<String, Object> paramMap, String taskType) throws Exception {
         switch (taskType) {
             case Constants.FACE_CAPTURE_FREQ_ANALYSIS:
             case Constants.FREQUENT_ACCESS:
-                deviceIds = StringUtil.toString(paramMap.get("DEVICE_IDS")).split(",");
-                for (String deviceId : deviceIds) {
-                    deviceList.add(getDeviceInfo(deviceId));
-                }
-
-                paramMap.put("DEVICE_IDS", deviceList);
+                paramMap.put("DEVICE_IDS", this.buildDeviceList(paramMap.get("DEVICE_IDS")));
                 break;
             case Constants.REGION_COLLISION:
-                List<Map<String, Object>> paramList = (List<Map<String, Object>>) paramMap.get("TIME_REGION_LIST");
+                List<Map<String, Object>> paramList = (List<Map<String, Object>>) paramMap.get("timeRegionList");
                 for (Map<String, Object> map : paramList) {
-                    deviceIds = StringUtil.toString(map.get("DEVICE_IDS")).split(",");
-                    for (String deviceId : deviceIds) {
-                        deviceList.add(getDeviceInfo(deviceId));
-                    }
-
-                    map.put("DEVICE_IDS", deviceList);
+                    map.put("DEVICE_IDS", this.buildDeviceList(map.get("DEVICE_IDS")));
                 }
                 break;
             case Constants.FOLLOW_PERSON:
                 Map<String, Object> oneCompareParam
                         = JSONObject.parseObject(StringUtil.toString(paramMap.get("ONECOMPARE_PARAM")), Map.class);
-                String[] deviceIdList = StringUtil.toString(oneCompareParam.get("DEVICE_IDS")).split(",");
-                ServiceLog.debug("同伙分析设备参数：" + JSONObject.toJSONString(deviceIdList));
-                for (String deviceId : deviceIdList) {
-                    deviceList.add(getDeviceInfo(deviceId));
-                }
-
+                List<Map<String, Object>> deviceList = this.buildDeviceList(paramMap.get("DEVICE_IDS"));
                 oneCompareParam.put("DEVICE_IDS", deviceList);
                 paramMap.put("PIC", StringUtil.toString(oneCompareParam.get("PIC"), ""));
                 paramMap.put("BEGIN_TIME", StringUtil.toString(oneCompareParam.get("BEGIN_TIME"), ""));
@@ -513,13 +505,7 @@ public class FaceNVNTaskService {
             case Constants.DAY_HIDE_NIGHT_ACTIVE:
                 List<Map<String, Object>> groupList = (List<Map<String, Object>>) paramMap.get("GROUP_LIST");
                 for (Map<String, Object> map : groupList) {
-                    deviceIds = StringUtil.toString(map.get("CROSS")).split(",");
-                    List<Map<String, Object>> cross = new ArrayList<>();
-                    for (String deviceId : deviceIds) {
-                        cross.add(getDeviceInfo(deviceId));
-                    }
-
-                    map.put("DEVICE_IDS", cross);
+                    paramMap.put("DEVICE_IDS", this.buildDeviceList(map.get("CROSS")));
                 }
                 break;
             default:
