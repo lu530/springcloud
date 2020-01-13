@@ -101,9 +101,9 @@ public class FaceNVNTaskDao {
         return jdbc.queryForObject(sql, Integer.class);
     }
 
-    public Map<String, Object> getDoingTask() {
+    public Map<String, Object> getWaitGetResultTask() {
         String sql = "select ID, TASK_ID, TASK_TYPE, PARAM, " + dialect.datetochar("UPDATE_TIME", Dialect.DATETIME_FORMAT_STANDARD) +
-                " as UPDATE_TIME, REQUEST_FACE_GROUPS from EFACE_NVN_TASK_INFO where TASK_STATUS = 1";
+                " as UPDATE_TIME, REQUEST_FACE_GROUPS from EFACE_NVN_TASK_INFO where TASK_STATUS = 4 limit 1";
         List<Map<String, Object>> list = jdbc.queryForList(sql);
         if (list != null & list.size() > 0) {
             return list.get(0);

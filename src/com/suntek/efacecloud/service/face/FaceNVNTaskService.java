@@ -51,122 +51,121 @@ public class FaceNVNTaskService {
 
     @BeanService(id = "executeTask", type = "remote", description = "执行nvn任务")
     public void executeTask(RequestContext context) {
-        Map<String, Object> taskMap = dao.getNeedExcuteTask();
-        Log.nvnTaskLog.debug("查询到的数据：" + JSONObject.toJSONString(taskMap));
-        if (StringUtil.isObjectNull(taskMap)) {
-            Log.nvnTaskLog.debug("没有查询到需要执行的数据");
-        } else {
-            String taskType = StringUtil.toString(taskMap.get("TASK_TYPE"));
-            String id = StringUtil.toString(taskMap.get("ID"));
-            String taskId = StringUtil.toString(taskMap.get("TASK_ID"));
-            String paramJson = StringUtil.toString(taskMap.get("PARAM"));
-            Log.nvnTaskLog.debug("------------------>此次操作nvn的类型是：" + taskType);
+        try {
+            Map<String, Object> taskMap = dao.getNeedExcuteTask();
+            Log.nvnTaskLog.debug("查询到的数据：" + JSONObject.toJSONString(taskMap));
+            if (StringUtil.isObjectNull(taskMap)) {
+                Log.nvnTaskLog.debug("没有查询到需要执行的数据");
+            } else {
+                String taskType = StringUtil.toString(taskMap.get("TASK_TYPE"));
+                String id = StringUtil.toString(taskMap.get("ID"));
+                String taskId = StringUtil.toString(taskMap.get("TASK_ID"));
+                String paramJson = StringUtil.toString(taskMap.get("PARAM"));
+                Log.nvnTaskLog.debug("------------------>此次操作nvn的类型是：" + taskType);
 
-            dao.updateTaskStatus(id, Constants.NVN_TASK_DEALING);
+                dao.updateTaskStatus(id, Constants.NVN_TASK_DEALING);
 
-            OnlineTaskCounter.removeTask();
+                Log.nvnTaskLog.debug("------------------>调用开放平台，更新状态处理中");
+                try {
 
-            Log.nvnTaskLog.debug("------------------>调用开放平台，更新状态处理中");
-            try {
+                    CommandContext commandContext = new CommandContext(context.getHttpRequest());
+                    Registry registry = Registry.getInstance();
+                    commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
+                    Map<String, Object> param = JSONObject.parseObject(paramJson, Map.class);
+                    // 所有后台任务，需要使用异步接口
+                    param.put("IS_ASYNC", "true");
+                    commandContext.setBody(param);
 
-                CommandContext commandContext = new CommandContext(context.getHttpRequest());
-                Registry registry = Registry.getInstance();
-                commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-                Map<String, Object> param = JSONObject.parseObject(paramJson, Map.class);
-                // 所有后台任务，需要使用异步接口
-                param.put("IS_ASYNC", "true");
-                commandContext.setBody(param);
+                    switch (taskType) {
+                        // 频繁出现
+                        case Constants.FREQUENT_ACCESS:
+                            try {
+                                registry.selectCommand(BaseCommandEnum.frequentAccess.getUri(),
+                                        "4401",
+                                        ConfigUtil.getVendor()).exec(commandContext);
+                            } catch (Exception e) {
+                                Log.nvnTaskLog.error("调用开放平台频繁出现出错，原因：" + e.getMessage(), e);
+                            }
 
-                switch (taskType) {
-                    // 频繁出现
-                    case Constants.FREQUENT_ACCESS:
-                        try {
-                            registry.selectCommand(BaseCommandEnum.frequentAccess.getUri(),
-                                    "4401",
-                                    ConfigUtil.getVendor()).exec(commandContext);
-                        } catch (Exception e) {
-                            Log.nvnTaskLog.error("调用开放平台频繁出现出错，原因：" + e.getMessage(), e);
-                        }
+                            break;
+                        // 人脸区域碰撞
+                        case Constants.REGION_COLLISION:
+                            try {
+                                registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(),
+                                        "4401",
+                                        ConfigUtil.getVendor()).exec(commandContext);
+                            } catch (Exception e) {
+                                Log.nvnTaskLog.error("调用开放平台人脸区域碰撞出错，原因：" + e.getMessage(), e);
+                            }
+                            break;
+                        // 同伙分析
+                        case Constants.FOLLOW_PERSON:
+                            try {
+                                registry.selectCommand(BaseCommandEnum.followPerson.getUri(),
+                                        "4401",
+                                        ConfigUtil.getVendor()).exec(commandContext);
+                            } catch (Exception e) {
+                                Log.nvnTaskLog.error("调用开放平台同伙分析出错，原因：" + e.getMessage(), e);
+                            }
+                            break;
+                        // 昼伏夜出
+                        case Constants.DAY_HIDE_NIGHT_ACTIVE:
+                            try {
+                                registry.selectCommand(BaseCommandEnum.faceNvn.getUri(),
+                                        "4401",
+                                        ConfigUtil.getVendor()).exec(commandContext);
+                            } catch (Exception e) {
+                                Log.nvnTaskLog.error("调用开放平台昼伏夜出出错，原因：" + e.getMessage(), e);
+                            }
+                            break;
+                        // 路人检索频次分析
+                        case Constants.FACE_CAPTURE_FREQ_ANALYSIS:
+                            try {
+                                registry.selectCommand(BaseCommandEnum.faceCaptureFreqAnalysis.getUri(),
+                                        "4401",
+                                        ConfigUtil.getVendor()).exec(commandContext);
+                            } catch (Exception e) {
+                                Log.nvnTaskLog.error("调用开放平台路人检索频次分析出错，原因：" + e.getMessage(), e);
+                            }
+                            break;
+                        //特殊人群分析
+                        case Constants.SPECIAL_PERSON:
+                            this.specialPersonService.execute(taskMap);
+                            break;
+                        default:
+                            break;
+                    }
 
-                        break;
-                    // 人脸区域碰撞
-                    case Constants.REGION_COLLISION:
-                        try {
-                            registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(),
-                                    "4401",
-                                    ConfigUtil.getVendor()).exec(commandContext);
-                        } catch (Exception e) {
-                            Log.nvnTaskLog.error("调用开放平台人脸区域碰撞出错，原因：" + e.getMessage(), e);
-                        }
-                        break;
-                    // 同伙分析
-                    case Constants.FOLLOW_PERSON:
-                        try {
-                            registry.selectCommand(BaseCommandEnum.followPerson.getUri(),
-                                    "4401",
-                                    ConfigUtil.getVendor()).exec(commandContext);
-                        } catch (Exception e) {
-                            Log.nvnTaskLog.error("调用开放平台同伙分析出错，原因：" + e.getMessage(), e);
-                        }
-                        break;
-                    // 昼伏夜出
-                    case Constants.DAY_HIDE_NIGHT_ACTIVE:
-                        try {
-                            registry.selectCommand(BaseCommandEnum.faceNvn.getUri(),
-                                    "4401",
-                                    ConfigUtil.getVendor()).exec(commandContext);
-                        } catch (Exception e) {
-                            Log.nvnTaskLog.error("调用开放平台昼伏夜出出错，原因：" + e.getMessage(), e);
-                        }
-                        break;
-                    // 路人检索频次分析
-                    case Constants.FACE_CAPTURE_FREQ_ANALYSIS:
-                        try {
-                            registry.selectCommand(BaseCommandEnum.faceCaptureFreqAnalysis.getUri(),
-                                    "4401",
-                                    ConfigUtil.getVendor()).exec(commandContext);
-                        } catch (Exception e) {
-                            Log.nvnTaskLog.error("调用开放平台路人检索频次分析出错，原因：" + e.getMessage(), e);
-                        }
-                        break;
-                    //特殊人群分析
-                    case Constants.SPECIAL_PERSON:
-                        this.specialPersonService.execute(taskMap);
-                        break;
-                    default:
-                        break;
-                }
+                    // 异步接口获取到taskId
+                    long code = commandContext.getResponse().getCode();
+                    if (0L == code) {
+                        Log.nvnTaskLog.debug("------------------>调用开放平台，获取taskId" + commandContext.getResponse().getResult());
+                        Log.nvnTaskLog.debug("任务返回信息：" + commandContext.getResponse().getMessage());
+                        List<Map<String, Object>> resultList = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
+                        Map<String, Object> map = resultList.get(0);
+                        String asyncTaskId = StringUtil.toString(map.get("TASK_ID"));
+                        List<FaceGroup> requestFaceGroups = (List<FaceGroup>) map.get("REQUEST_FACE_GROUPS");
+                        //华为返回任务id替换原来的任务id
+                        dao.updateTaskIdAndRequestFaceGroups(id, asyncTaskId, JSONObject.toJSONString(requestFaceGroups));
+                        dao.updateTaskStatus(id, Constants.NVN_TASK_WAIT_GET_RESULT);
+                        return;
+                    } else {
+                        Log.nvnTaskLog.debug("------------------>调用开放平台出错，原因：" + commandContext.getResponse().getResult());
+                        Object[] result = getErrMessage(taskId, commandContext.getResponse().getMessage());
+                        dao.insertTaskResult(result);
+                        dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
+                    }
 
-                // 异步接口获取到taskId
-                long code = commandContext.getResponse().getCode();
-                if (0L == code) {
-                    Log.nvnTaskLog.debug("------------------>调用开放平台，获取taskId" + commandContext.getResponse().getResult());
-                    Log.nvnTaskLog.debug("任务返回信息：" + commandContext.getResponse().getMessage());
-                    List<Map<String, Object>> resultList = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
-                    Map<String, Object> map = resultList.get(0);
-                    String asyncTaskId = StringUtil.toString(map.get("TASK_ID"));
-                    List<FaceGroup> requestFaceGroups = (List<FaceGroup>) map.get("REQUEST_FACE_GROUPS");
-                    //华为返回任务id替换原来的任务id
-                    dao.updateTaskIdAndRequestFaceGroups(id, asyncTaskId, JSONObject.toJSONString(requestFaceGroups));
-
-                    return;
-                } else {
-                    Log.nvnTaskLog.debug("------------------>调用开放平台出错，原因：" + commandContext.getResponse().getResult());
-                    Object[] result = getErrMessage(taskId, commandContext.getResponse().getMessage());
+                } catch (Exception e) {
+                    Log.nvnTaskLog.error("执行nvn任务失败，原因：" + e.getMessage(), e);
+                    Object[] result = getErrMessage(taskId, e.getMessage());
                     dao.insertTaskResult(result);
                     dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 }
-
-            } catch (Exception e) {
-                Log.nvnTaskLog.error("执行nvn任务失败，原因：" + e.getMessage(), e);
-                Object[] result = getErrMessage(taskId, e.getMessage());
-                dao.insertTaskResult(result);
-                dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
-                FaceNvNTaskExecuteJob.isFinish = true;
             }
-
+        } finally {
+            FaceNvNTaskExecuteJob.isFinish = true;
         }
-        FaceNvNTaskExecuteJob.isFinish = true;
     }
 
     /**
@@ -177,7 +176,7 @@ public class FaceNVNTaskService {
     @BeanService(id = "obtainResultByInterface", type = "remote", description = "获取nvn任务的结果")
     public void obtainResultByInterface(RequestContext context) {
         try {
-            Map<String, Object> doingTask = dao.getDoingTask();
+            Map<String, Object> doingTask = dao.getWaitGetResultTask();
             if (doingTask.size() == 0) {
                 Log.nvnTaskLog.debug("当前无进行中的任务");
                 return;

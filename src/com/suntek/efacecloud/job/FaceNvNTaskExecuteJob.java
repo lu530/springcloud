@@ -17,7 +17,7 @@ import org.quartz.JobExecutionException;
  */
 public class FaceNvNTaskExecuteJob implements Job {
     public FaceNVNTaskService service = new FaceNVNTaskService();
-    public static boolean isFinish = true;
+    public static volatile boolean isFinish = true;
     
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {

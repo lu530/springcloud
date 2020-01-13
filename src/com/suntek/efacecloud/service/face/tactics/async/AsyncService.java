@@ -35,7 +35,6 @@ public class AsyncService {
                 totalNum,
                 context.getUserCode(),
                 taskType);
-        OnlineTaskCounter.addTask();
         String handleTime = StringUtil.toString(taskDao.getHandleTime(), "0");
         context.getResponse().putData("IS_ASYNC", "1");
         context.getResponse().putData("MESSAGE", "预估处理时间为" + handleTime + "分钟");

@@ -542,6 +542,11 @@ public class Constants {
      */
     public static final String NVN_TASK_DEALT_ERROR = "3";
 
+    /**
+     * nvn任务已提交异步请求，等待获取结果
+     */
+    public static final String NVN_TASK_WAIT_GET_RESULT = "4";
+
 
     /**
      * 视频云设备类型--中台设备类型对应关系

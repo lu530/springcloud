@@ -8,7 +8,6 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.job.FaceNvNGetResultJob;
 import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
-import com.suntek.efacecloud.service.face.OnlineTaskCounter;
 import com.suntek.efacecloud.service.redlist.FaceRedListDelegate;
 import com.suntek.efacecloud.util.AlluxioClientUtil;
 import com.suntek.efacecloud.util.ConfigUtil;
@@ -53,11 +52,6 @@ public class SystemInitListener implements ServletContextListener {
     private void stopFaceNvn() {
         if (!ConfigUtil.getIsNvnAsync()) {
             return;
-        }
-        try {
-            OnlineTaskCounter.stopSocketIOServer();
-        } catch (Exception e) {
-            log.debug("启动nvn任务socketio服务异常" + e.getMessage(), e);
         }
         try {
             EAP.schedule.delJob("FaceNvNTaskExecuteJob", "FaceNvNTaskExecuteJobGroup");
@@ -109,13 +103,6 @@ public class SystemInitListener implements ServletContextListener {
     private void initFaceNVN() {
         if (!ConfigUtil.getIsNvnAsync()) {
             return;
-        }
-        // nvn任务socketio服务
-        try {
-            OnlineTaskCounter.startSocketIOServer();
-
-        } catch (Exception e) {
-            log.debug("启动nvn任务socketio服务异常" + e.getMessage(), e);
         }
         try {
 
