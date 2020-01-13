@@ -150,10 +150,6 @@ function renderDate(time, type)
 
 var timesGroupData,coincideDateGroupData;
 function gangsAnalysis(){
-    SAVE_LEFT_PARAM_DATA = top.SAVE_LEFT_PARAM_DATA
-	if(parent&&parent){
-		SAVE_LEFT_PARAM_DATA = parent.parent.SAVE_LEFT_PARAM_DATA
-	}
 	if(top.GET_TASK_LIST_DATA){
 		var resp = top.GET_TASK_LIST_DATA.data;
 		dealWithListData(resp);
@@ -162,7 +158,12 @@ function gangsAnalysis(){
 		if (recordId) {
 			UI.util.showLoadingPanel('');
 			UI.control.remoteCall('technicalTactics/personFollow/togetherAnalysis', {
-				RECORD_IDS: recordId,TOGETHER_MINUTE:togetherMinute,THRESHOLD:threshold, FACE_SCORE:faceScore,INFO_IDS:infoIds,ONECOMPARE_PARAM: JSON.stringify(SAVE_LEFT_PARAM_DATA)
+				RECORD_IDS: recordId,
+				TOGETHER_MINUTE:togetherMinute,
+				THRESHOLD:threshold,
+				FACE_SCORE:faceScore,
+				INFO_IDS:infoIds,
+				ONECOMPARE_PARAM: JSON.stringify(top.SAVE_LEFT_PARAM_DATA)
 			}, function(resp) {
 				if(resp.IS_ASYNC == 1){
 					UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
