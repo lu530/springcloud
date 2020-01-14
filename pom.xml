@@ -137,13 +137,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.suntek</groupId>
-			<artifactId>eap-ui</artifactId>
-			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/WebRoot/WEB-INF/lib/eap-ui-1.0.2.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>com.hikvision</groupId>
 			<artifactId>artemis-http-client</artifactId>
 			<version>1.0</version>
