@@ -189,7 +189,9 @@ public class ExcelFileUtil
 				"Content-disposition",
 				"attachment;success=true;filename ="
 						+ URLEncoder.encode(fileName, "utf-8"));
-
+        if(ConfigUtil.isFileSave()){
+            context.putParameter("SAVE_FILE", FileSaveUtil.save(workbook,fileName ));
+        }
 		try (OutputStream output = response.getOutputStream()) {
 			workbook.write(output);
 			output.flush();

@@ -1,5 +1,7 @@
 package com.suntek.efacecloud.dao;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,8 +31,18 @@ public class FaceFavoriteDao
 		
 		return nameJdbc.update(insertFavoriteSql, map) > 0;
 	}
-	
-	public boolean isFavoriteNameExsist(String favoriteName, String favoriteId, String userCode) 
+
+
+	public Map<String, Object> getFavoirteById(String favoriteId) throws Exception {
+		String sql = "select * from EFACE_FAVORITE where FAVORITE_ID = ?";
+		List<Map<String, Object>> list = jdbc.queryForList(sql, favoriteId);
+		if (list.isEmpty()) {
+			return new HashMap<String, Object>();
+		}
+		return list.get(0);
+	}
+
+		public boolean isFavoriteNameExsist(String favoriteName, String favoriteId, String userCode)
 	{
 		String sql = "select count(1) from EFACE_FAVORITE where FAVORITE_NAME = ? and FAVORITE_ID <> ? and CREATOR = ?";
 		return jdbc.queryForObject(sql, Integer.class, favoriteName, favoriteId, userCode) > 0;

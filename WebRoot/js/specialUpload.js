@@ -139,7 +139,8 @@
 
  	return true;
  }
-
+/*
+ *路人检索上传图片去掉face/common/fileUpload接口调用，该接口实现的是空逻辑，不知为何响应超级慢，经确认，可以掉干接口调用
 function getFileid(url,bool,fileElementId){
 
 	UI.control.remoteCall("face/common/fileUpload",{PIC: url}, function(resp){
@@ -170,5 +171,26 @@ function getFileid(url,bool,fileElementId){
 	},function(){
 		UI.util.hideLoadingPanel();
 	});
+	return global.fileid;
+}*/
+
+// 路人检索上传图片去掉face/common/fileUpload接口调用，该接口实现的是空逻辑，不知为何响应超级慢，经确认，可以掉干接口调用
+function getFileid(url,bool,fileElementId){
+	global.fileid = fileid = url;
+	if(!bool){
+		$(fileElementId).val('');
+		$('[foruploadform*="'+ fileElementId +'"]').val(url);
+		$('[foruploadimg*="'+ fileElementId +'"]').attr("src", url);
+		var picBar = $('.bottom-pic-bar');
+		if(picBar.length!=0){
+			picBar.removeClass('hide');
+		}
+		if($(".arithmetic-tools.on").length==0){ //如果没有选中的算法，默认选择第一种；
+			$(".arithmetic-tools:eq(0) i").trigger('click');
+		}
+
+		UI.util.alert("上传成功！");
+	}
+	UI.util.hideLoadingPanel();
 	return global.fileid;
 }

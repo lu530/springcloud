@@ -102,7 +102,7 @@
                         <li class="passBtn {%=showBtn('passBtn',o.APPROVAL_STATUS)%}" taskid="{%=o.TASK_ID%}" type="1"><b><i class="icon-checkmark3"></i> 通过</b></li>
                         <li class="noPassBtn {%=showBtn('noPassBtn',o.APPROVAL_STATUS)%}" taskid="{%=o.TASK_ID%}" type="2"><b><i class="icon-cross2"></i> 不通过</b></li>
                       	{% } %}  
-						<li class="detailBtn" taskid="{%=o.TASK_ID%}"><b><i class="icon-list3"></i> 详情</b></li>
+						<li class="detailBtn" taskid="{%=o.TASK_ID%} logBuriedPoint" buriedPointID="log_liling146" buriedPointValue=".log_liling146"><b><i class="icon-list3"></i> 详情</b></li>
                     </ul>
                 </td>
             </tr>

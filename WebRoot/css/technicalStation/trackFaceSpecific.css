@@ -1,0 +1,17 @@
+.position-top .dropdown-tree-area{top: 32px; }
+.face-lib{
+	display: inline-block;
+    border-radius: 4px;
+    overflow: hidden;
+    vertical-align: top;
+    position: relative;
+    top: -1px;
+    width: 235px;
+}
+.face-lib select{
+	height: 31px;
+    line-height: 31px;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 1px;
+}

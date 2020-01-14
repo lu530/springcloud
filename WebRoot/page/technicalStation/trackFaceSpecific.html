@@ -10,7 +10,7 @@
 <link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/form.css" />
 <link type="text/css" rel="stylesheet" href="/efacecloud/css/technicalStation/trackFaceSpecific.css">
 </head>
-<body class="full-screen" menuId="personTechnicalStation-personFrequentPast">
+<body class="full-screen bgWhite" menuId="personTechnicalStation-personFrequentPast">
 <div class="page-list-head">
 	<a id="backBtn" class="back-btn">
 		<i class="icon-arrow-left10"></i>
@@ -48,6 +48,25 @@
 				<dd class="form-group form-group-block">
 					<label class="control-label">选择区域：</label>
 					<ul class="map-icon-list clearfix" layerName="L_CAMERA_FACE">
+						<li title="直线框选"><i map="mapBtn" class="map-icon map-icon-line icon-statistics" name="polyline"></i></li>
+						<li title="多边形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select001" name="polygon"></i></li>
+						<li title="圆形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select002" name="circle"></i></li>
+						<li title="矩形框选"><i map="mapBtn" class="map-icon map-icon-area icon-select003" name="rect"></i></li>
+						<li title="显示隐藏感知设备" class="active"><i map="mapBtn" togglebtn="kktree" class="map-icon map-icon-area icon-list22" name="showKKTree"></i></li>
+						<li title="清除框选"><i map="mapBtn" class="map-icon map-icon-area icon-trash" name="delete"></i></li>
+					</ul>
+					<span class="red">*</span>
+					<div class="table-wrap" style="border: none;">
+						<table class="table" cellspacing="0" cellpadding="0">  
+							<tbody id="bayonetList">
+							</tbody>         
+						</table>
+						<!-- <input type="hidden" id="selectedBayonet" ui-validate="required" name="CAMERA_IDS" ui-vtext="选择区域"> -->
+					</div>
+				</dd>
+				<!-- <dd class="form-group form-group-block">
+					<label class="control-label">选择区域：</label>
+					<ul class="map-icon-list clearfix" layerName="L_CAMERA_FACE">
 						<li title="直线框选">
 							<svg map="mapBtn" class="pci-icon svg-icon map-icon map-icon-line" aria-hidden="true" name="polyline">
 								<use xlink:href="#iconguijifenxi-xuanzequyu3"></use>
@@ -75,7 +94,7 @@
 						</li>
 					</ul>
 					<span class="red hide">*</span>
-				</dd>
+				</dd> -->
 				<dl class="form-group form-group-block">
 					<label class="control-label">感知设备：</label>
 					<div class="dropdown-list device-select">
@@ -113,7 +132,15 @@
 				</dd>
 				<dd class="form-group form-group-block">
 					<label class="control-label">库名称：</label>
-					<div class="dropdown-list lib-name-select">
+					<div class="dropdown-list device-select">
+						<!-- <div class="dropdown-list-text">
+							<span class="list-title" id="deviceNames"></span> 
+							<input type="hidden" id="faceDetect" name="DEVICE_IDS" ui-validate="required" ui-vtext="感知设备">
+							<input type="hidden" id="deviceIdInt" name="DEVICE_IDS_INT" ui-validate="required" ui-vtext="感知设备">
+							<a class="dropdown">
+								<i class="icon-arrow-down7"></i>
+							</a>
+						</div> -->
 						<div class="dropdown-list-text">
 							<span class="list-title" id="faceLibName"></span>
 							<input type="hidden" id="faceLibID" name="LIB_ID" ui-validate="required" ui-vtext="库名称">
@@ -169,7 +196,7 @@
 
 <script type="text/javascript" src="/ui/plugins/font4.0/iconfont.js"></script>
 
-<script type="text/javascript" src="/efacecloud/js/common4.0.js"></script>
+<script type="text/javascript" src="/efacecloud/js/shunde5000/common4.0.js"></script>
 <script type="text/javascript" src="/efacecloud/js/technicalStation/tacticsCommon.js"></script>
 <script type='text/javascript' src="/efacecloud/js/technicalStation/trackFaceSpecific.js"></script>
 </body>

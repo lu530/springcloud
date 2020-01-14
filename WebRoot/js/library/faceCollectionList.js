@@ -50,7 +50,8 @@ var total = 0; //保存分页总数
 var uiOptions = {
     isMedia: false,
     // unload: imgSrc !=''? true: false
-    unload: true
+    unload: true,
+    toPage: true
 }
 
 var timeOption = {
@@ -108,7 +109,9 @@ $(function () {
     }
 });
 function initPage(){
-	var isPicSearchConfig = getConfigValue({model:"efacecloud",keys:["FACE_LIST_SEARCH"]})["FACE_LIST_SEARCH"];
+	var result = getConfigValue({model:"efacecloud",keys:["FACE_LIST_SEARCH", "FACE_PIC_EDIT"]});
+	var isPicSearchConfig = result["FACE_LIST_SEARCH"];
+	var isPicEdit = result["FACE_PIC_EDIT"];
     if(isPicSearchConfig==1){
     	UI.control.remoteCall("face/capture/getFaceUploadPicConfig",{},function(resp){
     		if(resp&&resp.FACE_SEARCH==true){
@@ -120,6 +123,10 @@ function initPage(){
     }else{
     	$(".picUpdata").removeClass("hide");
     	$(".top-box").removeClass("pl0");
+    }
+    //判断是否开启图片编辑（1开启 0关闭， 页面默认hide）
+    if (isPicEdit == 1) {
+        $("#editImgBtn").removeClass("hide");
     }
     domPermission();
 }
@@ -362,7 +369,7 @@ function initEvent() {
     // 打开人脸扫描页面
     $('#editImgBtn').on('click', function () {
         //		var imgUrl = $('#filterImg').attr('src');
-        var imgUrl = global.fileid;
+        var imgUrl = global.fileid ? global.fileid : $('#filterImg').attr('src');
         if ($('#filterImg').attr('src').slice(-12) != "noPhoto2.png") {  // 已上传图片
             UI.util.showCommonWindow("/efacecloud/page/scan/scanOld.html?imgUrl=" + imgUrl, "选择人脸", 1200, 700, function (data) {
                 if (data.faceImg != '') {
@@ -916,6 +923,7 @@ function initEvent() {
                 obj.jgsj = n.JGSK;
                 curData.push(obj);
             });
+            top.logSwitch && top.LogToolPackage && top.LogToolPackage.specialLogClass.log_liling26(JSON.parse(JSON.stringify(trackData)));
             var pageUrl = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=trackResult&getDataType=trackResult';
             UI.util.showCommonIframe('.frame-form-full', pageUrl);
             //top.showTrajectoryWindow(curData);

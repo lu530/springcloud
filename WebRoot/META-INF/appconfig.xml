@@ -53,4 +53,10 @@
 
 	<param key="TECHNICAL_PERSON_FLOW_ANALYSIS" name="人技战法人流量分析任务运行时间" type="String" description="cron表达式">0 0 1 * * ?</param>
 	<param key="TECHNICAL_SPECIAL_PERSON_TRACK" name="人技战法特定人群轨迹分析任务运行时间" type="String" description="cron表达式">0 0 3 * * ?</param>
+
+	<param key="FACE_PIC_EDIT" name="是否开启路人库检索图片编辑按钮,0关闭，1开启，默认关闭" description="是否开启路人库检索图片编辑按钮,0关闭，1开启，默认关闭" type="String">0</param>
+
+	<param key="ZK_DEVICE_NODE" name="zookeeper中设备信息的节点" type="String" description="zookeeper中设备信息的节点">/bigdata/config/gateway/capture</param>
+	<param key="ZK_DEVICE_NODE_LISTEN" name="是否开启监听zookeeper设备信息节点" type="String" description="是否开启监听zookeeper设备信息节点">0</param>
+	<param key="RED_LIST_DISPATCHED_OPEN" type="String" name="是否开启人员布控红名检测功能" description="是否开启人员布控红名检测功能">0</param>
 </config>

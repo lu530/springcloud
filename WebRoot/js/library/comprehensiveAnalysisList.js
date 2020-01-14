@@ -53,6 +53,11 @@ function initEvent(){
 		dragSrc = null;
 	});
 
+	$('.compare-img').on('change', '.upload-compare-img', function() {
+		var upImgId = $(this).attr('id');
+		ajaxFileUpload(upImgId,uploadSuccess)
+	})
+
 	$(".photo-tools").off("mouseover").on("mouseover", function(e){
 		// e = e || window.event;
 		// var target = e.target || e.srcElement;
@@ -75,7 +80,7 @@ function initEvent(){
 
 	$("#oneCompareOne").on("click", function() {
 		var params = {};
-		params.URL_FROM = TIMG;
+		params.URL_FROM = $(".photo-tools.photo-top img").attr("src");
 		params.URL_TO = $(".photo-tools.photo-bottom img").attr("src");
         var $algoItem = $('.algo-item.active'),
         len = $algoItem.length;
@@ -176,12 +181,12 @@ function initEvent(){
 	})
 	
 	//展开收起
-	$("body").on("click",".settingDownBtn",function () {
-        var $curParent = $(this).parent().prev();
+	$("body").on("click",".settingDownText",function () {
+        var $curParent = $(this).closest('.setting-down-new').prev();
         if($curParent.hasClass('active')) {
-            $(this).find('#settingDownText').text('展开此算法');
+            $(this).text('展开此算法');
         }else{
-            $(this).find('#settingDownText').text('收起此算法');
+            $(this).text('收起此算法');
         }
         $curParent.toggleClass('active');
     })
@@ -282,6 +287,16 @@ function initEvent(){
 			UI.util.alert("请先上传图片,再编辑", "warn");
 		}
 	})
+}
+
+function uploadSuccess(data) {
+	var imgUrl = JSON.parse(data).fastDfsParam.fullUrl;
+	var elId = $(this)[0].fileElementId;
+	$('#' + elId).siblings('img')
+		.removeClass('hide')
+		.attr('src', imgUrl);
+	$('#' + elId).val('');
+	UI.util.hideLoadingPanel();
 }
 
 function scrolllFun(opts){

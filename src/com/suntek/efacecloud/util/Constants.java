@@ -27,6 +27,9 @@ public class Constants {
 	
 	public final static String MPPDB_NAME = "MPPDB_RES";
 
+
+	public static String BASE_FACE_CAPTURE_ZKPATH = "/bigdata/config/gateway/capture";
+
 	/**
 	 * 厂商-海康
 	 */
@@ -381,4 +384,8 @@ public class Constants {
 		deviceTypeMap.put("190", "6");
 		deviceTypeMap.put("189", "7");
 	}
+
+
+	/** 是否导入导出文件上传dfs */
+	public static final String IS_FILE_SAVE = "1";
 }

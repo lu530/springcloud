@@ -11,6 +11,7 @@
 		<vendor>suntek</vendor>
 		<java.version>1.8</java.version>
 		<spring.framework.version>4.3.10.RELEASE</spring.framework.version>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
 	</properties>
 
 	<dependencies>
@@ -307,6 +308,19 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>2.11.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>2.11.1</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 
@@ -315,120 +329,172 @@
 		<sourceDirectory>src</sourceDirectory>
 
 		<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>3.3</version>
-			<configuration>
-				<source>1.8</source>
-				<target>1.8</target>
-				<encoding>utf8</encoding>
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>buildnumber-maven-plugin</artifactId>
-			<version>1.4</version>
-			<configuration>
-				<timestampFormat>yyyy-MM-dd HH:mm:ss.S</timestampFormat>
-				<timestampPropertyName>buildTime</timestampPropertyName>
-			</configuration>
-			<executions>
-				<execution>
-					<id>create-timestamp</id>
-					<phase>validate</phase>
-					<goals>
-						<!-- <goal>create-timestamp</goal> -->
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>utf8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<configuration>
+					<timestampFormat>yyyy-MM-dd HH:mm:ss.S</timestampFormat>
+					<timestampPropertyName>buildTime</timestampPropertyName>
+				</configuration>
+				<executions>
+					<execution>
+						<id>create-timestamp</id>
+						<phase>validate</phase>
+						<goals>
+							<!-- <goal>create-timestamp</goal> -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-		<plugin>
-			<groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
-			<artifactId>svn-revision-number-maven-plugin</artifactId>
-			<version>1.13</version>
-			<configuration>
-				<verbose>true</verbose>
-				<entries>
-					<entry>
-						<prefix>svn</prefix>
-						<depth>infinite</depth>
-					</entry>
-				</entries>
-			</configuration>
-			<executions>
-				<execution>
-					<id>revision</id>
-					<phase>validate</phase>
-					<goals>
-						<!-- <goal>revision</goal> -->
-					</goals>
-				</execution>
-			</executions>
-			<dependencies>
-				<dependency>
-					<groupId>org.tmatesoft.svnkit</groupId>
-					<artifactId>svnkit</artifactId>
-					<version>1.8.14</version>
-				</dependency>
-			</dependencies>
-		</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+				<artifactId>svn-revision-number-maven-plugin</artifactId>
+				<version>1.13</version>
+				<configuration>
+					<verbose>true</verbose>
+					<entries>
+						<entry>
+							<prefix>svn</prefix>
+							<depth>infinite</depth>
+						</entry>
+					</entries>
+				</configuration>
+				<executions>
+					<execution>
+						<id>revision</id>
+						<phase>validate</phase>
+						<goals>
+							<!-- <goal>revision</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.tmatesoft.svnkit</groupId>
+						<artifactId>svnkit</artifactId>
+						<version>1.8.14</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-war-plugin</artifactId>
-			<version>3.0.0</version>
-			<configuration>
-				<warSourceDirectory>WebRoot</warSourceDirectory>
-				<failOnMissingWebXml>false</failOnMissingWebXml>
-				<webResources>
-					<resource>
-						<directory>src</directory>
-						<filtering>true</filtering>
-						<excludes>
-							<exclude>**/*.java</exclude>
-						</excludes>
-						<targetPath>WEB-INF/classes</targetPath>
-					</resource>
-				</webResources>
-				<archive>
-					<manifestEntries>
-						<Specification-Vendor>${vendor}</Specification-Vendor>
-						<Implementation-Vendor>${vendor}</Implementation-Vendor>
-						<Implementation-Title>${project.artifactId}</Implementation-Title>
-						<Implementation-Version>${project.version}</Implementation-Version>
-						<Build-Time>${buildTime}</Build-Time>
-						<svn-revision>${svn.revision} </svn-revision>
-					</manifestEntries>
-				</archive>
-			</configuration>
-		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<useCache>true</useCache>
+					<warSourceDirectory>WebRoot</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>src</directory>
+							<filtering>true</filtering>
+							<excludes>
+								<exclude>**/*.java</exclude>
+							</excludes>
+							<targetPath>WEB-INF/classes</targetPath>
+						</resource>
+					</webResources>
+					<archive>
+						<manifestEntries>
+							<Specification-Vendor>${vendor}</Specification-Vendor>
+							<Implementation-Vendor>${vendor}</Implementation-Vendor>
+							<Implementation-Title>${project.artifactId}</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Build-Time>${buildTime}</Build-Time>
+							<svn-revision>${svn.revision} </svn-revision>
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<!-- 在打包之前执行，打包后包含已经执行后的文件 -->
+					<execution>
+						<id>prepare-war</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<!-- 打包前进行替换 -->
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- 自动识别到项目target文件夹 -->
+					<basedir>${build.directory}</basedir>
+					<!-- 替换的文件所在目录规则 -->
+					<includes>
+						<include>**/*.html</include>
+					</includes>
 
-		<plugin>
-			<groupId>pl.project13.maven</groupId>
-			<artifactId>git-commit-id-plugin</artifactId>
-			<executions>
-				<execution>
-					<goals>
-						<goal>revision</goal>
-					</goals>
-				</execution>
-			</executions>
-			<configuration>
-				<verbose>true</verbose>
-				<dateFormat>yyyyMMddHHmmss</dateFormat>
-				<!--git版本，默认7个字符-->
-				<abbrevLength>8</abbrevLength>
-				<generateGitPropertiesFile>true</generateGitPropertiesFile>
-				<generateGitPropertiesFilename>${project.build.outputDirectory}/version.txt</generateGitPropertiesFilename>
-				<format>txt</format>
-				<injectAllReactorProjects>true</injectAllReactorProjects>
-				<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time,git.branch</includeOnlyProperties>
-			</configuration>
-		</plugin>
+					<replacements>
+						<!-- 更改规则，在css/js文件末尾追加?v=时间戳，反斜杠表示字符转义 -->
+						<replacement>
+							<token>\.css\"</token>
+							<value>.css?v=${maven.build.timestamp}\"</value>
+						</replacement>
+						<replacement>
+							<token>\.css\'</token>
+							<value>.css?v=${maven.build.timestamp}\'</value>
+						</replacement>
+						<replacement>
+							<token>\.js\"</token>
+							<value>.js?v=${maven.build.timestamp}\"</value>
+						</replacement>
+						<replacement>
+							<token>\.js\'</token>
+							<value>.js?v=${maven.build.timestamp}\'</value>
+						</replacement>
+					</replacements>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<verbose>true</verbose>
+					<dateFormat>yyyyMMddHHmmss</dateFormat>
+					<!--git版本，默认7个字符-->
+					<abbrevLength>8</abbrevLength>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/version.txt</generateGitPropertiesFilename>
+					<format>txt</format>
+					<injectAllReactorProjects>true</injectAllReactorProjects>
+					<includeOnlyProperties>git.commit.id.abbrev,git.build.version,git.commit.time,git.build.time,git.branch</includeOnlyProperties>
+				</configuration>
+			</plugin>
 
-	</plugins>
+		</plugins>
 
 	</build>
 </project>

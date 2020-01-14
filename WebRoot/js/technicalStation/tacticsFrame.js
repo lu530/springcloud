@@ -35,6 +35,7 @@ var pageUrlObj = {
 	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html', // 昼伏夜出
 	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html', // 深夜出入
 	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
+	'specific':matcher("/efacecloud/page/technicalStation/trackFaceSpecific.html/" + projectKey).url//特定人群轨迹分析
 }
 $(function(){
 	initEvent();
@@ -173,6 +174,8 @@ function initPage_Black(params) {
 
 //初始化左侧页面
 function initLeftForm(url){
+	
+	top.logSwitch && top.LogToolPackage && ( url = top.LogToolPackage.addUrlPointID(pageUrlObj[pageType], window) );
 	$("#leftMainDiv iframe").attr("src",url);
 }
 

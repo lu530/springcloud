@@ -36,14 +36,16 @@
 					<div class="compare-img">
 						<img src="" alt="" id="compareTopPhoto" class="hide">
 						<div class="no-photo-logo"></div>
-						<div class="no-photo-text">请将图片<br>拖拽到此处</div>
+						<div class="no-photo-text">点击上传<br>或将图片拖拽到此处</div>
+						<input class="upload-compare-img" type="file" id="uploadImg1" name="uploadImg1" issearch=true />
 					</div>
 				</div>
 				<div class="photo-tools pr photo-bottom">
 					<div class="compare-img">
 						<img src="" alt="" id="compareBottomPhoto" class="hide">
 						<div class="no-photo-logo"></div>
-						<div class="no-photo-text">请将图片<br>拖拽到此处</div>
+						<div class="no-photo-text">点击上传<br>或将图片拖拽到此处</div>
+						<input class="upload-compare-img" type="file" id="uploadImg2" name="uploadImg2" issearch=true />
 					</div>
 				</div>
 				<div class="photo-title tc">图片2</div>
@@ -71,7 +73,8 @@
 							<div class="top-pic-box">
 								<div class="img-wrap">
 									<img id="filterImg" src="/efacecloud/images/noPhoto2.png"
-										foruploadimg="uploadImg,picBtn"> <input
+										foruploadimg="uploadImg,picBtn">
+									<input
 										class="file-style searchImgButton" type="file" id="uploadImg"
 										name="uploadImg" issearch=true />
 								</div>
@@ -385,7 +388,7 @@
         </div>
         <div class="setting-down-new">
         		<div class="setting-down-list setting-down-left"></div>
-        		<div class="setting-down-list setting-down-btn settingDownBtn"><span id="settingDownText">展开此算法</span><b class="setting-down-icon"></b></div>
+        		<div class="setting-down-list setting-down-btn settingDownBtn"><span class="settingDownText">收起此算法</span><b class="setting-down-icon"></b></div>
         		<div class="setting-down-list setting-down-right"></div>
         </div>
       {% } %}
