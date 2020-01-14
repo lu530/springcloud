@@ -35,6 +35,8 @@ public class FaceCaptureProvider {
 
 	private FaceCommonDao commonDao = new FaceCommonDao();
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
+	//1表示为人技战法-人脸集合的导出
+	private final static String FACE_COLLECTION = "1";
 	
 	@QueryService(id = "query", description = "人脸抓拍数据查询", since = "2.0", type = "remote", paasService = "true")
 	public Map<String, Object> query(RequestContext context) throws Exception {
@@ -340,7 +342,7 @@ public class FaceCaptureProvider {
 			}
 		}
 		//人技战法-人脸集合不导出检索图片
-        if("1".equals(faceCollection)) {
+        if(FACE_COLLECTION.equals(faceCollection)) {
             headers = new String[]{"原图", "抓拍图片", "相似度", "地点", "抓拍时间", "设备名称"};
             dataKey = new String[]{"imageUrl", "frameImageUrl", "SCORE", "DEVICE_ADDR", "JGSK", "DEVICE_NAME"};
         }
