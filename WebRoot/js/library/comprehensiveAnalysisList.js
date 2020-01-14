@@ -449,10 +449,10 @@ function faceControlService(){
 	    			if(html == ''){
 	    				if($("#faceControlList .item-con .nodata").length == 0){
 	    					html = '<div class="nodata"></div>'
-    						$("#faceControlList .item-con").append(html);
+    						$("#faceControlList .item-con").html(html);
 	    				}
 	    			}else{
-	    				$("#faceControlList .item-con").append(html);
+	    				$("#faceControlList .item-con").html(html);
 	    			}
 	    			serviceTick()
 	    		}

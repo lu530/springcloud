@@ -274,6 +274,8 @@ public class FaceCaptureProvider {
 				.getParameter("SEARCH_IMG_URL"));
 		String excelData = StringUtil.toString(context
 				.getParameter("EXPORT_DATA"));
+		String faceCollection = StringUtil.toString(context.getParameter("FACE_COLLECTION"));
+
 		List<Map<String, Object>> excelDataList = new ArrayList<Map<String, Object>>();
 		if (!StringUtil.isNull(excelData)) {
 			excelDataList = JSONArray.fromObject(excelData);
@@ -337,7 +339,11 @@ public class FaceCaptureProvider {
 				throw exception;
 			}
 		}
-
+		//人技战法-人脸集合不导出检索图片
+        if("1".equals(faceCollection)) {
+            headers = new String[]{"原图", "抓拍图片", "相似度", "地点", "抓拍时间", "设备名称"};
+            dataKey = new String[]{"imageUrl", "frameImageUrl", "SCORE", "DEVICE_ADDR", "JGSK", "DEVICE_NAME"};
+        }
 		boolean returnCodeEnum = ExcelFileUtil.exportExcelFile2Req(
 				"导出结果"
 						+ com.suntek.eap.util.calendar.DateUtil.formatDate(
