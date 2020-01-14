@@ -56,14 +56,14 @@ function initEvents(){
 	var sliderS = $( "#sliderScore" ).slider({
 		range: "max",
 		min: 0,
-		max: 200,
-		value: 100,
+		max: 100,
+		value: 60,
 		slide: function( event, ui ) {
 			$( "#FACESCORE" ).val( ui.value );
 		}
 	});
 	$( "#THRESHOLD" ).val(70);
-	$( "#FACESCORE" ).val(100);
+	$( "#FACESCORE" ).val(60);
 	 
 	 $('#THRESHOLD').keyup(function() {  
         //数值范围为100以内
