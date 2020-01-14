@@ -1,0 +1,175 @@
+.person-list-container{
+    height: calc(100% - 50px);
+    overflow: hidden;
+}
+.tilelist{
+    margin-bottom: 100px;
+}
+
+.btn-group{
+    position: relative;
+}
+.list-node-wrap{
+    width: 100%;
+    padding: 0 10px;
+}
+.total-num{
+    color: #8bbcf6;
+    font-weight: normal;
+    margin-bottom: 0;
+    position: relative;
+    top: 7px;
+}
+.tilelist .list-node .person-img .total-num span{
+    width: auto;
+}
+.totalnum-icon{
+    background: url(/efacestore/images/icons.png);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-position: -149px -163px;
+    vertical-align: middle;
+}
+.tilelist .list-node{
+    width: 100%;
+    overflow: auto;
+}
+.moreTags{
+    display: none;
+}
+.more:hover .moreTags{
+    display: block;
+}
+.azure .tilelist .list-node{
+    border: 1px solid rgb(43, 79, 131);
+}
+.azure .tilelist .personUnit .list-node:hover, .azure .tilelist .personUnit.active .list-node{
+    box-shadow: -1px 1px 4px #fff;
+}
+.more-icon{
+    margin-left: 5px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url(/efacestore/images/icons.png);
+    background-position:-145px -20px;
+}
+.tags .tagitem,.lib-tag-name{
+    padding: 2px 6px;
+    background: #e9eaee;
+    color: #9a9a9c;
+    border-radius: 4px;
+    margin-right: 10px;
+    word-wrap:break-word;
+}
+.page-title .lib-tag-name{
+    margin-left:5px;
+    margin-right:0px;
+}
+.page-title .tag-contact{
+    padding: 0 5px;
+    background: rgb(208, 220, 236);
+    color: #fff;
+    line-height: 24px;
+    border-radius: 14px;
+    margin-left:5px;
+    margin-right:0px;
+}
+.tags .tagitem.special-flag{
+    background-color: red;
+    color:#fff;
+}
+.tags{
+    margin-top: 10px;
+    position: relative;
+    height: 25px;
+    /*overflow: hidden;*/
+}
+.tagmore-icon{
+    background: url(/efacestore/images/icons.png);
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-position: -189px -90px;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.tagmore-icon:hover{
+    background-position: -228px -90px;
+}
+.more-tags{
+    padding: 8px 20px;
+    border: 1px solid #d9d9db;
+    position: absolute;
+    top: 168px;
+    background: #fff;
+    z-index: 10;
+    right: 0;
+}
+
+.more-tags .tagitem{
+    margin-bottom: 6px;
+    display: inline-block;
+    float: left;
+}
+.tag-box:hover .more-tags{
+    display: block;
+}
+.more {
+    top: 0;
+    position: absolute;
+    right: 0;
+}
+.tags .tag-line {
+    display: block;
+}
+.ellipsis-list {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    line-height: 20px;
+    position: absolute;
+    left: 80px;
+    right: 0;
+}
+.tag-line-wrap {
+    height: 25px;
+    overflow: hidden;
+    position: absolute;
+    right: 25px;
+    left: 25px;
+    top: 0;
+}
+.more-tags {
+    top: 30px;
+    right: -10px;
+    width: 285px;
+}
+.list-node .btn-group .btn-i-t{
+    border:none;
+    padding: 5px !important;
+    background:transparent;
+    text-align: center;
+    display: inline-block;
+}
+.page-list-head {
+	background-color: #FFFFFF;
+	position: relative;
+	padding: 14px 10px;
+	height: 46px;
+	color: #444;
+	font-size: 15px;
+	border-bottom: 1px solid #dedde2;
+}
+.page-list-head .title-icon {
+	display: inline-block;
+	width: 23px;
+	height: 11px;
+	margin-right: 15px;
+	background: url(/efacecloud/images/technicalStation-icon.png);
+}
+.page-list-head .icon-track {
+	background-position: -14px -20px;
+}
