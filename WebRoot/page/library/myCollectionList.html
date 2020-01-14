@@ -157,26 +157,13 @@
                 <dl class="list-node">
                     <dt class="node-img person-img">
 				   		<span>
-				    		<img src="{%=o.PIC%}" attrimg="zoom" class="mb0">
+				    		<img src="{%=o.CAPTURE_PIC%}" attrimg="zoom" class="mb0">
 				   		</span>
                     </dt>
                     <dd class="node-text picMessage">
-                        <input type="checkbox" listview-check class="checkbox-opacity hide">
-                        <p class="similar-name" picMsg="姓名:{%=o.NAME?o.NAME:'暂无'%}">
-							<span>{%=o.NAME?o.NAME:'暂无'%}</span>
-						</p>
-                        <p picMsg="性别:{%=renderSex(o.SEX)%}">
-							<label>性别：</label>
-							<span>{%=renderSex(o.SEX)%}</span>
-						</p>
-                        <p style="width:106%" picMsg="证件:{%=o.IDENTITY_ID%}">
-							<label>证件：</label>
-							<span title="证件号码：{%=o.IDENTITY_ID%}">{%=o.IDENTITY_ID%}</span>
-						</p>
-                        <p picMsg="现居住地:{%=o.PRESENT_ADDRESS%}">
-							<label>现居住地：</label>
-							<span title="{%=o.PRESENT_ADDRESS%}">{%=o.PRESENT_ADDRESS%}</span>
-						</p>
+						<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+						<p picMsg="时间:{%=renderNullToNotKnow(o.CAPTURE_TIME)%}"><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.CAPTURE_TIME)%}">{%=renderNullToNotKnow(o.CAPTURE_TIME)%}</span></p>
+						<p picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
                         <div class="btn-group fr" fileId='{%=o.FILE_ID%}'>
 							<a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.PIC%}">
 								<i class="btn-icon verification-icon"></i>

@@ -67,7 +67,7 @@ function initEvent(){
 					'<dd class="form-inline">'+
 						'<label class="control-label w20 tr">类型：</label>'+
 						'<label class="radio-inline ml5 pl0"><input type="radio" name="FAVORITE_TYPE" value="1" checked="checked"><span>路人人脸收藏夹</span></label>'+
-						'<label class="radio-inline ml45"><input type="radio" name="FAVORITE_TYPE" value="2"><span>人脸资源收藏夹</span></label>'+
+						'<label class="radio-inline ml45"><input type="radio" name="FAVORITE_TYPE" value="7"><span>人员技战法收藏夹</span></label>'+
 						'<label class="radio-inline ml45"><input type="radio" name="FAVORITE_TYPE" value="3"><span>汽车驾驶人员收藏夹</span></label>'+
 						'<label class="radio-inline ml45"><input type="radio" name="FAVORITE_TYPE" value="4"><span>非汽车驾驶人员收藏夹</span></label>'+
 					'</dd>'+
