@@ -114,7 +114,7 @@ function formSearch(){
 	parent.cachedData.deviceIdInt = searchParam.DEVICE_IDS_INT;
 	parent.cachedData.deviceIds = searchParam.DEVICE_IDS;
 	
-	parent.rightMainFrameIn('/efacecloud/page/technicalStation/trackResultList4.0.html?fileId='
+	parent.rightMainFrameIn('/efacecloud/page/technicalStation/trackResultList.html?fileId='
 			+ searchParam.PIC + '&beginTime=' + searchParam.BEGIN_TIME + '&endTime='+ searchParam.END_TIME+ '&number='+ searchParam.TOP_N  
 			+ '&threshold='+searchParam.THRESHOLD);
 }
