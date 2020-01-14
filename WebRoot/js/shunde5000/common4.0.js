@@ -3205,3 +3205,17 @@ function getDeviceModule() {
 		}
 	})
 }
+
+//展示时间格式
+function showTime(time,type){
+    var timeArr = time.split(' ');
+
+    if(timeArr.length>1){
+        if(type == 'date'){
+            return timeArr[0];
+        }else{
+            return timeArr[1];
+        }
+    }
+
+}

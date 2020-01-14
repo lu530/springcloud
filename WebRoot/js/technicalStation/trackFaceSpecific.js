@@ -8,7 +8,7 @@ $(document).ready(function(){
 	UI.control.init();
 	initEvents();
 	initTime();
-	top.yiSaLogs('特定轨迹分析');
+	top.logSwitch && top.LogToolPackage && top.LogToolPackage.yiSaLogs('特定人群轨迹分析');
 });
 
 function judgePermission(){
@@ -142,8 +142,9 @@ function initEvents(){
 			deviceIdInt:$('#deviceIdInt').val(),
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
-		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
+
+		getDeviceModule();
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '设备选择', 1000, 600,function(resp){
 			$('#deviceNames').text(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);
