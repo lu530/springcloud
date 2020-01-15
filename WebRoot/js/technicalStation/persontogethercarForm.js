@@ -74,18 +74,26 @@ function initEvents(){
 	//查询
 	$('#searchBtn').click(function(){
 //		handleDrawResult(curPoints);
+		if(top.GET_TASK_LIST_DATA) {
+			setSearchParam();
+			return;
+		}
 		
 		if($("#filterImg").attr("src") == "" || $("#filterImg").attr("src").slice(-10) == 'upload.png'){
 			UI.util.alert('请上传比对人脸图片','warn');
 			return ;
 		}
-		if('' == $('#faceDetect').val()){
+		if($('#faceDetect').val() == ''){
 			UI.util.alert('请选择区域或感知设备','warn');
 			return ;
 		}
 		if (UI.util.validateForm($('.form-inline'), true)){
-			
-			var isScreenShot = false;
+			setSearchParam();
+		}
+	});
+
+	function setSearchParam() {
+		var isScreenShot = false;
 			if(sceShotParms && sceShotParms.length !=0){
 				isScreenShot = true;
 			}
@@ -107,14 +115,8 @@ function initEvents(){
 			parent.cachedData.deviceIds = $("#faceDetect").val();
 			parent.cachedData.deviceIdInt = $("#deviceIdInt").val();
 			
-			//检索案件录入
-			/*if(isOpenSearchCause()){*/
-				searchBeforeLogged(formSearch,searchParam);
-			/*}else{
-				formSearch();
-			}*/
-		}
-	});
+			searchBeforeLogged(formSearch,searchParam);
+	}
 	
 	//关闭
 	$('body').on('click','#closeBtn',function(){
@@ -291,12 +293,12 @@ function initEvents(){
 		//条件回填
 		var search = top.GET_TASK_LIST_DATA.search;
 		$("#filterImg").attr("src", search.PIC);
-		$("#beginTime").val(search.BEGIN_TIME);
-		$("#endTime").val(search.END_TIME);
-		sliderT.slider( "value", search.THRESHOLD );
-		$( "#THRESHOLD" ).val( search.THRESHOLD );
-		sliderN.slider( "value", search.TOPN );
-		$( "#SEARCHNUM" ).val( search.TOPN );
+		$("#beginTime").val(search.beginTime);
+		$("#endTime").val(search.endTime);
+		sliderT.slider( "value", search.threshold );
+		$( "#THRESHOLD" ).val( search.threshold );
+		sliderN.slider( "value", search.topN );
+		$( "#SEARCHNUM" ).val( search.topN );
 		var deviceName = "",orgCode = "",deviceId = "";
 		$.each(search.DEVICE_IDS, function(index, el) {
 			var str = "";
