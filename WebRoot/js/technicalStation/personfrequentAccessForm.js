@@ -231,6 +231,11 @@ function initEvents(){
 
 //初始化查询参数
 function initQueryParams() {
+
+	if(top.GET_TASK_LIST_DATA) {
+		setQueryParams();
+        return true;
+	}
 	
 	if($('#beginTime').val() == '') {
 		UI.util.alert("请选择开始时间", "warn");
@@ -262,16 +267,20 @@ function initQueryParams() {
 		return false;
 	}
     if (UI.util.validateForm($('.form-inline'), true)){
-        queryParams.NUMS = $('#kks').val();
-        parent.cachedData.deviceIds = $('#faceDetect').val();
-        //queryParams.DEVICE_IDS = $('#faceDetect').val();
-        queryParams.BEGIN_TIME = $('#beginTime').val();
-        queryParams.END_TIME = $('#endTime').val();/*
-         queryParams.time = $("input[name='time']:checked").val();*/
-        queryParams.THRESHOLD = $('#THRESHOLD').val();
-        queryParams.FACE_SCORE = $('#FACESCORE').val();
+        setQueryParams();
         return true;
     }
+}
+
+function setQueryParams() {
+	queryParams.NUMS = $('#kks').val();
+	parent.cachedData.deviceIds = $('#faceDetect').val();
+	//queryParams.DEVICE_IDS = $('#faceDetect').val();
+	queryParams.BEGIN_TIME = $('#beginTime').val();
+	queryParams.END_TIME = $('#endTime').val();/*
+		queryParams.time = $("input[name='time']:checked").val();*/
+	queryParams.THRESHOLD = $('#THRESHOLD').val();
+	queryParams.FACE_SCORE = $('#FACESCORE').val();
 }
 
 //初始化日期选择框
