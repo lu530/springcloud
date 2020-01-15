@@ -1,10 +1,5 @@
 package com.suntek.efacecloud.provider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.log.ServiceLog;
@@ -23,8 +18,12 @@ import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
 import com.suntek.efacecloud.util.ModuleUtil;
-
 import net.sf.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 警情调度查询
@@ -35,8 +34,6 @@ import net.sf.json.JSONArray;
  */
 @LocalComponent(id = "face/faceScheduling")
 public class FaceSchedulingProvider extends ExportGridDataProvider {
-
-   
 
 
     private final static Map<Integer, String> STATUS_MAP = new HashMap<>();
@@ -79,6 +76,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
 
     /**
      * 把代码转成名称
+     *
      * @param list
      */
     private void changeCode2Name(List<Map<String, Object>> list) {
@@ -101,7 +99,7 @@ public class FaceSchedulingProvider extends ExportGridDataProvider {
         this.changeCode2Name(excelDataList);
         String[] headers = {"图片", "姓名", "身份证号", "受理人", "下发时间", "任务描述", "状态", "任务类型"};
         String[] dataKey = {"OBJECT_PICTURE", "NAME", "IDENTITY_ID",
-            "ACCEPTER", "CREATE_TIME", "REMARK", "TASK_STATUS", "TASK_LEVEL"};
+                "ACCEPTER", "CREATE_TIME", "REMARK", "TASK_STATUS", "TASK_LEVEL"};
 
         List<Map<String, byte[]>> imgList = new ArrayList<>();
 

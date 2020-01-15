@@ -1,5 +1,19 @@
 package com.suntek.efacecloud.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.suntek.eap.common.CommandContext;
+import com.suntek.eap.log.ServiceLog;
+import com.suntek.eap.util.DateUtil;
+import com.suntek.eap.util.StringUtil;
+import com.suntek.eap.web.RequestContext;
+import com.suntek.eaplet.registry.Registry;
+import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
+import com.suntek.efacecloud.util.ConfigUtil;
+import com.suntek.efacecloud.util.Constants;
+import com.suntek.efacecloud.util.DeviceInfoUtil;
+import com.suntek.efacecloud.util.ModuleUtil;
+import com.suntek.sp.common.common.BaseCommandEnum;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,22 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONArray;
-import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
-import com.suntek.eap.log.ServiceLog;
-import com.suntek.eap.util.DateUtil;
-import com.suntek.eap.util.StringUtil;
-import com.suntek.eap.web.RequestContext;
-import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
-import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.sp.common.common.BaseCommandEnum;
 
 
 /**
@@ -43,7 +41,7 @@ public class WJFaceCaptureService {
 
         Map<String, Object> params = context.getParameters();
 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
 
         String deviceIds = StringUtil.toString(params.get("DEVICE_IDS"));
 

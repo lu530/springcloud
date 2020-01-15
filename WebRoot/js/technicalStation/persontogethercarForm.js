@@ -1,3 +1,4 @@
+var taskStatus = UI.util.getUrlParam("taskStatus") || '';
 var beginTime = $('#beginTime');
 var	endTime = $('#endTime');
 var fileUrl;
@@ -6,7 +7,7 @@ var topMargin = false;
 var imgRatio;
 var imgUrl = UI.util.getUrlParam("imgUrl");
 var sceShotParms = [];
-
+var SAVE_LEFT_PARAM_DATA = {};
 //var orgTreeOpts = {//初始化卡口下拉树
 //		isShowFolder: true,
 //		multiple: true,
@@ -42,9 +43,9 @@ var searchParam = {};
 $(document).ready(function(){
 	UI.control.init(["userInfo"]);
 	getDeviceModule();  //定义在common中
+	initTime();
 	initEvents();
 //	initTreeEvent('orgTree');
-	initTime();
 	/*initFaceDetectDropdowntree();*/
 	topUploadPic();
 	if (isRedList()) {
@@ -63,24 +64,36 @@ function initEvents(){
 	
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
-		parent.showMenu();
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
 	});
 	
 	//查询
 	$('#searchBtn').click(function(){
 //		handleDrawResult(curPoints);
+		if(top.GET_TASK_LIST_DATA) {
+			setSearchParam();
+			return;
+		}
 		
 		if($("#filterImg").attr("src") == "" || $("#filterImg").attr("src").slice(-10) == 'upload.png'){
 			UI.util.alert('请上传比对人脸图片','warn');
 			return ;
 		}
-		if('' == $('#faceDetect').val()){
+		if($('#faceDetect').val() == ''){
 			UI.util.alert('请选择区域或感知设备','warn');
 			return ;
 		}
 		if (UI.util.validateForm($('.form-inline'), true)){
-			
-			var isScreenShot = false;
+			setSearchParam();
+		}
+	});
+
+	function setSearchParam() {
+		var isScreenShot = false;
 			if(sceShotParms && sceShotParms.length !=0){
 				isScreenShot = true;
 			}
@@ -96,19 +109,14 @@ function initEvents(){
 					topN: $("#SEARCHNUM").val(),
 					searchType:3
 			}
+			top.SAVE_LEFT_PARAM_DATA = searchParam
 			
 			//var cameraIds = $("#faceDetect").val();
 			parent.cachedData.deviceIds = $("#faceDetect").val();
 			parent.cachedData.deviceIdInt = $("#deviceIdInt").val();
 			
-			//检索案件录入
-			/*if(isOpenSearchCause()){*/
-				searchBeforeLogged(formSearch,searchParam);
-			/*}else{
-				formSearch();
-			}*/
-		}
-	});
+			searchBeforeLogged(formSearch,searchParam);
+	}
 	
 	//关闭
 	$('body').on('click','#closeBtn',function(){
@@ -274,7 +282,47 @@ function initEvents(){
      	setTimeout(function(){
      		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
      	},500)
-    })
+	})
+
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+	
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		$("#filterImg").attr("src", search.PIC);
+		$("#beginTime").val(search.beginTime);
+		$("#endTime").val(search.endTime);
+		sliderT.slider( "value", search.threshold );
+		$( "#THRESHOLD" ).val( search.threshold );
+		sliderN.slider( "value", search.topN );
+		$( "#SEARCHNUM" ).val( search.topN );
+		var deviceName = "",orgCode = "",deviceId = "";
+		$.each(search.DEVICE_IDS, function(index, el) {
+			var str = "";
+			if(index != search.DEVICE_IDS.length - 1){
+				str = ",";
+			}
+			deviceName += el.DEVICE_NAME + str;
+			orgCode += el.ORG_CODE + str;
+			deviceId += el.DEVICE_ID + str;			
+		});
+		$('#deviceNames').text(deviceName);
+		$('#deviceNames').attr('title',deviceName);
+		$('#deviceNames').attr('orgcode',orgCode);
+		$('#faceDetect').val(deviceId);
+		$('#deviceIdInt').val("");
+		addDrowdownDeviceList({
+			deviceId:deviceId,
+			deviceName:deviceName,
+			deviceNameList:$("#deviceNameList"),
+			dropdownListText:$(".dropdown-list-text")
+		});
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
 
 }
 

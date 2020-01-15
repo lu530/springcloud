@@ -3,6 +3,7 @@
  * @author fenghuixia
  * 2018-06-13
  */
+var taskStatus = UI.util.getUrlParam("taskStatus")||'';
 var pageUrl = UI.util.getUrlParam("pageUrl") || '';
 //页面类型
 var pageType = UI.util.getUrlParam("pageType")||'track';
@@ -28,12 +29,12 @@ var pageUrlObj = {
 	"track": "/efacecloud/page/technicalStation/trackFaceForm.html?beginTime="+cachedData.beginTime+
 				"&endTime="+cachedData.endTime+"&imgUrl="+cachedData.imgUrl+"&noBackBtn="+cachedData.noBackBtn , //轨迹分析
 	'trackResult':'/efacecloud/page/technicalStation/persontogetherResultList.html' + (noPic ? '?noPic=true' : ''),//轨迹结果
-	"partner":'/efacecloud/page/technicalStation/persontogethercarForm.html',//同伙分析
-	"frequently":'/efacecloud/page/technicalStation/personfrequentAccessForm.html',//频繁出现
-	'region':'/efacecloud/page/technicalStation/faceCollisionForm.html',//区域碰撞
+	"partner":'/efacecloud/page/technicalStation/persontogethercarForm.html?taskStatus='+taskStatus,//同伙分析
+	"frequently":'/efacecloud/page/technicalStation/personfrequentAccessForm.html?taskStatus='+taskStatus,//频繁出现
+	'region':'/efacecloud/page/technicalStation/faceCollisionForm.html?taskStatus='+taskStatus,//区域碰撞
 	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html', //库碰撞
-	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html', // 昼伏夜出
-	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html', // 深夜出入
+	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html?taskStatus='+taskStatus, // 昼伏夜出
+	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html?taskStatus='+taskStatus, // 深夜出入
 	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
 	'specific':matcher("/efacecloud/page/technicalStation/trackFaceSpecific.html/" + projectKey).url,//特定人群轨迹分析
 	'specificResult': matcher("/efacecloud/page/technicalStation/trackResultSpecific.html/" + projectKey).url + "?TASK_ID=" + TASK_ID,//特定人群轨迹分析结果
@@ -175,9 +176,9 @@ function initPage_Black(params) {
 
 //初始化左侧页面
 function initLeftForm(url){
-	
+
 	top.logSwitch && top.LogToolPackage && ( url = top.LogToolPackage.addUrlPointID(pageUrlObj[pageType], window) );
-	$("#leftMainDiv iframe").attr("src",url);
+	$("#leftMainDiv #leftFrameCon").attr("src",url);
 }
 
 //显示同级iframe

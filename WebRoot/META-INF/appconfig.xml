@@ -59,4 +59,7 @@
 	<param key="ZK_DEVICE_NODE" name="zookeeper中设备信息的节点" type="String" description="zookeeper中设备信息的节点">/bigdata/config/gateway/capture</param>
 	<param key="ZK_DEVICE_NODE_LISTEN" name="是否开启监听zookeeper设备信息节点" type="String" description="是否开启监听zookeeper设备信息节点">0</param>
 	<param key="RED_LIST_DISPATCHED_OPEN" type="String" name="是否开启人员布控红名检测功能" description="是否开启人员布控红名检测功能">0</param>
+	<param key="FACE_NVN_EXCUTE_JOB_EXPRESSION" name="NVN任务执行定时器执行表达式" type="String" description="NVN任务执行定时器执行表达式">0/30 * * * * ?</param>
+	<param key="FACE_NVN_RESULT_JOB_EXPRESSION" name="NVN结果查询定时器执行表达式" type="String" description="NVN结果查询定时器执行表达式">0/10 * * * * ?</param>
+	<param key="IS_NVN_ASYNC" name="NVN技战法查询是否为异步" type="String" description="0为同步，1表示异步">1</param>
 </config>

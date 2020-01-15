@@ -1,16 +1,7 @@
 package com.suntek.efacecloud.provider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.MapUtils;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
@@ -21,13 +12,20 @@ import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelFileUtil;
 import com.suntek.efacecloud.util.FileDowloader;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
-
 import net.sf.json.JSONArray;
+import org.apache.commons.collections.MapUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 移动端人脸库查询
@@ -69,7 +67,7 @@ public class FaceMobileTerminalProvider
 		ctx.setBody(params); 
 //		Registry.getInstance().selectCommands(BaseCommandEnum.staticLibFaceQuery.getUri()).exec(ctx);
 		
-		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+		String vendor = ConfigUtil.getVendor();
     	Registry.getInstance().selectCommand(BaseCommandEnum.staticLibFaceQuery.getUri(), "4401", vendor).exec(ctx);
     	
 		

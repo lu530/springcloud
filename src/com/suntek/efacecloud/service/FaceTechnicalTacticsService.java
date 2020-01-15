@@ -287,7 +287,7 @@ public class FaceTechnicalTacticsService {
 
 //		registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
-		String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+		String vendor = ConfigUtil.getVendor();
 		registry.selectCommand(BaseCommandEnum.faceOne2One.getUri(), "4401", vendor).exec(commandContext);
 
 
@@ -543,7 +543,7 @@ public class FaceTechnicalTacticsService {
 				Registry registry = Registry.getInstance();
 				// registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
 
-				String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+				String vendor = ConfigUtil.getVendor();
 				registry.selectCommand(BaseCommandEnum.faceOne2One.getUri(), "4401", vendor).exec(commandContext);
 				Map<String,Object> data = (Map<String, Object>) commandContext.getResponse().getData("DATA");
 				if(data != null){

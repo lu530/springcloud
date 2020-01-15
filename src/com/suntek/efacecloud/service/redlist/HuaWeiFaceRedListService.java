@@ -10,6 +10,7 @@ import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.DateUtil;
 import com.suntek.efacecloud.util.FileMd5Util;
@@ -49,7 +50,7 @@ public class HuaWeiFaceRedListService extends FaceRedListService {
 
         commandContext.setBody(context.getParameters());
         try {
-            String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+            String vendor = ConfigUtil.getVendor();
             registry.selectCommand("hw" + BaseCommandEnum.staticLibFaceQuery.getUri(), "4401", vendor).exec(commandContext);
         } catch (Exception e) {
             ServiceLog.error("在红名单库中以图搜图失败", e);

@@ -1,6 +1,7 @@
 /**
  * 说明：  id属性值末位为2，表示 预警设置页面  与  昼伏夜出页面 具有类似的页面元素，以表区分
  */
+var taskStatus = UI.util.getUrlParam("taskStatus")||'';
 var queryParams = {};
 var isEdit = false;
 var beginTime = $('#beginTime');
@@ -12,8 +13,8 @@ var nightNum= $('#nightNum');
 
 $(document).ready(function(){
 	UI.control.init(["userInfo"]);
-	initEvents();
 	initTime();
+	initEvents();
 	getDeviceModule();  //定义在common中
 	$('#technicalTitle').text('人员深夜出入分析');
 })
@@ -21,7 +22,11 @@ $(document).ready(function(){
 function initEvents(){
 	//返回菜单
 	$("#backBtn").click(function(){
-		parent.showMenu();
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
 	})
 	
 	//搜索
@@ -84,6 +89,54 @@ function initEvents(){
             $('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
         },500)
 	});
+
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		$("#beginTime").val(search.GROUP_LIST[0].BEGIN_DATE);
+		$("#endTime").val(search.GROUP_LIST[0].END_DATE);
+		//夜时间要分情况
+		if(search.GROUP_LIST.length == 2){
+			$("#beginnightTime").val(search.GROUP_LIST[1].BEGIN_TIME);
+			$("#endnightTime").val(search.GROUP_LIST[1].END_TIME);	
+		}
+		if(search.GROUP_LIST.length == 3){
+			$("#beginnightTime").val(search.GROUP_LIST[1].BEGIN_TIME);
+			$("#endnightTime").val(search.GROUP_LIST[2].END_TIME);	
+		}	
+		$("#nightNum").val(search.NIGHT_FREQUENCE || 2);	
+		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
+		sliderT.slider( "value", search.SIMILARITY );
+		$( "#THRESHOLD" ).val( search.SIMILARITY );
+		var deviceName = "",orgCode = "",deviceId = "";
+		$.each(search.GROUP_LIST[0].DEVICE_IDS, function(index, el) {
+			var str = "";
+			if(index != search.GROUP_LIST[0].DEVICE_IDS.length - 1){
+				str = ",";
+			}
+			deviceName += el.DEVICE_NAME + str;
+			orgCode += el.ORG_CODE + str;
+			deviceId += el.DEVICE_ID + str;			
+		});
+		$('#deviceNames').text(deviceName);
+		$('#deviceNames').attr('title',deviceName);
+		$('#deviceNames').attr('orgcode',orgCode);
+		$('#faceDetect').val(deviceId);
+		$('#deviceIdInt').val("");
+		addDrowdownDeviceList({
+			deviceId:deviceId,
+			deviceName:deviceName,
+			deviceNameList:$("#deviceNameList"),
+			dropdownListText:$(".dropdown-list-text")
+		});		
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
 	
 	//删除已选设备
 	$("body").on("click",".removeDeviceBtn",function(e){

@@ -3,7 +3,11 @@ package com.suntek.efacecloud.dao;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.util.SqlUtil;
 import com.suntek.eap.common.util.StringUtil;
+import com.suntek.eap.index.Query;
+import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.NamedParameterJdbcTemplate;
+import com.suntek.eap.jdbc.PageQueryResult;
+import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.Constants;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -177,6 +181,24 @@ public class SpecialPersonTrackDao {
     public List<Map<String, Object>> queryPersonFlow(String taskId) {
         String sql = "SELECT PERSON_FLOW FROM SPECIAL_PERSON_TRACK_RESULT WHERE TASK_ID = ?";
         return jdbc.queryForList(sql, taskId);
+    }
+
+    /**
+     * 查询专题库档案信息
+     *
+     * @param libId
+     * @return
+     */
+    public List<Map<String, Object>> queryTopic(String libId) {
+        Query query = new Query(1, 1000000);
+        query.addEqualCriteria("LIB_ID", libId);
+        try {
+            PageQueryResult pageQueryResult = EAP.bigdata.query(Constants.PERSON_TOPIC_INDICE, Constants.PERSON_TOPIC_INFO, query);
+            return pageQueryResult.getResultSet();
+        } catch (SearchEngineException e) {
+            Log.technicalLog.error("查询专题库: " + libId + "异常 : " + e.getMessage(), e);
+            return null;
+        }
     }
 }
 

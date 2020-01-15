@@ -1,17 +1,22 @@
 package com.suntek.efacecloud.dao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.suntek.efacecloud.util.CommonUtil;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.suntek.eap.EAP;
+import com.suntek.eap.index.Query;
+import com.suntek.eap.index.SearchEngineException;
+import com.suntek.eap.log.ServiceLog;
+import com.suntek.eap.util.EsUtil;
 import com.suntek.eap.util.SqlUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.efacecloud.util.Constants;
+import com.suntek.tactics.util.CommonUtil;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wudapei
@@ -163,6 +168,7 @@ public class FaceCaptureStatisticDao {
 
     /**
      * 按照场景分组人脸设备ID集合
+     *
      * @return
      */
     public List<Map<String, Object>> findFaceSceneDeviceIds() {
@@ -181,20 +187,45 @@ public class FaceCaptureStatisticDao {
         return jdbc.queryForList(sql);
     }
 
+    /**
+     * 查询抓拍量
+     *
+     * @param deviceIds 设备id集合
+     * @param beginTime 开始日期,日期格式yyyy-mm-dd hh24:mi:ss
+     * @param endTime   结束日期,日期格式yyyy-mm-dd hh24:mi:ss
+     * @return
+     */
+    public int findCaptureNum(Collection<String> deviceIds, String beginTime, String endTime) {
+        long beginTimeL = CommonUtil.convertJGSKToLong(StringUtil.toString(beginTime));
+        long endTimeL = CommonUtil.convertJGSKToLong(StringUtil.toString(endTime));
+        Query query = new Query(1, 1);
+        query.addRangeCriteria("JGSK", beginTimeL, endTimeL);
+        query.addEqualCriteria("DEVICE_ID", deviceIds.toArray(new String[deviceIds.size()]));
+        String[] indices = EsUtil.getIndexNameByTime(Constants.FACE_INDEX + "_", beginTime, endTime);
+        try {
+            Long totalSize = EAP.bigdata.query(indices, Constants.FACE_TABLE, query).getTotalSize();
+            return totalSize.intValue();
+        } catch (SearchEngineException e) {
+            ServiceLog.error(e);
+        }
+        return 0;
+    }
 
-//    public List<Map<String, Object>> getLastTimeByDeivceId(String beginTime, String endTime, List<String> deviceIdList) {
-//        String sql = "select count(1) num,sbbh from face_capture where 1=1";
-//
-//        List<String> params = new ArrayList<String>();
-//        if (!StringUtil.isEmpty(beginTime) && !StringUtil.isEmpty(endTime)) {
-//            sql += " and (" + "jgrqsjb between extract (epoch from to_date ('" + beginTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint  "
-//                    + "and extract (epoch from to_date ('" + endTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint )";
-//        }
-//        if (!StringUtil.isEmpty(deviceIds)) {
-//            sql = sql + " and sbbh = any  " + CommonUtil.getDeviceSqlInParams(deviceIds.split(","));
-//        }
-//        sql = sql + " group by sbbh";
-//        return jdbc.queryForList(sql, params.toArray());
-//    }
+    /**
+     * 通过时间区域列表来得到总的抓拍数
+     * @param timeRegionList
+     * @return
+     */
+    public int findCaptureNumByTimeRegionList(List<Map<String, Object>> timeRegionList) {
+        int total = 0;
+        for (Map<String, Object> row : timeRegionList) {
+            total += this.findCaptureNum(Arrays.asList(row.get("cross").toString().split(",")),
+                    row.get("beginTime").toString(),
+                    row.get("endTime").toString());
+        }
+        return total;
+    }
+
+
 }
 

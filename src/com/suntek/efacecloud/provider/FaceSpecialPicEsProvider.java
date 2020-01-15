@@ -1,18 +1,6 @@
 package com.suntek.efacecloud.provider;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.MapUtils;
-import org.json.simple.JSONValue;
-
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.pico.annotation.LocalComponent;
@@ -21,10 +9,21 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.model.ExcelColumn;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ExcelUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
+import org.apache.commons.collections.MapUtils;
+import org.json.simple.JSONValue;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人员专题库人脸查询
@@ -66,7 +65,7 @@ public class FaceSpecialPicEsProvider
         
         Registry registry = Registry.getInstance();
 //        registry.selectCommand(BaseCommandEnum.staticLibFaceQuery.getUri()).exec(ctx); 
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
         registry.selectCommand(BaseCommandEnum.staticLibFaceQuery.getUri(), "4401", vendor).exec(ctx);
         
 		long code = ctx.getResponse().getCode();

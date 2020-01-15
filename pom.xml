@@ -302,6 +302,20 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.corundumstudio.socketio</groupId>
+			<artifactId>netty-socketio</artifactId>
+			<version>1.7.12</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.suntek</groupId>
+			<artifactId>huawei-service-proxy2.0</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-framework</artifactId>
 			<version>2.11.1</version>
@@ -464,6 +478,7 @@
 					</replacements>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>

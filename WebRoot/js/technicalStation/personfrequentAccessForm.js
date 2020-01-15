@@ -1,3 +1,4 @@
+var taskStatus = UI.util.getUrlParam("taskStatus") || '';
 var now = new Date();
 var endTime = dateFormat(now,'yyyy-MM-dd 23:59:59');
 now.setDate(now.getDate() - 7);
@@ -9,8 +10,8 @@ $(document).ready(function(){
 	UI.control.init();
 	getDeviceModule();  //定义在common中
 	/*judgePermission();*/
-	initEvents();
 	initTime();
+	initEvents();
 	/*initFaceDetectDropdowntree();*/
 })
 
@@ -20,6 +21,7 @@ function judgePermission(){
 		return;
 	}
 }
+
 function initEvents(){
 	
 	//初始化滑块事件
@@ -55,21 +57,25 @@ function initEvents(){
      	},500)
     })
     $('#FACESCORE').keyup(function() {  
-	        //数值范围为100以内
-	    	$(this).val($(this).val().replace(/[^0-9]+/,''));
-	    	if($(this).val() > 100){
-	    		$(this).val(100);
-	    	}
-	     	$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
-	     	sliderS.slider( "value", $(this).val() );
-	     	setTimeout(function(){
-	     		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
-	     	},500)
-	    })
+		//数值范围为100以内
+		$(this).val($(this).val().replace(/[^0-9]+/,''));
+		if($(this).val() > 100){
+			$(this).val(100);
+		}
+		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0.5s');
+		sliderS.slider( "value", $(this).val() );
+		setTimeout(function(){
+			$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
+		},500)
+	})
 	
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
-		parent.showMenu();
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
 	});
 	
 	//查询按钮
@@ -182,10 +188,54 @@ function initEvents(){
 		e.stopPropagation();
 	});
 
+	if(taskStatus && taskStatus != 2){
+		$("#searchBtn").addClass("hide");
+	}
+
+	//从任务列表查看
+	if(top.GET_TASK_LIST_DATA){
+		//条件回填
+		var search = top.GET_TASK_LIST_DATA.search;
+		$("#arithmeticSelect").val(search.ALGORITHM_CODE);
+		$("#beginTime").val(search.BEGIN_TIME);
+		$("#endTime").val(search.END_TIME);
+		$("#kks").val(search.NUMS);
+		sliderT.slider( "value", search.THRESHOLD );
+		$( "#THRESHOLD" ).val( search.THRESHOLD );
+		var deviceName = "",orgCode = "",deviceId = "";
+		$.each(search.DEVICE_IDS, function(index, el) {
+			var str = "";
+			if(index != search.DEVICE_IDS.length - 1){
+				str = ",";
+			}
+			deviceName += el.DEVICE_NAME + str;
+			orgCode += el.ORG_CODE + str;
+			deviceId += el.DEVICE_ID + str;			
+		});
+		$('#deviceNames').text(deviceName);
+		$('#deviceNames').attr('title',deviceName);
+		$('#deviceNames').attr('orgcode',orgCode);
+		$('#faceDetect').val(deviceId);
+		$('#deviceIdInt').val("");
+		addDrowdownDeviceList({
+			deviceId:deviceId,
+			deviceName:deviceName,
+			deviceNameList:$("#deviceNameList"),
+			dropdownListText:$(".dropdown-list-text")
+		});
+		//执行检索
+		if(taskStatus == 2)$('#searchBtn').trigger("click");
+	}
+
 }
 
 //初始化查询参数
 function initQueryParams() {
+
+	if(top.GET_TASK_LIST_DATA) {
+		setQueryParams();
+        return true;
+	}
 	
 	if($('#beginTime').val() == '') {
 		UI.util.alert("请选择开始时间", "warn");
@@ -217,16 +267,20 @@ function initQueryParams() {
 		return false;
 	}
     if (UI.util.validateForm($('.form-inline'), true)){
-        queryParams.NUMS = $('#kks').val();
-        parent.cachedData.deviceIds = $('#faceDetect').val();
-        //queryParams.DEVICE_IDS = $('#faceDetect').val();
-        queryParams.BEGIN_TIME = $('#beginTime').val();
-        queryParams.END_TIME = $('#endTime').val();/*
-         queryParams.time = $("input[name='time']:checked").val();*/
-        queryParams.THRESHOLD = $('#THRESHOLD').val();
-        queryParams.FACE_SCORE = $('#FACESCORE').val();
+        setQueryParams();
         return true;
     }
+}
+
+function setQueryParams() {
+	queryParams.NUMS = $('#kks').val();
+	parent.cachedData.deviceIds = $('#faceDetect').val();
+	//queryParams.DEVICE_IDS = $('#faceDetect').val();
+	queryParams.BEGIN_TIME = $('#beginTime').val();
+	queryParams.END_TIME = $('#endTime').val();/*
+		queryParams.time = $("input[name='time']:checked").val();*/
+	queryParams.THRESHOLD = $('#THRESHOLD').val();
+	queryParams.FACE_SCORE = $('#FACESCORE').val();
 }
 
 //初始化日期选择框

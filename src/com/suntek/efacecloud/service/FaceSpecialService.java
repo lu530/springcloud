@@ -1,21 +1,21 @@
 package com.suntek.efacecloud.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.common.util.DateUtil;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceSpecialDao;
+import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import com.suntek.sp.common.common.BaseCommandEnum;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 人员专题库服务
@@ -125,7 +125,7 @@ public class FaceSpecialService
         ctx.setBody(params);
 //        Registry.getInstance().selectCommand(BaseCommandEnum.staticLibFaceQuery.getUri()).exec(ctx); 
         
-    	String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+    	String vendor = ConfigUtil.getVendor();
     	Registry.getInstance().selectCommand(BaseCommandEnum.staticLibFaceQuery.getUri(), "4401", vendor).exec(ctx);
         
 		Map<String, Object> resultMap = new HashMap<>();

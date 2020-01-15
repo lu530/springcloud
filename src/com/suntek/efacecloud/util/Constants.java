@@ -362,19 +362,70 @@ public class Constants {
     /** 华云算法 */
     public static final String HUAYUN_ALGO = "80003";
 
-	/** 有效库-有特征值*/
-	public static final String IS_CORRECT = "1";
-	/** 残缺库-特征值*/
-	public static final String IS_INCORRECT = "0";
+    /**
+     * 有效库-有特征值
+     */
+    public static final String IS_CORRECT = "1";
+    /**
+     * 残缺库-特征值
+     */
+    public static final String IS_INCORRECT = "0";
 
-	/**
-	 * 视频云设备类型--中台设备类型对应关系
-	 * 中台暂时只支持：
-	 * 	'1：车辆卡口，2：人员卡口，3：微卡口，
-	 * 	4：特征摄像机，5：普通监控，6：人员结构化，
-	 * 	7：车辆结构化， 99：其他'
-	 */
-	public static Map<String, String> deviceTypeMap = null;
+    //nvn任务执行中任务返回码
+    public static final long NVN_EXCUTING_CODE = 30870119121023L;
+
+    public static final String FOLLOW_PERSON = "followPerson";
+
+    public static final String REGION_COLLISION = "regionCollision";
+
+    public static final String FREQUENT_ACCESS = "frequentAccess";
+
+    public static final String FACE_CAPTURE_FREQ_ANALYSIS = "faceCaptureFreqAnalysis";
+
+    public static final String DAY_HIDE_NIGHT_ACTIVE = "dayHideNightActive";
+
+    public static final String NIGHT_ACTIVE = "nightActive";
+
+    public static final String SPECIAL_PERSON = "specialPerson";
+
+    //管理员人员种类
+    public static final String ADMIN_USER_TYPE = "9";
+
+
+    /**
+     * nvn任务未处理
+     */
+    public static final String NVN_TASK_UN_DEAL = "0";
+
+    /**
+     * nvn任务正在处理中
+     */
+    public static final String NVN_TASK_DEALING = "1";
+
+    /**
+     * nvn任务已处理
+     */
+    public static final String NVN_TASK_DEALT = "2";
+
+    /**
+     * nvn任务已处理,但是发生了异常
+     */
+    public static final String NVN_TASK_DEALT_ERROR = "3";
+
+    /**
+     * nvn任务已提交异步请求，等待获取结果
+     */
+    public static final String NVN_TASK_WAIT_GET_RESULT = "4";
+
+
+    /**
+     * 视频云设备类型--中台设备类型对应关系
+     * 中台暂时只支持：
+     * '1：车辆卡口，2：人员卡口，3：微卡口，
+     * 4：特征摄像机，5：普通监控，6：人员结构化，
+     * 7：车辆结构化， 99：其他'
+     */
+    public static Map<String, String> deviceTypeMap = null;
 
     static{
 		deviceTypeMap = new HashedMap(4);

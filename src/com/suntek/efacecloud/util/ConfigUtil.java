@@ -182,6 +182,16 @@ public class ConfigUtil {
     }
 
     /**
+     * NVN技战法查询是否为异步
+     *
+     * @return
+     */
+    public static boolean getIsNvnAsync() {
+        String isNvnAsync = AppHandle.getHandle(Constants.APP_NAME).getProperty("IS_NVN_ASYNC", "0");
+        return "1".equals(isNvnAsync);
+    }
+
+    /**
      * 是否外籍人项目
      */
     public static boolean isBlack() {
@@ -193,11 +203,19 @@ public class ConfigUtil {
      */
     public static String getRedListDbId() {
         String redListDbId = "RED_LIST_DB";
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
-        if(Constants.HIK_VENDOR.equals(vendor)){
+        String vendor = getVendor();
+        if (Constants.HIK_VENDOR.equals(vendor)) {
             redListDbId = AppHandle.getHandle(Constants.APP_NAME).getProperty("HIK_RED_LIST_DB", "");
         }
         return redListDbId;
+    }
+
+    /**
+     * 得到厂商代码
+     * @return
+     */
+    public static String getVendor() {
+        return AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
     }
 
 

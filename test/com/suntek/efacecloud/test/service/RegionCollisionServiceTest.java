@@ -1,20 +1,19 @@
 package com.suntek.efacecloud.test.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.suntek.eap.junit.JUnitBase;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.efacecloud.util.Constants;
+import org.junit.Test;
 
-public class RegionCollsionServiceTest extends JUnitBase{
+import java.util.HashMap;
+import java.util.Map;
+
+public class RegionCollisionServiceTest extends JUnitBase{
 	
 	@Test
 	public void testQuery() {
 		try {
-			String serviceName = "technicalTactics/regionCollsion/query";
+			String serviceName = "technicalTactics/regionCollision/query";
 			Map<Object, Object> params = new HashMap<>();
 			params.put("BEGIN_TIMES", "2017-07-15 00:00:00_2017-07-15 00:00:00");
 			params.put("END_TIMES", "2017-07-18 23:59:59_2017-07-18 23:59:59");

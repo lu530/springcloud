@@ -1,14 +1,11 @@
-package com.suntek.efacecloud.service;
+package com.suntek.efacecloud.service.face.tactics.common;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
-import com.suntek.eap.pico.annotation.BeanService;
-import com.suntek.eap.pico.annotation.LocalComponent;
 import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
@@ -22,85 +19,51 @@ import com.suntek.sp.common.common.BaseCommandEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 人员区域碰撞
- *
- * @author yana
- * @version 2017年07月18日
+ * 区域碰撞公共类
  */
-@LocalComponent(id = "technicalTactics/regionCollsion")
-public class RegionCollsionService {
+public class RegionCollisionCommonService {
 
-    @SuppressWarnings("unchecked")
-    @BeanService(id = "query", description = "人员技战法区域碰撞查询", since = "2.0.0", type = "remote")
-    public void query(RequestContext context) throws Exception {
-
+    protected Map<String, Object> buildQueryParams(RequestContext context) {
         String[] bT_arr = StringUtil.toString(context.getParameter("BEGIN_TIMES")).split("_");
         String[] eT_arr = StringUtil.toString(context.getParameter("END_TIMES")).split("_");
         String[] kkbh_arr = StringUtil.toString(context.getParameter("DEVICE_IDS")).split("_");
-
         int similarity = Integer.valueOf(StringUtil.toString(context.getParameter("THRESHOLD"), "80"));
-
-        String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"), "65");
-
-        List<Map<String, Object>> timeRegionList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> timeRegionList = new ArrayList<>();
 
         for (int i = 0; i < bT_arr.length && i < eT_arr.length && i < kkbh_arr.length; i++) {
-
-            Map<String, Object> esSearchTime = ModuleUtil.searchEsTime(bT_arr[i], eT_arr[i]);
-            if (Integer.valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_LACK) {
-                context.getResponse().setError("应用模块配置项：人脸抓拍索引起始月份  未配置");
-                return;
-
-            } else if (Integer
-                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_OVERSTEP) {
-                context.getResponse().putData("DATA", Collections.EMPTY_LIST);
-                return;
-
-            } else if (Integer
-                    .valueOf(StringUtil.toString(esSearchTime.get("code"))) == Constants.SEARCH_ES_TIME_SUCCESS) {
-                bT_arr[i] = StringUtil.toString(esSearchTime.get("beginTime"));
-                eT_arr[i] = StringUtil.toString(esSearchTime.get("endTime"));
-            }
-
             Map<String, Object> temp = new HashMap<String, Object>();
             temp.put("beginTime", bT_arr[i]);
             temp.put("endTime", eT_arr[i]);
             temp.put("cross", kkbh_arr[i]);
+            temp.put("DEVICE_IDS", kkbh_arr[i]);
             timeRegionList.add(temp);
         }
-
-        CommandContext commandContext = new CommandContext(context.getHttpRequest());
-
-        commandContext.setServiceUri(BaseCommandEnum.regionCollsion.getUri());
-
-        try {
-            commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-        } catch (Exception e) {
-            ServiceLog.debug("外部调用。");
-        }
-
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("timeRegionList", timeRegionList);
         params.put("similarity", similarity);
         params.put("algoType", ConfigUtil.getAlgoType());
-        params.put("faceScore", faceScore);
+        return params;
+    }
+
+    public List<List<Map<String, Object>>> handle(RequestContext context,
+                                                  Map<String, Object> params) throws Exception {
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+        commandContext.setServiceUri(BaseCommandEnum.regionCollsion.getUri());
+        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
         commandContext.setBody(params);
 
         ServiceLog.debug("区域碰撞 调用sdk参数:" + params);
-        String vendor = AppHandle.getHandle(Constants.OPENGW).getProperty(
-                "EAPLET_VENDOR", "Suntek");
+        String vendor = ConfigUtil.getVendor();
 
         Registry registry = Registry.getInstance();
 
-        registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(), "4401",
+        registry.selectCommand(commandContext.getServiceUri(), "4401",
                 vendor).exec(commandContext);
-
         ServiceLog.debug("区域碰撞 调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
 
@@ -108,17 +71,29 @@ public class RegionCollsionService {
 
         if (0L != code) {
             context.getResponse().setWarn(commandContext.getResponse().getMessage());
-            return;
+            return null;
         }
+        List<List<Object>> persons = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+        return buildResult(context, persons);
+    }
 
-        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+    /**
+     * 把内容构建成前端所需
+     *
+     * @param context
+     * @param persons
+     * @return
+     * @throws Exception
+     */
+    public List<List<Map<String, Object>>> buildResult(RequestContext context, List<?> persons) throws Exception {
         // 返回结果的集合
-        List<List<Map<String, Object>>> resultList = new ArrayList<List<Map<String, Object>>>();
-
-        for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids;
-            if (personIds.get(i) instanceof HashMap) {
-                HashMap map = (HashMap) personIds.get(i);
+        List<List<Map<String, Object>>> resultList = new ArrayList<>();
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+        Registry registry = Registry.getInstance();
+        String vendor = ConfigUtil.getVendor();
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) persons.get(i);
 
                 String idStr = (String) map.get("IDS");
 
@@ -129,36 +104,36 @@ public class RegionCollsionService {
                 queryParams.put("IDS", idStr);
                 commandContext.setBody(queryParams);
                 ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
-                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                registry.selectCommand(commandContext.getServiceUri(), "4401",
+                        vendor).exec(commandContext);
                 ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
                         + commandContext.getResponse().getMessage() + " result:"
                         + commandContext.getResponse().getResult());
 
-                code = commandContext.getResponse().getCode();
+                long code = commandContext.getResponse().getCode();
                 if (0L != code) {
                     context.getResponse().setWarn(commandContext.getResponse().getMessage());
-                    return;
+                    return null;
                 }
                 List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
-                list.stream().forEach(o->{
-                    o.put("REPEATS",map.get("REPEATS"));
-                    o.put("ORIGINAL_DEVICE_ID",map.get("DEVICE_ID"));
-                    o.put("FACE_SCORE","0");
+                list.stream().forEach(o -> {
+                    o.put("REPEATS", map.get("REPEATS"));
+                    o.put("ORIGINAL_DEVICE_ID", map.get("DEVICE_ID"));
+                    o.put("FACE_SCORE", "0");
                 });
                 resultList.add(list);
             } else {
-                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                List<Object> ids = (List<Object>) persons.get(i); // 一个人员出现列表的主键id集合
                 List<Map<String, Object>> result = handlePersonId(ids);
 
                 if (result.size() > 0) { // 过滤反查不到的结果列表
                     resultList.add(result);
                 }
             }
-
         }
-
-        context.getResponse().putData("DATA", resultList);
+        return resultList;
     }
+
 
     /**
      * 根据id反查得到返回需要的数据信息,一个人的所有数据 抓拍时间、卡口、次数、图片
@@ -167,7 +142,7 @@ public class RegionCollsionService {
      * @return
      * @throws Exception
      */
-    private List<Map<String, Object>> handlePersonId(List<Object> aPersonIds) throws Exception {
+    protected List<Map<String, Object>> handlePersonId(List<Object> aPersonIds) {
 
         List<Map<String, Object>> aPersonList = new ArrayList<Map<String, Object>>();
 
@@ -219,17 +194,16 @@ public class RegionCollsionService {
                 aPersonList.add(personData);
             }
             // 详情以时间倒序排序
-            Collections.sort(aPersonList, new Comparator<Map<String, Object>>() {
-                @Override
-                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                    String a1 = StringUtil.toString(o1.get("TIME"));
-                    String a2 = StringUtil.toString(o2.get("TIME"));
-                    return a2.compareTo(a1);
-                }
+            Collections.sort(aPersonList, (o1, o2) -> {
+                String a1 = StringUtil.toString(o1.get("TIME"));
+                String a2 = StringUtil.toString(o2.get("TIME"));
+                return a2.compareTo(a1);
             });
         } catch (SearchEngineException e) {
             Log.fanchaLog.error("区域碰撞 渲染人脸数据异常:", e);
         }
         return aPersonList;
     }
+
+
 }
