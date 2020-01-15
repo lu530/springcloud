@@ -14,14 +14,15 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
+import com.suntek.efacecloud.service.FollowPersonService;
 import com.suntek.efacecloud.service.face.tactics.SpecialPersonService;
+import com.suntek.efacecloud.service.face.tactics.common.RegionCollisionCommonService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.sp.common.common.BaseCommandEnum;
 import com.suntek.sp.huawei.HWStatusCode;
 import com.suntek.sp.huawei.command.facematch.FacenvnCommand;
 import com.suntek.sp.huawei.dto.FaceGroup;
-import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -46,6 +47,10 @@ import java.util.Map;
 public class FaceNVNTaskService {
 
     private FaceNVNTaskDao dao = new FaceNVNTaskDao();
+
+    private RegionCollisionCommonService regionCollisionCommonService = new RegionCollisionCommonService();
+
+    private FollowPersonService followPersonService = new FollowPersonService();
 
     private SpecialPersonService specialPersonService = new SpecialPersonService();
 
@@ -243,8 +248,8 @@ public class FaceNVNTaskService {
                 Log.nvnTaskLog.error("------------------>解析nvn任务结果查询接口xml失败，原因：" + e.getMessage());
             }
 
-            handleResult(taskType, resultList, param, context);
-            Object[] result = renderResult(taskId, resultList);
+            Object handleResult = handleResult(taskType, resultList, context);
+            Object[] result = renderResult(taskId, handleResult);
             dao.insertTaskResult(result);
             Log.nvnTaskLog.debug("------------------>接口返回结果已入库");
 
@@ -289,7 +294,8 @@ public class FaceNVNTaskService {
             ServiceLog.debug("数据库查询到的参数：" + JSONObject.toJSONString(taskParam));
             List<Map<String, Object>> taskResult = dao.getTaskResult(taskId);
             if (taskResult != null && taskResult.size() > 0) {
-                context.getResponse().putData("DATA", StringUtil.toString(taskResult.get(0).get("TASK_RESULT"), ""));
+                String taskResultString = StringUtil.toString(taskResult.get(0).get("TASK_RESULT"), "");
+                context.getResponse().putData("DATA", taskResultString);
             }
             ServiceLog.debug("数据库查询到的结果：" + JSONObject.toJSONString(taskResult));
             Map<String, Object> taskParamMap = new HashMap<>();
@@ -376,97 +382,31 @@ public class FaceNVNTaskService {
 
     }
 
-    public Object[] renderResult(String taskId, List<Map<String, Object>> resultList) {
+    public Object[] renderResult(String taskId, Object result) {
         Object[] param = new Object[3];
         param[0] = taskId;
-        param[1] = JSONObject.toJSONString(resultList);
+        param[1] = JSONObject.toJSONString(result);
         param[2] = new Date();
 
         return param;
     }
 
     // 需要对同伙分析和昼伏夜出的结果进行处理
-    public void handleResult(String taskType, List<Map<String, Object>> resultList, Map<String, Object> requestParam,
-                             RequestContext context) {
+    public Object handleResult(String taskType, List<Map<String, Object>> resultList,
+                               RequestContext context) throws Exception {
 
         if (resultList.size() == 0) {
-            return;
+            return "";
         }
-
-        CommandContext commandContext = new CommandContext(context.getHttpRequest());
-        Registry registry = Registry.getInstance();
         switch (taskType) {
             case Constants.FOLLOW_PERSON:
-                try {
-                    for (Map<String, Object> result : resultList) {
-                        String ids = StringUtil.toString(result.get("IDS"));
-                        commandContext.setServiceUri(BaseCommandEnum.faceQueryByIds.getUri());
-                        commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
-
-                        Map<String, Object> queryParams = new HashMap<String, Object>();
-                        queryParams.put("IDS", ids);
-                        commandContext.setBody(queryParams);
-                        ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
-                        registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
-                        ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
-                                + commandContext.getResponse().getMessage() + " result:"
-                                + commandContext.getResponse().getResult());
-
-                        long code = commandContext.getResponse().getCode();
-                        if (0L != code) {
-                            context.getResponse().setWarn(commandContext.getResponse().getMessage());
-                            return;
-                        }
-                        result.put("RECORDS", commandContext.getResponse().getData("DATA"));
-                    }
-                } catch (Exception e) {
-                    Log.nvnTaskLog.error("调用开放平台同伙分析出错，原因：" + e.getMessage(), e);
-                }
-                break;
-            // 昼伏夜出
+                return followPersonService.buildResult(context, resultList);
+            case Constants.REGION_COLLISION:
             case Constants.DAY_HIDE_NIGHT_ACTIVE:
-                try {
-                    int dayFrequence = Integer.valueOf(StringUtil.toString(requestParam.get("DAY_FREQUENCE")));
-                    int nightFrequence = Integer.valueOf(StringUtil.toString(requestParam.get("NIGHT_FREQUENCE")));
-                    Log.nvnTaskLog.debug("DAY_FREQUENCE：" + dayFrequence + ",NIGHT_FREQUENCE：" + nightFrequence);
-                    Log.nvnTaskLog.debug("RESULT_LIST：" + resultList);
-                    List<Map<String, Object>> tempList = new ArrayList<>();
-                    for (Map<String, Object> data : resultList) {
-                        int dayFreq = 0;
-                        int nightFreq = 0;
-                        List<String> recordIds = new ArrayList<String>();
-                        List<Map<String, Object>> records = (List<Map<String, Object>>) data.get("RECORDS");
-                        String firstRecordId = StringUtil.toString(data.get("INFO_ID"));
-                        for (Map<String, Object> record : records) {
-                            String faceGroupNo = StringUtil.toString(record.get("FACE_GROUP_NO"));
-                            String recordId = StringUtil.toString(record.get("RECORD_ID"));
-                            recordIds.add(recordId);
-                            if ("0".equals(faceGroupNo)) {
-                                dayFreq++;
-                            } else {
-                                nightFreq++;
-                            }
-                        }
-                        if (dayFreq <= dayFrequence && nightFreq >= nightFrequence) {
-                            data.put("DAY_FREQUENCE", dayFreq);
-                            data.put("NIGHT_FREQUENCE", nightFreq);
-                            data.put("RECORD_IDS", StringUtils.join(recordIds.toArray(), ","));
-                            data.remove("RECORDS");
-                            tempList.add(data);
-                        } else {
-                            ServiceLog.debug("first recordId：" + firstRecordId + " 昼频次：" + dayFreq + " 夜频次：" + nightFreq
-                                    + " 不满足条件，排除");
-                        }
-                    }
-
-                    resultList.clear();
-                    resultList.addAll(tempList);
-                } catch (Exception e) {
-                    Log.nvnTaskLog.error("调用开放平台昼伏夜出出错，原因：" + e.getMessage(), e);
-                }
-                break;
+            case Constants.NIGHT_ACTIVE:
+                return regionCollisionCommonService.buildResult(context, resultList);
             default:
-                break;
+                return resultList;
         }
     }
 
@@ -528,13 +468,14 @@ public class FaceNVNTaskService {
 
     /**
      * 处理xml数据，把xml改成转成list
+     *
      * @param xmlData
      * @param taskType
      * @param requestFaceGroups
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> handleXmlData(String xmlData, String taskType,  List<FaceGroup> requestFaceGroups) throws Exception {
+    public List<Map<String, Object>> handleXmlData(String xmlData, String taskType, List<FaceGroup> requestFaceGroups) throws Exception {
         FacenvnCommand command = new FacenvnCommand();
         command.setRequestFaceGroups(requestFaceGroups);
         Document doc = DocumentHelper.parseText(xmlData);
