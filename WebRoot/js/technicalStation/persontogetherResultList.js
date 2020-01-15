@@ -1,5 +1,6 @@
 // 设置无图片
 var noPic = UI.util.getUrlParam('noPic') || '';
+var entrance= UI.util.getUrlParam('entrance') || '';
 
 $(function(){
 	initEvents();
@@ -8,7 +9,6 @@ $(function(){
 });
 
 function initEvents(){
-	
 	//返回
 	$('#backBtn').click(function(){
 		switch(parent.getDataType){
@@ -132,10 +132,14 @@ function showTrackData(trackArr){
 			palyArr.push(playObj);
 		}
 	});
-	
 	if(palyArr.length > 0){
 		if(palyArr.length < trackArr.length){
 			UI.util.alert((trackArr.length-palyArr.length)+"条数据的坐标缺失","warn");
+		}
+		if(entrance=='wifiSearch') {
+			for(var ii=0;ii<palyArr.length;ii++) {
+				palyArr[ii].image='/efacecloud/images/wifi.png'
+			}
 		}
 		var playOpts = {
 			routeInfo:palyArr,
