@@ -43,9 +43,9 @@ var searchParam = {};
 $(document).ready(function(){
 	UI.control.init(["userInfo"]);
 	getDeviceModule();  //定义在common中
+	initTime();
 	initEvents();
 //	initTreeEvent('orgTree');
-	initTime();
 	/*initFaceDetectDropdowntree();*/
 	topUploadPic();
 	if (isRedList()) {

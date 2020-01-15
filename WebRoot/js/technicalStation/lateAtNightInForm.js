@@ -13,8 +13,8 @@ var nightNum= $('#nightNum');
 
 $(document).ready(function(){
 	UI.control.init(["userInfo"]);
-	initEvents();
 	initTime();
+	initEvents();
 	getDeviceModule();  //定义在common中
 	$('#technicalTitle').text('人员深夜出入分析');
 })
