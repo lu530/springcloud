@@ -5,6 +5,8 @@ now.setDate(now.getDate() - 7);
 var beginTime = dateFormat(now,'yyyy-MM-dd 00:00:00');
 var queryParams = {};
 
+var fromFace = false;
+
 $(document).ready(function(){
 	/*UI.control.init(["userInfo"]);*/
 	UI.control.init();
@@ -73,6 +75,8 @@ function initEvents(){
 	$('body').on('click','#backBtn',function(){
 		if(taskStatus) {
 			parent.parent.hideFrame();
+		}else if(fromFace) {
+			parent.parent.UI.util.hideCommonIframe('.frame-form-full');
 		}else {
 			parent.showMenu();
 		}
@@ -285,6 +289,23 @@ function setQueryParams() {
 
 //初始化日期选择框
 function initTime(){
+	if(top.frequentInfo) {
+        beginTime = top.frequentInfo.beginTime;
+        endTime = top.frequentInfo.endTime;
+        $('#deviceNames').text(top.frequentInfo.deviceName);
+        $('#deviceNames').attr('title',top.frequentInfo.deviceName);
+        $('#deviceNames').attr('orgcode',top.frequentInfo.orgCode);
+        $('#faceDetect').val(top.frequentInfo.deviceId);
+        $('#deviceIdInt').val(top.frequentInfo.deviceIdInt);
+        addDrowdownDeviceList({
+            deviceId:top.frequentInfo.deviceId,
+            deviceName:top.frequentInfo.deviceName,
+            deviceNameList:$("#deviceNameList"),
+            dropdownListText:$(".dropdown-list-text")
+        });
+        fromFace = true;
+        delete top.frequentInfo;
+    }
 	$("#beginTime").val(beginTime);
 	$("#endTime").val(endTime);
 	var	now = new Date();

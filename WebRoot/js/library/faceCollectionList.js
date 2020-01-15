@@ -705,6 +705,20 @@ function initEvent() {
         });
     });
 
+    $("#frequentBtn").click(function() {
+        top.frequentInfo = {
+            beginTime: queryParams.BEGIN_TIME,
+            endTime: queryParams.END_TIME,
+        }
+        if($("#deviceNames").attr('title')) {
+            top.frequentInfo.deviceName = $("#deviceNames").attr('title');
+            top.frequentInfo.orgCode =  $("#deviceNames").attr('orgCode');
+            top.frequentInfo.deviceId = $("#orgCode").val();
+            top.frequentInfo.deviceIdInt = $("#orgCodeInt").val();
+        }
+        UI.util.showCommonIframe('.frame-form-full', '/efacecloud/page/technicalStation/tacticsFrame.html?pageType=frequently');
+    })
+
     $("#freqAnalysisBtn").click(function () {
         var listData = UI.control.getDataById('faceCollectionList');
         beginTime = $('#beginTime').val();
