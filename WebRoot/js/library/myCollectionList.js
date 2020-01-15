@@ -9,7 +9,7 @@ var queryParams = {
 var params={};
 var collectionOptions={
 	parameters:queryParams,
-	template:fileType==2?'collectionTemplate':'captureTemplate'
+	template:fileType==7?'collectionTemplate':'captureTemplate'
 }
 var timeOption = {
 		'elem':$('#birthdayTagsWrap'),

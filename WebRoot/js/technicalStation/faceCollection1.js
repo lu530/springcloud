@@ -298,9 +298,11 @@ function initEvent(){
 				UI.util.alert("请勾选导出的数据","warn");
 				return;
 			}
-			exportParams.SEARCH_IMG_URL = $('#filterImg')[0].src;
 			exportParams.EXPORT_DATA = JSON.stringify(exportData);
 		} else {
+		    //暂时取空白图，导出暂不支持多个检索图导出
+            exportParams.SEARCH_IMG_URL = $('#filterImg')[0].src;
+            exportParams.FACE_COLLECTION = "1";
 			//exportData = UI.control.getControlById('faceCollectionList').getListviewCheckData();
 			//记录选中数据
 			var checkedDataArr = [],
