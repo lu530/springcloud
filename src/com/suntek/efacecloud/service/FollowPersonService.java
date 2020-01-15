@@ -88,14 +88,27 @@ public class FollowPersonService {
         }
 
         @SuppressWarnings("unchecked")
-        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+        List<List<Object>> persons = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+        context.getResponse().putData("DATA", this.buildResult(context, persons));
+    }
 
-        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();// 返回到前端的结果集
+    /**
+     * 把内容构建成前端所需
+     *
+     * @param context
+     * @param persons
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> buildResult(RequestContext context, List<?> persons) throws Exception {
+        List<Map<String, Object>> resultList = new ArrayList<>();// 返回到前端的结果集
+        Registry registry = Registry.getInstance();
+        String vendor = ConfigUtil.getVendor();
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
 
-        for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids;
-            if (personIds.get(i) instanceof HashMap) {
-                HashMap map = (HashMap) personIds.get(i);
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) persons.get(i);
                 String idStr = (String) map.get("IDS");
 
                 commandContext.setOrgCode(context.getUser().getDepartment().getCivilCode());
@@ -110,10 +123,10 @@ public class FollowPersonService {
                         + commandContext.getResponse().getMessage() + " result:"
                         + commandContext.getResponse().getResult());
 
-                code = commandContext.getResponse().getCode();
+                long code = commandContext.getResponse().getCode();
                 if (0L != code) {
                     context.getResponse().setWarn(commandContext.getResponse().getMessage());
-                    return;
+                    return null;
                 }
 
                 List<Map<String, Object>> list = (List<Map<String, Object>>) commandContext.getResponse().getData("DATA");
@@ -151,15 +164,11 @@ public class FollowPersonService {
                 personData.put("FACE_SCORES", String.join(",", faceScores));
                 resultList.add(personData);
             } else {
-                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                List<Object> ids = (List<Object>) persons.get(i); // 一个人员出现列表的主键id集合
                 resultList.add(handlePersonId(ids));
             }
-
-
         }
-
-        context.getResponse().putData("DATA", resultList);
-
+        return resultList;
     }
 
     @BeanService(id = "query", description = "1:N检索查找此人的出现记录", since = "1.0.0", type = "remote")

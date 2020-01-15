@@ -2,7 +2,6 @@ package com.suntek.efacecloud.service.face.tactics.common;
 
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.CommandContext;
-import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.dict.DictType;
 import com.suntek.eap.index.SearchEngineException;
 import com.suntek.eap.jdbc.PageQueryResult;
@@ -12,7 +11,6 @@ import com.suntek.eap.util.IDGenerator;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
-import com.suntek.efacecloud.dao.FaceCaptureStatisticDao;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -29,8 +27,6 @@ import java.util.Map;
  * 区域碰撞公共类
  */
 public class RegionCollisionCommonService {
-
-    private FaceCaptureStatisticDao dao = new FaceCaptureStatisticDao();
 
     protected Map<String, Object> buildQueryParams(RequestContext context) {
         String[] bT_arr = StringUtil.toString(context.getParameter("BEGIN_TIMES")).split("_");
@@ -66,7 +62,7 @@ public class RegionCollisionCommonService {
 
         Registry registry = Registry.getInstance();
 
-        registry.selectCommand(BaseCommandEnum.regionCollsion.getUri(), "4401",
+        registry.selectCommand(commandContext.getServiceUri(), "4401",
                 vendor).exec(commandContext);
         ServiceLog.debug("区域碰撞 调用sdk返回结果code:" + commandContext.getResponse().getCode() + " message:"
                 + commandContext.getResponse().getMessage() + " result:" + commandContext.getResponse().getResult());
@@ -77,15 +73,27 @@ public class RegionCollisionCommonService {
             context.getResponse().setWarn(commandContext.getResponse().getMessage());
             return null;
         }
+        List<List<Object>> persons = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+        return buildResult(context, persons);
+    }
 
-        List<List<Object>> personIds = (List<List<Object>>) commandContext.getResponse().getData("DATA");
+    /**
+     * 把内容构建成前端所需
+     *
+     * @param context
+     * @param persons
+     * @return
+     * @throws Exception
+     */
+    public List<List<Map<String, Object>>> buildResult(RequestContext context, List<?> persons) throws Exception {
         // 返回结果的集合
         List<List<Map<String, Object>>> resultList = new ArrayList<>();
-
-        for (int i = 0; i < personIds.size(); i++) {
-            List<Object> ids;
-            if (personIds.get(i) instanceof HashMap) {
-                HashMap map = (HashMap) personIds.get(i);
+        CommandContext commandContext = new CommandContext(context.getHttpRequest());
+        Registry registry = Registry.getInstance();
+        String vendor = ConfigUtil.getVendor();
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i) instanceof HashMap) {
+                HashMap map = (HashMap) persons.get(i);
 
                 String idStr = (String) map.get("IDS");
 
@@ -96,12 +104,13 @@ public class RegionCollisionCommonService {
                 queryParams.put("IDS", idStr);
                 commandContext.setBody(queryParams);
                 ServiceLog.debug("调用sdk反查记录参数:" + queryParams);
-                registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                registry.selectCommand(commandContext.getServiceUri(), "4401",
+                        vendor).exec(commandContext);
                 ServiceLog.debug("调用sdk反查返回结果code:" + commandContext.getResponse().getCode() + " message:"
                         + commandContext.getResponse().getMessage() + " result:"
                         + commandContext.getResponse().getResult());
 
-                code = commandContext.getResponse().getCode();
+                long code = commandContext.getResponse().getCode();
                 if (0L != code) {
                     context.getResponse().setWarn(commandContext.getResponse().getMessage());
                     return null;
@@ -114,14 +123,13 @@ public class RegionCollisionCommonService {
                 });
                 resultList.add(list);
             } else {
-                ids = personIds.get(i); // 一个人员出现列表的主键id集合
+                List<Object> ids = (List<Object>) persons.get(i); // 一个人员出现列表的主键id集合
                 List<Map<String, Object>> result = handlePersonId(ids);
 
                 if (result.size() > 0) { // 过滤反查不到的结果列表
                     resultList.add(result);
                 }
             }
-
         }
         return resultList;
     }
