@@ -126,9 +126,14 @@ public class SpecialPersonTrackDao {
 
     public List<Map<String, Object>> queryTaskDetail(String taskId) {
         // 设备名称暂时不返回
-        String sql = " SELECT TASK_TYPE, TASK_NAME, BEGIN_TIME, END_TIME, DEVICE_IDS, DEVICE_NAMES, LIB_TYPE_DESC, LIB_NAME, TOP_N, "
-                + "THRESHOLD, FACE_SCORE FROM  SPECIAL_PERSON_TRACK_TASK WHERE TASK_ID = ?";
-        return jdbc.queryForList(sql, taskId);
+        String sql = " SELECT PARAM FROM  EFACE_NVN_TASK_INFO WHERE TASK_ID = ?";
+        List<Map<String, Object>> rows = jdbc.queryForList(sql, taskId);
+        rows.forEach(row -> {
+            String param = StringUtil.toString(row.get("PARAM"));
+            Map<String, Object> map = JSONObject.parseObject(param, Map.class);
+            row.putAll(map);
+        });
+        return rows;
     }
 
     public Map<String, Object> queryTaskException(String taskId) {
