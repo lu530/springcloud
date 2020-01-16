@@ -165,13 +165,13 @@
 						<p picMsg="时间:{%=renderNullToNotKnow(o.CAPTURE_TIME)%}"><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.CAPTURE_TIME)%}">{%=renderNullToNotKnow(o.CAPTURE_TIME)%}</span></p>
 						<p picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
                         <div class="btn-group fr" fileId='{%=o.FILE_ID%}'>
-							<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
+							<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
 								<i class="btn-icon verification-icon"></i>
 							</a>
-							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
+							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
 								<i class="btn-icon trajectory-icon"></i>
 							</a>
-							<a class="btn-i-t btn-xs editBtn" title="编辑">
+							<a class="btn-i-t btn-xs editBtn hide" title="编辑">
 								<i class="btn-icon edit-icon"></i>
 							</a>
 							<a class="btn-i-t btn-xs deleteBtn" title="删除">
@@ -200,10 +200,10 @@
 					   			<p picMsg="时间:{%=renderNullToNotKnow(o.CAPTURE_TIME)%}"><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.CAPTURE_TIME)%}">{%=renderNullToNotKnow(o.CAPTURE_TIME)%}</span></p>
 					   			<p picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
 								<div class="btn-group fr" fileId='{%=o.FILE_ID%}'>
-									<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
+									<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
 										<i class="btn-icon verification-icon"></i>
 									</a>
-									<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
+									<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
 										<i class="btn-icon trajectory-icon"></i>
 									</a>
 									<a class="btn-i-t btn-xs editBtn hide" title="编辑">
