@@ -101,11 +101,7 @@ public class SystemInitListener implements ServletContextListener {
      * 华为NVN定时器初始化
      */
     private void initFaceNVN() {
-        if (!ConfigUtil.getIsNvnAsync()) {
-            return;
-        }
         try {
-
             String nvnTaskExpression = StringUtil
                     .toString(AppHandle.getHandle(Constants.APP_NAME).getProperty("FACE_NVN_EXCUTE_JOB_EXPRESSION"));
             if (!StringUtil.isNull(nvnTaskExpression)) {
