@@ -18,7 +18,7 @@ function judgePermission(){
 	}
 }
 function initEvents(){
-	
+
 	//初始化滑块事件
 	var sliderT = $( "#sliderThreshold" ).slider({
 		range: "max",
@@ -41,9 +41,9 @@ function initEvents(){
 
 	$( "#THRESHOLD" ).val(CONSTANTS.TACTICS_TASK.VAL.THRESHOLD);
 	$( "#SEARCHNUM" ).val(CONSTANTS.TACTICS_TASK.VAL.SEARCHNUM);
-	
-	 
-	 $('#THRESHOLD').keyup(function() {  
+
+
+	 $('#THRESHOLD').keyup(function() {
         //数值范围为100以内
     	$(this).val($(this).val().replace(/[^0-9]+/,''));
     	if($(this).val() > 100){
@@ -55,7 +55,7 @@ function initEvents(){
      		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
      	},500)
     })
-    $('#SEARCHNUM').keyup(function() {  
+    $('#SEARCHNUM').keyup(function() {
 	        //数值范围为100以内
 	    	$(this).val($(this).val().replace(/[^0-9]+/,''));
 	    	if($(this).val() > 100){
@@ -67,12 +67,12 @@ function initEvents(){
 	     		$('.ui-slider-horizontal .ui-slider-handle').css('transition','0s');
 	     	},500)
 	    })
-	
+
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
 		parent.showMenu();
 	});
-	
+
 	//查询按钮
 	$('#searchBtn').click(function(){
 
@@ -80,7 +80,7 @@ function initEvents(){
 
             // parent.UI.map.clearDraw();  //清除地图框选
 			// $('.form-con [map=mapBtn]').parent('li.active').removeClass('active');
-			
+
             var params = UI.util.formToBean($("#frequentAccess"));
 
             params.LIB_TYPE = $("#libType option:selected").attr('value');
@@ -89,7 +89,7 @@ function initEvents(){
 
             UI.util.showLoadingPanel();
 
-            UI.control.remoteCall('technicalTactics/task/add', params, function (resp) {
+            UI.control.remoteCall('special/person/addTask', params, function (resp) {
 
                 UI.util.alert(resp.MESSAGE, resp.CODE === 0 ? '' : 'warn');
                 UI.util.hideLoadingPanel();
@@ -97,13 +97,13 @@ function initEvents(){
             }, function (error){ console.log(error) }, '', true)
         }
     });
-	
+
 	//关闭
 	$('body').on('click','#closeBtn',function(){
 		top.rightMainFrameOut();
 	});
-    
-    
+
+
   //删除已选设备
 	$("body").on("click",".removeDeviceBtn",function(e){
 		var $this = $(this);
@@ -114,7 +114,7 @@ function initEvents(){
 		var index = deviceIdArr.indexOf(deviceId),
 			orgCode = $("#deviceNames").attr("orgcode"),
 			orgCodeArr = orgCode.split(",");
-		
+
 		$this.parents("li").remove();
 		deviceIdArr.splice(index,1);
 		deviceIdIntArr.splice(index,1);
@@ -132,7 +132,7 @@ function initEvents(){
 		}
 		e.stopPropagation();
 	});
-	
+
 	//通过卡口树加载设备
 	$('#deviceNames').click(function(e){
 		//回填数据
@@ -159,7 +159,7 @@ function initEvents(){
 		});
 		e.stopPropagation();
     });
-    
+
 
     //  人员库选择
     $("body").on('click', '#faceLibName', function () {
@@ -170,7 +170,7 @@ function initEvents(){
             $(".faceLibName").val(resp.libName);
 		});
 	});
-	
+
 	//	已建任务查看
 	$('body').on('click', '#taskLooking', function () {
 
@@ -190,7 +190,7 @@ function initTime(){
 	$("#endTime").val(endTime);
 	var	now = new Date();
 	var maxTime = today = now.format("yyyy-MM-dd 23:59:59");
-	
+
 	$("#beginTime").focus(function(){
 		WdatePicker({
 			isShowClear:false,
@@ -212,7 +212,7 @@ function initTime(){
 					 maxTime = now.format("yyyy-MM-dd 23:59:59");
 				}else{
 					maxTime = '#F{$dp.$D(\'beginTime\',{d:6})}';
-				}	
+				}
 				UI.util.debug(maxTime)
 			}
 		});
@@ -232,7 +232,7 @@ function initTime(){
 function showForm(url) {
 	$("#frameFormFull").attr("src", url);
 	$(".frame-form-full").show();
-	
+
 }
 function hideForm() {
 	$("#frameFormFull").attr("src", "");

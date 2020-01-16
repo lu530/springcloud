@@ -16,6 +16,7 @@ import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.service.FollowPersonService;
 import com.suntek.efacecloud.service.face.tactics.SpecialPersonService;
+import com.suntek.efacecloud.service.face.tactics.common.FollowPersonCommonService;
 import com.suntek.efacecloud.service.face.tactics.common.RegionCollisionCommonService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -50,7 +51,7 @@ public class FaceNVNTaskService {
 
     private RegionCollisionCommonService regionCollisionCommonService = new RegionCollisionCommonService();
 
-    private FollowPersonService followPersonService = new FollowPersonService();
+    private FollowPersonCommonService followPersonService = new FollowPersonCommonService();
 
     private SpecialPersonService specialPersonService = new SpecialPersonService();
 
@@ -435,7 +436,7 @@ public class FaceNVNTaskService {
             case Constants.FOLLOW_PERSON:
                 Map<String, Object> oneCompareParam
                         = JSONObject.parseObject(StringUtil.toString(paramMap.get("ONECOMPARE_PARAM")), Map.class);
-                List<Map<String, Object>> deviceList = this.buildDeviceList(paramMap.get("DEVICE_IDS"));
+                List<Map<String, Object>> deviceList = this.buildDeviceList(oneCompareParam.get("DEVICE_IDS"));
                 oneCompareParam.put("DEVICE_IDS", deviceList);
                 paramMap.put("PIC", StringUtil.toString(oneCompareParam.get("PIC"), ""));
                 paramMap.put("beginTime", StringUtil.toString(oneCompareParam.get("beginTime"), ""));
