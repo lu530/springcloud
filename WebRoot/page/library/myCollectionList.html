@@ -157,34 +157,21 @@
                 <dl class="list-node">
                     <dt class="node-img person-img">
 				   		<span>
-				    		<img src="{%=o.PIC%}" attrimg="zoom" class="mb0">
+				    		<img src="{%=o.CAPTURE_PIC%}" attrimg="zoom" class="mb0">
 				   		</span>
                     </dt>
                     <dd class="node-text picMessage">
-                        <input type="checkbox" listview-check class="checkbox-opacity hide">
-                        <p class="similar-name" picMsg="姓名:{%=o.NAME?o.NAME:'暂无'%}">
-							<span>{%=o.NAME?o.NAME:'暂无'%}</span>
-						</p>
-                        <p picMsg="性别:{%=renderSex(o.SEX)%}">
-							<label>性别：</label>
-							<span>{%=renderSex(o.SEX)%}</span>
-						</p>
-                        <p style="width:106%" picMsg="证件:{%=o.IDENTITY_ID%}">
-							<label>证件：</label>
-							<span title="证件号码：{%=o.IDENTITY_ID%}">{%=o.IDENTITY_ID%}</span>
-						</p>
-                        <p picMsg="现居住地:{%=o.PRESENT_ADDRESS%}">
-							<label>现居住地：</label>
-							<span title="{%=o.PRESENT_ADDRESS%}">{%=o.PRESENT_ADDRESS%}</span>
-						</p>
+						<input type="checkbox" listview-check="" class="checkbox-opacity hide">
+						<p picMsg="时间:{%=renderNullToNotKnow(o.CAPTURE_TIME)%}"><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.CAPTURE_TIME)%}">{%=renderNullToNotKnow(o.CAPTURE_TIME)%}</span></p>
+						<p picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
                         <div class="btn-group fr" fileId='{%=o.FILE_ID%}'>
-							<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
+							<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
 								<i class="btn-icon verification-icon"></i>
 							</a>
-							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
+							<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
 								<i class="btn-icon trajectory-icon"></i>
 							</a>
-							<a class="btn-i-t btn-xs editBtn" title="编辑">
+							<a class="btn-i-t btn-xs editBtn hide" title="编辑">
 								<i class="btn-icon edit-icon"></i>
 							</a>
 							<a class="btn-i-t btn-xs deleteBtn" title="删除">
@@ -213,10 +200,10 @@
 					   			<p picMsg="时间:{%=renderNullToNotKnow(o.CAPTURE_TIME)%}"><label>时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(o.CAPTURE_TIME)%}">{%=renderNullToNotKnow(o.CAPTURE_TIME)%}</span></p>
 					   			<p picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}"><label>设备名称：</label><span title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</span></p>
 								<div class="btn-group fr" fileId='{%=o.FILE_ID%}'>
-									<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
+									<a class="btn-i-t btn-xs verification-search logBuriedPoint" title="身份核查" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling133" buriedPointValue=".log_liling133">
 										<i class="btn-icon verification-icon"></i>
 									</a>
-									<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
+									<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.CAPTURE_PIC%}" buriedPointID="log_liling134" buriedPointValue=".log_liling134">
 										<i class="btn-icon trajectory-icon"></i>
 									</a>
 									<a class="btn-i-t btn-xs editBtn hide" title="编辑">

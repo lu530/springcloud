@@ -216,52 +216,52 @@
 								</div>
 							</div>
 							<div class='item-con'>
-							<script id="faceControlListTmpl" type="text/x-tmpl">
-								<div class="list-node-wrap pr" db_id="{%=o.DB_ID%}" person-id="{%=o.PERSON_ID%}">
-			                        <dl class="list-node">
-			                            <dt class="node-img person-img">
-					                        <span>
-					                            <img src="{%=o.PIC%}" attrimg="zoom" class="mb0 drag-img-xy">
-					                        </span>
-											{% if(o.SCORE){ %}
-											<b class="similar" key="similar">{%=o.SCORE%}%</b>
-											{% } %}
-			                            </dt>
-			                            <dd class="node-text picMessage">
-			                                <input type="checkbox" listview-check class="checkbox-opacity hide"/>
-			                                <p class="node-title similar-name {%= isPrivate?'hide':''%}" picMsg="姓名:{%=o.NAME?o.NAME:'暂无'%}">
-			                                    <label>姓名：</label>
-			                                    <span class="orange" title="{%=(o.NAME&&!isPrivate)?o.NAME:'暂无'%}">{%=(o.NAME&&!isPrivate)?o.NAME:'暂无'%}</span>
-			                                </p>
-			                                <p class="w100 fl {%= isPrivate?'hide':'hide'%}" picMsg="性别:{%=o.SEX == 1 ? '男' :o.SEX== 2 ? '女' :'未知'%}">
-			                                    <label>性别：</label>
-			                                    <span>{%=o.SEX == 1 ? '男' :o.SEX== 2 ? '女' :"未知"%}</span>
-			                                </p>
-			                                <p class="{%= isPrivate?'hide':'text-overflow'%}" style="width:100%;" picMsg="证件号:{%= isPrivate?'--':o.IDENTITY_ID%}">
-			                                    <label>证件号：</label>
-			                                    <span title="证件号码：{%= isPrivate?'--':o.IDENTITY_ID%}">{%= isPrivate?'--':o.IDENTITY_ID%}</span>
-			                                </p>
-			                                <p class="{%= isPrivate?'hide':'hide'%}" style="width:108%;" picMsg="脱敏ID：{%= o.PERSON_ID%}">
-			                                    <label>脱敏ID：</label>
-			                                    <span title="脱敏ID：{%= o.PERSON_ID%}">{%= o.PERSON_ID%}</span>
-			                                </p>
-			                                <p class="text-overflow" style="width:100%;" picMsg="布控时间:{%=o.CREATE_TIME.substring(0,19)%}">
-			                                    <label>布控时间：</label>
-			                                    <span title="布控时间：{%=o.CREATE_TIME.substring(0,19)%}">{%=o.CREATE_TIME.substring(0,19)%}</span>
-			                                </p>
-			                                <p class="w100 fl" picMsg="布控人:{%=o.CREATOR%}">
-			                                    <label pictitle="">布控人：</label>
-			                                    <span picVal="{%=o.CREATOR%}">{%=o.CREATOR%}</span>
-			                                </p>
-			                                <p class="w100 fl"><label>布控单位：</label><span>{%=o.DEPT_NAME%}</span></p>
-			                                <p class="w100 fl text-overflow"><label>布控库：</label><span>{%=o.DB_NAME%}</span></p>
-			                                <div class="btn-group fr">
-			                                    <a class="btn-i-t btn-xs nb searchImgBtn" fileUrl='{%=o.PIC%}'>搜索</a>
-			                                    <a class="btn-i-t btn-xs nb detailBtn" PERSON_ID="{%= o.PERSON_ID %}">详情</a>
-			                                </div>
-			                            </dd>
-			                        </dl>
-			                    </div>
+								<script id="faceControlListTmpl" type="text/x-tmpl">
+									<div class="list-node-wrap pr" db_id="{%=o.DB_ID%}" person-id="{%=o.PERSON_ID%}">
+										<dl class="list-node">
+											<dt class="node-img person-img">
+												<span>
+													<img src="{%=o.PIC%}" attrimg="zoom" class="mb0 drag-img-xy">
+												</span>
+												{% if(o.SCORE){ %}
+												<b class="similar" key="similar">{%=o.SCORE%}%</b>
+												{% } %}
+											</dt>
+											<dd class="node-text picMessage">
+												<input type="checkbox" listview-check class="checkbox-opacity hide"/>
+												<p class="node-title similar-name {%= isPrivate?'hide':''%}" picMsg="姓名:{%=o.NAME?o.NAME:'暂无'%}">
+													<label>姓名：</label>
+													<span class="orange" title="{%=(o.NAME&&!isPrivate)?o.NAME:'暂无'%}">{%=(o.NAME&&!isPrivate)?o.NAME:'暂无'%}</span>
+												</p>
+												<p class="w100 fl {%= isPrivate?'hide':'hide'%}" picMsg="性别:{%=o.SEX == 1 ? '男' :o.SEX== 2 ? '女' :'未知'%}">
+													<label>性别：</label>
+													<span>{%=o.SEX == 1 ? '男' :o.SEX== 2 ? '女' :"未知"%}</span>
+												</p>
+												<p class="{%= isPrivate?'hide':'text-overflow'%}" style="width:100%;" picMsg="证件号:{%= isPrivate?'--':o.IDENTITY_ID%}">
+													<label>证件号：</label>
+													<span title="证件号码：{%= isPrivate?'--':o.IDENTITY_ID%}">{%= isPrivate?'--':o.IDENTITY_ID%}</span>
+												</p>
+												<p class="{%= isPrivate?'hide':'hide'%}" style="width:108%;" picMsg="脱敏ID：{%= o.PERSON_ID%}">
+													<label>脱敏ID：</label>
+													<span title="脱敏ID：{%= o.PERSON_ID%}">{%= o.PERSON_ID%}</span>
+												</p>
+												<p class="text-overflow" style="width:100%;" picMsg="布控时间:{%=o.CREATE_TIME.substring(0,19)%}">
+													<label>布控时间：</label>
+													<span title="布控时间：{%=o.CREATE_TIME.substring(0,19)%}">{%=o.CREATE_TIME.substring(0,19)%}</span>
+												</p>
+												<p class="w100 fl" picMsg="布控人:{%=o.CREATOR%}">
+													<label pictitle="">布控人：</label>
+													<span picVal="{%=o.CREATOR%}">{%=o.CREATOR%}</span>
+												</p>
+												<p class="w100 fl"><label>布控单位：</label><span>{%=o.DEPT_NAME%}</span></p>
+												<p class="w100 fl text-overflow"><label>布控库：</label><span>{%=o.DB_NAME%}</span></p>
+												<div class="btn-group fr">
+													<a class="btn-i-t btn-xs nb searchImgBtn" fileUrl='{%=o.PIC%}'>搜索</a>
+													<a class="btn-i-t btn-xs nb detailBtn" PERSON_ID="{%= o.PERSON_ID %}">详情</a>
+												</div>
+											</dd>
+										</dl>
+									</div>
 								</script>
 							</div>
 						</div>

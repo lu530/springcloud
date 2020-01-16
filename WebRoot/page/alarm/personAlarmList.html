@@ -699,7 +699,7 @@
                                         {%  }  %}
 
                                         {%  if(o.CONFIRM_STATUS && top.projectID != "shunde5000"){  %}
-                                        <p picMsg="确认状态:{%=o.CONFIRM_STATUS%}"><label>确认状态：</label><span title="确认状态：{%=o.CONFIRM_STATUS%}">{%=o.CONFIRM_STATUS%}</span></p>
+                                        <p class="hide" picMsg="确认状态:{%=o.CONFIRM_STATUS%}"><label>确认状态：</label><span title="确认状态：{%=o.CONFIRM_STATUS%}">{%=o.CONFIRM_STATUS%}</span></p>
                                         {%  }  %}
 
 
@@ -707,7 +707,7 @@
 
                                         <p picMsg="抓拍时间:{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%} <span deviceid='{%=o.DEVICE_ID%}' attr-time='{%=o.CAPTURE_TIME%}' class='icon icon-camera5 fr historyVideo' title='查看视频' style='color:#777;font-size:20px;'></span>"><label>抓拍时间：</label><span title="抓拍时间：{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}">{%=renderNullToNotKnow(dateRender(o.CAPTURE_TIME,19))%}</span></p>
                                         {% if(top.projectID != "shunde5000") { %}
-                                        <p picMsg="质量分数:{%=renderNullToNotKnow(o.FACE_SCORE)%}"><label>质量分数：</label><span title="质量分数：{%=renderNullToNotKnow(o.FACE_SCORE)%}">{%=renderNullToNotKnow(o.FACE_SCORE)%}</span></p>
+                                        <p class="hide" picMsg="质量分数:{%=renderNullToNotKnow(o.FACE_SCORE)%}"><label>质量分数：</label><span title="质量分数：{%=renderNullToNotKnow(o.FACE_SCORE)%}">{%=renderNullToNotKnow(o.FACE_SCORE)%}</span></p>
                                         {% } %}
                                         <p class="{%= o.REPEATS == 1?"":"openRepeatAll open-repeat"%}" OBJECT_ID="{%= o.OBJECT_ID %}" picMsg="告警频次:{%= o.REPEATS%}"><label>同布控人告警频次：</label><span class="card-num" title="告警频次：{%= o.REPEATS%}"><a style="{%= o.REPEATS == 1?"":"color:#0078d7;"%}">{%= o.REPEATS%} 次</a></span></p>
 

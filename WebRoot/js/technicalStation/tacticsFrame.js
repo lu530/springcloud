@@ -13,6 +13,8 @@ var getDataType = UI.util.getUrlParam("getDataType")||"track";
 var noPic = UI.util.getUrlParam('noPic') || '';
 // 证件号码
 var zjhm = UI.util.getUrlParam('zjhm') || '';
+// wifi检索
+var entrance=UI.util.getUrlParam('entrance') || '';
 //缓存数据
 var cachedData = {};
 cachedData.beginTime = UI.util.getUrlParam("beginTime")||'';
@@ -179,6 +181,11 @@ function initLeftForm(url){
 
 	top.logSwitch && top.LogToolPackage && ( url = top.LogToolPackage.addUrlPointID(pageUrlObj[pageType], window) );
 	$("#leftMainDiv #leftFrameCon").attr("src",url);
+	if(url&&url.indexOf("?")>0) {
+		url+='&entrance='+entrance
+	}else {
+		url+='?entrance='+entrance
+	}
 }
 
 //显示同级iframe
