@@ -291,8 +291,8 @@ function initTime(){
 		WdatePicker({
 			startDate:'%H:%m:%s',
 			dateFmt:'HH:mm:ss',
-			maxDate: '#F{$dp.$D(\'enddayTime\')}',
-			minDate:'06:00:00'
+			// maxDate: '#F{$dp.$D(\'enddayTime\')}',
+			// minDate:'06:00:00'
 		});
 		
 	});
@@ -300,8 +300,8 @@ function initTime(){
 		WdatePicker({
 			startDate:'%H:%m:%s',
 			dateFmt:'HH:mm:ss',
-			minDate: '#F{$dp.$D(\'begindayTime\')}',
-			maxDate:'18:00:00',
+			// minDate: '#F{$dp.$D(\'begindayTime\')}',
+			// maxDate:'18:00:00',
 		});
 		
 	});
