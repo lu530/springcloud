@@ -17,7 +17,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
+import com.suntek.efacecloud.dao.FaceAlgorithmTypeDao;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -54,6 +56,8 @@ import com.suntek.sp.common.common.BaseCommandEnum;
 @LocalComponent(id = "face/technicalTactics")
 public class FaceTechnicalTacticsService {
 	private ViidCalltimeDao viidCalltimeDao = new ViidCalltimeDao();
+
+	private FaceAlgorithmTypeDao faceAlgorithmTypeDao = new FaceAlgorithmTypeDao();
 
 	// liangzhen 20190605
 	@BeanService(id = "IntegrationFaceSearch", description = "整合版新飞识与外籍人1:n比对", type="remote")
@@ -516,6 +520,11 @@ public class FaceTechnicalTacticsService {
 		String algoType = StringUtil.toString(map.get("ALGO_TYPES")) ;
 		String urlFrom = StringUtil.toString(map.get("URL_FROM")) ;
 		String urlTo = StringUtil.toString(map.get("URL_TO")) ;
+
+        List<Map<String, Object>> algoTypeList = faceAlgorithmTypeDao.getAlgorithTypeList();
+        Map<String, String> algoIDNameMap = algoTypeList.stream().collect(Collectors.toMap(
+                o -> StringUtil.toString(o.get("ALGORITHM_ID")), o -> StringUtil.toString(o.get("ALGORITHM_NAME"))));
+
 		List<JSONObject> resList = new ArrayList<>();
 		Map<String,Object> resMap = new HashMap<>();
 		try {
@@ -523,13 +532,17 @@ public class FaceTechnicalTacticsService {
 				Log.faceOneToOneLog.debug("开始调用本地算法>>>>>>");
 				//Map<String, Object> resMap = new HashMap<>();
 				JSONObject jsonObject = new JSONObject();
-				if("10003".equals(algo)){
+				/*if("10003".equals(algo)){
 					jsonObject.put("algorithmName","云从3.5人脸算法");
 				}else if("80003".equals(algo)){
 					jsonObject.put("algorithmName","华云算法");
 				} else if ("90003".equals(algo)) {
 					jsonObject.put("algorithmName", "海康人脸算法");
-				}
+				}*/
+				//通过 VPLUS_FACE_ALGORITHM_TYPE 找到对应算法名称
+				if (algoIDNameMap.containsKey(algo)) {
+                    jsonObject.put("algorithmName", algoIDNameMap.get(algo));
+                }
 				Map<String, Object> param = new HashMap<>();
 
 				param.put("URL_FROM",urlFrom);
