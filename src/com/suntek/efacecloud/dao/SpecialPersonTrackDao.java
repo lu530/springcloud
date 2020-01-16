@@ -193,7 +193,7 @@ public class SpecialPersonTrackDao {
         Query query = new Query(1, 1000000);
         query.addEqualCriteria("LIB_ID", libId);
         try {
-            PageQueryResult pageQueryResult = EAP.bigdata.query(Constants.PERSON_TOPIC_INDICE, Constants.PERSON_TOPIC_INFO, query);
+            PageQueryResult pageQueryResult = EAP.es.query(Constants.PERSON_TOPIC_INDICE, Constants.PERSON_TOPIC_INFO, query);
             return pageQueryResult.getResultSet();
         } catch (SearchEngineException e) {
             Log.technicalLog.error("查询专题库: " + libId + "异常 : " + e.getMessage(), e);
