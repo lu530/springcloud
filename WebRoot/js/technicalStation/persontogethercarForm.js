@@ -110,7 +110,7 @@ function initEvents(){
 					searchType:3
 			}
 			top.SAVE_LEFT_PARAM_DATA = searchParam;
-			top.SAVE_LEFT_PARAM_DATA.DEVICE_IDS = parent.searchDeviceParams.deviceIds;
+			top.SAVE_LEFT_PARAM_DATA.DEVICE_IDS = $("#faceDetect").val();
 			
 			//var cameraIds = $("#faceDetect").val();
 			parent.cachedData.deviceIds = $("#faceDetect").val();

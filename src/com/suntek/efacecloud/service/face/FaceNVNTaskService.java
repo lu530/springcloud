@@ -138,7 +138,8 @@ public class FaceNVNTaskService {
                         //特殊人群分析
                         case Constants.SPECIAL_PERSON:
                             this.specialPersonService.execute(taskMap);
-                            break;
+                            dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT);
+                            return;
                         default:
                             break;
                     }

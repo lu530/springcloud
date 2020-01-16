@@ -1,6 +1,7 @@
 package com.suntek.efacecloud.service.face.tactics;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eaplet.registry.Registry;
@@ -9,6 +10,7 @@ import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.SpecialTarckLibType;
 import com.suntek.sp.common.common.BaseCommandEnum;
+import scala.annotation.meta.param;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +24,13 @@ public class SpecialPersonService {
     /**
      * 执行任务
      *
-     * @param param
+     * @param row
      */
-    public void execute(Map<String, Object> param) {
+    public void execute(Map<String, Object> row) {
         String algoType = ConfigUtil.getAlgoType();
-        String taskId = "";
+        Map<String, Object> param = JSONObject.parseObject(StringUtil.toString(row.get("param")), Map.class);
         try {
-            taskId = StringUtil.toString(param.get("TASK_ID"));
+            String taskId = StringUtil.toString(param.get("TASK_ID"));;
             String libId = StringUtil.toString(param.get("LIB_ID"));
             int libType = Integer.parseInt(StringUtil.toString(param.get("LIB_TYPE")));
             if (libType == SpecialTarckLibType.TOPIC_ARCHIVE.getType()) {// 搜索专题库
@@ -63,7 +65,7 @@ public class SpecialPersonService {
                 }
             }
         } catch (Exception e) {
-            Log.technicalLog.debug("TASK_ID=" + taskId + ", 执行异常: " + e.getMessage() + e);
+            Log.technicalLog.error("执行异常: " + e.getMessage(), e);
         }
     }
 
