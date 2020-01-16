@@ -436,7 +436,7 @@ public class FaceNVNTaskService {
             case Constants.FOLLOW_PERSON:
                 Map<String, Object> oneCompareParam
                         = JSONObject.parseObject(StringUtil.toString(paramMap.get("ONECOMPARE_PARAM")), Map.class);
-                List<Map<String, Object>> deviceList = this.buildDeviceList(paramMap.get("DEVICE_IDS"));
+                List<Map<String, Object>> deviceList = this.buildDeviceList(oneCompareParam.get("DEVICE_IDS"));
                 oneCompareParam.put("DEVICE_IDS", deviceList);
                 paramMap.put("PIC", StringUtil.toString(oneCompareParam.get("PIC"), ""));
                 paramMap.put("beginTime", StringUtil.toString(oneCompareParam.get("beginTime"), ""));
