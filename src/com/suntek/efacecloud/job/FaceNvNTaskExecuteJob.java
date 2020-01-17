@@ -2,6 +2,7 @@ package com.suntek.efacecloud.job;
 
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.log.Log;
+import com.suntek.efacecloud.service.face.FaceNVNTaskDao;
 import com.suntek.efacecloud.service.face.FaceNVNTaskService;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
@@ -17,7 +18,11 @@ import org.quartz.JobExecutionException;
  * @version 2019年6月11日
  */
 public class FaceNvNTaskExecuteJob implements Job {
+
+    private FaceNVNTaskDao faceNVNTaskDao = new FaceNVNTaskDao();
+
     public FaceNVNTaskService service = new FaceNVNTaskService();
+
     public static volatile boolean isFinish = true;
     
     @Override
@@ -25,7 +30,7 @@ public class FaceNvNTaskExecuteJob implements Job {
         if (!ConfigUtil.getIsNvnAsync()) {
             return;
         }
-        if (isFinish) {
+        if (isFinish && !faceNVNTaskDao.isExistsGetingResultTask()) {
             Log.nvnTaskLog.debug("------------------>执行nvn定时器开始");
             isFinish = false;
             RequestContext ctx = new RequestContext(null);

@@ -47,6 +47,16 @@ public class FaceNVNTaskDao {
         return jdbc.update(sql, status, dateTime, id);
     }
 
+    /**
+     * 是否有正在获取结果的任务
+     * @return
+     */
+    public boolean isExistsGetingResultTask() {
+        String sql = "SELECT COUNT(1) FROM EFACE_NVN_TASK_INFO WHERE TASK_STATUS = 4";
+        Integer getingResultNum = jdbc.queryForObject(sql, Integer.class);
+        return getingResultNum > 0;
+    }
+
     public int updateTaskUpdateTime(String id) {
         String dateTime = DateUtil.getDateTime();
         String sql = "update EFACE_NVN_TASK_INFO set UPDATE_TIME = ? where ID = ?";
