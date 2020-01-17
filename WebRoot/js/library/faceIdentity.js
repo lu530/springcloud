@@ -41,6 +41,7 @@ $(function(){
 	UI.control.init();
 	compatibleIndexOf();
 	initEvent();
+	getDeviceModule();  //定义在common中
 	initDateTimeControl(timeOptionDraw);
 	initDbTree(addressOption);
 	initWaterMark();
@@ -76,7 +77,7 @@ function initEvent(){
 			orgCode:$("#deviceNames").attr("orgcode")
 		});
 		
-		UI.util.showCommonWindow('/connectplus/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceList.html?deviceType=194', '感知设备', 1000, 600,function(resp){
 			$('#deviceNames').html(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);
@@ -120,7 +121,7 @@ function initEvent(){
 	
 	//点击进入卡口选择地图
 	$('#locate').click(function(){
-		UI.util.showCommonWindow('/connectplus/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600,function(resp){
+		UI.util.showCommonWindow(deviceModule + '/page/device/deviceMap.html?deviceType=194', '感知设备', 1000, 600,function(resp){
 			$('#deviceNames').html(resp.deviceName);
 			$('#deviceNames').attr('title',resp.deviceName);
 			$('#deviceNames').attr('orgcode',resp.orgCode);

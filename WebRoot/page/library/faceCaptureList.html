@@ -33,7 +33,8 @@
                             <li class="re-upload"><i class="icon-image2"></i> <input class="file-style searchImgButton"
                                     type="file" id="picBtn" name="picBtn" issearch=true /></li>
                             <li class="del-pic" id="deleteImgBtn"><i class="icon-trash"></i></li>
-                            <li class="edit-pic" id="editImgBtn"><i class="icon-pencil3"></i></li>
+
+                            <li class="edit-pic hide" id="editImgBtn"><i class="icon-pencil3"></i></li>
                         </ul>
                     </div>
                     <!--<ul class="bottom-pic-bar hide" id="thresholdValidate">
@@ -180,7 +181,7 @@
                     </script>
                     </dl>
                     <!-- 排序 -->
-                    <dl class="filter-bar">
+                    <dl class="filter-bar" dom-permission="DEFENCE_faceCaptureList_order">
                         <dt class="filter-arrt">排序：</dt>
                         <dd class="filter-tag pt5">
                             <div class="tagslist" id="sortList">
@@ -231,7 +232,7 @@
                     </a> -->
                     <a class="btn btn-i-t" id="frequentBtn">
                         <span class="btn-icon import-icon"></span>
-                        <span>频繁出现</span>
+                        <span>频次分析</span>
                     </a>
                     <script id="frequentTemplate" type="text/x-tmpl">
                     {% if(UI.control.hasPermission('EFACE_frequentAccess')) { %}
@@ -297,7 +298,7 @@
                         <div class="list-node-wrap">
                         <dl class="list-node picMessage">
                             <!-- 图片区域 -->
-                            <dt class="node-img compare-img" attrimg="doublezoom">
+                            <dt class="node-img compare-img logBuriedPoint" buriedPointID="log_liling27" buriedPointValue="点击的抓拍图=={%= o.OBJ_PIC %}&&原图=={%= o.PIC %}" attrimg="doublezoom">
                                 <span class="compare-large">
                                     <img src="{%=o.PIC%}" zoom-url="{%=o.PIC%}" style="width:100%">
                                     <em>原图</em>
@@ -326,7 +327,7 @@
                                     {% } %}
                                     <span title="抓拍时间：{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</span>
                                 </p>
-                                <p>
+                                <p class="hide">
                                     <label picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}">入库时间：</label>
                                     <span title="入库时间：{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</span>
                                 </p>
@@ -344,9 +345,9 @@
                                 </p>
                                 <p class='{%= projectDisplay("faceCaptureList-algo-type") %}'>
                                     <label picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
-                                    <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</span>
+                                    <span title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME : '未知'%}</span>
                                 </p>
-                                <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                <p class='{%= projectDisplay("faceCaptureList-quality-score") %} hide'>
                                     <label picMsg="质量分数:{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}">质量分数：</label>
                                     <span title="{%=o.FACE_SCORE ? o.FACE_SCORE:'未知'%}">{%=o.FACE_SCORE ? o.FACE_SCORE : '未知'%}</span>
                                 </p>
@@ -379,7 +380,7 @@
                                 {% if(!UI.isForeigners) { %}
                                 <div class="btn-group fr" >
                                     {% if(UI.control.hasPermission('EFACE_faceVerificationArchive')) { %}
-                                    <a class="btn-i-t btn-xs verification-search" title="身份核查" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}">
+                                    <a class="btn-i-t btn-xs verification-search logBuriedPoint" buriedPointID="log_liling28" buriedPointValue="核查的图片=={%= o.OBJ_PIC %}" title="身份核查" url="{%=o.OBJ_PIC%}" identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}">
                                         <i class="btn-icon verification-icon"></i>
                                     </a>
                                     {% } %}
@@ -387,7 +388,7 @@
 
                                     <!-- 如果有权限，显示身份核查图标 -->
                                     {% if(UI.control.hasPermission('EFACE_faceVerification')) { %}
-                                    <a class="btn-i-t btn-xs verification-search" title="身份核查"  url="{%=o.OBJ_PIC%}"  identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" >
+                                    <a class="btn-i-t btn-xs verification-search logBuriedPoint" buriedPointID="log_liling28" buriedPointValue="核查的图片=={%= o.OBJ_PIC %}" title="身份核查"  url="{%=o.OBJ_PIC%}"  identity-id="{%=o.PERSON_ID%}" device-id="{%=o.DEVICE_ID%}" capture-time="{%=o.JGSK%}" algo-id="{%=o.ALGORITHM_ID%}" face-id="{%=o.FACE_ID%}" >
                                         <i class="btn-icon verification-icon"></i>
                                     </a>
                                     {% } %}
@@ -395,10 +396,10 @@
                                     <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.OBJ_PIC%}">
                                         <i class="btn-icon trajectory-icon"></i>
                                     </a>
-                                    <a fileUrl="{%=o.OBJ_PIC%}" bigImg="{%=o.PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                    <a fileUrl="{%=o.OBJ_PIC%}" bigImg="{%=o.PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="图片检索">
                                         <i class="btn-icon search-icon"></i>
                                     </a>
-                                    <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">
+                                    <a class="btn-i-t btn-xs collectionBtn logBuriedPoint" buriedPointID="log_liling31" buriedPointValue="收藏的图片=={%= o.OBJ_PIC %}" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏">
                                         <i class="btn-icon collection-icon"></i>
                                     </a>
                                     <a fileUrl="{%=o.OBJ_PIC%}" 
@@ -406,7 +407,9 @@
                                         LONGITUDE="{%= o.LONGITUDE %}"
                                         attr-time="{%=renderNullToNotKnow(o.JGSK)%}"
                                         attr-addr="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}"
-                                        class="btn-i-t btn-xs locationBtn location-btn"
+                                        class="btn-i-t btn-xs locationBtn location-btn logBuriedPoint"
+                                        buriedPointID="log_liling32"
+                                        buriedPointValue="定位的抓拍图=={%= o.OBJ_PIC %}"
                                         ref="/efacecloud/page/library/selectMapAddr.html" title="定位">
                                         <i class="btn-icon location-icon"></i>
                                     </a>
@@ -416,7 +419,7 @@
                                     
                                     <!-- 如果有权限，显示结构化搜索图标 -->
                                     {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
-                                        <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o.PIC%}" title="结构化检索">
+                                        <a class="btn-i-t btn-xs turnStructuredSearch hide" imgSrc="{%=o.PIC%}" title="结构化检索">
                                             <i class="btn-icon structured-icon"></i>
                                         </a>
                                     {% } %}
@@ -439,18 +442,18 @@
                             <tr>
                                 <th class="tc" style="width: 30px;"></th>
                                 <th class="tc clearfix" style="width: 140px;">
-                                    <span class="pic-text fl tc ">原图</span>
+                                    <span class="pic-text fl tc">原图</span>
                                     <span class="obj-text fr tc">抓拍图</span>
                                 </th>
                                 <th class="tc hide" style="width: 50px;"></th>
                                 <th class="w10 tc"><span>地点</span></th>
                                 <th class="w10 tc"><span>抓拍时间</span></th>
-                                <th class="w10 tc"><span>入库时间</span></th>
+                                <th class="w10 tc hide"><span>入库时间</span></th>
                                 <th class="w10 tc"><span>设备名称</span></th>
                                 <th class="w10 tc"><span>行政区域</span></th>
                                 <th class="w10 tc" dom-permission="faceCaptureList-register"><span>注册状态</span></th>
                                 <th class="w10 tc" dom-permission="faceCaptureList-algo-type"><span>算法类型</span></th>
-                                <th class="w10 tc" dom-permission="faceCaptureList-quality-score"><span>质量分数</span></th>
+                                <th class="w10 tc hide" dom-permission="faceCaptureList-quality-score"><span>质量分数</span></th>
                                 <th class="tc" style="width: 350px;"><span>操作</span></th>
                             </tr>
                         </thead>
@@ -474,12 +477,12 @@
                                     </td>  -->
                                     <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o.DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o.DEVICE_ADDR)%}">{%=renderNullToNotKnow(o.DEVICE_ADDR)%}</td>
                                     <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
-                                    <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                    <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
                                     <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o.DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o.DEVICE_NAME)%}">{%=renderNullToNotKnow(o.DEVICE_NAME)%}</td>
                                     <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o.ORG_NAME)%}" title="{%=renderNullToNotKnow(o.ORG_NAME)%}">{%=renderNullToNotKnow(o.ORG_NAME)%}</td>
                                     <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o.RLTZ == '' ? '失败' : '成功'%}</td>
                                     <td class="tc {%= projectDisplay('faceCaptureList-algo-type') %}" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}</td>
-                                    <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}</td>
+                                    <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %} hide" picMsg="质量分数:{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}" title="{%= o.FACE_SCORE %}">{%= o.FACE_SCORE ? o.FACE_SCORE : '未知' %}</td>
                                     {% if(o.ACTIVITY_NAME) { %}
                                     <p class="hide">
                                         <label picMsg="活动名称:{%=o.ACTIVITY_NAME%}"></label>
@@ -521,7 +524,7 @@
                                             </li>
                                             {% } %}
                                             <li class="trajectory-search"  url="{%=o.OBJ_PIC%}" title="轨迹分析"><b><i class="btn-icon trajectory-icon"></i></b></li>
-                                            <li class="searchBtn search-btn search-list" fileUrl="{%=o.OBJ_PIC%}" bigImg="{%= o.PIC %}" title="搜索"><b><i class="btn-icon search-icon"></i></b></li>
+                                            <li class="searchBtn search-btn search-list" fileUrl="{%=o.OBJ_PIC%}" bigImg="{%= o.PIC %}" title="图片检索"><b><i class="btn-icon search-icon"></i></b></li>
                                             <li class="collectionBtn collection" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o.DEVICE_ID%}&deviceName={%=o.DEVICE_NAME%}&infoId={%=o.INFO_ID%}&pic={%=o.PIC%}&objPci={%=o.OBJ_PIC%}&jgsj={%=o.JGSK%}" title="收藏"><b><i class="btn-icon collection-icon"></i></b></li>
                                             <li class="locationBtn location-li" fileUrl="{%=o.OBJ_PIC%}" 
                                                 LATITUDE="{%= o.LATITUDE %}"
@@ -531,7 +534,7 @@
                                                 ref="/efacecloud/page/library/selectMapAddr.html" title="定位"><b><i class="btn-icon location-icon"></i></b>
                                             </li>
                                             {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}                                            
-                                            <li class="turnStructuredSearch structured-search" imgSrc="{%=o.PIC%}" title="结构化检索">
+                                            <li class="turnStructuredSearch structured-search hide" imgSrc="{%=o.PIC%}" title="结构化检索">
                                                 <b><i class="btn-icon structured-icon"></i></b>
                                             </li>
                                             {% } %}
@@ -584,7 +587,7 @@
                                         <label picMsg="时间:{%=renderNullToNotKnow(o[i].JGSK)%}">抓拍时间：</label>
                                         <span title="抓拍时间：{%=renderNullToNotKnow(o[i].JGSK)%}">{%=renderNullToNotKnow(o[i].JGSK)%}</span>
                                     </p>
-                                    <p>
+                                    <p class="hide">
                                         <label picMsg="入库时间:{%=renderNullToNotKnow(o[i].CREATETIME)%}">入库时间：</label>
                                         <span title="入库时间：{%=renderNullToNotKnow(o[i].CREATETIME)%}">{%=renderNullToNotKnow(o[i].CREATETIME)%}</span>
                                     </p>
@@ -604,7 +607,7 @@
                                         <label picMsg="算法类型:{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                         <span title="{%=o[i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</span>
                                     </p>
-                                    <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                    <p class='{%= projectDisplay("faceCaptureList-quality-score") %} hide'>
                                         <label picMsg="质量分数:{%=o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">质量分数：</label>
                                         <span title="{%= o[i].FACE_SCORE %}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</span>
                                     </p>
@@ -642,7 +645,7 @@
                                         <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[i].OBJ_PIC%}">
                                             <i class="btn-icon trajectory-icon"></i>
                                         </a>
-                                        <a fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%=o[i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                        <a fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%=o[i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="图片检索">
                                             <i class="btn-icon search-icon"></i>
                                         </a>
                                         <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[i].DEVICE_ID%}&deviceName={%=o[i].DEVICE_NAME%}&infoId={%=o[i].INFO_ID%}&pic={%=o[i].PIC%}&objPci={%=o[i].OBJ_PIC%}&jgsj={%=o[i].JGSK%}" title="收藏">
@@ -658,7 +661,7 @@
                                             <i class="btn-icon location-icon"></i> 
                                         </a>
                                         {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
-                                        <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[i].PIC%}" title="结构化检索">
+                                        <a class="btn-i-t btn-xs turnStructuredSearch hide" imgSrc="{%=o[i].PIC%}" title="结构化检索">
                                             <i class="btn-icon structured-icon"></i>
                                         </a>
                                         {% } %}
@@ -685,12 +688,12 @@
                                     <th class="tc hide" style="width: 50px;"></th>
                                     <th class="w10 tc"><span>地点</span></th>      
                                     <th class="w10 tc"><span>抓拍时间</span></th> 
-                                    <th class="w10 tc"><span>入库时间</span></th> 
+                                    <th class="w10 tc hide"><span>入库时间</span></th> 
                                     <th class="w10 tc"><span>设备名称</span></th>      
                                     <th class="w10 tc"><span>行政区域</span></th> 
                                     <th class="w10 tc"><span>注册状态</span></th>      
                                     <th class="w10 tc"><span>算法类型</span></th> 
-                                    <th class="w10 tc"><span>质量分数</span></th>
+                                    <th class="w10 tc hide"><span>质量分数</span></th>
                                     <th class="tc" style="width: 422px;"><span>操作</span></th> 
                                 </tr>
                             </thead>
@@ -713,12 +716,12 @@
                                         </td>  -->
                                         <td class="tc" picMsg="地点:{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}">{%=renderNullToNotKnow(o[i].DEVICE_ADDR)%}</td>
                                         <td class="tc" picMsg="抓拍时间:{%=renderNullToNotKnow(o.JGSK)%}" title="{%=renderNullToNotKnow(o.JGSK)%}">{%=renderNullToNotKnow(o.JGSK)%}</td>
-                                        <td class="tc" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
+                                        <td class="tc hide" picMsg="入库时间:{%=renderNullToNotKnow(o.CREATETIME)%}" title="{%=renderNullToNotKnow(o.CREATETIME)%}">{%=renderNullToNotKnow(o.CREATETIME)%}</td>
                                         <td class="tc" picMsg="设备名称:{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}" title="{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}">{%=renderNullToNotKnow(o[i].DEVICE_NAME)%}</td>
                                         <td class="tc" picMsg="行政区域:{%=renderNullToNotKnow(o[i].ORG_NAME)%}" title="{%=renderNullToNotKnow(o[i].ORG_NAME)%}">{%=renderNullToNotKnow(o[i].ORG_NAME)%}</td>
                                         <td class="tc {%= projectDisplay('faceCaptureList-register') %}" picMsg="注册状态:{%=o.RLTZ == '' ? '失败' : '成功'%}" title="{%=o.RLTZ == '' ? '失败' : '成功'%}">{%=o[i].RLTZ == '' ? '失败' : '成功'%}</td>
                                         <td class="tc {%= projectDisplay('faceCaptureList-algo-type') %}" picMsg="算法类型:{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}" title="{%=o.ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[i].ALGORITHM_NAME?o[i].ALGORITHM_NAME:'未知'%}</td>
-                                        <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %}" picMsg="质量分数:{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</td>
+                                        <td class="tc {%= projectDisplay('faceCaptureList-quality-score') %} hide" picMsg="质量分数:{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}">{%= o[i].FACE_SCORE ? o[i].FACE_SCORE : '未知'%}</td>
 
                                         {% if(o[i].ACTIVITY_NAME) { %}
                                         <p class="hide">
@@ -753,7 +756,7 @@
                                             <ul class="btn-group-icons list-inline">
                                                 <li class="verification-search" url="{%=o[i].OBJ_PIC%}" identity-id="{%=o[i].PERSON_ID%}" device-id="{%=o[i].DEVICE_ID%}" capture-time="{%=o[i].JGSK%}" algo-id="{%=o[i].ALGORITHM_ID%}" face-id="{%=o[i].FACE_ID%}"><b><i class="btn-icon verification-icon"></i>身份核查</b></li>
                                                 <li class="trajectory-search"  url="{%=o[i].OBJ_PIC%}"><b><i class="btn-icon trajectory-icon"></i>轨迹分析</b></li>
-                                                <li class="searchBtn search-btn search-list" fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%= o[i].PIC %}"><b><i class="btn-icon search-icon"></i>搜索</b></li>
+                                                <li class="searchBtn search-btn search-list" fileUrl="{%=o[i].OBJ_PIC%}" bigImg="{%= o[i].PIC %}"><b><i class="btn-icon search-icon"></i>图片检索</b></li>
                                                 <li class="collectionBtn collection" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[i].DEVICE_ID%}&deviceName={%=o[i].DEVICE_NAME%}&infoId={%=o[i].INFO_ID%}&pic={%=o[i].PIC%}&objPci={%=o[i].OBJ_PIC%}&jgsj={%=o[i].JGSK%}" title="收藏"><b><i class="btn-icon collection-icon"></i>收藏</b></li>
                                                 <li class="locationBtn location-li" fileUrl="{%=o[i].OBJ_PIC%}" 
                                                     LATITUDE="{%= o[i].LATITUDE %}"
@@ -763,7 +766,7 @@
                                                     ref="/efacecloud/page/library/selectMapAddr.html" title="定位"><b><i class="btn-icon location-icon"></i>定位</b>
                                                 </li>
                                                 {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
-                                                <li class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[i].PIC%}" title="结构化检索">
+                                                <li class="btn-i-t btn-xs turnStructuredSearch hide" imgSrc="{%=o[i].PIC%}" title="结构化检索">
                                                     <b><i class="btn-icon structured-icon"></i></b>
                                                 </li>
                                                 {% } %}
@@ -822,7 +825,7 @@
                                                 <label picMsg="时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">抓拍时间：</label>
                                                 <span title="抓拍时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].JGSK)%}</span>
                                             </p>
-                                            <p>
+                                            <p class="hide">
                                                 <label picMsg="入库时间:{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">入库时间：</label>
                                                 <span title="入库时间：{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}">{%=renderNullToNotKnow(o[j].sortAlgorithmObj[k][i].CREATETIME)%}</span>
                                             </p>
@@ -842,7 +845,7 @@
                                                 <label picMsg="算法类型:{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                                 <span title="{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}">{%=o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME?o[j].sortAlgorithmObj[k][i].ALGORITHM_NAME:'未知'%}</span>
                                             </p>
-                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %} hide'>
                                                 <label picMsg="质量分数:{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知' %}">质量分数：</label>
                                                 <span title="{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE %}">{%= o[j].sortAlgorithmObj[k][i].FACE_SCORE ? o[j].sortAlgorithmObj[k][i].FACE_SCORE : '未知'%}</span>
                                             </p>
@@ -882,7 +885,7 @@
                                                 <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}">
                                                     <i class="btn-icon trajectory-icon"></i>
                                                 </a>
-                                                <a fileUrl="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" bigImg="{%=o[j].sortAlgorithmObj[k][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                                <a fileUrl="{%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}" bigImg="{%=o[j].sortAlgorithmObj[k][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="图片检索">
                                                     <i class="btn-icon search-icon"></i>
                                                 </a>
                                                 <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[j].sortAlgorithmObj[k][i].DEVICE_ID%}&deviceName={%=o[j].sortAlgorithmObj[k][i].DEVICE_NAME%}&infoId={%=o[j].sortAlgorithmObj[k][i].INFO_ID%}&pic={%=o[j].sortAlgorithmObj[k][i].PIC%}&objPci={%=o[j].sortAlgorithmObj[k][i].OBJ_PIC%}&jgsj={%=o[j].sortAlgorithmObj[k][i].JGSK%}" title="收藏">
@@ -898,7 +901,7 @@
                                                     <i class="btn-icon location-icon"></i> 
                                                 </a>
                                                 {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
-                                                <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[j].sortAlgorithmObj[k][i].PIC%}" title="结构化检索">
+                                                <a class="btn-i-t btn-xs turnStructuredSearch hide" imgSrc="{%=o[j].sortAlgorithmObj[k][i].PIC%}" title="结构化检索">
                                                     <i class="btn-icon structured-icon"></i>
                                                 </a>
                                                 {% } %}
@@ -951,7 +954,7 @@
                                                 <label picMsg="时间:{%=renderNullToNotKnow(o[key][i].JGSK)%}">抓拍时间：</label>
                                                 <span title="抓拍时间：{%=renderNullToNotKnow(o[key][i].JGSK)%}">{%=renderNullToNotKnow(o[key][i].JGSK)%}</span>
                                             </p>
-                                            <p>
+                                            <p class="hide">
                                                 <label picMsg="入库时间:{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">入库时间：</label>
                                                 <span title="入库时间：{%=renderNullToNotKnow(o[key][i].CREATETIME)%}">{%=renderNullToNotKnow(o[key][i].CREATETIME)%}</span>
                                             </p>
@@ -971,7 +974,7 @@
                                                 <label picMsg="算法类型:{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">算法类型：</label>
                                                 <span title="{%=o[key][i].ALGORITHM_NAME?o.ALGORITHM_NAME:'未知'%}">{%=o[key][i].ALGORITHM_NAME?o[key][i].ALGORITHM_NAME:'未知'%}</span>
                                             </p>
-                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %}'>
+                                            <p class='{%= projectDisplay("faceCaptureList-quality-score") %} hide'>
                                                 <label picMsg="质量分数:{%=o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}">质量分数：</label>
                                                 <span title="{%= o[key][i].FACE_SCORE %}">{%= o[key][i].FACE_SCORE ? o[key][i].FACE_SCORE : '未知'%}</span>
                                             </p>
@@ -1009,7 +1012,7 @@
                                                 <a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o[key][i].OBJ_PIC%}">
                                                     <i class="btn-icon trajectory-icon"></i>
                                                 </a>
-                                                <a fileUrl="{%=o[key][i].OBJ_PIC%}" bigImg="{%=o[key][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="搜索">
+                                                <a fileUrl="{%=o[key][i].OBJ_PIC%}" bigImg="{%=o[key][i].PIC%}" class="btn-i-t btn-xs searchBtn search-btn" title="图片检索">
                                                     <i class="btn-icon search-icon"></i>
                                                 </a>
                                                 <a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?fileType=1&deviceId={%=o[key][i].DEVICE_ID%}&deviceName={%=o[key][i].DEVICE_NAME%}&infoId={%=o[key][i].INFO_ID%}&pic={%=o[key][i].PIC%}&objPci={%=o[key][i].OBJ_PIC%}&jgsj={%=o[key][i].JGSK%}" title="收藏">
@@ -1025,7 +1028,7 @@
                                                     <i class="btn-icon location-icon"></i> 
                                                 </a>
                                                 {% if(UI.control.hasPermission('DEFENCE_structuredSearch')) { %}
-                                                <a class="btn-i-t btn-xs turnStructuredSearch" imgSrc="{%=o[key][i].PIC%}" title="结构化检索">
+                                                <a class="btn-i-t btn-xs turnStructuredSearch hide" imgSrc="{%=o[key][i].PIC%}" title="结构化检索">
                                                     <i class="btn-icon structured-icon"></i>
                                                 </a>
                                                 {% } %}

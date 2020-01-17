@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
@@ -47,15 +48,21 @@ public class FaceRedListService {
     @BeanService(id = "add", description = "新增或编辑红名单库人脸")
     public void edit(RequestContext context) throws Exception {
         faceRedListDelegate.addOrEdit(context);
+        Map<String, Object> differentData = new CompareParamsService().getDifferentData(context);
+        context.putParameter("editParam", differentData.get("editParam"));
+        context.putParameter("originParam", differentData.get("originParam"));
     }
 
     @BeanService(id = "open", description = "是否开启红名单", type = "remote")
     public void open(RequestContext context) throws Exception {
-        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_LIST_OPEN, "0");//默认不开启红名单
-        if (context.getUser().isAdministrator()) { //admin不需要此操作
+        //默认不开启红名单
+        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_LIST_OPEN, "0");
+        //admin不需要此操作
+        if (context.getUser().isAdministrator()) {
             status = "0";
         }
-        String wartermarkOpen = AppHandle.getHandle(Constants.PORTAL).getProperty("WARTERMARK_OPEN", "0");//默认不开启水印
+        //默认不开启水印
+        String wartermarkOpen = AppHandle.getHandle(Constants.PORTAL).getProperty("WARTERMARK_OPEN", "0");
 
         context.getResponse().putData("STATUS", status);
         context.getResponse().putData("WARTERMARK_OPEN", wartermarkOpen);
@@ -63,8 +70,10 @@ public class FaceRedListService {
 
     @BeanService(id = "openSearchCause", description = "是否开启查询操作事由", type = "remote")
     public void openSearchCause(RequestContext context) throws Exception {
-        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.SEARCH_CAUSE_OPEN, "0");//默认不开启红名单
-        if (context.getUser().isAdministrator()) { //admin不需要此操作
+        //默认不开启红名单
+        String status = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.SEARCH_CAUSE_OPEN, "0");
+        //admin不需要此操作
+        if (context.getUser().isAdministrator()) {
             status = "0";
         }
         context.getResponse().putData("STATUS", status);
@@ -115,6 +124,16 @@ public class FaceRedListService {
         try {
             Map<String, Object> params = context.getParameters();
             String personId = StringUtil.toString(params.get("INFO_ID"));
+            List<Map<String, Object>> list = dao.getDetailById(personId);
+            list.stream().forEach(o->{
+                o.put("PIC", ModuleUtil.renderPic(ModuleUtil.renderImage(StringUtil.toString(o.get("PIC")))));
+                o.put("INFO_ID", StringUtil.toString(o.get("INFO_ID")));
+                o.put("IDENTITY_TYPE", StringUtil.toString(o.get("IDENTITY_TYPE")));
+                o.put("IDENTITY_ID", StringUtil.toString(o.get("IDENTITY_ID")));
+                o.put("PERMANENT_ADDRESS", StringUtil.toString(o.get("PERMANENT_ADDRESS")));
+                o.put("PRESENT_ADDRESS", StringUtil.toString(o.get("PRESENT_ADDRESS")));
+            });
+            context.putParameter("DATA", JSONObject.toJSONString(list));
             CollisionResult deleteFaceResult = faceRedListDelegate.deleteFace(context);
             if (deleteFaceResult == null || deleteFaceResult.getCode() != 0) {
                 context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
@@ -269,9 +288,34 @@ public class FaceRedListService {
         }
         params.put("PIC_MD5", picMd5);
         params.put("IS_INVOLVE_RED_LIST", belongRedFlag); //是否涉 红名单
+        //新增人脸布控检测红名单场景不需要新增审批任务
         dao.addRedTask(params, relatedPersons);
 
         context.getResponse().putData("TASK_ID", taskId);
+        context.getResponse().putData("BELONG_FLAG", belongRedFlag);
+
+    }
+
+    @BeanService(id = "checkRedList", description = "查询人员是否涉红名单不用审核", type = "remote")
+    public void checkRedList(RequestContext context){
+        //默认没有红名单人员
+        int belongRedFlag = 1;
+        String threshold = AppHandle.getHandle(Constants.APP_NAME).getProperty(Constants.RED_SIMILARITY, "87");
+        context.putParameter("THRESHOLD", threshold);
+        context.putParameter("TOP_N", 30);
+        String pic = StringUtil.toString(context.getParameter("PIC"));
+        CollisionResult result = this.faceRedListDelegate.faceOne2NSearch(context, pic);
+        if (result != null && result.getCode() == 0) {
+            List<Map<String, Object>> collisionList = result.getList();
+            //如果存在红名单人员
+            if (CollectionUtils.isNotEmpty(collisionList)) {
+                belongRedFlag = 0;
+            }
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_SUCCESS);
+        }else {
+            context.getResponse().putData("MESSAGE", result.getMessage());
+            context.getResponse().putData("CODE", Constants.RETURN_CODE_ERROR);
+        }
         context.getResponse().putData("BELONG_FLAG", belongRedFlag);
 
     }

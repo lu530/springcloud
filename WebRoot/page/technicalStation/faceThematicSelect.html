@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>专题库检索页面</title>
+<link rel="stylesheet" type="text/css" href="/ui/plugins/font-images/font.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/bootstrap4.0/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/efacecloud/css/technicalStation/faceThematicSelect.css"/>
+</head>
+<body class="">
+	<div class="pager-wrap" style='overflow: hidden;'>
+		<div class="pager-content">
+			<div class="page-top-box">
+				<div class="top-box">
+					<div class="filter-view">
+						<dl class="filter-bar">
+							<dt class="filter-arrt">搜索：</dt>
+							<dd class="filter-bar-search">
+								<div class="fifler-group mr5">
+									<div class="search-box upload-img" clearsearchkey="true">
+										<input class="search-input" type="text" id="searchText" placeholder="请输入库名称" maxlength="100"> 
+                                        <span class="icon-search2" id="searchBtn"></span>
+									</div>
+								</div>
+							</dd>
+						</dl>
+						<button class="btn-confirm btn" id="confirmSearch">确认检索</button>
+					</div>
+				</div>
+			</div>
+			<div class="page-info-metro full">
+			</div>
+			<div class="lib-list-container mCustomScrollbar">
+				<div class="library-info pl20">
+					<div class="faceLB">
+					<script id="faceLB" type="x-tmpl">
+                    {% for(var i = 0; i < o.length; i ++) { %}
+						<div class='face-lb-unit faceLbUnit' libID = "{%= o[i].LIB_ID %}" libName = "{%= o[i].LIB_NAME %}">
+					      	<dl>
+								<dd>
+									<p class="node-title"><span title="{%= o[i].LIB_NAME %}">{%= o[i].LIB_NAME %}</span></p>
+									<p><label>时间：</label><span title="{%= o[i].CREATE_TIME %}">{%= o[i].CREATE_TIME %}</span></p>
+									<p><label>创建人：</label><span title="{%= o[i].CREATOR %}">{%= o[i].CREATOR %}</span></p>
+									<p><label>模版数：</label><span title="{%= o[i].LIB_TOTAL %}" class="num">{%= o[i].LIB_TOTAL %}个</span></p>
+								</dd>
+							</dl>
+                        </div>
+                    {% } %}
+					</script>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="window-bottom">
+        <a class="btn btn-i-t" id="saveBtn">
+            <span>确定</span>
+        </a>
+        <a class="btn btn-i-t" id="cancelBtn">
+            <span>取消</span>
+        </a>
+    </div>
+</body>
+<script type="text/javascript" src="/ui/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/plugins/eapui/eapui.js"></script>
+<script type="text/javascript" src="/ui/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/efacecloud/js/technicalStation/faceThematicSelect.js"></script>
+</html>

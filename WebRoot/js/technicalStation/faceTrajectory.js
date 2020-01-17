@@ -124,6 +124,7 @@ function showTracks(mapData){
 		mapObj.title = i+1;
 		/*mapObj.addr = n.DEVICE_ADDR;*/
 		mapObj.url = n.OBJ_PIC;
+		mapObj.pic = n.PIC;
 		mapObj.time = n.TIME;
 		mapObj.latlng = [parseFloat(n.Y),parseFloat(n.X)];
 		mapObj.name = n.DEVICE_NAME || "";
@@ -160,7 +161,7 @@ function showTracks(mapData){
 										'<a class="btn-i-t btn-xs trajectory-search" title="轨迹分析" url="{%=o.url%}">'+
 											'<i class="btn-icon trajectory-icon"></i>'+
 										'</a>'+
-										'<a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?favoriteType=7&fileType=7&pic={%=o.url%}&jgsj={%=o.time%}" title="收藏">'+
+										'<a class="btn-i-t btn-xs collectionBtn" ref="/efacecloud/page/library/collectionFolder.html?favoriteType=7&fileType=7&objPci={%=o.url%}&pci={%=o.pic%}&deviceName={%=o.name%}&jgsj={%=o.time%}" title="收藏">'+
 											'<i class="btn-icon collection-icon"></i>'+
 										'</a>'+
 

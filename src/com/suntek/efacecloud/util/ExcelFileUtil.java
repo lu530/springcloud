@@ -1,5 +1,16 @@
 package com.suntek.efacecloud.util;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
+
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;

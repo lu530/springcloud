@@ -13,6 +13,8 @@ var getDataType = UI.util.getUrlParam("getDataType")||"track";
 var noPic = UI.util.getUrlParam('noPic') || '';
 // 证件号码
 var zjhm = UI.util.getUrlParam('zjhm') || '';
+// wifi检索
+var entrance=UI.util.getUrlParam('entrance') || '';
 //缓存数据
 var cachedData = {};
 cachedData.beginTime = UI.util.getUrlParam("beginTime")||'';
@@ -36,6 +38,8 @@ var pageUrlObj = {
 	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html?taskStatus='+taskStatus, // 昼伏夜出
 	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html?taskStatus='+taskStatus, // 深夜出入
 	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
+	'specific':matcher("/efacecloud/page/technicalStation/trackFaceSpecific.html/" + projectKey).url,//特定人群轨迹分析
+	'specificResult': matcher("/efacecloud/page/technicalStation/trackResultSpecific.html/" + projectKey).url + "?TASK_ID=" + TASK_ID,//特定人群轨迹分析结果
 }
 $(function(){
 	initEvent();
@@ -174,7 +178,14 @@ function initPage_Black(params) {
 
 //初始化左侧页面
 function initLeftForm(url){
+
+	top.logSwitch && top.LogToolPackage && ( url = top.LogToolPackage.addUrlPointID(pageUrlObj[pageType], window) );
 	$("#leftMainDiv #leftFrameCon").attr("src",url);
+	if(url&&url.indexOf("?")>0) {
+		url+='&entrance='+entrance
+	}else {
+		url+='?entrance='+entrance
+	}
 }
 
 //显示同级iframe

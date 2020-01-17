@@ -84,7 +84,7 @@ public class FaceFavoriteService
 	public void delete(RequestContext context) throws Exception
 	{
 		String favoriteId = (String)context.getParameter("FAVORITE_ID");
-		
+		context.getParameters().putAll(favoriteDao.getFavoirteById(favoriteId));
 		boolean status = favoriteDao.deleteFavoirteById(favoriteId);
 	
 		if (!status) {

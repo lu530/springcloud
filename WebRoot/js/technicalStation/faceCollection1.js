@@ -234,6 +234,7 @@ function initEvent(){
 		if($checkbox.prop("checked")){
 			$checkbox.prop("checked",false)
 			$this.removeClass("active");
+			$('#checkAll').prop('checked', false);
 			var removeIndex = checkedIndexArr.indexOf(curIndex);
 			checkedIndexArr.splice(removeIndex, 1);
 		} else {
@@ -297,9 +298,11 @@ function initEvent(){
 				UI.util.alert("请勾选导出的数据","warn");
 				return;
 			}
-			exportParams.SEARCH_IMG_URL = $('#filterImg')[0].src;
 			exportParams.EXPORT_DATA = JSON.stringify(exportData);
 		} else {
+		    //暂时取空白图，导出暂不支持多个检索图导出
+            exportParams.SEARCH_IMG_URL = $('#filterImg')[0].src;
+            exportParams.FACE_COLLECTION = "1";
 			//exportData = UI.control.getControlById('faceCollectionList').getListviewCheckData();
 			//记录选中数据
 			var checkedDataArr = [],
@@ -326,11 +329,13 @@ function initEvent(){
 			if (exportData.length > 0) {
 				exportParams.EXPORT_DATA = JSON.stringify(exportData);
 			} else {
-				exportParams.DEVICE_IDS = $("#orgCode").val();
-				exportParams.THRESHOLD = $('#threshold').val();
-				exportParams.KEYWORDS = $("#searchText").val() || "";
-				exportParams.BEGIN_TIME = $('#beginTime').val() || "";
-				exportParams.END_TIME = $('#endTime').val() || "";
+				// exportParams.DEVICE_IDS = $("#orgCode").val();
+				// exportParams.THRESHOLD = $('#threshold').val();
+				// exportParams.KEYWORDS = $("#searchText").val() || "";
+				// exportParams.BEGIN_TIME = $('#beginTime').val() || "";
+				// exportParams.END_TIME = $('#endTime').val() || "";
+				UI.util.alert("请勾选导出的数据","warn");
+				return;
 			}
 		}
 		bigDataToDownload(url,"exportFrame",exportParams);

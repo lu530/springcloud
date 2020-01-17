@@ -1,5 +1,6 @@
 package com.suntek.efacecloud.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
 import com.suntek.eap.common.util.SqlUtil;
 import com.suntek.eap.common.util.StringUtil;
@@ -125,9 +126,14 @@ public class SpecialPersonTrackDao {
 
     public List<Map<String, Object>> queryTaskDetail(String taskId) {
         // 设备名称暂时不返回
-        String sql = " SELECT TASK_TYPE, TASK_NAME, BEGIN_TIME, END_TIME, DEVICE_IDS, DEVICE_NAMES, LIB_TYPE_DESC, LIB_NAME, TOP_N, "
-                + "THRESHOLD, FACE_SCORE FROM  SPECIAL_PERSON_TRACK_TASK WHERE TASK_ID = ?";
-        return jdbc.queryForList(sql, taskId);
+        String sql = " SELECT PARAM FROM  EFACE_NVN_TASK_INFO WHERE TASK_ID = ?";
+        List<Map<String, Object>> rows = jdbc.queryForList(sql, taskId);
+        rows.forEach(row -> {
+            String param = StringUtil.toString(row.get("PARAM"));
+            Map<String, Object> map = JSONObject.parseObject(param, Map.class);
+            row.putAll(map);
+        });
+        return rows;
     }
 
     public Map<String, Object> queryTaskException(String taskId) {
@@ -166,10 +172,17 @@ public class SpecialPersonTrackDao {
 
     // 查询任务关联档案 + 任务信息
     public List<Map<String, Object>> queryResult(String taskId) {
-        String sql = "SELECT t.BEGIN_TIME, t.END_TIME, t.TOP_N, t.THRESHOLD, t.DEVICE_IDS, r.PERSON_ID, r.IDENTITY_ID, " +
-                " r.NAME, r.PERMANENT_ADDRESS, r.SEX, r.PERSON_TAG, r.PIC,r.COUNT FROM SPECIAL_PERSON_TRACK_TASK t " +
+        //t.BEGIN_TIME, t.END_TIME, t.TOP_N, t.THRESHOLD, t.DEVICE_IDS,
+        String sql = "SELECT t.PARAM , r.PERSON_ID, r.IDENTITY_ID, " +
+                " r.NAME, r.PERMANENT_ADDRESS, r.SEX, r.PERSON_TAG, r.PIC,r.COUNT FROM EFACE_NVN_TASK_INFO t " +
                 " INNER JOIN SPECIAL_PERSON_TRACK_RESULT r ON t.TASK_ID = r.tASK_ID WHERE t.TASK_ID = ?";
-        return jdbc.queryForList(sql, taskId);
+        List<Map<String, Object>> rows = jdbc.queryForList(sql, taskId);
+        rows.forEach(row -> {
+            String param = StringUtil.toString(row.get("PARAM"));
+            Map<String, Object> map = JSONObject.parseObject(param, Map.class);
+            row.putAll(map);
+        });
+        return rows;
     }
 
     // 人流量总数
@@ -193,7 +206,7 @@ public class SpecialPersonTrackDao {
         Query query = new Query(1, 1000000);
         query.addEqualCriteria("LIB_ID", libId);
         try {
-            PageQueryResult pageQueryResult = EAP.bigdata.query(Constants.PERSON_TOPIC_INDICE, Constants.PERSON_TOPIC_INFO, query);
+            PageQueryResult pageQueryResult = EAP.es.query(Constants.PERSON_TOPIC_INDICE, Constants.PERSON_TOPIC_INFO, query);
             return pageQueryResult.getResultSet();
         } catch (SearchEngineException e) {
             Log.technicalLog.error("查询专题库: " + libId + "异常 : " + e.getMessage(), e);

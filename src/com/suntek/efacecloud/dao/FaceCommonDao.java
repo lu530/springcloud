@@ -229,5 +229,14 @@ public class FaceCommonDao {
 	    }
         return jdbc.queryForList(sql, list.toArray());
     }
-	
+
+	/**
+	*
+	* 获取pgs引擎节点数据
+	*
+	* */
+	public List<String> getEngineIds() {
+		String sql = "select ENGINE_ID from VPLUS_FACE_CAPTURE_TASK_DEV group by ENGINE_ID";
+		return jdbc.queryForList(sql, String.class);
+	}
 }

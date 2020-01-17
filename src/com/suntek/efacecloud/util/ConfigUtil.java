@@ -5,10 +5,10 @@ import com.suntek.eap.core.app.AppHandle;
 
 /**
  * 应用基础配置类
- *
- * @author lx
+ * 
  * @version 2017-06-27
  * @since 1.0
+ * @author lx
  */
 public class ConfigUtil {
     /**
@@ -83,7 +83,7 @@ public class ConfigUtil {
 
     /**
      * 获取图片url前缀
-     *
+     * 
      * @return
      */
     public static String getUrlPreffix() {
@@ -97,7 +97,7 @@ public class ConfigUtil {
 
     /**
      * 获取图片utl前缀,根据console配置的存储类型获取
-     *
+     * 
      * @return
      */
     public static String getImgUrlPreffix() {
@@ -132,7 +132,7 @@ public class ConfigUtil {
 
     /**
      * 获取索引开始时间
-     *
+     * 
      * @return yyMM
      */
     public static String getIndexBeginTime() {
@@ -142,7 +142,7 @@ public class ConfigUtil {
 
     /**
      * 是否开启短信功能 0禁用 1启用
-     *
+     * 
      * @return
      */
     public static String getEnableSendSms() {
@@ -152,18 +152,18 @@ public class ConfigUtil {
 
     /**
      * 获取红名单审批短信推送号码
-     *
+     * 
      * @return
      */
     public static String getRedApprovalSendPhone() {
         String redApprovalSendPhone
-                = AppHandle.getHandle(Constants.APP_NAME).getProperty("RED_APPROVAL_SEND_PHONE", "");
+            = AppHandle.getHandle(Constants.APP_NAME).getProperty("RED_APPROVAL_SEND_PHONE", "");
         return redApprovalSendPhone;
     }
 
     /**
      * 1:N
-     *
+     * 
      * @return
      */
     public static String getOne2NConfig() {
@@ -173,7 +173,7 @@ public class ConfigUtil {
 
     /**
      * N:N
-     *
+     * 
      * @return
      */
     public static String getN2NConfig() {
@@ -197,10 +197,8 @@ public class ConfigUtil {
     public static boolean isBlack() {
         return Constants.IS_BLACK.equals(AppHandle.getHandle(Constants.DATA_DEFENCE).getProperty("IS_BLACK", "0"));
     }
-
     /**
      * 获取红名单库
-     *
      * @return
      */
     public static String getRedListDbId() {
@@ -218,5 +216,13 @@ public class ConfigUtil {
      */
     public static String getVendor() {
         return AppHandle.getHandle(Constants.OPENGW).getProperty("EAPLET_VENDOR", "Suntek");
+    }
+
+
+    /**
+     * 是否导入导出文件上传dfs
+     */
+    public static boolean isFileSave() {
+        return Constants.IS_FILE_SAVE.equals(AppHandle.getHandle(Constants.CONSOLE).getProperty("IS_FILE_SAVE", "0"));
     }
 }

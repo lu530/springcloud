@@ -3192,3 +3192,30 @@ function getCaseInfo (IDENTITY_ID) {
 
 //	===============@end 打标签功能重做=================
 
+var deviceModule = '/portal';  // 感知设备默认加载portal模块的
+function getDeviceModule() {
+	$.ajax({
+		url: '/portal/page/device/deviceList.html',
+		async: false,
+		success: function(data){
+			deviceModule = '/portal'
+		},
+		error: function(error) {
+			deviceModule = '/connectplus'
+		}
+	})
+}
+
+//展示时间格式
+function showTime(time,type){
+    var timeArr = time.split(' ');
+
+    if(timeArr.length>1){
+        if(type == 'date'){
+            return timeArr[0];
+        }else{
+            return timeArr[1];
+        }
+    }
+
+}

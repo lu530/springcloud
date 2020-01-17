@@ -35,6 +35,8 @@ public class FaceCaptureProvider {
 
 	private FaceCommonDao commonDao = new FaceCommonDao();
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
+	//1表示为人技战法-人脸集合的导出
+	private final static String FACE_COLLECTION = "1";
 	
 	@QueryService(id = "query", description = "人脸抓拍数据查询", since = "2.0", type = "remote", paasService = "true")
 	public Map<String, Object> query(RequestContext context) throws Exception {
@@ -212,7 +214,7 @@ public class FaceCaptureProvider {
 //				}
 
                 //一次性查询获得infoId为key的数据集
-                Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
+                //Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
 
 				for (Map<String, Object> info : infoList) {
 					String createTime = StringUtil.toString(info
@@ -224,10 +226,10 @@ public class FaceCaptureProvider {
 					}
 					info.put("CREATETIME", createTime);
 
-					String infoId = StringUtil.toString(info.get("INFO_ID"));
+					/*String infoId = StringUtil.toString(info.get("INFO_ID"));
 					if (actMap.containsKey(infoId)) {
                         info.putAll(actMap.get(infoId));
-                    }
+                    }*/
 					//是否添加来源类型
 //					if(isAdd) {
 //						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
@@ -273,6 +275,8 @@ public class FaceCaptureProvider {
 				.getParameter("SEARCH_IMG_URL"));
 		String excelData = StringUtil.toString(context
 				.getParameter("EXPORT_DATA"));
+		String faceCollection = StringUtil.toString(context.getParameter("FACE_COLLECTION"));
+
 		List<Map<String, Object>> excelDataList = new ArrayList<Map<String, Object>>();
 		if (!StringUtil.isNull(excelData)) {
 			excelDataList = JSONArray.fromObject(excelData);
@@ -336,7 +340,11 @@ public class FaceCaptureProvider {
 				throw exception;
 			}
 		}
-
+		//人技战法-人脸集合不导出检索图片
+        if(FACE_COLLECTION.equals(faceCollection)) {
+            headers = new String[]{"原图", "抓拍图片", "相似度", "地点", "抓拍时间", "设备名称"};
+            dataKey = new String[]{"imageUrl", "frameImageUrl", "SCORE", "DEVICE_ADDR", "JGSK", "DEVICE_NAME"};
+        }
 		boolean returnCodeEnum = ExcelFileUtil.exportExcelFile2Req(
 				"导出结果"
 						+ com.suntek.eap.util.calendar.DateUtil.formatDate(

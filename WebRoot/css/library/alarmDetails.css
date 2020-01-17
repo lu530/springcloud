@@ -266,7 +266,7 @@
     overflow: hidden;
     margin-bottom: 8px;
 }
-.alarm-wrag .multil-arithmetic-list {
+.alarm-wrag .multil-arithmetic-list, .multil-arithmetic-face-list {
 	width: 23%;
 	height: 48px;
 	display: inline-block;
@@ -278,7 +278,7 @@
 	position: relative;
 }
 
-.alarm-wrag .multil-arithmetic-list .multil-name {
+.alarm-wrag .multil-arithmetic-list .multil-name, .multil-arithmetic-face-list .multil-name {
 	color: #9da5ba;
 	font-size: 12px;
 	margin-bottom: 0;

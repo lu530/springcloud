@@ -19,16 +19,16 @@
         <span class="switch-detail prev-detail hide"></span>
         <button class="btn btn-alarm mr10 hide alarmBtn0" id="alarmConfirmBtn">告警确认</button>
 		<button class="btn btn-alarm mr10 hide " id="filterBtn">添加过滤名单</button>
-	    <button class="btn btn-alarm mr10 alarmBtn1" id="issuedBtn">警情下发</button>
+	    <button class="btn btn-alarm mr10 alarmBtn1 logBuriedPoint" id="issuedBtn" buriedPointID='log_liling118' buriedPointValue='.log_liling118'>警情下发</button>
 	    <button class="btn btn-alarm mr10 alarmBtn2 hide" id="playAttention" disabled="disabled">关注</button>
 	    <button class="btn btn-alarm mr10 alarmBtn3 hide" id="ignore" disabled="disabled">忽略</button>
-	    <button class="btn btn-alarm mr10 alarmBtn4" id="receivedBtn">签收</button>
-	    <button class="btn btn-alarm mr10 hide disabled alarmBtn5" id="feedbackBtn">反馈</button>
+	    <button class="btn btn-alarm mr10 alarmBtn4 logBuriedPoint" id="receivedBtn" buriedPointID='log_liling119' buriedPointValue='.log_liling119'>签收</button>
+	    <button class="btn btn-alarm mr10 hide disabled alarmBtn5 logBuriedPoint" buriedPointID='log_liling120' buriedPointValue='.log_liling120' id="feedbackBtn">反馈</button>
 	    <button class="btn btn-alarm mr10 hide " id="cancelControlBtn">撤销</button>
 	    <button class="btn btn-alarm mr10 alarmBtn6" id="recordBtn">处置记录</button>
 	    <button class="btn btn-alarm mr10 catch-btn hide alarmBtn7" id="hasCatchBtn">确认抓捕</button>
 		<span class="switch-detail next-detail hide"></span>
-		<button class="btn btn-alarm mr10 historyVideo hide" id="historyVideo" dom-permission="alarmDetail-history-video">录像回放</button>
+		<button class="btn btn-alarm mr10 historyVideo hide logBuriedPoint" id="historyVideo" dom-permission="alarmDetail-history-video" buriedPointID='log_liling121' buriedPointValue='.log_liling121'>录像回放</button>
 	</div>
 	<!-- <script id="alarmDetailsTemplate" type="x-tmpl">
 	<div class="alarm-wrag {%=o.isFly==1?"fly-con":""%}">
@@ -198,7 +198,7 @@
                     {% if(o.FS_ALGO_LIST.length > 0){ %}
                         <div class="multil-arithmetic-face-wrap">
                             {% for(var j = 0; j < o.FS_ALGO_LIST.length; j++) { %}
-                                <div class="multil-arithmetic-face-list" style="background-color:{%= o.FS_ALGO_LIST[j].PASS == '1' ? 'rgb(62,186,248)' : '#e8ecf8' %}">
+                                <div class="multil-arithmetic-face-list {%= o.FS_ALGO_LIST[j].PASS == '1' ? 'arithmetic-main' : '' %}" >
                                     <p class="multil-name">{%= o.FS_ALGO_LIST[j].ALGORITHMNAME && o.FS_ALGO_LIST[j].ALGORITHMNAME.indexOf("++")>-1?o.FS_ALGO_LIST[j].ALGORITHMNAME:o.FS_ALGO_LIST[j].ALGORITHMNAME.split("").splice(0,2).join("") %}</p>
                                     <p class="multil-similar">{%=o.FS_ALGO_LIST[j].SIMILARITY%}%</p>
                                 </div>
