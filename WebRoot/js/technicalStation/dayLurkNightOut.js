@@ -203,7 +203,7 @@ function doSearch(){
 				setTimeout(function() {
 					var url = window.location.origin + '/portal/page/datadefenceMenu.html#tasklist';
 					window.open(url, '_blank');
-				}, 800);
+				}, 500);
 			}else{
 				dealWithListData(resp);
 			}
