@@ -117,7 +117,7 @@ public class FaceNVNTaskProvider extends GridDataProvider{
                             map.put("TASK_TYPE", "深夜出入");
                             break;
                         case Constants.SPECIAL_PERSON:
-                            map.put("TASK_TYPE", "重点人员分析");
+                            map.put("TASK_TYPE", "特定人群轨迹分析");
                             break;
                         default:
                             break;

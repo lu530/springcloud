@@ -84,28 +84,32 @@ function initEvent() {
 						top.GET_TASK_LIST_DATA = {};
 						top.GET_TASK_LIST_DATA.data = resp;
 						top.GET_TASK_LIST_DATA.search = resp.PARAM;
-						var arr = ["频繁出现", "区域碰撞", "同伙分析", "昼伏夜出", "深夜出入"];
+						var arr = ["频繁出现", "区域碰撞", "同伙分析", "昼伏夜出", "深夜出入", "特定人群轨迹分析"];
+						var type = "";
 						$.each(arr, function(index, el) {
 							if(TASK_TYPE.indexOf(el) != -1){
 								switch(index) {
 									case 0://频繁出现
-										var type = 'frequently';
+										type = 'frequently';
 										break;
 									case 1://区域碰撞
-										var type = 'region';
+										type = 'region';
 										break;
 									case 2://同伙分析
-										var type = 'partner';
+										type = 'partner';
 										break;
 									case 3://昼伏夜出
-										var type = 'dayLurkNightOut';
+										type = 'dayLurkNightOut';
 										break;
 									case 4://深夜出入
-										var type = 'lateAtNightIn';
+										type = 'lateAtNightIn';
+										break;
+									case 5://特定人群轨迹分析
+										type = 'specificResult';
 										break;
 								}
 								if(type) {
-									var url = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType='+type+'&taskStatus='+TASK_STATUS;
+									var url = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType='+type+'&taskStatus='+TASK_STATUS+"&TASK_ID="+TASK_ID;
 									showFrame(url);
 								}
 							}
