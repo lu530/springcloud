@@ -75,11 +75,11 @@ public class PersonFlowAnalysisService extends FrequentAccessCommonService {
     }
 
     /**
-     * 处理结果
+     * 处理结果和记录结果
      * @param taskId
      * @param resultList
      */
-    public void handleResult(String taskId,  List<Map<String, Object>> resultList) {
+    public void handleAndRecordResult(String taskId, List<Map<String, Object>> resultList) {
         Log.tasklog.debug("sdk返回数据resultList: " + resultList.size() + "条");
         // 处理返回的结果数
         Map<String, Object> row = nvnTaskDao.getTaskParamByTaskId(taskId);
