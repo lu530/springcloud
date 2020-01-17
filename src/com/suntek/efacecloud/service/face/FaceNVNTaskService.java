@@ -252,10 +252,13 @@ public class FaceNVNTaskService {
             } catch (Exception e) {
                 Log.nvnTaskLog.error("------------------>解析nvn任务结果查询接口xml失败，原因：" + e.getMessage());
             }
-
-            Object handleResult = handleResult(taskType, resultList, context);
-            Object[] result = renderResult(taskId, handleResult);
-            dao.insertTaskResult(result);
+            if (Constants.PERSON_FLOW_ANALYSIS.equals(taskType)) {
+                this.personFlowAnalysisService.handleAndRecordResult(taskId, resultList);
+            } else {
+                Object handleResult = handleResult(taskType, resultList, context);
+                Object[] result = buildInsertParam(taskId, handleResult);
+                dao.insertTaskResult(result);
+            }
             Log.nvnTaskLog.debug("------------------>接口返回结果已入库");
 
             // 任务结束更新状态
@@ -384,12 +387,17 @@ public class FaceNVNTaskService {
 
     }
 
-    public Object[] renderResult(String taskId, Object result) {
+    /**
+     * 组装插入的参数
+     * @param taskId
+     * @param result
+     * @return
+     */
+    public Object[] buildInsertParam(String taskId, Object result) {
         Object[] param = new Object[3];
         param[0] = taskId;
         param[1] = JSONObject.toJSONString(result);
         param[2] = new Date();
-
         return param;
     }
 
