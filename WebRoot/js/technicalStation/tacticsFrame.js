@@ -37,7 +37,7 @@ var pageUrlObj = {
 	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html', //库碰撞
 	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html?taskStatus='+taskStatus, // 昼伏夜出
 	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html?taskStatus='+taskStatus, // 深夜出入
-	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
+	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=resultLooking",//人流量分析
 	'specific':matcher("/efacecloud/page/technicalStation/trackFaceSpecific.html/" + projectKey).url,//特定人群轨迹分析
 	'specificResult': matcher("/efacecloud/page/technicalStation/trackResultSpecific.html/" + projectKey).url + "?TASK_ID=" + TASK_ID,//特定人群轨迹分析结果
 }
