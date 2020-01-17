@@ -61,7 +61,9 @@ public class PersonFlowAnalysisService extends FrequentAccessCommonService {
 
             Registry registry = Registry.getInstance();
 
-            registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+            registry.selectCommand(commandContext.getServiceUri(),
+                    "4401",
+                    ConfigUtil.getVendor()).exec(commandContext);
 
             Log.tasklog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode()
                     + " message:" + commandContext.getResponse().getMessage());
