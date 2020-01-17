@@ -168,7 +168,6 @@
                             <b class="similar {%=renderColor(o[i].ALGORITHM_LIST[j].ALARM_LEVEL)%}" key="similar">{%= o[i].ALGORITHM_LIST[j].SCORE %}%</b>
                         </dt>
                         <dd class="node-text picMessage">
-                            <input type="checkbox" listview-check class="checkbox-opacity hide"/>
                             <p class="node-title similar-name" picMsg="姓名:{%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}" title="{%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}">
                                 <span class="orange">
                                     {%=o[i].ALGORITHM_LIST[j].NAME?o[i].ALGORITHM_LIST[j].NAME:'暂无'%}
@@ -225,7 +224,6 @@
                             <b class="similar {%=renderColor(o[i].data[j].ALARM_LEVEL)%}" key="similar">{%= o[i].data[j].SIMILARITY %}%</b>
                         </dt>
                         <dd class="node-text picMessage">
-                            <input type="checkbox" listview-check class="checkbox-opacity hide"/>
                             <p class="node-title similar-name" picMsg="姓名:{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}" title="{%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}">
                                 <span class="orange">
                                     {%=o[i].data[j].NAME?o[i].data[j].NAME:'暂无'%}
@@ -309,7 +307,6 @@
                                 <b class="similar {%=renderColor(o[i].ALARM_LEVEL)%}" key="similar">{%= o[i].SIMILARITY %}%</b>
                             </dt>
                             <dd class="node-text picMessage">
-                                <input type="checkbox" listview-check class="checkbox-opacity hide"/>
                                 <p class="" title="{%= o[i].PERSON_ID %}" picMsg="证件号码:{%= o[i].PERSON_ID %}">
                                     <span title="证件号码：{%= o[i].PERSON_ID %}">{%= o[i].PERSON_ID %}</span>
                                 </p>

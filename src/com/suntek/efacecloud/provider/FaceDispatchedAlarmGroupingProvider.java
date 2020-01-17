@@ -561,14 +561,6 @@ public class FaceDispatchedAlarmGroupingProvider extends ExportGridDataProvider 
 					} else {
 						sexCode = "未知";
 					}
-					try {
-						List<Map<String, Object>> list = dao.queryActivityInfo(infoId);
-						for (Map<String, Object> actMap : list) {
-							map.putAll(actMap);
-						}
-					} catch (Exception e) {
-						ServiceLog.error("不存在表activity_info", e);
-					}
 					String isFacemore = AppHandle.getHandle(Constants.APP_EFACESURVEILLANCE).getProperty("IS_FACEMORE",
 							"0");
 					if (!"0".equalsIgnoreCase(isFacemore)) {

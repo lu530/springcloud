@@ -133,17 +133,6 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			tempMap.put("SEX", StringUtil.toString(map.get("sex")));
 			tempMap.put("RLTZ", "MPPDB");//华为MPPDB默认提取特征，只有注册库
 
-			String infoId = StringUtil.toString(map.get("info_id"));
-			try{
-            	if(!StringUtils.isBlank(infoId)){
-            		List<Map<String, Object>> actList = dao.queryActivityInfo(infoId);
-                    for (Map<String, Object> actMap : actList) {
-                        map.putAll(actMap);
-                    }
-            	}
-            }catch(Exception e){
-            	ServiceLog.error("不存在activity_info表: " + e);
-            }
 			String algoTyoeStr = StringUtil.toString(map.get("algorithm_id"));
 			if (!StringUtil.isNull(algoTyoeStr)) {
 				tempMap.put("ALGORITHM_NAME", ModuleUtil.getAlgorithmById(Integer.valueOf(algoTyoeStr)).get("ALGORITHM_NAME"));
