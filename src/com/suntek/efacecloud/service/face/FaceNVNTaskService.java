@@ -144,6 +144,7 @@ public class FaceNVNTaskService {
                             return;
                         case Constants.PERSON_FLOW_ANALYSIS:
                             commandContext = this.personFlowAnalysisService.execute(taskMap);
+                            break;
                         default:
                             break;
                     }
