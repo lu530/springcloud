@@ -166,8 +166,12 @@ function gangsAnalysis(){
 				ONECOMPARE_PARAM: JSON.stringify(top.SAVE_LEFT_PARAM_DATA)
 			}, function(resp) {
 				if(resp.IS_ASYNC == 1){
-					UI.util.alert("异步查询, " + resp.MESSAGE + " ,可到任务列表查询结果");
 					UI.util.hideLoadingPanel();
+					UI.util.alert("异步查询, " + resp.MESSAGE + " , 即将打开任务列表");
+					setTimeout(() => {
+						var url = window.location.origin + '/portal/page/datadefenceMenu.html#tasklist';
+						window.open(url, '_blank');
+					}, 800);
 				}else{
 					dealWithListData(resp);
 				}
