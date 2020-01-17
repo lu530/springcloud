@@ -80,7 +80,7 @@ function initFrequentAccessList(){
 			if(resp.IS_ASYNC == 1){
 				UI.util.hideLoadingPanel('currentPage');
 				UI.util.alert("异步查询, " + resp.MESSAGE + " , 即将打开任务列表");
-				setTimeout(() => {
+				setTimeout(function() {
 					var url = window.location.origin + '/portal/page/datadefenceMenu.html#tasklist';
 					window.open(url, '_blank');
 				}, 800);
