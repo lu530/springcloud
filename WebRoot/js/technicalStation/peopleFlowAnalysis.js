@@ -99,7 +99,7 @@ function initEvents(){
 
             UI.util.showLoadingPanel();
 
-            UI.control.remoteCall('technicalTactics/task/add', params, function (resp) {
+            UI.control.remoteCall('person/flow/addAsyncTask', params, function (resp) {
 
                 UI.util.alert(resp.MESSAGE, resp.CODE === 0 ? '' : 'warn');
                 UI.util.hideLoadingPanel();

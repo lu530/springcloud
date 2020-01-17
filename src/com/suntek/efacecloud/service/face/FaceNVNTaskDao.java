@@ -76,6 +76,11 @@ public class FaceNVNTaskDao {
         return jdbc.queryForList(sql, taskId, id);
     }
 
+    public Map<String, Object> getTaskParamByTaskId(String taskId) {
+        String sql = "select PARAM from EFACE_NVN_TASK_INFO where TASK_ID = ?";
+        return jdbc.queryForObject(sql, Map.class, taskId);
+    }
+
     public List<Map<String, Object>> getTaskResult(String taskId) {
         String sql = "select TASK_RESULT from EFACE_NVN_TASK_RESULT where TASK_ID = ?";
 
