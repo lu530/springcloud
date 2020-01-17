@@ -1,27 +1,15 @@
 package com.suntek.efacecloud.service;
 
-import com.suntek.eap.EAP;
-import com.suntek.eap.core.app.AppHandle;
-import com.suntek.eap.index.Query;
-import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.log.ServiceLog;
 import com.suntek.eap.pico.annotation.BeanService;
 import com.suntek.eap.pico.annotation.LocalComponent;
-import com.suntek.eap.util.DateUtil;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.SpecialPersonTrackDao;
-import com.suntek.efacecloud.log.Log;
-import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.ESUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
-import com.suntek.efacecloud.util.SpecialTarckLibType;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -181,80 +169,6 @@ public class SpecialPersonTaskService {
             ServiceLog.error("查询特定人群轨迹分析任务异常原因异常 : " + e.getMessage());
             context.getResponse().putData("CODE", 1);
             context.getResponse().putData("MESSAGE", "查询失败");
-        }
-    }
-
-    private long getCapNum(String beginTime, String endTime, String deviceIds, String faceScore) {
-        long captureNum = 0;
-        String[] indices = ESUtil.getIndicesNameByBeginAndEndTime(Constants.FACE_INDEX, beginTime, endTime);
-        try {
-            Query query = new Query(1, 1);
-            String[] deviceIdArr = deviceIds.split(",");
-            List<String> deviceIdList = new ArrayList<String>();
-            for (String deviceId : deviceIdArr) {
-                deviceIdList.add(deviceId);
-            }
-            query.addEqualCriteria("DEVICE_ID", deviceIdList.toArray());
-            Long sjgsk = Long.valueOf(
-                    com.suntek.efacecloud.util.DateUtil.convertByStyle(beginTime, com.suntek.efacecloud.util.DateUtil.standard_style, com.suntek.efacecloud.util.DateUtil.yyMMddHHmmss_style, "-1"));
-            Long ejgsk = Long.valueOf(
-                    com.suntek.efacecloud.util.DateUtil.convertByStyle(endTime, com.suntek.efacecloud.util.DateUtil.standard_style, com.suntek.efacecloud.util.DateUtil.yyMMddHHmmss_style, "-1"));
-            query.addBetweenCriteria("JGSK", sjgsk, ejgsk);
-            PageQueryResult pageResult = EAP.bigdata.query(indices, Constants.FACE_TABLE, query);
-            if (!pageResult.getResultSet().isEmpty()) {
-                captureNum = StringUtil.toLong(pageResult.getTotalSize(), 0);
-            }
-        } catch (Exception e) {
-        }
-        return captureNum;
-    }
-
-    @BeanService(id = "testFloat", type = "remote")
-    public void test(RequestContext context) {
-        String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
-        String faceScore = StringUtil.toString(context.getParameter("FACE_SCORE"));
-        String beginTime = StringUtil.toString(context.getParameter("BEGIN_TIME"));
-        String endTime = StringUtil.toString(context.getParameter("END_TIME"));
-        long captureNum = 0;
-        String[] indices = ESUtil.getIndicesNameByBeginAndEndTime(Constants.FACE_INDEX, beginTime, endTime);
-        Log.tasklog.debug("indices : " + Arrays.toString(indices));
-        try {
-            Query query = new Query(1, 1500000);
-            String[] deviceIdArr = deviceIds.split(",");
-            List<String> deviceIdList = new ArrayList<String>();
-            for (String deviceId : deviceIdArr) {
-                deviceIdList.add(deviceId);
-            }
-            query.addEqualCriteria("DEVICE_ID", deviceIdList.toArray());
-            Long sjgsk = Long.valueOf(
-                    DateUtil.convertByStyle(beginTime, DateUtil.standard_style, DateUtil.yyMMddHHmmss_style, "-1"));
-            Long ejgsk = Long.valueOf(
-                    DateUtil.convertByStyle(endTime, DateUtil.standard_style, DateUtil.yyMMddHHmmss_style, "-1"));
-            query.addBetweenCriteria("JGSK", sjgsk, ejgsk);
-            PageQueryResult pageResult = EAP.bigdata.query(indices, Constants.FACE_TABLE, query);
-            Log.tasklog.debug("result: " + pageResult.getResultSet().size());
-            if (!pageResult.getResultSet().isEmpty()) {
-                captureNum = StringUtil.toLong(pageResult.getTotalSize(), 0);
-            }
-            List<Map<String, Object>> list = pageResult.getResultSet();
-            if (!StringUtil.isEmpty(faceScore)) {
-                int face = Integer.parseInt(faceScore);
-                list = list.stream().filter(o -> {
-                    Integer faceS = Integer.parseInt(StringUtil.toString(o.get("FACE_SCORE"), "0"));
-                    Log.tasklog.debug("faceS: " + faceS);
-                    if (faceS > face) {
-                        return true;
-                    }
-                    return false;
-                }).collect(Collectors.toList());
-                Log.tasklog.debug("face : " + face);
-                context.getResponse().putData("total ", list.size());
-            } else {
-                context.getResponse().putData("total ", captureNum);
-            }
-        } catch (Exception e) {
-            Log.tasklog.debug("反查es异常: " + e.getMessage());
-            context.getResponse().putData("total ", e.getMessage());
         }
     }
 }

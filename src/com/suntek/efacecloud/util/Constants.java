@@ -388,6 +388,8 @@ public class Constants {
 
     public static final String SPECIAL_PERSON = "specialPerson";
 
+	public static final String PERSON_FLOW_ANALYSIS = "personFlowAnalysis";
+
     //管理员人员种类
     public static final String ADMIN_USER_TYPE = "9";
 

@@ -99,10 +99,15 @@ function initEvents(){
 
             UI.util.showLoadingPanel();
 
-            UI.control.remoteCall('technicalTactics/task/add', params, function (resp) {
+            UI.control.remoteCall('person/flow/addAsyncTask', params, function (resp) {
 
                 UI.util.alert(resp.MESSAGE, resp.CODE === 0 ? '' : 'warn');
-                UI.util.hideLoadingPanel();
+				UI.util.hideLoadingPanel();
+				UI.util.alert("异步查询, " + resp.MESSAGE + " , 即将打开任务列表");
+				setTimeout(() => {
+					var url = window.location.origin + '/portal/page/datadefenceMenu.html#tasklist';
+					window.open(url, '_blank');
+				}, 800);
 
             }, function (error){ console.log(error) }, '', true);
         }

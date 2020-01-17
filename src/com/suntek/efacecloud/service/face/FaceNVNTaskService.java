@@ -14,7 +14,7 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.job.FaceNvNTaskExecuteJob;
 import com.suntek.efacecloud.log.Log;
 import com.suntek.efacecloud.model.DeviceEntity;
-import com.suntek.efacecloud.service.FollowPersonService;
+import com.suntek.efacecloud.service.face.tactics.PersonFlowAnalysisService;
 import com.suntek.efacecloud.service.face.tactics.SpecialPersonService;
 import com.suntek.efacecloud.service.face.tactics.common.FollowPersonCommonService;
 import com.suntek.efacecloud.service.face.tactics.common.RegionCollisionCommonService;
@@ -54,6 +54,8 @@ public class FaceNVNTaskService {
     private FollowPersonCommonService followPersonService = new FollowPersonCommonService();
 
     private SpecialPersonService specialPersonService = new SpecialPersonService();
+
+    private PersonFlowAnalysisService personFlowAnalysisService = new PersonFlowAnalysisService();
 
     @BeanService(id = "executeTask", type = "remote", description = "执行nvn任务")
     public void executeTask(RequestContext context) {
@@ -140,6 +142,9 @@ public class FaceNVNTaskService {
                             this.specialPersonService.execute(taskMap);
                             dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT);
                             return;
+                        case Constants.PERSON_FLOW_ANALYSIS:
+                            commandContext = this.personFlowAnalysisService.execute(taskMap);
+                            break;
                         default:
                             break;
                     }
@@ -209,7 +214,6 @@ public class FaceNVNTaskService {
                 dao.insertTaskResult(result);
                 dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
                 Log.nvnTaskLog.debug(taskId + " nvn任务查询时间大于半个小时");
-                FaceNvNTaskExecuteJob.isFinish = true;
                 return;
             }
 
@@ -236,7 +240,6 @@ public class FaceNVNTaskService {
                 Object[] result = getErrMessage(taskId, commandContext.getResponse().getMessage());
                 dao.insertTaskResult(result);
                 dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT_ERROR);
-                FaceNvNTaskExecuteJob.isFinish = true;
                 return;
             }
 
@@ -258,11 +261,8 @@ public class FaceNVNTaskService {
             // 任务结束更新状态
             dao.updateTaskStatus(id, Constants.NVN_TASK_DEALT);
             Log.nvnTaskLog.debug("------------------>任务结束，更新状态已处理");
-            FaceNvNTaskExecuteJob.isFinish = true;
-
         } catch (Exception e) {
             Log.nvnTaskLog.error("获取nvn任务结果出错，原因：" + e.getMessage(), e);
-            FaceNvNTaskExecuteJob.isFinish = true;
         }
 
     }
@@ -487,7 +487,7 @@ public class FaceNVNTaskService {
         if (HWStatusCode.成功.getCode() == Long.valueOf(code)) {
             List<Element> faceInfosElements = root.element("faceInfos").elements();
             boolean isMultiRegion;
-            if (Constants.FREQUENT_ACCESS.equals(taskType)) {
+            if (Constants.FREQUENT_ACCESS.equals(taskType) || Constants.PERSON_FLOW_ANALYSIS.equals(taskType)) {
                 isMultiRegion = false;
             } else {
                 isMultiRegion = true;
