@@ -55,7 +55,9 @@ public class SpecialPersonService {
                     commandContext.setServiceUri(BaseCommandEnum.faceCollisionQuery.getUri());
                     Log.technicalLog.debug("调用SDK参数 : " + JSON.toJSONString(param));
                     Registry registry = Registry.getInstance();
-                    registry.selectCommands(commandContext.getServiceUri()).exec(commandContext);
+                    registry.selectCommand(commandContext.getServiceUri(),
+                            "4401",
+                            ConfigUtil.getVendor()).exec(commandContext);
                     long code = commandContext.getResponse().getCode();
                     if (0L != code) {
                         Log.technicalLog.debug("TASK_ID=" + taskId + ", PERSON_ID=" + archive.get("PERSON_ID") + ", 任务执行异常"
