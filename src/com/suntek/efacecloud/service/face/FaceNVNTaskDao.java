@@ -8,6 +8,7 @@ import com.suntek.eap.util.SqlUtil;
 import com.suntek.efacecloud.util.Constants;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,8 @@ public class FaceNVNTaskDao {
 
     public Map<String, Object> getTaskParamByTaskId(String taskId) {
         String sql = "select PARAM from EFACE_NVN_TASK_INFO where TASK_ID = ?";
-        return jdbc.queryForObject(sql, Map.class, taskId);
+        List<Map<String, Object>> rows = jdbc.queryForList(sql, taskId);
+        return rows.size() > 0 : rows.get(0) : new ArrayList<>();
     }
 
     public List<Map<String, Object>> getTaskResult(String taskId) {
