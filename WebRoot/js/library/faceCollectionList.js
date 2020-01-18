@@ -28,6 +28,8 @@ var deviceIdIntStr = top.deviceIdInts;
 // var orgCodeStr = UI.util.getUrlParam("ORG_CODE") || '';
 // var deviceIdStr = UI.util.getUrlParam("DEVICE_ID") || '';
 // var deviceIdIntStr = UI.util.getUrlParam("DEVICE_IDINT") || '';
+var deviceID = UI.util.getUrlParam("deviceIdFromItom") || '';
+var deviceName = UI.util.getUrlParam("deviceNameFromItom") || '';
 
 var scanData = [];  //缓存人脸扫描结果
 var queryParams = {
@@ -228,6 +230,12 @@ function fatherSearchDevice() {
 
 
 function initEvent() {
+
+    if(deviceID !== ""){
+        $('#deviceNames').html(deviceName);
+        $('#orgCode').val(deviceID);
+    }
+
     //详情
     $('body').on('click', '.detailSearch', function() {
         var id = $(this).attr('id'),
