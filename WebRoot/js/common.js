@@ -1583,18 +1583,13 @@ function ajaxFileUpload(fileElementId,succFunction,fileType) {
 	}
 	UI.util.showLoadingPanel();
 	
-	var isThumb = null;
-	if(!fileType){
-		isThumb = 1;
-	}
-	
     $.ajaxFileUpload({
         url : global.baseUrl, 
         type: 'post',
         secureuri : false,  
         fileElementId : fileElementId,  
         dataType : 'text',
-        data : {'FILE_TYPE':'picture','IS_THUMB':isThumb},
+        data : {'FILE_TYPE':'picture'},
         success : succFunction,
         error : function(data, status, e) {
         	UI.util.debug(data);
