@@ -284,7 +284,7 @@ function ajaxMultiImageUpload() {
         secureuri: false,
         fileElementId: 'uploadFile',
         dataType: 'text',
-        data: {'FILE_TYPE': 'picture','IS_THUMB':'1'},
+        data: {'FILE_TYPE': 'picture'},
         success: function (data, status) {
             var resp = eval("(" + data + ")");
             if (resp.ids) {

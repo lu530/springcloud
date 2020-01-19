@@ -80,7 +80,7 @@
 			secureuri : false,
 			fileElementId : fileElementId,
 			dataType : 'text',
-			data : {'FILE_TYPE':'picture','IS_THUMB':'1'},
+			data : {'FILE_TYPE':'picture'},
 			success : succFunction,
 			error : function(data, status, e) {
 			UI.util.debug(data);

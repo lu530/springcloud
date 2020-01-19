@@ -1,61 +1,69 @@
 package com.suntek.efacecloud.provider.mppdb;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import com.suntek.eap.jdbc.TransactionExecutor;
+import com.suntek.eap.log.ServiceLog;
 
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
-import com.suntek.eap.common.log.ServiceLog;
-import com.suntek.eap.common.util.DateUtil;
-import com.suntek.eap.common.util.SqlUtil;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.metadata.DictType;
 import com.suntek.eap.tag.grid.ExportGridDataProvider;
 import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
-import com.suntek.efacecloud.dao.DeviceInfoDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.util.Constants;
-import com.suntek.efacecloud.util.DeviceInfoUtil;
 import com.suntek.efacecloud.util.ModuleUtil;
 
+import cn.hutool.core.date.DateUtil;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.TransactionStatus;
+
 /**
- * @author wsh
- * @since 1.0.0
- * @version 2017-06-29
+ *
+ * 人脸抓拍列表服务
  */
 public class FaceCaptureMpProvider extends ExportGridDataProvider {
+
+	private StringBuffer countOptionStatement = new StringBuffer();
 	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
-
-	public Map<String, Object> query(RequestContext context) throws Exception {
-		String sourceType = StringUtil.toString(context.getParameter("SOURCE_TYPE"));
-
-		PageQueryResult result = this.getData(context);
-		return new PageQueryResult(result.getTotalSize(), render(result.getResultSet(), sourceType)).toMap();
-	}
 
 	@Override
 	protected String buildCountSQL() {
-		String sql = "select count(1)  from FACE_CAPTURE  where 1=1 " + this.getOptionalStatement();
-		return sql;
+	    String sql = "select count(1)  from FACE_INFO  where 1=1 " + this.getOptionalStatement();
+	    return sql;
 	}
 
 	@Override
 	protected String buildQuerySQL() {
-		String sql = "select info_id , device_id , algorithm_id, jgsk,"
-				+ " obj_pic, pic, age, sex, with_glasses, with_hat"
-				+ " from face_capture where 1=1 "
+		String sql = "select * from FACE_INFO where 1=1 "
 				+ this.getOptionalStatement();
 		return sql;
 	}
+
+	/**
+	 *
+	 * @param context
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, Object> query(RequestContext context) throws Exception {
+
+		PageQueryResult result = this.getData(context);
+
+		long totalCount = getCountFromProcedure();
+
+		return new PageQueryResult(totalCount, render(result.getResultSet())).toMap();
+		//return result.toMap();
+	}
+	
 
 	@Override
 	protected void prepare(RequestContext context) {
@@ -67,58 +75,42 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 		String beginTime = StringUtil.toString(body.get("BEGIN_TIME"));
 		String endTime = StringUtil.toString(body.get("END_TIME"));
 		String devides = StringUtil.toString(body.get("DEVICE_IDS"));
-		String keywords = StringUtil.toString(body.get("KEYWORDS"));
 
 		ServiceLog.info("人脸抓拍 MPPDB 检索， 参数：" + JSONObject.toJSONString(body));
 
+		if (!StringUtil.isEmpty(beginTime) && !StringUtil.isEmpty(endTime)) {
+		    this.addOptionalStatement(" and jgsk between ? and ?");
+		    String formatBeginTime = DateUtil.format(DateUtil.parseDateTime(beginTime), "yyMMddHHmmss");
+		    String formatEndTime = DateUtil.format(DateUtil.parseDateTime(endTime), "yyMMddHHmmss");
+		    this.addParameter(formatBeginTime);
+		    this.addParameter(formatEndTime);
+		   
+			/*this.addOptionalStatement(
+					" and (" + "jgrqsjb between extract (epoch from to_date ('" + beginTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint  "
+							+ "and extract (epoch from to_date ('" + endTime + "','yyyy-mm-dd hh24:mi:ss'))::bigint )");*/
+			countOptionStatement.append("'").append(beginTime).append("',");
+			countOptionStatement.append("'").append(endTime).append("'");
+		}
+
 		if (!StringUtil.isEmpty(devides)) {
-			this.addOptionalStatement(" and device_id in " + SqlUtil.getSqlInParams(devides));
-			for (String deviceId : devides.split(",")) {
-				this.addParameter(deviceId);
-			}
+			this.addOptionalStatement(" and device_id = any " + getDeviceSqlInParams(devides.split(",")));
+			countOptionStatement.append(",").append(getCountSqlInParams(devides.split(",")));
 		}
-
-		if (!StringUtil.isEmpty(keywords)) {
-			
-			DeviceInfoDao resDao = new DeviceInfoDao();
-			List<Map<String, Object>> deviceList = resDao.getDeviceIdByTypeAndKeyword(StringUtil.toString(Constants.DEVICE_TYPE_FACE), keywords);
-			
-			List<String> deviceIdList = new ArrayList<String>();
-			for (Map<String, Object> map : deviceList) {
-				deviceIdList.add(StringUtil.toString(map.get("DEVICE_ID")));
-			}
-
-			this.addOptionalStatement(" and device_id in " + SqlUtil.getSqlInParams(devides));
-			for (String deviceId : deviceIdList) {
-				this.addParameter(deviceId);
-			}
-		}
-
-		this.addOptionalStatement(" and (jgsk between ? and ? )");
-		this.addParameter(beginTime);
-		this.addParameter(endTime);
 
 	}
 
-	private List<Map<String, Object>> render(List<Map<String, Object>> resultSet, String sourceType) throws Exception {
+	private List<Map<String, Object>> render(List<Map<String, Object>> resultSet) throws Exception {
 
 		List<Map<String, Object>> tempList = new ArrayList<Map<String, Object>>();
-
-//		boolean isAdd = !StringUtil.isEmpty(sourceType);
-//        Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
-//        if(isAdd) {
-//			Set<String> set = resultSet.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
-//			idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
-//		}
 
 		for (Map<String, Object> map : resultSet) {
 			Map<String, Object> tempMap = new HashMap<String, Object>();
 
-			Date date = (Date) map.get("jgsk");
-			tempMap.put("JGSK", date == null ? "" : DateUtil.dateToString(date));
-
+			String jgsk = StringUtil.toString(map.get("jgsk"));
+			tempMap.put("JGSK", DateUtil.format(DateUtil.parse(jgsk, "yyMMddHHmmss"), "yyyy-MM-dd HH:mm:ss"));
+			
 			String deviceId = StringUtil.toString(map.get("device_id"));
-
+			
 			DeviceEntity device = (DeviceEntity) EAP.metadata.getDictModel(DictType.D_FACE, deviceId, DeviceEntity.class);
 			tempMap.put("DEVICE_ID", deviceId);
 			tempMap.put("DEVICE_NAME", StringUtil.toString(device.getDeviceName()));
@@ -130,25 +122,84 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			tempMap.put("LATITUDE", StringUtil.toString(device.getDeviceY()));
 			tempMap.put("LONGITUDE", StringUtil.toString(device.getDeviceX()));
 			tempMap.put("AGE", StringUtil.toString(map.get("age")));
-			tempMap.put("SEX", StringUtil.toString(map.get("sex")));
+			tempMap.put("SEX", StringUtil.toString(map.get("gender_code")));
 			tempMap.put("RLTZ", "MPPDB");//华为MPPDB默认提取特征，只有注册库
 
+			String infoId = StringUtil.toString(map.get("info_id"));
 			String algoTyoeStr = StringUtil.toString(map.get("algorithm_id"));
 			if (!StringUtil.isNull(algoTyoeStr)) {
 				tempMap.put("ALGORITHM_NAME", ModuleUtil.getAlgorithmById(Integer.valueOf(algoTyoeStr)).get("ALGORITHM_NAME"));
 			}
-
-			//是否添加来源类型
-//			if(isAdd) {
-//				Map<String, Object> devideGroup = idGriupMap.get(deviceId);
-//				map.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
-//				map.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
-//			}
-
+			
 			tempList.add(tempMap);
 		}
 		return tempList;
-
 	}
 
+	/**
+	 * 通过存储过程获取抓拍总量
+	 * @return
+	 * @throws SQLException
+	 */
+	public long getCountFromProcedure() throws SQLException {
+
+		long beginTime = System.currentTimeMillis();
+
+		String preSql = "set enable_hashjoin = on;";
+
+		String sql = "select proc_face_info_count(" + countOptionStatement.toString() + ")";
+
+		String afterSql = "set enable_hashjoin = off;";
+
+		long total = (long) EAP.jdbc.getTransactionTemplate(Constants.APP_NAME, Constants.MPPDB_NAME).execute(new TransactionExecutor() {
+
+			@Override
+			public Object transaction(TransactionStatus arg0, JdbcTemplate arg1) {
+				arg1.execute(preSql);
+				long total = arg1.queryForObject(sql, Long.class);
+				arg1.execute(afterSql);
+				return total;
+			}
+		});
+
+		long endTime = System.currentTimeMillis();
+		ServiceLog.info("sql:" + sql);
+		ServiceLog.info("耗时：" + (endTime - beginTime) + "ms");
+
+		return total;
+	}
+
+	/**
+	 *
+	 * @param params
+	 * @return
+	 */
+	public static String getDeviceSqlInParams(Object[] params) {
+		StringBuffer strbuf = new StringBuffer();
+		strbuf.append("(values");
+		for (int i = 0; i < params.length; i++) {
+			strbuf.append("('"+params[i]+"'),");
+		}
+		strbuf.deleteCharAt(strbuf.length()-1);
+		strbuf.append(")");
+		return strbuf.toString();
+	}
+
+	/**
+	 * append the count sql's param values
+	 * @param params
+	 * @return
+	 */
+	private String getCountSqlInParams(Object[] params) {
+
+		// '(''44010564001320300262''),(''44011250001320500220'')'
+		StringBuffer strbuf = new StringBuffer();
+		strbuf.append("'");
+		for (int i = 0; i < params.length; i++) {
+			strbuf.append("(''" + params[i] + "''),");
+		}
+		strbuf.deleteCharAt(strbuf.length() - 1);
+		strbuf.append("'");
+		return strbuf.toString();
+	}
 }
