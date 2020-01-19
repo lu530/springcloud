@@ -1,4 +1,5 @@
 var now = new Date();
+var taskStatus = UI.util.getUrlParam("taskStatus") || '';
 var endTime = dateFormat(now,'yyyy-MM-dd 23:59:59');
 now.setDate(now.getDate() - 7);
 var beginTime = dateFormat(now,'yyyy-MM-dd 00:00:00');
@@ -80,7 +81,11 @@ function initEvents(){
 	
 	//返回菜单
 	$('body').on('click','#backBtn',function(){
-		parent.showMenu();
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
 	});
 	
 	//查询按钮
@@ -346,7 +351,10 @@ var peopleFlowMap = {
         $('#deviceNames').html(this.taskInfo.DEVICE_NAMES)
 
         //  按钮隐藏
-        $('#searchBtn, #taskLooking, #backBtn').addClass('hide');
+		$('#searchBtn, #taskLooking, #backBtn').addClass('hide');
+		if(parent.cachedData&&parent.cachedData.hasBackBtn){
+			$("#backBtn").removeClass("hide");
+		}
 
     },
     //  查看人流量分析结果

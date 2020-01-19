@@ -502,7 +502,7 @@ function picSearch(obj){
 			var curInfoIdArr = [];
 			//记录infoId
 			$.each(data,function(j,con){
-				var infoId = con.INFO_ID;
+				var infoId = con.INFO_ID||con.FACE_ID;
 				var index = curInfoIdArr.indexOf(infoId);
 				if(index < 0){
 					curInfoIdArr.push(infoId);
@@ -572,7 +572,7 @@ function showResultList(){
 		//并集去重
 		var curResultMap = new Map();
 		$.each(resultListArr,function(i,n){
-			var infoId = n.INFO_ID;
+			var infoId = n.INFO_ID||n.FACE_ID;
 			var isHasInfoId = curResultMap.containsKey(infoId);
 			if(!isHasInfoId){
 				curResultMap.put(infoId, n);
@@ -607,12 +607,12 @@ function showResultList(){
 
 		var curIntersetArr = [],curInfoId=[];
 		$.each(resultListArr,function(i,n){
-			var curIndex = resultArr.indexOf(n.INFO_ID);
+			var curIndex = resultArr.indexOf(n.INFO_ID||n.FACE_ID);
 			if(curIndex>=0){
-				var index = curInfoId.indexOf(n.INFO_ID);
+				var index = curInfoId.indexOf(n.INFO_ID||n.FACE_ID);
 				if(index<0){
 					curIntersetArr.push(n);
-					curInfoId.push(n.INFO_ID);
+					curInfoId.push(n.INFO_ID||n.FACE_ID);
 				}else if(curIntersetArr[index].SCORE<n.SCORE){
 					curIntersetArr.splice(index, 1, n);
 				}

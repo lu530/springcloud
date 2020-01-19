@@ -9,7 +9,7 @@ var TASK_ID = UI.util.getUrlParam("TASK_ID") || '',
         DEVICE_IDS: '',
         DEVICE_IDS_INT: ''
     };
-
+var taskStatus = UI.util.getUrlParam("taskStatus") || '';
 $(function (){
 
     initPage();
@@ -22,6 +22,9 @@ function initPage () {
         $(".form-con.form-silde").css('top','46px');
         $(".page-list-head").show();
     }
+	if(parent.cachedData.hasBackBtn){//任务分析进入
+		$("#backBtn").removeClass("hide");
+	}
 	queryTaskDetail();
 	
 	//  渲染该任务下人员列表
@@ -38,7 +41,14 @@ function initEvent () {
 
         formSearch();
 	});
-
+	//返回菜单
+	$('body').on('click','#backBtn',function(){
+		if(taskStatus) {
+			parent.parent.hideFrame();
+		}else {
+			parent.showMenu();
+		}
+	});
 	//	一人一档点击跳转路人库以图搜图
 	$('body').on('click', '.searchByImage', function() {
 		openWindowPopup('faceCapture', $(this).attr('imgSrc'));
