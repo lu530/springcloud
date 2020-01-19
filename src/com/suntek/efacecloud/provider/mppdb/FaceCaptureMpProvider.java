@@ -22,8 +22,6 @@ import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 
-import cn.hutool.core.date.DateUtil;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.TransactionStatus;
 
