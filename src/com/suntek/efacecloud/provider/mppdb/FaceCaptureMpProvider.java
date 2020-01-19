@@ -36,8 +36,9 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 
 	@Override
 	protected String buildCountSQL() {
-	    String sql = "select count(1)  from FACE_INFO  where 1=1 " + this.getOptionalStatement();
-	    return sql;
+	    //String sql = "select count(1)  from FACE_INFO  where 1=1 " + this.getOptionalStatement();
+	    //return sql;
+	    return null;
 	}
 
 	@Override
