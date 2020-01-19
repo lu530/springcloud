@@ -37,7 +37,7 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 
 	public Map<String, Object> query(RequestContext context) throws Exception {
 		String sourceType = StringUtil.toString(context.getParameter("SOURCE_TYPE"));
-		
+
 		PageQueryResult result = this.getData(context);
 		return new PageQueryResult(result.getTotalSize(), render(result.getResultSet(), sourceType)).toMap();
 	}
@@ -68,7 +68,7 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 		String endTime = StringUtil.toString(body.get("END_TIME"));
 		String devides = StringUtil.toString(body.get("DEVICE_IDS"));
 		String keywords = StringUtil.toString(body.get("KEYWORDS"));
-		
+
 		ServiceLog.info("人脸抓拍 MPPDB 检索， 参数：" + JSONObject.toJSONString(body));
 
 		if (!StringUtil.isEmpty(devides)) {
@@ -87,7 +87,7 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			for (Map<String, Object> map : deviceList) {
 				deviceIdList.add(StringUtil.toString(map.get("DEVICE_ID")));
 			}
-			
+
 			this.addOptionalStatement(" and device_id in " + SqlUtil.getSqlInParams(devides));
 			for (String deviceId : deviceIdList) {
 				this.addParameter(deviceId);
@@ -110,15 +110,15 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 //			Set<String> set = resultSet.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
 //			idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
 //		}
-		
+
 		for (Map<String, Object> map : resultSet) {
 			Map<String, Object> tempMap = new HashMap<String, Object>();
 
 			Date date = (Date) map.get("jgsk");
 			tempMap.put("JGSK", date == null ? "" : DateUtil.dateToString(date));
-			
+
 			String deviceId = StringUtil.toString(map.get("device_id"));
-			
+
 			DeviceEntity device = (DeviceEntity) EAP.metadata.getDictModel(DictType.D_FACE, deviceId, DeviceEntity.class);
 			tempMap.put("DEVICE_ID", deviceId);
 			tempMap.put("DEVICE_NAME", StringUtil.toString(device.getDeviceName()));
@@ -137,14 +137,14 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			if (!StringUtil.isNull(algoTyoeStr)) {
 				tempMap.put("ALGORITHM_NAME", ModuleUtil.getAlgorithmById(Integer.valueOf(algoTyoeStr)).get("ALGORITHM_NAME"));
 			}
-			
+
 			//是否添加来源类型
 //			if(isAdd) {
 //				Map<String, Object> devideGroup = idGriupMap.get(deviceId);
 //				map.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
 //				map.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
 //			}
-			
+
 			tempList.add(tempMap);
 		}
 		return tempList;

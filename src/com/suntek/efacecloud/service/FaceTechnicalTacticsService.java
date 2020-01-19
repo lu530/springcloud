@@ -155,11 +155,12 @@ public class FaceTechnicalTacticsService {
 				// 修改LIST部分
 				Map<String,List<Map<String,Object>>> responseData
 					= (Map<String, List<Map<String, Object>>>) picResult.get("LIST");
-				for(int i = 110;i <= 118;i++){
-					if(responseData.get(StringUtil.toString(i)) != null){
-						addIdentityTypeAndGJ(responseData.get(StringUtil.toString(i)));
-					}
-				}
+                Set<String> fsAlgokeys = responseData.keySet();
+                for(String fsAlgoKey : fsAlgokeys){
+                    if(null != responseData.get(fsAlgoKey)){
+                        addIdentityTypeAndGJ(responseData.get(fsAlgoKey));
+                    }
+                }
 
 				// 修改RECOMMEND_RESULT部分
 				if(picResult.get("RECOMMEND_RESULT") != null){
