@@ -20,6 +20,7 @@ var cachedData = {};
 cachedData.beginTime = UI.util.getUrlParam("beginTime")||'';
 cachedData.endTime = UI.util.getUrlParam("endTime")||'';
 cachedData.noBackBtn = UI.util.getUrlParam("noBackBtn")||false;
+cachedData.hasBackBtn = UI.util.getUrlParam("hasBackBtn")||false;
 cachedData.imgUrl = UI.util.getUrlParam("imgUrl")||"";
 
 var TASK_ID = UI.util.getUrlParam("TASK_ID")||"",
@@ -37,9 +38,9 @@ var pageUrlObj = {
 	'library':'/dbcollision/page/technicalStation/libraryCollisionForm.html', //库碰撞
 	'dayLurkNightOut': '/efacecloud/page/technicalStation/dayLurkNightOutForm.html?taskStatus='+taskStatus, // 昼伏夜出
 	'lateAtNightIn': '/efacecloud/page/technicalStation/lateAtNightInForm.html?taskStatus='+taskStatus, // 深夜出入
-	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking,//人流量分析
+	'flow':matcher("/efacecloud/page/technicalStation/peopleFlowAnalysis.html/" + projectKey).url + "?TASK_ID=" + TASK_ID + "&resultLooking=" + resultLooking+'&taskStatus='+taskStatus,//人流量分析
 	'specific':matcher("/efacecloud/page/technicalStation/trackFaceSpecific.html/" + projectKey).url,//特定人群轨迹分析
-	'specificResult': matcher("/efacecloud/page/technicalStation/trackResultSpecific.html/" + projectKey).url + "?TASK_ID=" + TASK_ID,//特定人群轨迹分析结果
+	'specificResult': matcher("/efacecloud/page/technicalStation/trackResultSpecific.html/" + projectKey).url + "?TASK_ID=" + TASK_ID+'&taskStatus='+taskStatus,//特定人群轨迹分析结果
 }
 $(function(){
 	initEvent();
