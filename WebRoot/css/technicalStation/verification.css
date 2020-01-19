@@ -390,7 +390,7 @@
     width: 160px;
     margin: 0px auto 20px;
 }
-.tilelist.vertical .list-node::before {
+/* .tilelist.vertical .list-node::before {
     content: '';
     position: absolute;
     top: 3px;
@@ -403,7 +403,7 @@
 }
 .tilelist.vertical .list-node.active::before {
     background-position: -60px -57px;
-}
+} */
 
 .setting-down {
     margin-left: 10px;
