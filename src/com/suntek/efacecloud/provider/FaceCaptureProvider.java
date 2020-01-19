@@ -14,6 +14,7 @@ import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
+import com.suntek.efacecloud.provider.mppdb.FaceCaptureMpProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
 import com.suntek.efacecloud.util.*;
 import com.suntek.sp.common.common.BaseCommandEnum;
@@ -72,7 +73,15 @@ public class FaceCaptureProvider {
 		if (!StringUtil.isNull(isSearchFace)) {
 			return searchByPic(context);
 		} else {
-			return new FaceCaptureEsProvider().query(context);
+		    String bigDataSearchFun = AppHandle.getHandle("console").getProperty("BIGDATA_SEARCH_FUN");
+            switch(bigDataSearchFun) {
+                case Constants.BIGDATA_SEARCH_ES:
+                    return new FaceCaptureEsProvider().query(context);
+                case Constants.BIGDATA_SEARCH_MPPDB:
+                    return new FaceCaptureMpProvider().query(context);
+                default:
+                    return new FaceCaptureEsProvider().query(context);
+            }
 		}
 	}
 
