@@ -114,7 +114,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             map.put("LATITUDE", StringUtil.toString(faceDevice.getDeviceY()));
             map.put("LONGITUDE", StringUtil.toString(faceDevice.getDeviceX()));
             
-            map.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("SEX"))));
+            map.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("GENDER_CODE"))));
             map.put("AGE", StringUtil.toString(map.get("AGE")));
             map.put("RACE", StringUtil.toString(FaceCaptureProvider.RACE.get(map.get("RACE"))));
             map.put("WITH_GLASSES", StringUtil.toString(FaceCaptureProvider.WITH_GLASSES.get(map.get("WITH_GLASSES"))));
