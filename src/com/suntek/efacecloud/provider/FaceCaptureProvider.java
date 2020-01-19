@@ -96,7 +96,9 @@ public class FaceCaptureProvider {
 
 		ServiceLog.info("路人库检索，1:N开始");
 		Map<String, Object> params = context.getParameters();
-		String vendor = ConfigUtil.getVendor();
+		//厂商参数可由外部控制，zk注册多个厂商同个命令
+		String vendorParam = StringUtil.toString(context.getParameter("vendor"), "");
+		String vendor = StringUtil.isNull(vendorParam) ? ConfigUtil.getVendor() : vendorParam;
 
 		// 通过上传图片调用开放平台人脸属性提取服务开始 2018年9月4日 陈文杰添加
 		String faceTypeAlgoTypes = AppHandle.getHandle(Constants.APP_NAME)
@@ -216,14 +218,6 @@ public class FaceCaptureProvider {
 							+ algorithmName + "数据为空,过滤掉该算法返回");
 					continue;
 				}
-//              Map<String, Map<String, Object>> idGriupMap = new HashMap<String, Map<String, Object>>();
-//				if(isAdd) {
-//					Set<String> set = infoList.stream().map(o -> StringUtil.toString(o.get("DEVICE_ID"))).collect(Collectors.toSet());
-//					idGriupMap = DeviceInfoUtil.queryDeviceGroupByIds(String.join(",", set));
-//				}
-
-                //一次性查询获得infoId为key的数据集
-                //Map<String, Map<String, Object>> actMap = getActivityMap(infoList);
 
 				for (Map<String, Object> info : infoList) {
 					String createTime = StringUtil.toString(info
@@ -235,16 +229,6 @@ public class FaceCaptureProvider {
 					}
 					info.put("CREATETIME", createTime);
 
-					/*String infoId = StringUtil.toString(info.get("INFO_ID"));
-					if (actMap.containsKey(infoId)) {
-                        info.putAll(actMap.get(infoId));
-                    }*/
-					//是否添加来源类型
-//					if(isAdd) {
-//						Map<String, Object> devideGroup = idGriupMap.get(info.get("DEVICE_ID"));
-//						info.put("SOURCE_TYPE", devideGroup == null ? "未知" : devideGroup.get("groupId"));
-//						info.put("SOURCE_NAME", devideGroup == null ? "未知" : devideGroup.get("name"));
-//					}
 				}
 				tempMap.put("ALGORITHM_CODE", algorithmCode);
 				tempMap.put("ALGORITHM_ANME", algorithmName);
