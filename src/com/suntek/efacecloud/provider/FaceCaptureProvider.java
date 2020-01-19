@@ -1,6 +1,7 @@
 package com.suntek.efacecloud.provider;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.ImmutableMap;
 import com.suntek.eap.common.CommandContext;
 import com.suntek.eap.core.app.AppHandle;
 import com.suntek.eap.log.ServiceLog;
@@ -13,6 +14,7 @@ import com.suntek.eap.web.RequestContext;
 import com.suntek.eaplet.registry.Registry;
 import com.suntek.efacecloud.dao.FaceCommonDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
+import com.suntek.efacecloud.provider.FaceCaptureProvider.AgeGroup;
 import com.suntek.efacecloud.provider.es.FaceCaptureEsProvider;
 import com.suntek.efacecloud.provider.mppdb.FaceCaptureMpProvider;
 import com.suntek.efacecloud.service.WJFaceCaptureService;
@@ -50,7 +52,7 @@ public class FaceCaptureProvider {
 //		String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
 		String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
 		try {
-			if (StringUtil.isEmpty(deviceIds) && !context.getUserCode().equals("admin")) {
+			if (StringUtil.isEmpty(deviceIds)) {
 				Set<String> deviceSet = DevicesRedisUtil.getDeviceList(context.getUserCode(), Constants.DEVICE_TYPE_FACE);
 				if (!ObjectUtils.isEmpty(deviceSet)) {
 					deviceIds = String.join(",", deviceSet);
@@ -340,5 +342,75 @@ public class FaceCaptureProvider {
 			context.getResponse().setError("导出失败！");
 		}
 	}
+	
+	// 性别
+    public static final Map<String, String> GENDER
+    = ImmutableMap.<String, String>builder().put("0", "未知").put("1", "男").put("2", "女").build();
+    // 人种
+    public static final Map<String, String> RACE
+        = ImmutableMap.<String, String>builder().put("-1", "未知").put("0", "黄").put("1", "白").put("2", "黑").build();
+    // 是否戴眼镜
+    public static final Map<String, String> WITH_GLASSES
+        = ImmutableMap.<String, String>builder().put("0", "未知").put("1", "不戴").put("2", "戴").build();
+    // 是否戴口罩
+    public static final Map<String, String> WITH_RESPIRATOR
+        = ImmutableMap.<String, String>builder().put("0", "未知").put("1", "不戴").put("2", "戴").build();
+    // 表情
+    public static final Map<String, String> FACE_EXPRESSION
+        = ImmutableMap.<String, String>builder().put("0", "未知").put("1", "惊喜").put("2", "恐惧").put("3", "反感")
+            .put("4", "开心").put("5", "伤心").put("6", "愤怒").put("7", "自然").build();
+    // 笑容
+    public static final Map<String, String> SMILE
+        = ImmutableMap.<String, String>builder().put("0", "未知").put("1", "无").put("2", "有").build();
+    
+    public static enum AgeGroup {
+        UNKNOW("-1", -1, 0, "未知"), TEENAGER("1", 1, 15, "少年"), YOUNG_AGE("2", 16, 44, "青年"), MIDDLE_AGE("3", 45, 60, "中年"), OLD("4", 60, 100, "老年");
+
+        String group;
+        int ageUpperLimit;
+        int ageLowerLimit;
+        String groupName;
+
+        private AgeGroup(String group, int ageLowerLimit, int ageUpperLimit, String groupName) {
+            this.group = group;
+            this.ageLowerLimit = ageLowerLimit;
+            this.ageUpperLimit = ageUpperLimit;
+            this.groupName = groupName;
+        }
+
+        public String getGroup() {
+            return group;
+        }
+
+        public int getAgeUpperLimit() {
+            return ageUpperLimit;
+        }
+
+        public int getAgeLowerLimit() {
+            return ageLowerLimit;
+        }
+        
+        public String getGroupName() {
+            return groupName;
+        }
+
+        public static AgeGroup getAgeGroup(String group) {
+            for (AgeGroup ageGroup : AgeGroup.values()) {
+                if (ageGroup.getGroup().equals(group)) {
+                    return ageGroup;
+                }
+            }
+            return UNKNOW;
+        }
+        
+        public static AgeGroup getAgeGroupByAge(int age) {
+            for (AgeGroup ageGroup : AgeGroup.values()) {
+                if (age >= ageGroup.getAgeLowerLimit() && age <= ageGroup.getAgeUpperLimit()) {
+                    return ageGroup;
+                }
+            }
+            return UNKNOW;
+        }
+    }
 
 }

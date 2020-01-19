@@ -19,9 +19,14 @@ import com.suntek.eap.util.StringUtil;
 import com.suntek.eap.web.RequestContext;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.model.DeviceEntity;
+import com.suntek.efacecloud.provider.FaceCaptureProvider;
+import com.suntek.efacecloud.provider.FaceCaptureProvider.AgeGroup;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.TransactionStatus;
 
@@ -32,12 +37,10 @@ import org.springframework.transaction.TransactionStatus;
 public class FaceCaptureMpProvider extends ExportGridDataProvider {
 
 	private StringBuffer countOptionStatement = new StringBuffer();
-	private FaceDispatchedAlarmDao dao = new FaceDispatchedAlarmDao();
 
 	@Override
 	protected String buildCountSQL() {
-	    String sql = "select count(1)  from FACE_INFO  where 1=1 " + this.getOptionalStatement();
-	    return sql;
+	    return null;
 	}
 
 	@Override
@@ -54,19 +57,14 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 	 * @throws Exception
 	 */
 	public Map<String, Object> query(RequestContext context) throws Exception {
-
 		PageQueryResult result = this.getData(context);
-
 		long totalCount = getCountFromProcedure();
-
 		return new PageQueryResult(totalCount, render(result.getResultSet())).toMap();
-		//return result.toMap();
 	}
 	
 
 	@Override
 	protected void prepare(RequestContext context) {
-
 		this.setDatasource(Constants.MPPDB_NAME);
 		Map<String, Object> body = context.getParameters();
 		context.putParameter("sort", " jgsk desc ");
@@ -74,6 +72,27 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 		String beginTime = StringUtil.toString(body.get("BEGIN_TIME"));
 		String endTime = StringUtil.toString(body.get("END_TIME"));
 		String devides = StringUtil.toString(body.get("DEVICE_IDS"));
+		
+		// 性别
+        String sex = StringUtil.toString(body.get("SEX"));
+        // 年龄段
+        String ageGroup = StringUtil.toString(body.get("AGE_GROUP"));
+        // 年龄
+        String age = StringUtil.toString(body.get("AGE"));
+        // 人种
+        String race = StringUtil.toString(body.get("RACE"));
+        // 是否戴眼镜
+        String withGlasses = StringUtil.toString(body.get("WITH_GLASSES"));
+        // 是否戴口罩
+        String withRespirator = StringUtil.toString(body.get("WITH_RESPIRATOR"));
+        // 颜值
+        String pretty = StringUtil.toString(body.get("PRETTY"));
+        // 表情
+        String faceExpression = StringUtil.toString(body.get("FACE_EXPRESSION"));
+        // 笑容
+        String smile = StringUtil.toString(body.get("SMILE"));
+        // 3、代表人脸结构化
+        String dataSrc = StringUtil.toString(body.get("DATA_SRC"));
 
 		ServiceLog.info("人脸抓拍 MPPDB 检索， 参数：" + JSONObject.toJSONString(body));
 
@@ -95,7 +114,50 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			this.addOptionalStatement(" and device_id = any " + getDeviceSqlInParams(devides.split(",")));
 			countOptionStatement.append(",").append(getCountSqlInParams(devides.split(",")));
 		}
-		ServiceLog.info("prepare end");
+		
+		if (!StringUtil.isEmpty(sex)) {
+		    this.addOptionalStatement(" and gender_code = ? ");
+		    this.addParameter(sex);
+        }
+        if (!StringUtil.isEmpty(ageGroup)) {
+            AgeGroup group = AgeGroup.getAgeGroup(ageGroup);
+            this.addOptionalStatement(" and age >= ? and age < ? ");
+            this.addParameter(group.getAgeLowerLimit());
+            this.addParameter(group.getAgeUpperLimit());
+        }
+        if (NumberUtils.isNumber(age)) {
+            this.addOptionalStatement(" and age = ? ");
+            this.addParameter(age);
+        }
+        if (!StringUtil.isEmpty(race)) {
+            this.addOptionalStatement(" and race = ? ");
+            this.addParameter(race);
+        }
+        if (!StringUtil.isEmpty(withGlasses)) {
+            this.addOptionalStatement(" and with_glasses = ? ");
+            this.addParameter(withGlasses);
+        }
+        if (!StringUtil.isEmpty(withRespirator)) {
+            this.addOptionalStatement(" and with_respirator = ? ");
+            this.addParameter(withRespirator);
+        }
+        if (NumberUtils.isNumber(pretty)) {
+            this.addOptionalStatement(" and pretty = ? ");
+            this.addParameter(pretty);
+        }
+        if (!StringUtil.isEmpty(faceExpression)) {
+            this.addOptionalStatement(" and face_expression = ? ");
+            this.addParameter(faceExpression);
+        }
+        if (!StringUtil.isEmpty(smile)) {
+            this.addOptionalStatement(" and smile = ? ");
+            this.addParameter(smile);
+        }
+        if (!StringUtil.isEmpty(dataSrc)) {
+            // 目前的设计，DATA_SRC字段有值，就代表是结构化人脸
+            this.addOptionalStatement(" and data_src = ? ");
+            this.addParameter(dataSrc);
+        }
 
 	}
 
@@ -118,18 +180,28 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			tempMap.put("ORG_NAME", device.getOrgName());
 			tempMap.put("OBJ_PIC", ModuleUtil.renderAlarmImage(StringUtil.toString(map.get("obj_pic"))));
 			tempMap.put("PIC", ModuleUtil.renderAlarmImage(StringUtil.toString(map.get("pic"))));
-			tempMap.put("INFO_ID", map.get("info_id"));
+			tempMap.put("INFO_ID", StringUtil.toString(map.get("info_id")));
 			tempMap.put("LATITUDE", StringUtil.toString(device.getDeviceY()));
 			tempMap.put("LONGITUDE", StringUtil.toString(device.getDeviceX()));
-			tempMap.put("AGE", StringUtil.toString(map.get("age")));
-			tempMap.put("SEX", StringUtil.toString(map.get("gender_code")));
+			//tempMap.put("AGE", StringUtil.toString(map.get("age")));
+			//tempMap.put("SEX", StringUtil.toString(map.get("gender_code")));
 			tempMap.put("RLTZ", "MPPDB");//华为MPPDB默认提取特征，只有注册库
 
-			String infoId = StringUtil.toString(map.get("info_id"));
+
 			String algoTyoeStr = StringUtil.toString(map.get("algorithm_id"));
 			if (!StringUtil.isNull(algoTyoeStr)) {
 				tempMap.put("ALGORITHM_NAME", ModuleUtil.getAlgorithmById(Integer.valueOf(algoTyoeStr)).get("ALGORITHM_NAME"));
 			}
+			
+			tempMap.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("gender_code"))));
+			tempMap.put("AGE", StringUtil.toString(map.get("age")));
+			tempMap.put("RACE", StringUtil.toString(FaceCaptureProvider.RACE.get(map.get("race"))));
+			tempMap.put("WITH_GLASSES", StringUtil.toString(FaceCaptureProvider.WITH_GLASSES.get(map.get("with_glasses"))));
+			tempMap.put("WITH_RESPIRATOR", StringUtil.toString(FaceCaptureProvider.WITH_RESPIRATOR.get(map.get("with_respirator"))));
+			tempMap.put("FACE_EXPRESSION", StringUtil.toString(FaceCaptureProvider.FACE_EXPRESSION.get(map.get("face_expression"))));
+			tempMap.put("SMILE", StringUtil.toString(FaceCaptureProvider.SMILE.get(map.get("smile"))));
+			tempMap.put("PRETTY", StringUtil.toString(map.get("pretty")));
+			tempMap.put("AGE_GROUP", AgeGroup.getAgeGroupByAge(Integer.parseInt(StringUtil.toString(map.get("age"), "0"))).getGroupName());
 			
 			tempList.add(tempMap);
 		}
