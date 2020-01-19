@@ -11,6 +11,7 @@ import com.suntek.eap.log.ServiceLog;
 
 import com.alibaba.fastjson.JSONObject;
 import com.suntek.eap.EAP;
+import com.suntek.eap.common.util.DateUtil;
 import com.suntek.eap.jdbc.PageQueryResult;
 import com.suntek.eap.metadata.DictType;
 import com.suntek.eap.tag.grid.ExportGridDataProvider;
@@ -80,8 +81,8 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 
 		if (!StringUtil.isEmpty(beginTime) && !StringUtil.isEmpty(endTime)) {
 		    this.addOptionalStatement(" and jgsk between ? and ?");
-		    String formatBeginTime = DateUtil.format(DateUtil.parseDateTime(beginTime), "yyMMddHHmmss");
-		    String formatEndTime = DateUtil.format(DateUtil.parseDateTime(endTime), "yyMMddHHmmss");
+		    String formatBeginTime =DateUtil.convertByStyle(beginTime, DateUtil.standard_style, DateUtil.yyMMddHHmmss_style);
+		    String formatEndTime = DateUtil.convertByStyle(endTime, DateUtil.standard_style, DateUtil.yyMMddHHmmss_style);
 		    this.addParameter(formatBeginTime);
 		    this.addParameter(formatEndTime);
 		   
@@ -96,6 +97,7 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			this.addOptionalStatement(" and device_id = any " + getDeviceSqlInParams(devides.split(",")));
 			countOptionStatement.append(",").append(getCountSqlInParams(devides.split(",")));
 		}
+		ServiceLog.info("prepare end");
 
 	}
 
@@ -107,7 +109,7 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			Map<String, Object> tempMap = new HashMap<String, Object>();
 
 			String jgsk = StringUtil.toString(map.get("jgsk"));
-			tempMap.put("JGSK", DateUtil.format(DateUtil.parse(jgsk, "yyMMddHHmmss"), "yyyy-MM-dd HH:mm:ss"));
+			tempMap.put("JGSK", DateUtil.convertByStyle(jgsk, DateUtil.yyMMddHHmmss_style, DateUtil.standard_style));
 			
 			String deviceId = StringUtil.toString(map.get("device_id"));
 			
@@ -163,8 +165,8 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 		});
 
 		long endTime = System.currentTimeMillis();
-		ServiceLog.info("sql:" + sql);
-		ServiceLog.info("耗时：" + (endTime - beginTime) + "ms");
+		ServiceLog.info("procedure count sql:" + sql);
+		ServiceLog.info("存储过程count耗时：" + (endTime - beginTime) + "ms");
 
 		return total;
 	}
