@@ -15,11 +15,13 @@ import com.suntek.efacecloud.dao.DeviceInfoDao;
 import com.suntek.efacecloud.dao.FaceDispatchedAlarmDao;
 import com.suntek.efacecloud.model.DeviceEntity;
 import com.suntek.efacecloud.provider.FaceCaptureProvider;
+import com.suntek.efacecloud.provider.FaceCaptureProvider.AgeGroup;
 import com.suntek.efacecloud.util.ConfigUtil;
 import com.suntek.efacecloud.util.Constants;
 import com.suntek.efacecloud.util.ModuleUtil;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -107,10 +109,20 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             map.put("DEVICE_NAME", StringUtil.toString(faceDevice.getDeviceName()));
             map.put("DEVICE_ADDR", StringUtil.toString(faceDevice.getDeviceAddr()));
             map.put("ORG_NAME", StringUtil.toString(faceDevice.getOrgName()));
-            map.put("AGE", StringUtil.toString(map.get("AGE")));
-            map.put("SEX", StringUtil.toString(map.get("SEX")));
+            //map.put("AGE", StringUtil.toString(map.get("AGE")));
+            //map.put("SEX", StringUtil.toString(map.get("SEX")));
             map.put("LATITUDE", StringUtil.toString(faceDevice.getDeviceY()));
             map.put("LONGITUDE", StringUtil.toString(faceDevice.getDeviceX()));
+            
+            map.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("SEX"))));
+            map.put("AGE", StringUtil.toString(map.get("AGE")));
+            map.put("RACE", StringUtil.toString(FaceCaptureProvider.RACE.get(map.get("RACE"))));
+            map.put("WITH_GLASSES", StringUtil.toString(FaceCaptureProvider.WITH_GLASSES.get(map.get("WITH_GLASSES"))));
+            map.put("WITH_RESPIRATOR", StringUtil.toString(FaceCaptureProvider.WITH_RESPIRATOR.get(map.get("WITH_RESPIRATOR"))));
+            map.put("FACE_EXPRESSION", StringUtil.toString(FaceCaptureProvider.FACE_EXPRESSION.get(map.get("FACE_EXPRESSION"))));
+            map.put("SMILE", StringUtil.toString(FaceCaptureProvider.SMILE.get(map.get("SMILE"))));
+            map.put("PRETTY", StringUtil.toString(map.get("PRETTY")));
+            map.put("AGE_GROUP", AgeGroup.getAgeGroupByAge(Integer.parseInt(StringUtil.toString(map.get("AGE"), "0"))).getGroupName());
 
             String algoTyoeStr = StringUtil.toString(map.get("ALGORITHM_ID"));
             if (!StringUtil.isNull(algoTyoeStr)) {
@@ -150,6 +162,27 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String treeNodeId = (String)params.get("DEVICE_IDS");
         String isEffective = StringUtil.toString(params.get("IS_EFFECTIVE"));
         String viidObjectIds = StringUtil.toString(params.get("VIID_OBJECT_IDS"));
+        
+        // 性别
+        String sex = StringUtil.toString(params.get("SEX"));
+        // 年龄段
+        String ageGroup = StringUtil.toString(params.get("AGE_GROUP"));
+        // 年龄
+        String age = StringUtil.toString(params.get("AGE"));
+        // 人种
+        String race = StringUtil.toString(params.get("RACE"));
+        // 是否戴眼镜
+        String withGlasses = StringUtil.toString(params.get("WITH_GLASSES"));
+        // 是否戴口罩
+        String withRespirator = StringUtil.toString(params.get("WITH_RESPIRATOR"));
+        // 颜值
+        String pretty = StringUtil.toString(params.get("PRETTY"));
+        // 表情
+        String faceExpression = StringUtil.toString(params.get("FACE_EXPRESSION"));
+        // 笑容
+        String smile = StringUtil.toString(params.get("SMILE"));
+
+        String dataSrc = StringUtil.toString(params.get("DATA_SRC"));
 
         //如果传入时间为空,默认只查当月的
         if(!StringUtil.isNull(beginTime)&&!StringUtil.isNull(endTime)) {
@@ -230,6 +263,40 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String raceConfirm = StringUtil.toString(params.get("RACE_CONFIRM"));
         if (!StringUtil.isEmpty(raceConfirm)) {
         	query.addEqualCriteria("RACE_CONFIRM", raceConfirm);
+        }
+        
+        //人脸结构化新增属性
+        if (!StringUtil.isEmpty(sex)) {
+            query.addEqualCriteria("SEX", sex);
+        }
+        if (!StringUtil.isEmpty(ageGroup)) {
+            AgeGroup group = AgeGroup.getAgeGroup(ageGroup);
+            query.addBetweenCriteria("AGE", group.getAgeLowerLimit(), group.getAgeUpperLimit());
+        }
+        if (NumberUtils.isNumber(age)) {
+            query.addEqualCriteria("AGE", age);
+        }
+        if (!StringUtil.isEmpty(race)) {
+            query.addEqualCriteria("RACE", race);
+        }
+        if (!StringUtil.isEmpty(withGlasses)) {
+            query.addEqualCriteria("WITH_GLASSES", withGlasses);
+        }
+        if (!StringUtil.isEmpty(withRespirator)) {
+            query.addEqualCriteria("WITH_RESPIRATOR", withRespirator);
+        }
+        if (NumberUtils.isNumber(pretty)) {
+            query.addEqualCriteria("PRETTY", pretty);
+        }
+        if (!StringUtil.isEmpty(faceExpression)) {
+            query.addEqualCriteria("FACE_EXPRESSION", faceExpression);
+        }
+        if (!StringUtil.isEmpty(smile)) {
+            query.addEqualCriteria("SMILE", smile);
+        }
+        if (!StringUtil.isEmpty(dataSrc)) {
+            // 目前的设计，DATA_SRC字段有值，就代表是结构化人脸
+            query.addEqualCriteria("DATA_SRC", dataSrc);
         }
 
         query.addSort("JGSK", timeSortType);
