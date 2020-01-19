@@ -180,20 +180,20 @@ public class FaceCaptureMpProvider extends ExportGridDataProvider {
 			tempMap.put("ORG_NAME", device.getOrgName());
 			tempMap.put("OBJ_PIC", ModuleUtil.renderAlarmImage(StringUtil.toString(map.get("obj_pic"))));
 			tempMap.put("PIC", ModuleUtil.renderAlarmImage(StringUtil.toString(map.get("pic"))));
-			tempMap.put("INFO_ID", map.get("info_id"));
+			tempMap.put("INFO_ID", StringUtil.toString(map.get("info_id")));
 			tempMap.put("LATITUDE", StringUtil.toString(device.getDeviceY()));
 			tempMap.put("LONGITUDE", StringUtil.toString(device.getDeviceX()));
-			tempMap.put("AGE", StringUtil.toString(map.get("age")));
-			tempMap.put("SEX", StringUtil.toString(map.get("gender_code")));
+			//tempMap.put("AGE", StringUtil.toString(map.get("age")));
+			//tempMap.put("SEX", StringUtil.toString(map.get("gender_code")));
 			tempMap.put("RLTZ", "MPPDB");//华为MPPDB默认提取特征，只有注册库
 
-			String infoId = StringUtil.toString(map.get("info_id"));
+
 			String algoTyoeStr = StringUtil.toString(map.get("algorithm_id"));
 			if (!StringUtil.isNull(algoTyoeStr)) {
 				tempMap.put("ALGORITHM_NAME", ModuleUtil.getAlgorithmById(Integer.valueOf(algoTyoeStr)).get("ALGORITHM_NAME"));
 			}
 			
-			tempMap.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("sex"))));
+			tempMap.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("gender_code"))));
 			tempMap.put("AGE", StringUtil.toString(map.get("age")));
 			tempMap.put("RACE", StringUtil.toString(FaceCaptureProvider.RACE.get(map.get("race"))));
 			tempMap.put("WITH_GLASSES", StringUtil.toString(FaceCaptureProvider.WITH_GLASSES.get(map.get("with_glasses"))));
