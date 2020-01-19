@@ -267,7 +267,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         
         //人脸结构化新增属性
         if (!StringUtil.isEmpty(sex)) {
-            query.addEqualCriteria("SEX", sex);
+            query.addEqualCriteria("GENDER_CODE", sex);
         }
         if (!StringUtil.isEmpty(ageGroup)) {
             AgeGroup group = AgeGroup.getAgeGroup(ageGroup);
