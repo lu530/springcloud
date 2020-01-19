@@ -195,8 +195,8 @@ public class FaceRedListService {
         params.put("CASE_ID", StringUtil.toString(params.get("CASE_ID")));
         params.put("CASE_NAME", StringUtil.toString(params.get("CASE_NAME")));
         //因没用到查询参数，故暂时不存查询参数
-        //params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
-        params.put("SAERCH_PARAM", "");
+        params.put("SAERCH_PARAM", StringUtil.toString(params.get("SAERCH_PARAM")));
+//        params.put("SAERCH_PARAM", "");
 
         params.put("SEARCH_CAUSE", StringUtil.toString(params.get("SEARCH_CAUSE")));
         params.put("SEARCH_PIC", StringUtil.toString(params.get("SEARCH_PIC")));

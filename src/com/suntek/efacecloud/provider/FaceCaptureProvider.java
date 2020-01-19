@@ -73,15 +73,7 @@ public class FaceCaptureProvider {
 		if (!StringUtil.isNull(isSearchFace)) {
 			return searchByPic(context);
 		} else {
-		    String bigDataSearchFun = AppHandle.getHandle("console").getProperty("BIGDATA_SEARCH_FUN");
-            switch(bigDataSearchFun) {
-                case Constants.BIGDATA_SEARCH_ES:
-                    return new FaceCaptureEsProvider().query(context);
-                case Constants.BIGDATA_SEARCH_MPPDB:
-                    return new FaceCaptureMpProvider().query(context);
-                default:
-                    return new FaceCaptureEsProvider().query(context);
-            }
+			return new FaceCaptureEsProvider().query(context);
 		}
 	}
 

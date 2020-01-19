@@ -149,7 +149,8 @@ public class FaceTechnicalTacticsService {
 
 			// 给新飞识数据添加IDENTITY_TYPE和GJ属性
 			List<Map<String,Object>> dataList = (List<Map<String, Object>>) result.get("DATA");
-			for(Object obj:dataList) {
+			ServiceLog.debug("飞识结果：dataList = " + dataList);
+			for(Object obj : dataList) {
 
 				Map<String,Object> picResult = (Map<String,Object>)obj;
 				// 修改LIST部分
@@ -223,17 +224,6 @@ public class FaceTechnicalTacticsService {
 					message = commandContext.getResponse().getMessage();
 					break;
 				}
-
-				/*for(int j = 0; j < responseData.size(); j++){
-					Iterator<String> iterator = responseData.get(j).keySet().iterator();
-					while(iterator.hasNext()){
-						String keyData = StringUtil.toString(iterator.next());
-						if("IDENTITY_TYPE".equals(keyData)||"GJ".equals(keyData)){
-							iterator.remove();
-							responseData.get(j).remove(keyData);
-						}
-					}
-				}*/
 
 				Map<String,List<Map<String,Object>>> resultData = new HashMap<String,List<Map<String,Object>>>();
 				resultData.put("111", responseData);
@@ -354,6 +344,7 @@ public class FaceTechnicalTacticsService {
 			Map<String,List<Map<String,Object>>> responseData
 				= (Map<String,List<Map<String,Object>>>)commandContext.getResponse().getData("DATA");
 			List<Map<String,Object>> recommendResult = getRecommendResult(responseData);
+            ServiceLog.debug("调用sdk返回结果 responseData:" + responseData);
 
 			ServiceLog.debug("调用sdk返回结果code:" + commandContext.getResponse().getCode()
 		  		       + " message:" + commandContext.getResponse().getMessage()
