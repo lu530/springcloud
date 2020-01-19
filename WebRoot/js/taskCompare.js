@@ -112,7 +112,7 @@ function initEvent() {
 										break;
 								}
 								if(type) {
-									var url = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType='+type+'&taskStatus='+TASK_STATUS+"&TASK_ID="+TASK_ID+"&resultLooking=resultLooking";
+									var url = '/efacecloud/page/technicalStation/tacticsFrame.html?pageType='+type+'&taskStatus='+TASK_STATUS+"&TASK_ID="+TASK_ID+"&resultLooking=resultLooking&hasBackBtn=true";
 									showFrame(url);
 								}
 							}
