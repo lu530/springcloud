@@ -164,7 +164,7 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
         String viidObjectIds = StringUtil.toString(params.get("VIID_OBJECT_IDS"));
         
         // 性别
-        String sex = StringUtil.toString(params.get("SEX"));
+        String sex = StringUtil.toString(params.get("GENDER_CODE"));
         // 年龄段
         String ageGroup = StringUtil.toString(params.get("AGE_GROUP"));
         // 年龄
