@@ -52,7 +52,7 @@ public class FaceCaptureProvider {
 //		String sourceType = StringUtil.toString(params.get("SOURCE_TYPE"));
 		String deviceIds = StringUtil.toString(context.getParameter("DEVICE_IDS"));
 		try {
-			if (StringUtil.isEmpty(deviceIds) && !context.getUserCode().equals("admin")) {
+			if (StringUtil.isEmpty(deviceIds) && !"admin".equals(context.getUserCode())) {
 				Set<String> deviceSet = DevicesRedisUtil.getDeviceList(context.getUserCode(), Constants.DEVICE_TYPE_FACE);
 				if (!ObjectUtils.isEmpty(deviceSet)) {
 					deviceIds = String.join(",", deviceSet);
