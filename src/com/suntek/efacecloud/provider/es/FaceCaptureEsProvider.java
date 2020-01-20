@@ -114,13 +114,13 @@ public class FaceCaptureEsProvider extends IndexSearchProvider {
             map.put("LATITUDE", StringUtil.toString(faceDevice.getDeviceY()));
             map.put("LONGITUDE", StringUtil.toString(faceDevice.getDeviceX()));
             
-            map.put("SEX", StringUtil.toString(FaceCaptureProvider.GENDER.get(map.get("GENDER_CODE"))));
+            map.put("SEX", FaceCaptureProvider.GENDER.get(StringUtil.toString(map.get("GENDER_CODE"))));
             map.put("AGE", StringUtil.toString(map.get("AGE")));
-            map.put("RACE", StringUtil.toString(FaceCaptureProvider.RACE.get(map.get("RACE"))));
-            map.put("WITH_GLASSES", StringUtil.toString(FaceCaptureProvider.WITH_GLASSES.get(map.get("WITH_GLASSES"))));
-            map.put("WITH_RESPIRATOR", StringUtil.toString(FaceCaptureProvider.WITH_RESPIRATOR.get(map.get("WITH_RESPIRATOR"))));
-            map.put("FACE_EXPRESSION", StringUtil.toString(FaceCaptureProvider.FACE_EXPRESSION.get(map.get("FACE_EXPRESSION"))));
-            map.put("SMILE", StringUtil.toString(FaceCaptureProvider.SMILE.get(map.get("SMILE"))));
+            map.put("RACE", FaceCaptureProvider.RACE.get(StringUtil.toString(map.get("RACE"))));
+            map.put("WITH_GLASSES", FaceCaptureProvider.WITH_GLASSES.get(StringUtil.toString(map.get("WITH_GLASSES"))));
+            map.put("WITH_RESPIRATOR", FaceCaptureProvider.WITH_RESPIRATOR.get(StringUtil.toString(map.get("WITH_RESPIRATOR"))));
+            map.put("FACE_EXPRESSION", FaceCaptureProvider.FACE_EXPRESSION.get(StringUtil.toString(map.get("FACE_EXPRESSION"))));
+            map.put("SMILE", FaceCaptureProvider.SMILE.get(StringUtil.toString(map.get("SMILE"))));
             map.put("PRETTY", StringUtil.toString(map.get("PRETTY")));
             map.put("AGE_GROUP", AgeGroup.getAgeGroupByAge(Integer.parseInt(StringUtil.toString(map.get("AGE"), "0"))).getGroupName());
 
