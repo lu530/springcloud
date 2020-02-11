@@ -204,7 +204,7 @@ public class InternetCafesFaceProvider {
 			excelDataList = (List<Map<String, Object>>) map.get("records");
 		}
 		
-		String[] headers = {"人脸图片", "姓名", "证件", "性别", "登记时间", "网吧编号", "地点", "抓拍时间", "入库时间", "设备名称", "行政区域", "注册状态", "算法类型", "质量分数"};
+		String[] headers = {"人脸图片", "姓名", "证件", "性别", "登记时间", "网吧编号", "地点", "抓拍时间", "入库时间", "设备名称", "行政区域", "人脸识别", "算法类型", "质量分数"};
 		String[] dataKey = {"OBJ_PIC", "NAME", "IDENTITY_ID", "SEX", "STARTTIME", "PUB_CODE", "DEVICE_ADDR", "JGSK", "ADD_TIME", "DEVICE_NAME", "ORG_NAME", "REGISTER_STATUE", "ALGORITHM_NAME", "SCORE"};
 		List<Map<String, byte[]>> imgList = new ArrayList<>();
 		

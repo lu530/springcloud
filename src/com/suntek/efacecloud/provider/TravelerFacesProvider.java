@@ -189,7 +189,7 @@ public class TravelerFacesProvider {
 			excelDataList = (List<Map<String, Object>>) map.get("records");
 		}
 		
-		String[] headers = {"人脸图片", "姓名", "证件", "人员类型", "入住时间", "旅馆编号", "旅馆类别", "法人", "地址", "电话", "地点", "抓拍时间", "入库时间", "设备名称", "行政区域", "注册状态", "算法类型", "质量分数"};
+		String[] headers = {"人脸图片", "姓名", "证件", "人员类型", "入住时间", "旅馆编号", "旅馆类别", "法人", "地址", "电话", "地点", "抓拍时间", "入库时间", "设备名称", "行政区域", "人脸识别", "算法类型", "质量分数"};
 		String[] dataKey = {"URL", "CNAME", "IDCODE", "", "LTIME", "NOHOTEL", ""};
 		List<Map<String, byte[]>> imgList = new ArrayList<>();
 		
